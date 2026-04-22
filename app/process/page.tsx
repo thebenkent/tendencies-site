@@ -3,139 +3,69 @@
 import { useState, useEffect } from "react";
 
 const STEPS = [
-
   {
-
     number: "01",
-
     title: ["BRIEF", "& DIRECTION"],
-
     intro:
-
       "We start with the job the product needs to do. Audience, use case, timelines, quantity, budget, and brand fit all get resolved up front so the direction is clear before anything gets made.",
-
     bullets: [
-
       "Scope & Objectives",
-
       "Audience & Use Case",
-
       "Budget & Quantity",
-
       "Creative Direction",
-
     ],
-
     image: "/design-1.jpg",
-
     eyebrow: "Brief & Direction",
-
     imageLabel:
-
       "Design brief and concept direction for Kinetic Pride campaign",
-
   },
-
   {
-
     number: "02",
-
     title: ["SAMPLE", "& REFINE"],
-
     intro:
-
       "Once the direction is right, we test it properly. Materials, finishes, branding application, colours, and fit all get reviewed through samples and approvals before we move into final production.",
-
     bullets: [
-
       "Material Sampling",
-
       "Fit & Finish Checks",
-
       "Branding Approvals",
-
       "Final Sign-off",
-
     ],
-
     image: "/process-sample-flag.jpg",
-
     eyebrow: "Sample & Refine",
-
-    imageLabel:
-
-      "Pre-production print review of Pride campaign flag artwork",
-
+    imageLabel: "Pre-production print review of Pride campaign flag artwork",
     reverse: true,
-
   },
-
   {
-
     number: "03",
-
     title: ["MAKE", "& MANAGE"],
-
     intro:
-
       "We move into production with the details locked. Factory coordination, quality control, timelines, and communication are handled tightly so there are no surprises halfway through the run.",
-
     bullets: [
-
       "Production Management",
-
       "Factory Coordination",
-
       "Quality Control",
-
       "Timeline Oversight",
-
     ],
-
     image: "/process-make-bus.jpg",
-
     eyebrow: "Make & Manage",
-
-    imageLabel:
-
-      "Campaign artwork produced and applied at full scale",
-
+    imageLabel: "Campaign artwork produced and applied at full scale",
   },
-
   {
-
     number: "04",
-
     title: ["PACK", "& DELIVER"],
-
     intro:
-
       "The final step is getting product where it needs to go. Kitting, packing, dispatch, freight, and rollout are all part of the job. Finished properly means the last mile gets the same attention as the first.",
-
     bullets: [
-
       "Kitting & Packing",
-
       "Freight & Dispatch",
-
       "Rollout Coordination",
-
       "Final Delivery",
-
     ],
-
     image: "/process-deliver-team.jpg",
-
     eyebrow: "Pack & Deliver",
-
-    imageLabel:
-
-      "Finished campaign assets in use by team at Pride event",
-
+    imageLabel: "Finished campaign assets in use by team at Pride event",
     reverse: true,
-
   },
-
 ];
 
 const FAQS = [
@@ -277,7 +207,7 @@ function FaqItem({
           gridTemplateColumns: "1fr auto",
           gap: "16px",
           alignItems: "center",
-          padding: "18px 0",
+          padding: "14px 0",
           background: "transparent",
           border: "none",
           cursor: "pointer",
@@ -291,7 +221,7 @@ function FaqItem({
             fontSize: "14px",
             fontWeight: 700,
             letterSpacing: "0.04em",
-            lineHeight: 1.5,
+            lineHeight: 1.45,
           }}
         >
           {q}
@@ -312,11 +242,11 @@ function FaqItem({
       {open ? (
         <div
           style={{
-            padding: "0 0 18px",
+            padding: "0 0 16px",
             maxWidth: "760px",
             fontFamily: "Helvetica, Arial, sans-serif",
             fontSize: "14px",
-            lineHeight: 1.7,
+            lineHeight: 1.55,
             color: "rgba(255,255,255,0.58)",
           }}
         >
@@ -342,7 +272,7 @@ export default function ProcessPage() {
         style={{
           maxWidth: "1440px",
           margin: "0 auto",
-          padding: isMobile ? "88px 24px 0" : "116px 48px 0",
+          padding: isMobile ? "72px 24px 0" : "96px 48px 0",
         }}
       >
         {/* HERO */}
@@ -352,7 +282,7 @@ export default function ProcessPage() {
             gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
             alignItems: "start",
             gap: isMobile ? "16px" : "24px",
-            marginBottom: "26px",
+            marginBottom: "20px",
           }}
         >
           <div>
@@ -363,7 +293,7 @@ export default function ProcessPage() {
                 letterSpacing: "0.18em",
                 textTransform: "uppercase",
                 color: "rgba(255,255,255,0.42)",
-                marginBottom: "6px",
+                marginBottom: "4px",
               }}
             >
               Since · 2009
@@ -392,11 +322,11 @@ export default function ProcessPage() {
             <div
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
-                fontSize: "11px",
-                letterSpacing: "0.12em",
+                fontSize: "10px",
+                letterSpacing: "0.16em",
                 textTransform: "uppercase",
                 color: "rgba(255,255,255,0.6)",
-                lineHeight: 1.45,
+                lineHeight: 1.5,
               }}
             >
               The process
@@ -406,7 +336,7 @@ export default function ProcessPage() {
           </div>
         </div>
 
-        <div style={{ marginBottom: "30px" }}>
+        <div style={{ marginBottom: "20px" }}>
           <div
             style={{
               fontFamily: "Helvetica, Arial, sans-serif",
@@ -415,7 +345,7 @@ export default function ProcessPage() {
               letterSpacing: "0.22em",
               textTransform: "uppercase",
               color: "#b8f400",
-              marginBottom: "18px",
+              marginBottom: "12px",
             }}
           >
             Process
@@ -424,7 +354,9 @@ export default function ProcessPage() {
           <h1
             style={{
               fontFamily: "Helvetica, Arial, sans-serif",
-              fontSize: isMobile ? "clamp(56px, 16vw, 92px)" : "clamp(72px, 10vw, 152px)",
+              fontSize: isMobile
+                ? "clamp(56px, 16vw, 92px)"
+                : "clamp(72px, 10vw, 152px)",
               fontWeight: 900,
               letterSpacing: "-0.065em",
               lineHeight: 0.88,
@@ -450,8 +382,8 @@ export default function ProcessPage() {
             gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
             gap: "32px",
             alignItems: isMobile ? "start" : "center",
-            paddingTop: "22px",
-            paddingBottom: isMobile ? "56px" : "72px",
+            paddingTop: "18px",
+            paddingBottom: isMobile ? "40px" : "48px",
             borderTop: "1px solid rgba(255,255,255,0.08)",
           }}
         >
@@ -460,7 +392,7 @@ export default function ProcessPage() {
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
                 fontSize: "14px",
-                lineHeight: 1.65,
+                lineHeight: 1.55,
                 color: "rgba(255,255,255,0.48)",
                 margin: 0,
               }}
@@ -478,7 +410,7 @@ export default function ProcessPage() {
           <div
             style={{
               display: "flex",
-              gap: "12px",
+              gap: "10px",
               alignItems: "center",
               flexWrap: "wrap",
               justifyContent: isMobile ? "flex-start" : "flex-end",
@@ -493,7 +425,7 @@ export default function ProcessPage() {
         <section
           style={{
             borderTop: "1px solid rgba(255,255,255,0.06)",
-            paddingTop: isMobile ? "56px" : "72px",
+            paddingTop: isMobile ? "44px" : "52px",
           }}
         >
           <div
@@ -519,7 +451,7 @@ export default function ProcessPage() {
                     letterSpacing: "0.22em",
                     textTransform: "uppercase",
                     color: "#b8f400",
-                    marginBottom: "14px",
+                    marginBottom: "12px",
                   }}
                 >
                   Process Steps
@@ -529,7 +461,7 @@ export default function ProcessPage() {
                   style={{
                     display: "flex",
                     flexDirection: "column",
-                    gap: "10px",
+                    gap: "8px",
                   }}
                 >
                   {STEPS.map((step) => (
@@ -629,7 +561,7 @@ export default function ProcessPage() {
                         letterSpacing: "-0.06em",
                         lineHeight: 0.85,
                         color: "#f5f5f0",
-                        marginBottom: "12px",
+                        marginBottom: "8px",
                       }}
                     >
                       {step.number}
@@ -645,7 +577,7 @@ export default function ProcessPage() {
                         lineHeight: 0.94,
                         textTransform: "uppercase",
                         color: "#f5f5f0",
-                        marginBottom: "22px",
+                        marginBottom: "16px",
                       }}
                     >
                       {step.title[0]}
@@ -657,10 +589,10 @@ export default function ProcessPage() {
                       style={{
                         fontFamily: "Helvetica, Arial, sans-serif",
                         fontSize: "15px",
-                        lineHeight: 1.68,
+                        lineHeight: 1.55,
                         color: "rgba(255,255,255,0.56)",
                         maxWidth: "500px",
-                        margin: "0 0 28px",
+                        margin: "0 0 20px",
                       }}
                     >
                       {step.intro}
@@ -670,7 +602,6 @@ export default function ProcessPage() {
                       style={{
                         maxWidth: "520px",
                         borderTop: "1px solid rgba(255,255,255,0.06)",
-                        marginBottom: "28px",
                       }}
                     >
                       {step.bullets.map((item) => (
@@ -680,7 +611,7 @@ export default function ProcessPage() {
                             display: "flex",
                             alignItems: "center",
                             gap: "10px",
-                            padding: "14px 0",
+                            padding: "11px 0",
                             borderBottom: "1px solid rgba(255,255,255,0.06)",
                           }}
                         >
@@ -715,8 +646,10 @@ export default function ProcessPage() {
                   <div
                     key={step.number}
                     style={{
-                      paddingBottom: i === STEPS.length - 1 ? 0 : isMobile ? "56px" : "72px",
-                      marginBottom: i === STEPS.length - 1 ? 0 : isMobile ? "56px" : "72px",
+                      paddingBottom:
+                        i === STEPS.length - 1 ? 0 : isMobile ? "40px" : "48px",
+                      marginBottom:
+                        i === STEPS.length - 1 ? 0 : isMobile ? "40px" : "48px",
                       borderBottom:
                         i === STEPS.length - 1
                           ? "none"
@@ -727,7 +660,7 @@ export default function ProcessPage() {
                       style={{
                         display: "grid",
                         gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
-                        gap: isMobile ? "28px" : "56px",
+                        gap: isMobile ? "28px" : "44px",
                         alignItems: "start",
                       }}
                     >
@@ -759,16 +692,16 @@ export default function ProcessPage() {
         <section
           style={{
             borderTop: "1px solid rgba(255,255,255,0.06)",
-            paddingTop: isMobile ? "56px" : "72px",
-            paddingBottom: isMobile ? "64px" : "88px",
-            marginTop: isMobile ? "56px" : "72px",
+            paddingTop: isMobile ? "44px" : "52px",
+            paddingBottom: isMobile ? "48px" : "64px",
+            marginTop: isMobile ? "44px" : "52px",
           }}
         >
           <div
             style={{
               display: "grid",
               gridTemplateColumns: isMobile ? "1fr" : "1fr 1.2fr",
-              gap: isMobile ? "28px" : "56px",
+              gap: isMobile ? "28px" : "48px",
               alignItems: "start",
             }}
           >
@@ -781,7 +714,7 @@ export default function ProcessPage() {
                   letterSpacing: "0.22em",
                   textTransform: "uppercase",
                   color: "#b8f400",
-                  marginBottom: "12px",
+                  marginBottom: "10px",
                 }}
               >
                 Common Questions
@@ -790,13 +723,15 @@ export default function ProcessPage() {
               <h2
                 style={{
                   fontFamily: "Helvetica, Arial, sans-serif",
-                  fontSize: isMobile ? "clamp(40px, 10vw, 64px)" : "clamp(40px, 5vw, 72px)",
+                  fontSize: isMobile
+                    ? "clamp(40px, 10vw, 64px)"
+                    : "clamp(40px, 5vw, 72px)",
                   fontWeight: 900,
                   letterSpacing: "-0.05em",
                   lineHeight: 0.9,
                   textTransform: "uppercase",
                   color: "#f5f5f0",
-                  margin: "0 0 18px",
+                  margin: "0 0 14px",
                 }}
               >
                 WHAT PEOPLE
@@ -809,7 +744,7 @@ export default function ProcessPage() {
                 style={{
                   fontFamily: "Helvetica, Arial, sans-serif",
                   fontSize: "14px",
-                  lineHeight: 1.7,
+                  lineHeight: 1.55,
                   color: "rgba(255,255,255,0.56)",
                   maxWidth: "420px",
                   margin: 0,
@@ -839,8 +774,8 @@ export default function ProcessPage() {
         style={{
           background: "#b8f400",
           color: "#080808",
-          padding: isMobile ? "72px 24px" : "108px 48px",
-          marginTop: "24px",
+          padding: isMobile ? "56px 24px" : "64px 48px",
+          marginTop: 0,
         }}
       >
         <div
@@ -857,7 +792,9 @@ export default function ProcessPage() {
             <h2
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
-                fontSize: isMobile ? "clamp(56px, 16vw, 96px)" : "clamp(72px, 10vw, 140px)",
+                fontSize: isMobile
+                  ? "clamp(56px, 16vw, 96px)"
+                  : "clamp(72px, 10vw, 140px)",
                 fontWeight: 900,
                 letterSpacing: "-0.065em",
                 lineHeight: 0.84,
@@ -877,11 +814,11 @@ export default function ProcessPage() {
             <p
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
-                fontSize: "15px",
-                lineHeight: 1.7,
-                color: "rgba(8,8,8,0.72)",
+                fontSize: "14px",
+                lineHeight: 1.55,
+                color: "rgba(8,8,8,0.7)",
                 maxWidth: "240px",
-                margin: isMobile ? "0 0 22px 0" : "0 0 22px auto",
+                margin: isMobile ? "0 0 18px 0" : "0 0 18px auto",
               }}
             >
               Give us the rough brief and we’ll shape the right next step from there.
@@ -896,7 +833,7 @@ export default function ProcessPage() {
                 height: "48px",
                 padding: "0 26px",
                 borderRadius: "999px",
-                border: "1px solid rgba(8,8,8,0.18)",
+                border: "1px solid rgba(8,8,8,0.6)",
                 color: "#080808",
                 textDecoration: "none",
                 fontFamily: "Helvetica, Arial, sans-serif",
@@ -905,6 +842,15 @@ export default function ProcessPage() {
                 letterSpacing: "0.08em",
                 textTransform: "uppercase",
                 background: "transparent",
+                transition: "background 0.2s ease, color 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "#080808";
+                e.currentTarget.style.color = "#b8f400";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.color = "#080808";
               }}
             >
               Start a Project

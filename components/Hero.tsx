@@ -4,7 +4,7 @@ export default function Hero() {
   return (
     <section
       style={{
-        padding: "140px 48px 80px",
+        padding: "104px 48px 64px",
         borderBottom: "1px solid rgba(255,255,255,0.08)",
       }}
     >
@@ -19,17 +19,17 @@ export default function Hero() {
           style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
-            marginBottom: "40px",
+            marginBottom: "32px",
           }}
         >
           <div>
             <div
               style={{
                 fontSize: "10px",
-                letterSpacing: "0.18em",
+                letterSpacing: "0.16em",
                 textTransform: "uppercase",
                 color: "rgba(255,255,255,0.4)",
-                marginBottom: "6px",
+                marginBottom: "4px",
               }}
             >
               Since · 2009
@@ -50,11 +50,11 @@ export default function Hero() {
           <div style={{ textAlign: "right" }}>
             <div
               style={{
-                fontSize: "11px",
-                letterSpacing: "0.12em",
+                fontSize: "10px",
+                letterSpacing: "0.16em",
                 textTransform: "uppercase",
                 color: "rgba(255,255,255,0.6)",
-                lineHeight: 1.4,
+                lineHeight: 1.5,
               }}
             >
               Custom merch & apparel.
@@ -72,7 +72,7 @@ export default function Hero() {
             letterSpacing: "-0.06em",
             lineHeight: 0.85,
             textTransform: "uppercase",
-            marginBottom: "32px",
+            margin: "0 0 20px",
           }}
         >
           DONE
@@ -88,32 +88,31 @@ export default function Hero() {
             gridTemplateColumns: "1fr auto",
             alignItems: "center",
             gap: "32px",
-            paddingTop: "24px",
+            paddingTop: "20px",
             borderTop: "1px solid rgba(255,255,255,0.08)",
           }}
         >
-          <div style={{ maxWidth: "520px" }}>
-            <p
-              style={{
-                fontSize: "15px",
-                lineHeight: 1.6,
-                color: "rgba(255,255,255,0.5)",
-                margin: 0,
-              }}
-            >
-              Custom merch and apparel. Designed to be re-used.
-              <br />
-              <span style={{ color: "#fff", fontWeight: 600 }}>
-                Always delivering client expectations.
-              </span>
-            </p>
-          </div>
+          <p
+            style={{
+              fontSize: "14px",
+              lineHeight: 1.55,
+              color: "rgba(255,255,255,0.5)",
+              margin: 0,
+              maxWidth: "480px",
+            }}
+          >
+            Custom merch and apparel. Designed to be re-used.
+            <br />
+            <span style={{ color: "#fff", fontWeight: 600 }}>
+              Always delivering client expectations.
+            </span>
+          </p>
 
           {/* BUTTONS */}
           <div
             style={{
               display: "flex",
-              gap: "14px",
+              gap: "10px",
             }}
           >
             {/* PRIMARY */}
@@ -123,8 +122,8 @@ export default function Hero() {
                 display: "inline-flex",
                 alignItems: "center",
                 justifyContent: "center",
-                height: "48px",
-                padding: "0 26px",
+                height: "44px",
+                padding: "0 22px",
                 borderRadius: "999px",
                 background: "#b8f400",
                 color: "#080808",
@@ -152,8 +151,8 @@ export default function Hero() {
                 display: "inline-flex",
                 alignItems: "center",
                 justifyContent: "center",
-                height: "48px",
-                padding: "0 24px",
+                height: "44px",
+                padding: "0 22px",
                 borderRadius: "999px",
                 border: "1px solid rgba(255,255,255,0.2)",
                 color: "#fff",

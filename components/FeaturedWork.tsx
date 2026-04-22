@@ -138,11 +138,11 @@ function Card({
       <div
         style={{
           position: "absolute",
-          top: "16px",
-          right: "16px",
+          top: "18px",
+          right: "18px",
           zIndex: 4,
-          width: "34px",
-          height: "34px",
+          width: "32px",
+          height: "32px",
           borderRadius: "50%",
           border: "1px solid rgba(255,255,255,0.15)",
           display: "flex",
@@ -173,7 +173,7 @@ function Card({
             letterSpacing: "0.14em",
             textTransform: "uppercase",
             color: "rgba(255,255,255,0.45)",
-            marginBottom: "8px",
+            marginBottom: "6px",
           }}
         >
           {project.client}
@@ -187,7 +187,7 @@ function Card({
             textTransform: "uppercase",
             color: "#fff",
             lineHeight: 0.95,
-            marginBottom: "12px",
+            marginBottom: "10px",
             maxWidth: large ? "440px" : "260px",
           }}
         >
@@ -198,7 +198,7 @@ function Card({
           style={{
             fontSize: "13px",
             color: "rgba(255,255,255,0.68)",
-            lineHeight: 1.6,
+            lineHeight: 1.55,
             maxWidth: large ? "340px" : "260px",
             opacity: hovered ? 1 : 0.76,
             transform: hovered ? "translateY(0)" : "translateY(4px)",
@@ -232,7 +232,7 @@ export default function FeaturedWork() {
       ref={ref}
       style={{
         background: "#080808",
-        padding: "110px 48px 120px",
+        padding: "88px 48px 96px",
       }}
     >
       <div
@@ -247,7 +247,7 @@ export default function FeaturedWork() {
             justifyContent: "space-between",
             alignItems: "flex-end",
             gap: "24px",
-            marginBottom: "48px",
+            marginBottom: "36px",
             opacity: visible ? 1 : 0,
             transform: visible ? "translateY(0)" : "translateY(24px)",
             transition: "opacity 0.8s ease, transform 0.8s ease",
@@ -262,7 +262,7 @@ export default function FeaturedWork() {
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",
                 color: "#b8f400",
-                marginBottom: "14px",
+                marginBottom: "10px",
               }}
             >
               Featured Work
@@ -291,11 +291,11 @@ export default function FeaturedWork() {
             style={{
               fontFamily: "Helvetica, Arial, sans-serif",
               fontSize: "11px",
-              letterSpacing: "0.1em",
+              letterSpacing: "0.14em",
               textTransform: "uppercase",
-              color: "rgba(255,255,255,0.36)",
+              color: "rgba(255,255,255,0.4)",
               textDecoration: "none",
-              borderBottom: "1px solid rgba(255,255,255,0.12)",
+              borderBottom: "1px solid rgba(255,255,255,0.14)",
               paddingBottom: "2px",
               whiteSpace: "nowrap",
             }}
@@ -315,16 +315,13 @@ export default function FeaturedWork() {
             transition: "opacity 0.9s ease 0.12s, transform 0.9s ease 0.12s",
           }}
         >
-          <div>
-            <Card project={PROJECTS[0]} large />
-          </div>
+          <Card project={PROJECTS[0]} large />
 
           <div
             style={{
               display: "grid",
               gridTemplateRows: "1fr 1fr",
               gap: "12px",
-              minHeight: "560px",
             }}
           >
             <Card project={PROJECTS[1]} />

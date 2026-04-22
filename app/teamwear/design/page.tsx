@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const FONT = "Helvetica, Arial, sans-serif";
 const BG = "#080808";
@@ -111,6 +111,19 @@ const INITIAL_STATE: FormState = {
   artwork: null,
 };
 
+function useIsMobile(breakpoint = 900) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= breakpoint);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, [breakpoint]);
+
+  return isMobile;
+}
+
 function SectionHeader({
   number,
   title,
@@ -121,7 +134,7 @@ function SectionHeader({
   subtitle?: string;
 }) {
   return (
-    <div style={{ marginBottom: 26 }}>
+    <div style={{ marginBottom: 20 }}>
       <div
         style={{
           fontFamily: FONT,
@@ -130,7 +143,7 @@ function SectionHeader({
           letterSpacing: "0.22em",
           textTransform: "uppercase",
           color: LIME,
-          marginBottom: 12,
+          marginBottom: 10,
         }}
       >
         {number}
@@ -138,7 +151,7 @@ function SectionHeader({
       <h2
         style={{
           fontFamily: FONT,
-          fontSize: "clamp(34px, 4.5vw, 64px)",
+          fontSize: "clamp(32px, 4.2vw, 58px)",
           fontWeight: 900,
           letterSpacing: "-0.05em",
           lineHeight: 0.92,
@@ -153,12 +166,12 @@ function SectionHeader({
       {subtitle ? (
         <p
           style={{
-            margin: "14px 0 0",
+            margin: "12px 0 0",
             fontFamily: FONT,
             fontSize: 14,
-            lineHeight: 1.65,
-            color: "rgba(245,245,240,0.6)",
-            maxWidth: 560,
+            lineHeight: 1.62,
+            color: "rgba(245,245,240,0.58)",
+            maxWidth: 540,
           }}
         >
           {subtitle}
@@ -207,8 +220,8 @@ function ChoiceCard({
       type="button"
       onClick={onClick}
       style={{
-        minHeight: 74,
-        padding: "18px 16px",
+        minHeight: 68,
+        padding: "16px 14px",
         border: active ? `1px solid ${LIME}` : "1px solid rgba(255,255,255,0.1)",
         background: active ? "rgba(184,244,0,0.08)" : "#0d0d0d",
         color: FG,
@@ -337,7 +350,7 @@ function StyleCard({
         </div>
       )}
 
-      <div style={{ padding: "16px 16px 18px" }}>
+      <div style={{ padding: "14px 14px 16px" }}>
         <div
           style={{
             fontFamily: FONT,
@@ -389,7 +402,7 @@ function FileDropZone({
         display: "block",
         border: "1px dashed rgba(255,255,255,0.18)",
         background: "rgba(255,255,255,0.02)",
-        padding: 18,
+        padding: 16,
         cursor: "pointer",
       }}
     >
@@ -420,7 +433,7 @@ function FileDropZone({
           fontSize: 13,
           lineHeight: 1.55,
           color: "rgba(245,245,240,0.58)",
-          marginBottom: list.length ? 14 : 0,
+          marginBottom: list.length ? 12 : 0,
         }}
       >
         {helper}
@@ -432,7 +445,7 @@ function FileDropZone({
             display: "flex",
             flexWrap: "wrap",
             gap: 8,
-            marginTop: 14,
+            marginTop: 12,
           }}
         >
           {list.map((file) => (
@@ -457,6 +470,7 @@ function FileDropZone({
 }
 
 export default function TeamwearDesignPage() {
+  const isMobile = useIsMobile();
   const [form, setForm] = useState<FormState>(INITIAL_STATE);
   const [status, setStatus] = useState<"idle" | "submitting" | "submitted" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
@@ -544,7 +558,7 @@ export default function TeamwearDesignPage() {
           color: FG,
           display: "grid",
           placeItems: "center",
-          padding: "96px 24px",
+          padding: "80px 24px",
         }}
       >
         <div style={{ maxWidth: 760, textAlign: "center" }}>
@@ -556,7 +570,7 @@ export default function TeamwearDesignPage() {
               letterSpacing: "0.22em",
               textTransform: "uppercase",
               color: LIME,
-              marginBottom: 18,
+              marginBottom: 16,
             }}
           >
             Teamwear Brief Sent
@@ -581,21 +595,20 @@ export default function TeamwearDesignPage() {
 
           <p
             style={{
-              margin: "24px auto 0",
+              margin: "20px auto 0",
               maxWidth: 560,
               fontFamily: FONT,
               fontSize: 16,
-              lineHeight: 1.7,
+              lineHeight: 1.65,
               color: "rgba(245,245,240,0.68)",
             }}
           >
-            We’ll come back with a concept direction, a sample plan, and next
-            steps within 24–48 hours.
+            We’ll come back with a concept direction, a sample plan, and next steps within 24–48 hours.
           </p>
 
           <div
             style={{
-              marginTop: 34,
+              marginTop: 28,
               display: "flex",
               justifyContent: "center",
               gap: 12,
@@ -663,16 +676,16 @@ export default function TeamwearDesignPage() {
         style={{
           maxWidth: 1440,
           margin: "0 auto",
-          padding: "clamp(88px, 9vw, 116px) clamp(24px, 4vw, 48px) 96px",
+          padding: isMobile ? "84px 24px 72px" : "96px 48px 80px",
         }}
       >
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: 24,
+            gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(280px, 1fr))",
+            gap: isMobile ? 14 : 24,
             alignItems: "start",
-            marginBottom: 26,
+            marginBottom: 18,
           }}
         >
           <div>
@@ -712,7 +725,7 @@ export default function TeamwearDesignPage() {
             <div
               style={{
                 fontFamily: FONT,
-                fontSize: 11,
+                fontSize: "11px",
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
                 color: "rgba(255,255,255,0.6)",
@@ -726,7 +739,7 @@ export default function TeamwearDesignPage() {
           </div>
         </div>
 
-        <div style={{ marginBottom: 34 }}>
+        <div style={{ marginBottom: 24 }}>
           <div
             style={{
               fontFamily: FONT,
@@ -735,7 +748,7 @@ export default function TeamwearDesignPage() {
               letterSpacing: "0.22em",
               textTransform: "uppercase",
               color: LIME,
-              marginBottom: 18,
+              marginBottom: 16,
             }}
           >
             Teamwear Design Brief
@@ -745,7 +758,7 @@ export default function TeamwearDesignPage() {
             style={{
               margin: 0,
               fontFamily: FONT,
-              fontSize: "clamp(58px, 10vw, 148px)",
+              fontSize: isMobile ? "clamp(52px, 14vw, 82px)" : "clamp(58px, 10vw, 148px)",
               fontWeight: 900,
               letterSpacing: "-0.065em",
               lineHeight: 0.88,
@@ -764,11 +777,11 @@ export default function TeamwearDesignPage() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: 32,
+            gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(280px, 1fr))",
+            gap: 28,
             alignItems: "center",
-            paddingTop: 22,
-            paddingBottom: 64,
+            paddingTop: 18,
+            paddingBottom: 48,
             borderTop: "1px solid rgba(255,255,255,0.08)",
           }}
         >
@@ -778,12 +791,11 @@ export default function TeamwearDesignPage() {
                 margin: 0,
                 fontFamily: FONT,
                 fontSize: 15,
-                lineHeight: 1.7,
+                lineHeight: 1.68,
                 color: "rgba(245,245,240,0.52)",
               }}
             >
-              This is not a DIY configurator. It’s a guided brief that helps you
-              show us the direction, the logos, the colours, and the intent.
+              This is not a DIY configurator. It’s a guided brief that helps you show us the direction, the logos, the colours, and the intent.
               <br />
               <span style={{ color: FG, fontWeight: 600 }}>
                 We take it from there and turn it into a properly built kit.
@@ -797,7 +809,7 @@ export default function TeamwearDesignPage() {
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: 72,
+            gap: isMobile ? 48 : 56,
           }}
         >
           <section>
@@ -810,8 +822,8 @@ export default function TeamwearDesignPage() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                gap: 28,
+                gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(260px, 1fr))",
+                gap: 24,
               }}
             >
               <div>
@@ -820,7 +832,7 @@ export default function TeamwearDesignPage() {
                   style={{
                     display: "grid",
                     gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-                    gap: 12,
+                    gap: 10,
                   }}
                 >
                   {SPORTS.map((sport) => (
@@ -840,7 +852,7 @@ export default function TeamwearDesignPage() {
                   style={{
                     display: "grid",
                     gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-                    gap: 12,
+                    gap: 10,
                   }}
                 >
                   {CUTS.map((cut) => (
@@ -869,19 +881,18 @@ export default function TeamwearDesignPage() {
                 fontSize: 13,
                 lineHeight: 1.6,
                 color: "rgba(245,245,240,0.6)",
-                marginBottom: 24,
+                marginBottom: 18,
                 maxWidth: 520,
               }}
             >
-              Choose the closest lane to what you have in mind. This is a design
-              direction, not the final artwork.
+              Choose the closest lane to what you have in mind. This is a design direction, not the final artwork.
             </div>
 
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                gap: 14,
+                gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(auto-fit, minmax(220px, 1fr))",
+                gap: 12,
               }}
             >
               {STYLES.map((style) => (
@@ -905,8 +916,8 @@ export default function TeamwearDesignPage() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                gap: 24,
+                gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(260px, 1fr))",
+                gap: 20,
               }}
             >
               <div>
@@ -917,7 +928,7 @@ export default function TeamwearDesignPage() {
                   onChange={(e) => setField("teamName", e.target.value)}
                   style={{
                     width: "100%",
-                    height: 52,
+                    height: 48,
                     background: "transparent",
                     border: "none",
                     borderBottom: "1px solid rgba(255,255,255,0.14)",
@@ -938,7 +949,7 @@ export default function TeamwearDesignPage() {
                   placeholder="e.g. black, lime, white / Pantone 375"
                   style={{
                     width: "100%",
-                    height: 52,
+                    height: 48,
                     background: "transparent",
                     border: "none",
                     borderBottom: "1px solid rgba(255,255,255,0.14)",
@@ -959,83 +970,79 @@ export default function TeamwearDesignPage() {
               subtitle="Logos, sponsors, references — anything you’ve got. Rough is fine."
             />
 
-            {isBlankCanvas ? (
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                  gap: 14,
-                }}
-              >
-                <FileDropZone
-                  title="Your Artwork"
-                  helper="Upload the design or working file you want us to build from."
-                  singleFile={form.artwork}
-                  onFiles={(files) => setField("artwork", files?.[0] || null)}
-                />
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(260px, 1fr))",
+                gap: 12,
+              }}
+            >
+              {isBlankCanvas ? (
+                <>
+                  <FileDropZone
+                    title="Your Artwork"
+                    helper="Upload the design or working file you want us to build from."
+                    singleFile={form.artwork}
+                    onFiles={(files) => setField("artwork", files?.[0] || null)}
+                  />
 
-                <FileDropZone
-                  title="Primary Logo"
-                  helper="Club or team logo if it sits outside the supplied artwork."
-                  singleFile={form.primaryLogo}
-                  onFiles={(files) => setField("primaryLogo", files?.[0] || null)}
-                />
+                  <FileDropZone
+                    title="Primary Logo"
+                    helper="Club or team logo if it sits outside the supplied artwork."
+                    singleFile={form.primaryLogo}
+                    onFiles={(files) => setField("primaryLogo", files?.[0] || null)}
+                  />
 
-                <FileDropZone
-                  title="Sponsor Logos"
-                  helper="Upload sponsor lockups if they need placing or refining."
-                  multiple
-                  files={form.sponsorLogos}
-                  onFiles={(files) => addMultipleFiles("sponsorLogos", files)}
-                />
+                  <FileDropZone
+                    title="Sponsor Logos"
+                    helper="Upload sponsor lockups if they need placing or refining."
+                    multiple
+                    files={form.sponsorLogos}
+                    onFiles={(files) => addMultipleFiles("sponsorLogos", files)}
+                  />
 
-                <FileDropZone
-                  title="References"
-                  helper="Any inspo images, old kits, or visual directions."
-                  multiple
-                  files={form.references}
-                  onFiles={(files) => addMultipleFiles("references", files)}
-                />
-              </div>
-            ) : (
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                  gap: 14,
-                }}
-              >
-                <FileDropZone
-                  title="Primary Logo"
-                  helper="Main club or team logo. Single file."
-                  singleFile={form.primaryLogo}
-                  onFiles={(files) => setField("primaryLogo", files?.[0] || null)}
-                />
+                  <FileDropZone
+                    title="References"
+                    helper="Any inspo images, old kits, or visual directions."
+                    multiple
+                    files={form.references}
+                    onFiles={(files) => addMultipleFiles("references", files)}
+                  />
+                </>
+              ) : (
+                <>
+                  <FileDropZone
+                    title="Primary Logo"
+                    helper="Main club or team logo. Single file."
+                    singleFile={form.primaryLogo}
+                    onFiles={(files) => setField("primaryLogo", files?.[0] || null)}
+                  />
 
-                <FileDropZone
-                  title="Sponsor Logos"
-                  helper="One or more sponsor marks or lockups."
-                  multiple
-                  files={form.sponsorLogos}
-                  onFiles={(files) => addMultipleFiles("sponsorLogos", files)}
-                />
+                  <FileDropZone
+                    title="Sponsor Logos"
+                    helper="One or more sponsor marks or lockups."
+                    multiple
+                    files={form.sponsorLogos}
+                    onFiles={(files) => addMultipleFiles("sponsorLogos", files)}
+                  />
 
-                <FileDropZone
-                  title="References"
-                  helper="Inspiration, examples, old kits, or anything close."
-                  multiple
-                  files={form.references}
-                  onFiles={(files) => addMultipleFiles("references", files)}
-                />
+                  <FileDropZone
+                    title="References"
+                    helper="Inspiration, examples, old kits, or anything close."
+                    multiple
+                    files={form.references}
+                    onFiles={(files) => addMultipleFiles("references", files)}
+                  />
 
-                <FileDropZone
-                  title="Own Artwork"
-                  helper="Optional. Upload anything already in progress."
-                  singleFile={form.artwork}
-                  onFiles={(files) => setField("artwork", files?.[0] || null)}
-                />
-              </div>
-            )}
+                  <FileDropZone
+                    title="Own Artwork"
+                    helper="Optional. Upload anything already in progress."
+                    singleFile={form.artwork}
+                    onFiles={(files) => setField("artwork", files?.[0] || null)}
+                  />
+                </>
+              )}
+            </div>
           </section>
 
           <section>
@@ -1051,8 +1058,8 @@ export default function TeamwearDesignPage() {
               placeholder="e.g. We want something clean but still aggressive. Mostly black with lime and white. Sponsor logos need to sit neatly without taking over. We like the Hawke's Bay touch look but want it sharper and more premium."
               style={{
                 width: "100%",
-                minHeight: 180,
-                padding: 18,
+                minHeight: isMobile ? 160 : 170,
+                padding: 16,
                 background: "rgba(255,255,255,0.02)",
                 border: "1px solid rgba(255,255,255,0.14)",
                 color: FG,
@@ -1075,8 +1082,8 @@ export default function TeamwearDesignPage() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-                gap: 24,
+                gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(260px, 1fr))",
+                gap: 20,
               }}
             >
               <div>
@@ -1088,7 +1095,7 @@ export default function TeamwearDesignPage() {
                   onChange={(e) => setField("contactName", e.target.value)}
                   style={{
                     width: "100%",
-                    height: 52,
+                    height: 48,
                     background: "transparent",
                     border: "none",
                     borderBottom: "1px solid rgba(255,255,255,0.14)",
@@ -1109,7 +1116,7 @@ export default function TeamwearDesignPage() {
                   onChange={(e) => setField("contactEmail", e.target.value)}
                   style={{
                     width: "100%",
-                    height: 52,
+                    height: 48,
                     background: "transparent",
                     border: "none",
                     borderBottom: "1px solid rgba(255,255,255,0.14)",
@@ -1129,7 +1136,7 @@ export default function TeamwearDesignPage() {
                   onChange={(e) => setField("organisation", e.target.value)}
                   style={{
                     width: "100%",
-                    height: 52,
+                    height: 48,
                     background: "transparent",
                     border: "none",
                     borderBottom: "1px solid rgba(255,255,255,0.14)",
@@ -1146,16 +1153,16 @@ export default function TeamwearDesignPage() {
           <section
             style={{
               borderTop: "1px solid rgba(255,255,255,0.08)",
-              paddingTop: 28,
+              paddingTop: 22,
             }}
           >
             <div
               style={{
                 fontFamily: FONT,
                 fontSize: 13,
-                lineHeight: 1.7,
+                lineHeight: 1.65,
                 color: "rgba(245,245,240,0.62)",
-                marginBottom: 18,
+                marginBottom: 16,
               }}
             >
               No templates.
@@ -1168,7 +1175,7 @@ export default function TeamwearDesignPage() {
             <div
               style={{
                 display: "flex",
-                gap: 14,
+                gap: 12,
                 alignItems: "center",
                 flexWrap: "wrap",
               }}
@@ -1177,8 +1184,8 @@ export default function TeamwearDesignPage() {
                 type="submit"
                 disabled={status === "submitting"}
                 style={{
-                  height: 54,
-                  padding: "0 28px",
+                  height: 52,
+                  padding: "0 26px",
                   border: "none",
                   background: LIME,
                   color: BG,
@@ -1200,7 +1207,7 @@ export default function TeamwearDesignPage() {
                   display: "inline-flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  height: 54,
+                  height: 52,
                   padding: "0 22px",
                   textDecoration: "none",
                   border: "1px solid rgba(255,255,255,0.18)",
@@ -1231,7 +1238,7 @@ export default function TeamwearDesignPage() {
 
             <div
               style={{
-                marginTop: 14,
+                marginTop: 12,
                 fontFamily: FONT,
                 fontSize: 12,
                 lineHeight: 1.6,

@@ -5,59 +5,78 @@ export default function CTA() {
     <section
       style={{
         background: "#b8f400",
-        padding: "120px 48px",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "flex-end",
-        gap: "48px",
+        padding: "88px 48px",
       }}
     >
-      {/* Headline */}
-      <h2
+      <div
         style={{
-          fontSize: "clamp(64px, 10vw, 120px)",
-          fontWeight: 900,
-          lineHeight: 0.85,
-          margin: 0,
-          color: "#080808",
+          maxWidth: "1440px",
+          margin: "0 auto",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+          gap: "48px",
         }}
       >
-        LET'S
-        <br />
-        BUILD
-        <br />
-        SOMETHING.
-      </h2>
-
-      {/* Right */}
-      <div style={{ textAlign: "right" }}>
-        <p
+        {/* Headline */}
+        <h2
           style={{
-            fontSize: "14px",
-            color: "rgba(0,0,0,0.5)",
-            marginBottom: "24px",
-          }}
-        >
-          Big enough to deliver.<br />
-          Small enough to care.
-        </p>
-
-        <a
-          href="/contact"
-          style={{
-            display: "inline-block",
-            padding: "14px 28px",
-            borderRadius: "999px",
-            border: "2px solid #080808",
+            fontSize: "clamp(64px, 10vw, 120px)",
+            fontWeight: 900,
+            lineHeight: 0.85,
+            letterSpacing: "-0.05em",
             textTransform: "uppercase",
-            fontSize: "12px",
-            fontWeight: 700,
+            margin: 0,
             color: "#080808",
-            textDecoration: "none",
           }}
         >
-          Start a Project →
-        </a>
+          LET'S
+          <br />
+          BUILD
+          <br />
+          SOMETHING.
+        </h2>
+
+        {/* Right */}
+        <div style={{ textAlign: "right" }}>
+          <p
+            style={{
+              fontSize: "14px",
+              lineHeight: 1.45,
+              fontWeight: 500,
+              color: "rgba(0,0,0,0.6)",
+              margin: "0 0 18px",
+            }}
+          >
+            Big enough to deliver.
+            <br />
+            Small enough to care.
+          </p>
+
+          <a
+            href="/contact"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "52px",
+              padding: "0 28px",
+              borderRadius: "999px",
+              background: "#080808",
+              color: "#b8f400",
+              textDecoration: "none",
+              fontSize: "12px",
+              fontWeight: 700,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              transition: "opacity 0.2s ease",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.88")}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+          >
+            Start a Project →
+          </a>
+        </div>
       </div>
     </section>
   );

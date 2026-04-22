@@ -279,8 +279,8 @@ function FeaturedCard({
           position: "absolute",
           top: "14px",
           right: "14px",
-          width: "36px",
-          height: "36px",
+          width: "34px",
+          height: "34px",
           borderRadius: "50%",
           border: "1px solid rgba(255,255,255,0.18)",
           display: "flex",
@@ -307,13 +307,15 @@ function FeaturedCard({
         <div
           style={{
             fontFamily: "Helvetica, Arial, sans-serif",
-            fontSize: large ? "clamp(32px, 3vw, 44px)" : "clamp(24px, 2vw, 32px)",
+            fontSize: large
+              ? "clamp(32px, 3vw, 44px)"
+              : "clamp(24px, 2vw, 32px)",
             fontWeight: 900,
             letterSpacing: "-0.035em",
             textTransform: "uppercase",
             color: "#fff",
             lineHeight: 0.95,
-            marginBottom: "10px",
+            marginBottom: "8px",
           }}
         >
           {product.name}
@@ -335,6 +337,7 @@ function FeaturedCard({
     </a>
   );
 }
+
 function ProductCard({ product }: { product: Product }) {
   return (
     <a
@@ -427,8 +430,8 @@ function ProductCard({ product }: { product: Product }) {
           position: "absolute",
           top: "12px",
           right: "12px",
-          width: "34px",
-          height: "34px",
+          width: "32px",
+          height: "32px",
           borderRadius: "50%",
           border: "1px solid rgba(255,255,255,0.18)",
           display: "flex",
@@ -462,7 +465,7 @@ function ProductCard({ product }: { product: Product }) {
             textTransform: "uppercase",
             color: "#fff",
             lineHeight: 0.95,
-            marginBottom: "6px",
+            marginBottom: "4px",
           }}
         >
           {product.name}
@@ -500,7 +503,7 @@ function CategoryBlock({
     <section
       style={{
         borderTop: "1px solid rgba(255,255,255,0.06)",
-        paddingTop: "48px",
+        paddingTop: "40px",
       }}
     >
       <div
@@ -509,7 +512,7 @@ function CategoryBlock({
           gridTemplateColumns: "1fr auto",
           alignItems: "end",
           gap: "32px",
-          marginBottom: "26px",
+          marginBottom: "22px",
         }}
       >
         <div>
@@ -521,7 +524,7 @@ function CategoryBlock({
               letterSpacing: "0.22em",
               textTransform: "uppercase",
               color: "#b8f400",
-              marginBottom: "12px",
+              marginBottom: "10px",
             }}
           >
             {index}
@@ -597,7 +600,7 @@ export default function CataloguePage() {
         style={{
           maxWidth: "1440px",
           margin: "0 auto",
-          padding: "116px 48px 0",
+          padding: "96px 48px 0",
         }}
       >
         {/* HERO */}
@@ -607,7 +610,7 @@ export default function CataloguePage() {
             gridTemplateColumns: "1fr 1fr",
             alignItems: "start",
             gap: "24px",
-            marginBottom: "26px",
+            marginBottom: "20px",
           }}
         >
           <div>
@@ -618,7 +621,7 @@ export default function CataloguePage() {
                 letterSpacing: "0.18em",
                 textTransform: "uppercase",
                 color: "rgba(255,255,255,0.42)",
-                marginBottom: "6px",
+                marginBottom: "4px",
               }}
             >
               Since · 2009
@@ -647,11 +650,11 @@ export default function CataloguePage() {
             <div
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
-                fontSize: "11px",
-                letterSpacing: "0.12em",
+                fontSize: "10px",
+                letterSpacing: "0.16em",
                 textTransform: "uppercase",
                 color: "rgba(255,255,255,0.6)",
-                lineHeight: 1.45,
+                lineHeight: 1.5,
               }}
             >
               An edited selection
@@ -661,7 +664,7 @@ export default function CataloguePage() {
           </div>
         </div>
 
-        <div style={{ marginBottom: "30px" }}>
+        <div style={{ marginBottom: "20px" }}>
           <div
             style={{
               fontFamily: "Helvetica, Arial, sans-serif",
@@ -670,7 +673,7 @@ export default function CataloguePage() {
               letterSpacing: "0.22em",
               textTransform: "uppercase",
               color: "#b8f400",
-              marginBottom: "18px",
+              marginBottom: "12px",
             }}
           >
             Catalogue
@@ -702,8 +705,8 @@ export default function CataloguePage() {
             gridTemplateColumns: "1fr auto",
             gap: "32px",
             alignItems: "center",
-            paddingTop: "22px",
-            paddingBottom: "72px",
+            paddingTop: "18px",
+            paddingBottom: "48px",
             borderTop: "1px solid rgba(255,255,255,0.08)",
           }}
         >
@@ -712,7 +715,7 @@ export default function CataloguePage() {
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
                 fontSize: "14px",
-                lineHeight: 1.65,
+                lineHeight: 1.55,
                 color: "rgba(255,255,255,0.48)",
                 margin: 0,
               }}
@@ -729,7 +732,7 @@ export default function CataloguePage() {
           <div
             style={{
               display: "flex",
-              gap: "12px",
+              gap: "10px",
               alignItems: "center",
               flexWrap: "wrap",
               justifyContent: "flex-end",
@@ -747,7 +750,7 @@ export default function CataloguePage() {
             borderTop: "1px solid rgba(255,255,255,0.06)",
           }}
         >
-          <div style={{ marginBottom: "26px" }}>
+          <div style={{ marginBottom: "22px" }}>
             <div
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
@@ -756,7 +759,7 @@ export default function CataloguePage() {
                 letterSpacing: "0.22em",
                 textTransform: "uppercase",
                 color: "#b8f400",
-                marginBottom: "12px",
+                marginBottom: "10px",
               }}
             >
               Featured
@@ -793,7 +796,7 @@ export default function CataloguePage() {
         </section>
 
         {/* CATEGORY BLOCKS */}
-        <div style={{ paddingTop: "72px" }}>
+        <div style={{ paddingTop: "40px" }}>
           <CategoryBlock
             index="01"
             title="Apparel"
@@ -803,7 +806,7 @@ export default function CataloguePage() {
           />
         </div>
 
-        <div style={{ paddingTop: "72px" }}>
+        <div style={{ paddingTop: "40px" }}>
           <CategoryBlock
             index="02"
             title="Giveaways"
@@ -813,7 +816,7 @@ export default function CataloguePage() {
           />
         </div>
 
-        <div style={{ paddingTop: "72px", paddingBottom: "108px" }}>
+        <div style={{ paddingTop: "40px", paddingBottom: "64px" }}>
           <CategoryBlock
             index="03"
             title="Teamwear & Custom"
@@ -829,8 +832,8 @@ export default function CataloguePage() {
         style={{
           background: "#b8f400",
           color: "#080808",
-          padding: "108px 48px",
-          marginTop: "24px",
+          padding: "80px 48px",
+          marginTop: "12px",
         }}
       >
         <div
@@ -867,11 +870,11 @@ export default function CataloguePage() {
             <p
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
-                fontSize: "15px",
-                lineHeight: 1.7,
-                color: "rgba(8,8,8,0.72)",
+                fontSize: "14px",
+                lineHeight: 1.55,
+                color: "rgba(8,8,8,0.7)",
                 maxWidth: "240px",
-                margin: "0 0 22px auto",
+                margin: "0 0 18px auto",
               }}
             >
               Big enough to deliver. Small enough to care.
@@ -886,7 +889,7 @@ export default function CataloguePage() {
                 height: "48px",
                 padding: "0 26px",
                 borderRadius: "999px",
-                border: "1px solid rgba(8,8,8,0.18)",
+                border: "1px solid rgba(8,8,8,0.6)",
                 color: "#080808",
                 textDecoration: "none",
                 fontFamily: "Helvetica, Arial, sans-serif",
@@ -895,6 +898,15 @@ export default function CataloguePage() {
                 letterSpacing: "0.08em",
                 textTransform: "uppercase",
                 background: "transparent",
+                transition: "background 0.2s ease, color 0.2s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "#080808";
+                e.currentTarget.style.color = "#b8f400";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "transparent";
+                e.currentTarget.style.color = "#080808";
               }}
             >
               Start a Project

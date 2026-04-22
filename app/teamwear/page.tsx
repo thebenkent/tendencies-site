@@ -1,24 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 // -----------------------------------------------------------------------------
 // Teamwear hub — sport grid + 3D kit designer CTA.
 // File path in repo: app/teamwear/page.tsx
-//
-// Image mapping — all tiles use /public/sport-*.jpg (swap later).
-//   Team Sports:
-//     • /sport-rugby-league.jpg  → Rugby League
-//     • /sport-rugby.jpg         → Rugby
-//     • /sport-netball.jpg       → Netball
-//     • /sport-basketball.jpg    → Basketball
-//     • /sport-hockey.jpg        → Hockey
-//     • /sport-cricket.jpg       → Cricket
-//     • /sport-touch.jpg         → Touch
-//     • /sport-baseball.jpg      → Baseball
-//     • /sport-bowls.jpg         → Bowls
-//   School & Special:
-//     • /sport-leavers.jpg       → Leavers
-//   Designer preview:
-//     • /designer-preview.jpg    → 3D designer hero preview
 // -----------------------------------------------------------------------------
 
 type Sport = {
@@ -29,14 +15,14 @@ type Sport = {
 
 const TEAM_SPORTS: Sport[] = [
   { name: "Rugby League", image: "/sport-rugby-league.jpg", href: "/teamwear/rugby-league" },
-  { name: "Rugby",        image: "/sport-rugby.jpg",        href: "/teamwear/rugby" },
-  { name: "Netball",      image: "/sport-netball.jpg",      href: "/teamwear/netball" },
-  { name: "Basketball",   image: "/sport-basketball.jpg",   href: "/teamwear/basketball" },
-  { name: "Hockey",       image: "/sport-hockey.jpg",       href: "/teamwear/hockey" },
-  { name: "Cricket",      image: "/sport-cricket.jpg",      href: "/teamwear/cricket" },
-  { name: "Touch",        image: "/sport-touch.jpg",        href: "/teamwear/touch" },
-  { name: "Baseball",     image: "/sport-baseball.jpg",     href: "/teamwear/baseball" },
-  { name: "Bowls",        image: "/sport-bowls.jpg",        href: "/teamwear/bowls" },
+  { name: "Rugby", image: "/sport-rugby.jpg", href: "/teamwear/rugby" },
+  { name: "Netball", image: "/sport-netball.jpg", href: "/teamwear/netball" },
+  { name: "Basketball", image: "/sport-basketball.jpg", href: "/teamwear/basketball" },
+  { name: "Hockey", image: "/sport-hockey.jpg", href: "/teamwear/hockey" },
+  { name: "Cricket", image: "/sport-cricket.jpg", href: "/teamwear/cricket" },
+  { name: "Touch", image: "/sport-touch.jpg", href: "/teamwear/touch" },
+  { name: "Baseball", image: "/sport-baseball.jpg", href: "/teamwear/baseball" },
+  { name: "Bowls", image: "/sport-bowls.jpg", href: "/teamwear/bowls" },
 ];
 
 const LEAVERS = {
@@ -46,6 +32,19 @@ const LEAVERS = {
   image: "/sport-leavers.jpg",
   href: "/teamwear/leavers",
 };
+
+function useIsMobile(breakpoint = 900) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= breakpoint);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, [breakpoint]);
+
+  return isMobile;
+}
 
 function PrimaryButton({
   href,
@@ -199,7 +198,7 @@ function SportCard({ sport }: { sport: Sport }) {
         style={{
           position: "relative",
           zIndex: 2,
-          padding: "22px",
+          padding: "20px",
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-end",
@@ -224,7 +223,7 @@ function SportCard({ sport }: { sport: Sport }) {
   );
 }
 
-function LeaversCard() {
+function LeaversCard({ isMobile }: { isMobile: boolean }) {
   return (
     <a
       href={LEAVERS.href}
@@ -232,7 +231,7 @@ function LeaversCard() {
         position: "relative",
         display: "block",
         width: "100%",
-        minHeight: "360px",
+        minHeight: isMobile ? "300px" : "340px",
         overflow: "hidden",
         border: "1px solid rgba(255,255,255,0.08)",
         background: "#0f0f0f",
@@ -261,17 +260,16 @@ function LeaversCard() {
         }}
       />
 
-      {/* left-weighted gradient so copy reads cleanly */}
       <div
         style={{
           position: "absolute",
           inset: 0,
-          background:
-            "linear-gradient(90deg, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.55) 45%, rgba(8,8,8,0.15) 100%)",
+          background: isMobile
+            ? "linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.35) 60%, rgba(8,8,8,0.08) 100%)"
+            : "linear-gradient(90deg, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.55) 45%, rgba(8,8,8,0.15) 100%)",
         }}
       />
 
-      {/* top tag */}
       <div
         style={{
           position: "absolute",
@@ -314,25 +312,25 @@ function LeaversCard() {
         style={{
           position: "relative",
           zIndex: 2,
-          padding: "48px",
+          padding: isMobile ? "24px" : "40px",
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-end",
           height: "100%",
-          minHeight: "360px",
-          maxWidth: "640px",
+          minHeight: isMobile ? "300px" : "340px",
+          maxWidth: isMobile ? "100%" : "640px",
         }}
       >
         <div
           style={{
             fontFamily: "Helvetica, Arial, sans-serif",
-            fontSize: "clamp(48px, 6vw, 88px)",
+            fontSize: isMobile ? "clamp(42px, 12vw, 64px)" : "clamp(48px, 6vw, 88px)",
             fontWeight: 900,
             letterSpacing: "-0.05em",
             lineHeight: 0.9,
             textTransform: "uppercase",
             color: "#f5f5f0",
-            margin: "0 0 16px",
+            margin: "0 0 12px",
           }}
         >
           {LEAVERS.name}
@@ -357,6 +355,8 @@ function LeaversCard() {
 }
 
 export default function TeamwearPage() {
+  const isMobile = useIsMobile();
+
   return (
     <section
       style={{
@@ -368,17 +368,16 @@ export default function TeamwearPage() {
         style={{
           maxWidth: "1440px",
           margin: "0 auto",
-          padding: "116px 48px 0",
+          padding: isMobile ? "84px 24px 0" : "96px 48px 0",
         }}
       >
-        {/* HERO */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr",
+            gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
             alignItems: "start",
-            gap: "24px",
-            marginBottom: "26px",
+            gap: isMobile ? "14px" : "24px",
+            marginBottom: "18px",
           }}
         >
           <div>
@@ -410,8 +409,8 @@ export default function TeamwearPage() {
 
           <div
             style={{
-              justifySelf: "end",
-              textAlign: "right",
+              justifySelf: isMobile ? "start" : "end",
+              textAlign: isMobile ? "left" : "right",
               maxWidth: "360px",
             }}
           >
@@ -432,7 +431,7 @@ export default function TeamwearPage() {
           </div>
         </div>
 
-        <div style={{ marginBottom: "30px" }}>
+        <div style={{ marginBottom: "22px" }}>
           <div
             style={{
               fontFamily: "Helvetica, Arial, sans-serif",
@@ -441,7 +440,7 @@ export default function TeamwearPage() {
               letterSpacing: "0.22em",
               textTransform: "uppercase",
               color: "#b8f400",
-              marginBottom: "18px",
+              marginBottom: "16px",
             }}
           >
             Teamwear
@@ -450,7 +449,7 @@ export default function TeamwearPage() {
           <h1
             style={{
               fontFamily: "Helvetica, Arial, sans-serif",
-              fontSize: "clamp(72px, 10vw, 152px)",
+              fontSize: isMobile ? "clamp(56px, 16vw, 92px)" : "clamp(72px, 10vw, 152px)",
               fontWeight: 900,
               letterSpacing: "-0.065em",
               lineHeight: 0.88,
@@ -470,11 +469,11 @@ export default function TeamwearPage() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr auto",
-            gap: "32px",
-            alignItems: "center",
-            paddingTop: "22px",
-            paddingBottom: "72px",
+            gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
+            gap: isMobile ? "20px" : "32px",
+            alignItems: isMobile ? "start" : "center",
+            paddingTop: "18px",
+            paddingBottom: isMobile ? "44px" : "56px",
             borderTop: "1px solid rgba(255,255,255,0.08)",
           }}
         >
@@ -488,8 +487,7 @@ export default function TeamwearPage() {
                 margin: 0,
               }}
             >
-              Fully custom kit across nine sports, plus school leavers. Pick
-              your cut, pick your colours, drop in your badge.
+              Fully custom kit across nine sports, plus school leavers. Pick your cut, pick your colours, drop in your badge.
               <br />
               <span style={{ color: "#ffffff", fontWeight: 600 }}>
                 Design it live. See it on-body. Approve once and we make it.
@@ -503,22 +501,19 @@ export default function TeamwearPage() {
               gap: "12px",
               alignItems: "center",
               flexWrap: "wrap",
-              justifyContent: "flex-end",
+              justifyContent: isMobile ? "flex-start" : "flex-end",
             }}
           >
-            <PrimaryButton href="/teamwear/designer">
-              Launch Designer
-            </PrimaryButton>
+            <PrimaryButton href="/teamwear/designer">Launch Designer</PrimaryButton>
             <SecondaryButton href="#sports">Browse Sports</SecondaryButton>
           </div>
         </div>
 
-        {/* DESIGNER CTA — featured block */}
         <section
           style={{
             borderTop: "1px solid rgba(255,255,255,0.06)",
-            paddingTop: "28px",
-            paddingBottom: "72px",
+            paddingTop: "24px",
+            paddingBottom: isMobile ? "44px" : "56px",
           }}
         >
           <div
@@ -533,19 +528,18 @@ export default function TeamwearPage() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "1.05fr 1fr",
+                gridTemplateColumns: isMobile ? "1fr" : "1.05fr 1fr",
                 alignItems: "stretch",
-                minHeight: "520px",
+                minHeight: isMobile ? "auto" : "460px",
               }}
             >
-              {/* LEFT — copy */}
               <div
                 style={{
-                  padding: "48px",
+                  padding: isMobile ? "24px" : "40px",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  gap: "32px",
+                  gap: "24px",
                 }}
               >
                 <div
@@ -582,13 +576,13 @@ export default function TeamwearPage() {
                   <h2
                     style={{
                       fontFamily: "Helvetica, Arial, sans-serif",
-                      fontSize: "clamp(48px, 6vw, 96px)",
+                      fontSize: isMobile ? "clamp(40px, 11vw, 64px)" : "clamp(48px, 6vw, 96px)",
                       fontWeight: 900,
                       letterSpacing: "-0.06em",
                       lineHeight: 0.88,
                       textTransform: "uppercase",
                       color: "#f5f5f0",
-                      margin: "0 0 22px",
+                      margin: "0 0 16px",
                     }}
                   >
                     BUILD IT
@@ -607,47 +601,40 @@ export default function TeamwearPage() {
                       fontSize: "14px",
                       lineHeight: 1.65,
                       color: "rgba(255,255,255,0.52)",
-                      margin: "0 0 28px",
+                      margin: "0 0 20px",
                       maxWidth: "480px",
                     }}
                   >
-                    Spin the model. Try your colours. Drop in your logo.
-                    Preview every panel before anything goes into production —
-                    no back-and-forth, no guesswork.
+                    Spin the model. Try your colours. Drop in your logo. Preview every panel before anything goes into production — no back-and-forth, no guesswork.
                   </p>
 
-                  {/* feature chips */}
                   <div
                     style={{
                       display: "flex",
                       flexWrap: "wrap",
                       gap: "8px",
-                      marginBottom: "28px",
+                      marginBottom: "20px",
                     }}
                   >
-                    {[
-                      "Rotate in 3D",
-                      "Your Pantone",
-                      "Logo Upload",
-                      "Live Preview",
-                      "Quote on Submit",
-                    ].map((chip) => (
-                      <span
-                        key={chip}
-                        style={{
-                          fontFamily: "Helvetica, Arial, sans-serif",
-                          fontSize: "10px",
-                          fontWeight: 700,
-                          letterSpacing: "0.16em",
-                          textTransform: "uppercase",
-                          color: "rgba(255,255,255,0.72)",
-                          border: "1px solid rgba(255,255,255,0.14)",
-                          padding: "8px 12px",
-                        }}
-                      >
-                        {chip}
-                      </span>
-                    ))}
+                    {["Rotate in 3D", "Your Pantone", "Logo Upload", "Live Preview", "Quote on Submit"].map(
+                      (chip) => (
+                        <span
+                          key={chip}
+                          style={{
+                            fontFamily: "Helvetica, Arial, sans-serif",
+                            fontSize: "10px",
+                            fontWeight: 700,
+                            letterSpacing: "0.16em",
+                            textTransform: "uppercase",
+                            color: "rgba(255,255,255,0.72)",
+                            border: "1px solid rgba(255,255,255,0.14)",
+                            padding: "8px 12px",
+                          }}
+                        >
+                          {chip}
+                        </span>
+                      )
+                    )}
                   </div>
 
                   <div
@@ -657,23 +644,20 @@ export default function TeamwearPage() {
                       flexWrap: "wrap",
                     }}
                   >
-                    <PrimaryButton href="/teamwear/designer">
-                      Launch Designer →
-                    </PrimaryButton>
-                    <SecondaryButton href="/contact">
-                      Talk To Us
-                    </SecondaryButton>
+                    <PrimaryButton href="/teamwear/designer">Launch Designer →</PrimaryButton>
+                    <SecondaryButton href="/contact">Talk To Us</SecondaryButton>
                   </div>
                 </div>
               </div>
 
-              {/* RIGHT — preview */}
               <div
                 style={{
                   position: "relative",
                   overflow: "hidden",
                   background: "#080808",
-                  borderLeft: "1px solid rgba(255,255,255,0.06)",
+                  borderLeft: isMobile ? "none" : "1px solid rgba(255,255,255,0.06)",
+                  borderTop: isMobile ? "1px solid rgba(255,255,255,0.06)" : "none",
+                  minHeight: isMobile ? "320px" : "auto",
                 }}
               >
                 <img
@@ -689,7 +673,6 @@ export default function TeamwearPage() {
                   }}
                 />
 
-                {/* subtle bottom gradient for legibility */}
                 <div
                   style={{
                     position: "absolute",
@@ -699,7 +682,6 @@ export default function TeamwearPage() {
                   }}
                 />
 
-                {/* floating HUD tag */}
                 <div
                   style={{
                     position: "absolute",
@@ -735,7 +717,6 @@ export default function TeamwearPage() {
                   </span>
                 </div>
 
-                {/* bottom HUD */}
                 <div
                   style={{
                     position: "absolute",
@@ -744,8 +725,9 @@ export default function TeamwearPage() {
                     right: "20px",
                     display: "flex",
                     justifyContent: "space-between",
-                    alignItems: "center",
-                    gap: "12px",
+                    alignItems: isMobile ? "flex-start" : "center",
+                    flexDirection: isMobile ? "column" : "row",
+                    gap: "8px",
                   }}
                 >
                   <div
@@ -758,7 +740,7 @@ export default function TeamwearPage() {
                       color: "rgba(255,255,255,0.7)",
                     }}
                   >
-                    360°  ·  On-Body  ·  To-Spec
+                    360° · On-Body · To-Spec
                   </div>
 
                   <div
@@ -779,21 +761,20 @@ export default function TeamwearPage() {
           </div>
         </section>
 
-        {/* 01 — TEAM SPORTS */}
         <section
           id="sports"
           style={{
             borderTop: "1px solid rgba(255,255,255,0.06)",
-            paddingTop: "48px",
+            paddingTop: isMobile ? "36px" : "40px",
           }}
         >
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr auto",
+              gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
               alignItems: "end",
-              gap: "32px",
-              marginBottom: "26px",
+              gap: isMobile ? "14px" : "32px",
+              marginBottom: "22px",
             }}
           >
             <div>
@@ -805,7 +786,7 @@ export default function TeamwearPage() {
                   letterSpacing: "0.22em",
                   textTransform: "uppercase",
                   color: "#b8f400",
-                  marginBottom: "12px",
+                  marginBottom: "10px",
                 }}
               >
                 01 · Team Sports
@@ -814,7 +795,7 @@ export default function TeamwearPage() {
               <h2
                 style={{
                   fontFamily: "Helvetica, Arial, sans-serif",
-                  fontSize: "clamp(40px, 5vw, 72px)",
+                  fontSize: isMobile ? "clamp(34px, 10vw, 48px)" : "clamp(40px, 5vw, 72px)",
                   fontWeight: 900,
                   letterSpacing: "-0.05em",
                   lineHeight: 0.9,
@@ -835,7 +816,7 @@ export default function TeamwearPage() {
                 letterSpacing: "0.16em",
                 textTransform: "uppercase",
                 color: "rgba(255,255,255,0.5)",
-                textAlign: "right",
+                textAlign: isMobile ? "left" : "right",
                 maxWidth: "260px",
                 lineHeight: 1.5,
               }}
@@ -849,7 +830,7 @@ export default function TeamwearPage() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
+              gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(3, 1fr)",
               gap: "14px",
             }}
           >
@@ -859,19 +840,18 @@ export default function TeamwearPage() {
           </div>
         </section>
 
-        {/* 02 — SCHOOL & SPECIAL */}
         <section
           style={{
-            paddingTop: "72px",
+            paddingTop: isMobile ? "44px" : "56px",
           }}
         >
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr auto",
+              gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
               alignItems: "end",
-              gap: "32px",
-              marginBottom: "26px",
+              gap: isMobile ? "14px" : "32px",
+              marginBottom: "22px",
             }}
           >
             <div>
@@ -883,7 +863,7 @@ export default function TeamwearPage() {
                   letterSpacing: "0.22em",
                   textTransform: "uppercase",
                   color: "#b8f400",
-                  marginBottom: "12px",
+                  marginBottom: "10px",
                 }}
               >
                 02 · School & Special
@@ -892,7 +872,7 @@ export default function TeamwearPage() {
               <h2
                 style={{
                   fontFamily: "Helvetica, Arial, sans-serif",
-                  fontSize: "clamp(40px, 5vw, 72px)",
+                  fontSize: isMobile ? "clamp(34px, 10vw, 48px)" : "clamp(40px, 5vw, 72px)",
                   fontWeight: 900,
                   letterSpacing: "-0.05em",
                   lineHeight: 0.9,
@@ -913,7 +893,7 @@ export default function TeamwearPage() {
                 letterSpacing: "0.16em",
                 textTransform: "uppercase",
                 color: "rgba(255,255,255,0.5)",
-                textAlign: "right",
+                textAlign: isMobile ? "left" : "right",
                 maxWidth: "260px",
                 lineHeight: 1.5,
               }}
@@ -924,19 +904,18 @@ export default function TeamwearPage() {
             </div>
           </div>
 
-          <LeaversCard />
+          <LeaversCard isMobile={isMobile} />
         </section>
 
-        {/* PROMPT STRIP */}
         <div
           style={{
-            marginTop: "48px",
-            marginBottom: "108px",
-            padding: "22px 26px",
+            marginTop: "36px",
+            marginBottom: isMobile ? "64px" : "80px",
+            padding: isMobile ? "16px 18px" : "18px 22px",
             border: "1px solid rgba(255,255,255,0.08)",
             display: "grid",
-            gridTemplateColumns: "1fr auto",
-            gap: "24px",
+            gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
+            gap: "16px",
             alignItems: "center",
           }}
         >
@@ -947,10 +926,10 @@ export default function TeamwearPage() {
               letterSpacing: "0.14em",
               textTransform: "uppercase",
               color: "rgba(255,255,255,0.64)",
+              lineHeight: 1.5,
             }}
           >
-            Don't see your sport?{" "}
-            <span style={{ color: "#ffffff" }}>We can still build it.</span>
+            Don't see your sport? <span style={{ color: "#ffffff" }}>We can still build it.</span>
           </div>
 
           <a
@@ -965,13 +944,13 @@ export default function TeamwearPage() {
               textDecoration: "none",
               borderBottom: "1px solid rgba(184,244,0,0.3)",
               paddingBottom: "3px",
+              justifySelf: isMobile ? "start" : "end",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.borderBottomColor = "#b8f400";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderBottomColor =
-                "rgba(184,244,0,0.3)";
+              e.currentTarget.style.borderBottomColor = "rgba(184,244,0,0.3)";
             }}
           >
             Get in touch →
@@ -979,13 +958,12 @@ export default function TeamwearPage() {
         </div>
       </div>
 
-      {/* CTA BAND */}
       <section
         style={{
           background: "#b8f400",
           color: "#080808",
-          padding: "108px 48px",
-          marginTop: "24px",
+          padding: isMobile ? "56px 24px" : "84px 48px",
+          marginTop: "8px",
         }}
       >
         <div
@@ -993,8 +971,8 @@ export default function TeamwearPage() {
             maxWidth: "1440px",
             margin: "0 auto",
             display: "grid",
-            gridTemplateColumns: "1fr auto",
-            gap: "32px",
+            gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
+            gap: isMobile ? "24px" : "32px",
             alignItems: "end",
           }}
         >
@@ -1002,7 +980,7 @@ export default function TeamwearPage() {
             <h2
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
-                fontSize: "clamp(72px, 10vw, 140px)",
+                fontSize: isMobile ? "clamp(52px, 15vw, 88px)" : "clamp(72px, 10vw, 140px)",
                 fontWeight: 900,
                 letterSpacing: "-0.065em",
                 lineHeight: 0.84,
@@ -1018,7 +996,7 @@ export default function TeamwearPage() {
             </h2>
           </div>
 
-          <div style={{ textAlign: "right" }}>
+          <div style={{ textAlign: isMobile ? "left" : "right" }}>
             <p
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
@@ -1026,7 +1004,7 @@ export default function TeamwearPage() {
                 lineHeight: 1.7,
                 color: "rgba(8,8,8,0.72)",
                 maxWidth: "240px",
-                margin: "0 0 22px auto",
+                margin: isMobile ? "0 0 18px 0" : "0 0 18px auto",
               }}
             >
               Design live. Approve once. We make it.
@@ -1036,7 +1014,7 @@ export default function TeamwearPage() {
               style={{
                 display: "flex",
                 gap: "12px",
-                justifyContent: "flex-end",
+                justifyContent: isMobile ? "flex-start" : "flex-end",
                 flexWrap: "wrap",
               }}
             >
