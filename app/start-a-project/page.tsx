@@ -1,6 +1,7 @@
 "use client";
  
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
  
 /* ------------------------------------------------------------------ */
 /*  Tendencies — Start a Project                                      */
@@ -188,10 +189,12 @@ const selectBase: React.CSSProperties = {
 /* ------------------------------------------------------------------ */
  
 export default function StartAProjectPage() {
+  const searchParams = useSearchParams();
+  const product = searchParams.get("product");
+
   const [form, setForm] = useState<EnquiryForm>(DEFAULT_FORM);
   const [status, setStatus] = useState<"idle" | "submitting" | "submitted" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string>("");
- 
   /* ---------------------------------------------------------------- */
   /*  One-time prefill from ?product= on first mount.                 */
   /*  Empty deps = runs once. We never overwrite typed input because  */
@@ -228,7 +231,10 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(form),
+    body: JSON.stringify({
+    ...form,
+    product,
+    }),
     });
     const data = await res.json().catch(() => null);
     if (!res.ok) {
@@ -417,7 +423,21 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
             gap: 28,
           }}
         >
-          <h2
+         {product && (
+  <div
+    style={{
+      fontSize: 11,
+      letterSpacing: "0.22em",
+      textTransform: "uppercase",
+      fontWeight: 700,
+      color: "rgba(245,245,240,0.44)",
+      marginBottom: 14,
+          }}
+            >
+            Product: {PRODUCT_PREFILL[product]?.productName || product}
+            </div>
+            )} 
+            <h2
             style={{
               margin: 0,
               fontWeight: 900,

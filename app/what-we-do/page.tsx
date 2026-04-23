@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 
 const DESIGN_CASE = {
-  prototypeImg: "/work-streets-prototype.jpg",
-  finishedImg: "/work-streets-finished.jpg",
+  prototypeImg: "/work-streets-mold.jpg",
+  finishedImg: "/work-streets-prototype.jpg",
 };
 
 const BLOCKS = [
@@ -101,6 +101,22 @@ function Button({
           ? "none"
           : "1px solid rgba(255,255,255,0.18)",
       }}
+      onMouseEnter={(e) => {
+        if (primary) {
+          e.currentTarget.style.opacity = "0.88";
+        } else {
+          e.currentTarget.style.borderColor = "rgba(255,255,255,0.32)";
+          e.currentTarget.style.background = "rgba(255,255,255,0.03)";
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (primary) {
+          e.currentTarget.style.opacity = "1";
+        } else {
+          e.currentTarget.style.borderColor = "rgba(255,255,255,0.18)";
+          e.currentTarget.style.background = "transparent";
+        }
+      }}
     >
       {children}
     </a>
@@ -122,13 +138,16 @@ export default function WhatWeDoPage() {
         {/* HERO */}
         <h1
           style={{
+            fontFamily: "Helvetica, Arial, sans-serif",
             fontSize: isMobile
               ? "clamp(56px, 16vw, 92px)"
               : "clamp(72px, 10vw, 140px)",
             fontWeight: 900,
-            letterSpacing: "-0.06em",
-            lineHeight: 0.9,
-            marginBottom: "40px",
+            letterSpacing: "-0.065em",
+            lineHeight: 0.88,
+            margin: 0,
+            marginBottom: isMobile ? "40px" : "52px",
+            textTransform: "uppercase",
           }}
         >
           DESIGN<span style={{ color: "#b8f400" }}>.</span>
@@ -156,17 +175,22 @@ export default function WhatWeDoPage() {
                   gridTemplateColumns: isMobile
                     ? "1fr"
                     : isDesign
-                    ? "420px 620px"
-                    : "420px 520px",
+                    ? "minmax(0, 390px) minmax(0, 700px)"
+                    : "minmax(0, 390px) minmax(0, 520px)",
                   gap: isMobile ? "32px" : "80px",
+                  alignItems: "start",
+                  justifyContent: "space-between",
                 }}
               >
                 {/* TEXT */}
-                <div style={{ maxWidth: "420px" }}>
+                <div style={{ maxWidth: "390px" }}>
                   <div
                     style={{
+                      fontFamily: "Helvetica, Arial, sans-serif",
                       fontSize: isMobile ? "64px" : "84px",
                       fontWeight: 900,
+                      letterSpacing: "-0.06em",
+                      lineHeight: 0.84,
                       marginBottom: "12px",
                     }}
                   >
@@ -176,7 +200,12 @@ export default function WhatWeDoPage() {
 
                   <h3
                     style={{
-                      fontSize: isMobile ? "22px" : "26px",
+                      fontFamily: "Helvetica, Arial, sans-serif",
+                      fontSize: isMobile ? "22px" : "25px",
+                      fontWeight: 800,
+                      letterSpacing: "-0.03em",
+                      lineHeight: 0.96,
+                      margin: 0,
                       marginBottom: "20px",
                       textTransform: "uppercase",
                     }}
@@ -188,8 +217,10 @@ export default function WhatWeDoPage() {
 
                   <p
                     style={{
-                      fontSize: "15px",
-                      lineHeight: 1.6,
+                      fontFamily: "Helvetica, Arial, sans-serif",
+                      fontSize: "14px",
+                      lineHeight: 1.68,
+                      margin: 0,
                       marginBottom: "24px",
                       color: "rgba(255,255,255,0.6)",
                     }}
@@ -197,7 +228,12 @@ export default function WhatWeDoPage() {
                     {block.intro}
                   </p>
 
-                  <div style={{ marginBottom: "24px" }}>
+                  <div
+                    style={{
+                      marginBottom: "24px",
+                      borderTop: "1px solid rgba(255,255,255,0.06)",
+                    }}
+                  >
                     {block.bullets.map((b) => (
                       <div
                         key={b}
@@ -205,9 +241,12 @@ export default function WhatWeDoPage() {
                           padding: "14px 0",
                           borderBottom:
                             "1px solid rgba(255,255,255,0.06)",
+                          fontFamily: "Helvetica, Arial, sans-serif",
                           fontSize: "12px",
-                          letterSpacing: "0.12em",
+                          fontWeight: 700,
+                          letterSpacing: "0.14em",
                           textTransform: "uppercase",
+                          color: "#f5f5f0",
                         }}
                       >
                         {b}
@@ -221,52 +260,72 @@ export default function WhatWeDoPage() {
                 </div>
 
                 {/* VISUAL */}
-                <div>
+                <div style={{ width: "100%", maxWidth: isDesign ? "700px" : "520px" }}>
                   {isDesign ? (
                     <>
                       <div
                         style={{
                           display: "grid",
-                          gridTemplateColumns: "1fr 1fr",
-                          gap: "14px",
+                          gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+                          gap: "10px",
                           marginBottom: "12px",
                         }}
                       >
                         <img
                           src={DESIGN_CASE.prototypeImg}
+                          alt="Streets Ice Cream rough prototype development"
                           style={{
                             width: "100%",
                             aspectRatio: "1 / 1",
                             objectFit: "cover",
+                            objectPosition: "center center",
+                            filter: "brightness(0.78) contrast(1.06)",
+                            display: "block",
                           }}
                         />
                         <img
                           src={DESIGN_CASE.finishedImg}
+                          alt="Streets Ice Cream refined prototype"
                           style={{
                             width: "100%",
                             aspectRatio: "1 / 1",
                             objectFit: "cover",
+                            objectPosition: "center top",
+                            filter: "brightness(0.98) contrast(1.02)",
+                            display: "block",
                           }}
                         />
                       </div>
 
                       <div
                         style={{
+                          fontFamily: "Helvetica, Arial, sans-serif",
                           fontSize: "10px",
+                          fontWeight: 700,
                           letterSpacing: "0.18em",
-                          opacity: 0.6,
+                          textTransform: "uppercase",
+                          color: "rgba(255,255,255,0.48)",
+                          marginTop: "2px",
                         }}
                       >
-                        PROTOTYPE → FINISHED
+                        Rough → Refined
                       </div>
                     </>
                   ) : (
                     <img
                       src={block.image}
+                      alt={block.eyebrow}
                       style={{
                         width: "100%",
                         aspectRatio: "1 / 1",
                         objectFit: "cover",
+                        objectPosition:
+                          block.number === "02" ? "center top" : "center center",
+                        filter:
+                          block.number === "02"
+                            ? "brightness(0.96)"
+                            : "brightness(0.9) contrast(1.02)",
+                        display: "block",
                       }}
                     />
                   )}
@@ -277,7 +336,7 @@ export default function WhatWeDoPage() {
         })}
 
         {/* CTA */}
-        <div style={{ marginTop: "80px" }}>
+        <div style={{ marginTop: "80px", paddingBottom: isMobile ? "56px" : "72px" }}>
           <Button href="/start-a-project" primary>
             Start a Project
           </Button>

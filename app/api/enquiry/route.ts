@@ -16,6 +16,7 @@ export async function POST(req: Request) {
       timeline,
       budget,
       details,
+      product,
     } = body ?? {};
 
     if (!name || !email || !details) {
@@ -40,6 +41,7 @@ export async function POST(req: Request) {
     const html = `
       <div style="font-family: Helvetica, Arial, sans-serif; color: #111;">
         <h2>New Start a Project enquiry</h2>
+       <p><strong>Product:</strong> ${escapeHtml(product || "-")}</p>
         <p><strong>Name:</strong> ${escapeHtml(name)}</p>
         <p><strong>Email:</strong> ${escapeHtml(email)}</p>
         <p><strong>Company / School / Club:</strong> ${escapeHtml(company || "-")}</p>
@@ -57,6 +59,7 @@ export async function POST(req: Request) {
     const text = [
       "New Start a Project enquiry",
       "",
+      `Product: ${product || "-"}`,
       `Name: ${name}`,
       `Email: ${email}`,
       `Company / School / Club: ${company || "-"}`,
@@ -77,7 +80,29 @@ export async function POST(req: Request) {
       html,
       text,
     });
-
+try {
+  if (process.env.GOOGLE_SHEETS_WEBHOOK_URL) {
+    await fetch(process.env.GOOGLE_SHEETS_WEBHOOK_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        product,
+        name,
+        email,
+        company,
+        need,
+        quantity,
+        timeline,
+        budget,
+        details,
+      }),
+    });
+  }
+} catch (error) {
+  console.error("Google Sheets webhook failed:", error);
+}
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("Enquiry email error:", error);
