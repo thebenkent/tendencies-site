@@ -1,3 +1,11 @@
+type Product = {
+  href: string;
+  image: string;
+  name: string;
+  type: string;
+  line: string;
+};
+
 function ProductCard({ product }: { product: Product }) {
   return (
     <a
@@ -33,7 +41,6 @@ function ProductCard({ product }: { product: Product }) {
         }
       }}
     >
-      {/* IMAGE */}
       <img
         src={product.image}
         alt={product.name}
@@ -49,7 +56,6 @@ function ProductCard({ product }: { product: Product }) {
         }}
       />
 
-      {/* GRADIENT */}
       <div
         style={{
           position: "absolute",
@@ -59,7 +65,6 @@ function ProductCard({ product }: { product: Product }) {
         }}
       />
 
-      {/* TYPE TAG */}
       <div
         style={{
           position: "absolute",
@@ -77,7 +82,6 @@ function ProductCard({ product }: { product: Product }) {
         {product.type}
       </div>
 
-      {/* CTA ICON */}
       <div
         style={{
           position: "absolute",
@@ -98,7 +102,6 @@ function ProductCard({ product }: { product: Product }) {
         →
       </div>
 
-      {/* CONTENT */}
       <div
         style={{
           position: "relative",
@@ -138,3 +141,5 @@ function ProductCard({ product }: { product: Product }) {
     </a>
   );
 }
+
+export default ProductCard;

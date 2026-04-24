@@ -154,9 +154,7 @@ function PrimaryButton({
         textTransform: "uppercase",
         transition: "opacity 0.2s ease",
       }}
-      onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.86")}
-      onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-    >
+       >
       {children}
     </a>
   );

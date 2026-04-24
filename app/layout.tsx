@@ -1,4 +1,4 @@
-import Header from "../components/Header";
+import Header from "@/components/Header";
 import "./globals.css";
 
 export default function RootLayout({
@@ -8,14 +8,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        style={{
-          margin: 0,
-          background: "#080808",
-        }}
-      >
+      <body>
         <Header />
-        <main style={{ paddingTop: "64px" }}>{children}</main>
+        <main className="page">{children}</main>
       </body>
     </html>
   );

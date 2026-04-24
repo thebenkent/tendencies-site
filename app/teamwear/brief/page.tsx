@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 const FONT = "Helvetica, Arial, sans-serif";
@@ -124,7 +124,7 @@ const textareaStyle: React.CSSProperties = {
   boxSizing: "border-box",
 };
 
-export default function TeamwearBriefPage() {
+function TeamwearBriefForm() {
   const isMobile = useIsMobile();
   const searchParams = useSearchParams();
 
@@ -775,5 +775,12 @@ export default function TeamwearBriefPage() {
         </div>
       </section>
     </main>
+  );
+}
+export default function TeamwearBriefPage() {
+  return (
+    <Suspense fallback={null}>
+      <TeamwearBriefForm />
+    </Suspense>
   );
 }

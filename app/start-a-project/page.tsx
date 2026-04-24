@@ -1,28 +1,20 @@
 "use client";
- 
-import { useEffect, useState } from "react";
+
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
- 
+
 /* ------------------------------------------------------------------ */
 /*  Tendencies — Start a Project                                      */
 /*  File path in repo: app/start-a-project/page.tsx                   */
-/*                                                                    */
-/*  Query params supported:                                           */
-/*    ?product=heavyweight-tee   → Need = Apparel                     */
-/*    ?product=resin-keychains   → Need = Custom Product              */
-/*    ?product=insulated-bottle  → Need = Merch                       */
-/*                                                                    */
-/*  Prefill only happens once on mount. Once the user types, the      */
-/*  form state is never overwritten by URL params again.              */
 /* ------------------------------------------------------------------ */
- 
+
 const FONT = "Helvetica, Arial, sans-serif";
 const BG = "#080808";
 const FG = "#f5f5f0";
 const LIME = "#b8f400";
- 
+
 type NeedOption = "Merch" | "Apparel" | "Teamwear" | "Custom Product" | "Unsure";
- 
+
 const NEED_OPTIONS: NeedOption[] = [
   "Merch",
   "Apparel",
@@ -30,7 +22,7 @@ const NEED_OPTIONS: NeedOption[] = [
   "Custom Product",
   "Unsure",
 ];
- 
+
 type EnquiryForm = {
   name: string;
   email: string;
@@ -41,7 +33,7 @@ type EnquiryForm = {
   budget: string;
   details: string;
 };
- 
+
 const DEFAULT_FORM: EnquiryForm = {
   name: "",
   email: "",
@@ -52,28 +44,19 @@ const DEFAULT_FORM: EnquiryForm = {
   budget: "",
   details: "",
 };
- 
-/* ------------------------------------------------------------------ */
-/*  Product → prefill map                                             */
-/*  Extend this when new PDPs ship.                                   */
-/* ------------------------------------------------------------------ */
- 
+
 type Prefill = { need: NeedOption; productName: string };
- 
+
 const PRODUCT_PREFILL: Record<string, Prefill> = {
-  "heavyweight-tee":  { need: "Apparel",        productName: "Heavyweight Tee" },
-  "resin-keychains":  { need: "Custom Product", productName: "Resin Keychains" },
-  "insulated-bottle": { need: "Merch",          productName: "Insulated Bottle" },
+  "heavyweight-tee": { need: "Apparel", productName: "Heavyweight Tee" },
+  "resin-keychains": { need: "Custom Product", productName: "Resin Keychains" },
+  "insulated-bottle": { need: "Merch", productName: "Insulated Bottle" },
 };
- 
+
 function buildDetailsSeed(productName: string): string {
   return `Product: ${productName}\n\n`;
 }
- 
-/* ------------------------------------------------------------------ */
-/*  Small presentational pieces                                       */
-/* ------------------------------------------------------------------ */
- 
+
 function SectionKicker({ index, title }: { index: string; title: string }) {
   return (
     <div
@@ -113,7 +96,7 @@ function SectionKicker({ index, title }: { index: string; title: string }) {
     </div>
   );
 }
- 
+
 function Field({
   label,
   required,
@@ -142,7 +125,7 @@ function Field({
     </label>
   );
 }
- 
+
 const inputBase: React.CSSProperties = {
   width: "100%",
   height: 48,
@@ -156,7 +139,7 @@ const inputBase: React.CSSProperties = {
   outline: "none",
   transition: "border-color 160ms ease",
 };
- 
+
 const textareaBase: React.CSSProperties = {
   width: "100%",
   minHeight: 160,
@@ -171,7 +154,7 @@ const textareaBase: React.CSSProperties = {
   resize: "vertical",
   transition: "border-color 160ms ease",
 };
- 
+
 const selectBase: React.CSSProperties = {
   ...inputBase,
   appearance: "none",
@@ -183,23 +166,15 @@ const selectBase: React.CSSProperties = {
   backgroundPosition: "right 4px center",
   paddingRight: 24,
 };
- 
-/* ------------------------------------------------------------------ */
-/*  Page                                                              */
-/* ------------------------------------------------------------------ */
- 
-export default function StartAProjectPage() {
+
+function StartAProjectForm() {
   const searchParams = useSearchParams();
   const product = searchParams.get("product");
 
   const [form, setForm] = useState<EnquiryForm>(DEFAULT_FORM);
   const [status, setStatus] = useState<"idle" | "submitting" | "submitted" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string>("");
-  /* ---------------------------------------------------------------- */
-  /*  One-time prefill from ?product= on first mount.                 */
-  /*  Empty deps = runs once. We never overwrite typed input because  */
-  /*  this effect never runs again for the lifetime of the component. */
-  /* ---------------------------------------------------------------- */
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
@@ -207,51 +182,52 @@ export default function StartAProjectPage() {
     if (!productSlug) return;
     const prefill = PRODUCT_PREFILL[productSlug];
     if (!prefill) return;
+
     setForm((f) => ({
       ...f,
       need: prefill.need,
       details: buildDetailsSeed(prefill.productName),
     }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
- 
+
   const update =
     <K extends keyof EnquiryForm>(key: K) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
       setForm((f) => ({ ...f, [key]: e.target.value as EnquiryForm[K] }));
     };
- 
-async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-  e.preventDefault();
-  setStatus("submitting");
-  setErrorMessage("");
-  try {
-    const res = await fetch("/api/enquiry", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    body: JSON.stringify({
-    ...form,
-    product,
-    }),
-    });
-    const data = await res.json().catch(() => null);
-    if (!res.ok) {
-      throw new Error(data?.error || "Failed to send enquiry.");
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus("submitting");
+    setErrorMessage("");
+
+    try {
+      const res = await fetch("/api/enquiry", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...form,
+          product,
+        }),
+      });
+
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok) {
+        throw new Error(data?.error || "Failed to send enquiry.");
+      }
+
+      setStatus("submitted");
+    } catch (err) {
+      setStatus("error");
+      setErrorMessage(
+        err instanceof Error ? err.message : "Something went wrong. Try again or email us."
+      );
     }
-    setStatus("submitted");
-  } catch (err) {
-    setStatus("error");
-    setErrorMessage(
-      err instanceof Error ? err.message : "Something went wrong. Try again or email us."
-    );
   }
-}
- 
-  /* ---------------------------------------------------------------- */
-  /*  Success view                                                    */
-  /* ---------------------------------------------------------------- */
+
   if (status === "submitted") {
     return (
       <main
@@ -278,6 +254,7 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
           >
             Enquiry Sent
           </div>
+
           <h1
             style={{
               margin: 0,
@@ -293,6 +270,7 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
             Thanks {form.name || "— we've got it"}
             <span style={{ color: LIME }}>.</span>
           </h1>
+
           <p
             style={{
               marginTop: 28,
@@ -301,9 +279,10 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
               color: "rgba(245,245,240,0.7)",
             }}
           >
-            A real human will come back to you within one business day with
-            next steps, a quote range, and a sample plan.
+            A real human will come back to you within one business day with next
+            steps, pricing direction, and a clear plan.
           </p>
+
           <div
             style={{
               marginTop: 40,
@@ -335,6 +314,7 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
             >
               Send Another
             </button>
+
             <a
               href="/work"
               style={{
@@ -360,10 +340,7 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
       </main>
     );
   }
- 
-  /* ---------------------------------------------------------------- */
-  /*  Form view                                                       */
-  /* ---------------------------------------------------------------- */
+
   return (
     <main
       style={{
@@ -387,6 +364,7 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         >
           Start a Project
         </div>
+
         <h1
           style={{
             margin: 0,
@@ -399,14 +377,16 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         >
           Start<span style={{ color: LIME }}>.</span>
           <br />
-          A Project<span style={{ color: LIME }}>.</span>
+          With What
+          <br />
+          You Know<span style={{ color: LIME }}>.</span>
         </h1>
       </section>
- 
+
       {/* Two-column body */}
       <section
         style={{
-          padding: "48px 48px 120px",
+          padding: "40px 48px 120px",
           display: "grid",
           gridTemplateColumns: "1fr 2fr",
           gap: 96,
@@ -423,21 +403,22 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
             gap: 28,
           }}
         >
-         {product && (
-  <div
-    style={{
-      fontSize: 11,
-      letterSpacing: "0.22em",
-      textTransform: "uppercase",
-      fontWeight: 700,
-      color: "rgba(245,245,240,0.44)",
-      marginBottom: 14,
-          }}
+          {product && (
+            <div
+              style={{
+                fontSize: 11,
+                letterSpacing: "0.22em",
+                textTransform: "uppercase",
+                fontWeight: 700,
+                color: "rgba(245,245,240,0.44)",
+                marginBottom: -8,
+              }}
             >
-            Product: {PRODUCT_PREFILL[product]?.productName || product}
+              Product: {PRODUCT_PREFILL[product]?.productName || product}
             </div>
-            )} 
-            <h2
+          )}
+
+          <h2
             style={{
               margin: 0,
               fontWeight: 900,
@@ -447,24 +428,88 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
               textTransform: "uppercase",
             }}
           >
-            Tell us<br />what you<br />need<span style={{ color: LIME }}>.</span>
+            No Brief
+            <br />
+            Yet<span style={{ color: LIME }}>?</span>
+            <br />
+            Fine<span style={{ color: LIME }}>.</span>
           </h2>
+
           <p
             style={{
               margin: 0,
               fontSize: 15,
-              lineHeight: 1.55,
-              color: "rgba(245,245,240,0.65)",
-              maxWidth: 320,
+              lineHeight: 1.6,
+              color: "rgba(245,245,240,0.68)",
+              maxWidth: 340,
             }}
           >
-            No brief yet? Fine. A few lines is enough to get us started. We'll
-            come back with a real sample plan and a real quote — not a generic
-            spreadsheet.
+            A rough idea is enough. A few lines, a link, a logo, a product
+            reference — we’ll shape the rest with you.
           </p>
+
           <div
             style={{
-              marginTop: 8,
+              padding: "20px 22px",
+              border: "1px solid rgba(245,245,240,0.12)",
+              background: "rgba(255,255,255,0.01)",
+            }}
+          >
+            <div
+              style={{
+                fontSize: 11,
+                letterSpacing: "0.22em",
+                textTransform: "uppercase",
+                fontWeight: 700,
+                color: LIME,
+                marginBottom: 12,
+              }}
+            >
+              How this works
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 10,
+                fontSize: 14,
+                lineHeight: 1.55,
+                color: "rgba(245,245,240,0.72)",
+              }}
+            >
+              <div>1. You send the rough outline.</div>
+              <div>2. We come back with direction + pricing.</div>
+              <div>3. You refine. We make it happen.</div>
+            </div>
+          </div>
+
+          <div
+            style={{
+              padding: "18px 20px",
+              border: "1px solid rgba(245,245,240,0.12)",
+              fontSize: 13,
+              lineHeight: 1.6,
+              color: "rgba(245,245,240,0.7)",
+            }}
+          >
+            <div
+              style={{
+                fontSize: 11,
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                fontWeight: 700,
+                color: LIME,
+                marginBottom: 8,
+              }}
+            >
+              Not a quote form
+            </div>
+            You’ll get real numbers after a real conversation.
+          </div>
+
+          <div
+            style={{
               padding: "18px 20px",
               border: "1px solid rgba(245,245,240,0.12)",
               fontSize: 13,
@@ -472,12 +517,22 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
               color: "rgba(245,245,240,0.7)",
             }}
           >
-            Rather email direct?{" "}
-            <a href="mailto:ben@tendencies.co.nz" style={{ color: LIME, textDecoration: "none" }}>
-            </a>
+            Rather email direct?
+            <div style={{ marginTop: 8 }}>
+              <a
+                href="mailto:ben@tendencies.co.nz"
+                style={{
+                  color: LIME,
+                  textDecoration: "none",
+                  fontWeight: 700,
+                }}
+              >
+                ben@tendencies.co.nz
+              </a>
+            </div>
           </div>
         </aside>
- 
+
         {/* Form */}
         <form
           onSubmit={handleSubmit}
@@ -509,10 +564,12 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
                   style={inputBase}
                   onFocus={(e) => (e.currentTarget.style.borderBottomColor = LIME)}
                   onBlur={(e) =>
-                    (e.currentTarget.style.borderBottomColor = "rgba(245,245,240,0.15)")
+                    (e.currentTarget.style.borderBottomColor =
+                      "rgba(245,245,240,0.15)")
                   }
                 />
               </Field>
+
               <Field label="Email" required>
                 <input
                   type="email"
@@ -523,10 +580,12 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
                   style={inputBase}
                   onFocus={(e) => (e.currentTarget.style.borderBottomColor = LIME)}
                   onBlur={(e) =>
-                    (e.currentTarget.style.borderBottomColor = "rgba(245,245,240,0.15)")
+                    (e.currentTarget.style.borderBottomColor =
+                      "rgba(245,245,240,0.15)")
                   }
                 />
               </Field>
+
               <div style={{ gridColumn: "1 / -1" }}>
                 <Field label="Company / School / Club">
                   <input
@@ -537,14 +596,15 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
                     style={inputBase}
                     onFocus={(e) => (e.currentTarget.style.borderBottomColor = LIME)}
                     onBlur={(e) =>
-                      (e.currentTarget.style.borderBottomColor = "rgba(245,245,240,0.15)")
+                      (e.currentTarget.style.borderBottomColor =
+                        "rgba(245,245,240,0.15)")
                     }
                   />
                 </Field>
               </div>
             </div>
           </div>
- 
+
           {/* 02 — Your project */}
           <div>
             <SectionKicker index="02" title="Your Project" />
@@ -556,7 +616,7 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
               }}
             >
               <div style={{ gridColumn: "1 / -1" }}>
-                <Field label="What do you need?" required>
+                <Field label="What are you looking to make?" required>
                   <select
                     required
                     value={form.need}
@@ -564,7 +624,8 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
                     style={selectBase}
                     onFocus={(e) => (e.currentTarget.style.borderBottomColor = LIME)}
                     onBlur={(e) =>
-                      (e.currentTarget.style.borderBottomColor = "rgba(245,245,240,0.15)")
+                      (e.currentTarget.style.borderBottomColor =
+                        "rgba(245,245,240,0.15)")
                     }
                   >
                     <option value="" disabled style={{ color: "#888", backgroundColor: BG }}>
@@ -578,6 +639,7 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
                   </select>
                 </Field>
               </div>
+
               <Field label="Approx Quantity">
                 <input
                   type="text"
@@ -587,10 +649,12 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
                   style={inputBase}
                   onFocus={(e) => (e.currentTarget.style.borderBottomColor = LIME)}
                   onBlur={(e) =>
-                    (e.currentTarget.style.borderBottomColor = "rgba(245,245,240,0.15)")
+                    (e.currentTarget.style.borderBottomColor =
+                      "rgba(245,245,240,0.15)")
                   }
                 />
               </Field>
+
               <Field label="Timeline">
                 <input
                   type="text"
@@ -600,10 +664,12 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
                   style={inputBase}
                   onFocus={(e) => (e.currentTarget.style.borderBottomColor = LIME)}
                   onBlur={(e) =>
-                    (e.currentTarget.style.borderBottomColor = "rgba(245,245,240,0.15)")
+                    (e.currentTarget.style.borderBottomColor =
+                      "rgba(245,245,240,0.15)")
                   }
                 />
               </Field>
+
               <div style={{ gridColumn: "1 / -1" }}>
                 <Field label="Budget (optional)">
                   <input
@@ -614,14 +680,15 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
                     style={inputBase}
                     onFocus={(e) => (e.currentTarget.style.borderBottomColor = LIME)}
                     onBlur={(e) =>
-                      (e.currentTarget.style.borderBottomColor = "rgba(245,245,240,0.15)")
+                      (e.currentTarget.style.borderBottomColor =
+                        "rgba(245,245,240,0.15)")
                     }
                   />
                 </Field>
               </div>
             </div>
           </div>
- 
+
           {/* 03 — The brief */}
           <div>
             <SectionKicker index="03" title="The Brief" />
@@ -638,7 +705,7 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
               />
             </Field>
           </div>
- 
+
           {/* Submit */}
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <button
@@ -663,6 +730,7 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
             >
               {status === "submitting" ? "Sending…" : "Send Enquiry →"}
             </button>
+
             {status === "error" && (
               <div
                 style={{
@@ -671,9 +739,10 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
                   letterSpacing: "0.04em",
                 }}
               >
-                {errorMessage || "Something went wrong. Try again or email hello@tendencies.co"}
+                {errorMessage || "Something went wrong. Try again or email ben@tendencies.co.nz"}
               </div>
             )}
+
             <div
               style={{
                 fontSize: 12,
@@ -681,12 +750,12 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
                 color: "rgba(245,245,240,0.5)",
               }}
             >
-              One business day response. No autoresponder. No sales spam.
+              We reply within one business day — usually faster.
             </div>
           </div>
         </form>
       </section>
- 
+
       {/* Reassurance strip */}
       <section
         style={{
@@ -702,9 +771,18 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
           }}
         >
           {[
-            { title: "No brief? Fine.", body: "A line and a logo is enough. We'll shape it with you." },
-            { title: "Not a quote form.", body: "You get real numbers after a real conversation." },
-            { title: "Real people.", body: "You'll deal with the same person from brief to delivery." },
+            {
+              title: "No brief? Fine",
+              body: "A line and a logo is enough. We’ll shape it with you.",
+            },
+            {
+              title: "Not a quote form",
+              body: "You get real numbers after a real conversation.",
+            },
+            {
+              title: "Real people",
+              body: "You’ll deal with the same person from brief to delivery.",
+            },
           ].map((c) => (
             <div key={c.title}>
               <div
@@ -733,5 +811,12 @@ async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         </div>
       </section>
     </main>
+  );
+}
+export default function StartAProjectPage() {
+  return (
+    <Suspense fallback={null}>
+      <StartAProjectForm />
+    </Suspense>
   );
 }

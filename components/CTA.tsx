@@ -5,47 +5,65 @@ export default function CTA() {
     <section
       style={{
         background: "#b8f400",
-        padding: "88px 48px",
+        padding: "96px 48px",
       }}
     >
       <div
         style={{
           maxWidth: "1440px",
           margin: "0 auto",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-end",
+          display: "grid",
+          gridTemplateColumns: "minmax(0, 1fr) auto",
+          alignItems: "end",
           gap: "48px",
         }}
       >
-        {/* Headline */}
-        <h2
+        <div>
+          <div
+            style={{
+              fontSize: "11px",
+              fontWeight: 700,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "rgba(8,8,8,0.58)",
+              marginBottom: "16px",
+            }}
+          >
+            Start a project
+          </div>
+
+          <h2
+            style={{
+              fontSize: "clamp(64px, 10vw, 120px)",
+              fontWeight: 900,
+              lineHeight: 0.84,
+              letterSpacing: "-0.06em",
+              textTransform: "uppercase",
+              margin: 0,
+              color: "#080808",
+            }}
+          >
+            LET&apos;S
+            <br />
+            BUILD
+            <br />
+            SOMETHING.
+          </h2>
+        </div>
+
+        <div
           style={{
-            fontSize: "clamp(64px, 10vw, 120px)",
-            fontWeight: 900,
-            lineHeight: 0.85,
-            letterSpacing: "-0.05em",
-            textTransform: "uppercase",
-            margin: 0,
-            color: "#080808",
+            textAlign: "right",
+            maxWidth: "280px",
           }}
         >
-          LET'S
-          <br />
-          BUILD
-          <br />
-          SOMETHING.
-        </h2>
-
-        {/* Right */}
-        <div style={{ textAlign: "right" }}>
           <p
             style={{
               fontSize: "14px",
-              lineHeight: 1.45,
+              lineHeight: 1.5,
               fontWeight: 500,
-              color: "rgba(0,0,0,0.6)",
-              margin: "0 0 18px",
+              color: "rgba(8,8,8,0.66)",
+              margin: "0 0 20px",
             }}
           >
             Big enough to deliver.
@@ -54,7 +72,7 @@ export default function CTA() {
           </p>
 
           <a
-            href="/contact"
+            href="/start-a-project"
             style={{
               display: "inline-flex",
               alignItems: "center",
