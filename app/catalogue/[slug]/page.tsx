@@ -39,7 +39,7 @@ export default async function ProductPage({ params }: PageProps) {
   const product = getProduct(slug);
   if (!product) notFound();
 
-  const related = getRelated(product.relatedSlugs);
+  const related = getRelated(product.relatedSlugs ?? []);
 
   return <ProductPageView product={product} related={related} />;
 }

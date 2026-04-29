@@ -1,11 +1,17 @@
 import Header from "@/components/Header";
-import "./globals.css";
+import type { Metadata, Viewport } from "next";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export const metadata: Metadata = {
+  title: "Tendencies",
+  description: "Custom merch & apparel.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>

@@ -6,7 +6,7 @@ import { Breadcrumb } from "./Breadcrumb";
 import { ProductHero } from "./ProductHero";
 import { ProductFacts } from "./ProductFacts";
 import { ProductFeatures } from "./ProductFeatures";
-import { ProductGallery } from "./ProductGallery";
+import ProductGallery from "./ProductGallery";
 import { BrandingMethods } from "./BrandingMethods";
 import { ColourChips } from "./ColourChips";
 import { SizeRow } from "./SizeRow";

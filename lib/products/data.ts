@@ -1,7 +1,4 @@
 // lib/products/data.ts
-// Static product catalogue. Swap this file for a CMS fetch later —
-// the rest of the code only consumes the helpers in ./index.ts.
-
 import type { Product } from "./types";
 
 export const PRODUCTS: Product[] = [
@@ -20,6 +17,7 @@ export const PRODUCTS: Product[] = [
       label: "Flagship",
       aspect: "4/5",
     },
+
     gallery: [
       {
         src: "/catalogue/heavyweight-hoodie/detail-embroidery.jpg",
@@ -49,6 +47,7 @@ export const PRODUCTS: Product[] = [
 
     shortDescription:
       "A retail-weight hoodie built for teamwear programmes that can't compromise on feel. Heavyweight brushed-back fleece, boxed shoulder, ribbed cuff and hem, twin-needle stitch throughout. Holds a strong embroidered crest and takes print cleanly — equally at home on a uniform, a staff kit, or a drop.",
+
     features: [
       "450gsm brushed-back cotton fleece",
       "Boxed shoulder · modern relaxed fit",
@@ -75,7 +74,6 @@ export const PRODUCTS: Product[] = [
     ],
 
     sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL"],
-
     moq: 50,
     leadTimeWeeks: [6, 8],
     sourcing:
@@ -98,45 +96,8 @@ export const PRODUCTS: Product[] = [
       "Corporate gifting at scale",
     ],
 
-    relatedSlugs: ["crew-sweat", "heavyweight-tee", "structured-cap"],
+    relatedSlugs: ["heavyweight-tee", "structured-cap", "field-bottle"],
     tags: ["apparel", "hoodie", "teamwear", "premium"],
-  },
-
-  // --- Stubs for related product rail (fill these out later) ------------------
-  {
-    slug: "crew-sweat",
-    title: "Crew Sweat",
-    category: "apparel",
-    subcategory: "Sweats",
-    descriptor: "380gsm loopback cotton. The versatile companion to the hoodie.",
-    badges: ["teamwear"],
-    hero: {
-      src: "/catalogue/crew-sweat/hero.jpg",
-      alt: "Crew sweat, bone colourway",
-      aspect: "4/5",
-    },
-    shortDescription:
-      "A mid-weight crew sweat in loopback cotton. Built to sit alongside the Heavyweight Hoodie in any teamwear set.",
-    features: [
-      "380gsm loopback cotton",
-      "Classic set-in sleeve",
-      "Ribbed neck, cuff, hem",
-      "Retail-grade finish",
-    ],
-    brandingMethods: ["embroidery", "screen-print", "dtf"],
-    colours: [
-      { name: "Bone", hex: "#f0ece2" },
-      { name: "Coal", hex: "#1a1a1a" },
-    ],
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
-    moq: 50,
-    leadTimeWeeks: [6, 8],
-    specs: [
-      { label: "Fabric", value: "100% cotton loopback" },
-      { label: "Weight", value: "380gsm" },
-    ],
-    relatedSlugs: ["heavyweight-hoodie", "heavyweight-tee"],
-    tags: ["apparel", "sweat", "teamwear"],
   },
 
   {
@@ -145,28 +106,40 @@ export const PRODUCTS: Product[] = [
     category: "apparel",
     subcategory: "Tees",
     descriptor: "260gsm single-jersey. Retail-weight, shape-holding.",
+
     hero: {
       src: "/catalogue/heavyweight-tee/hero.jpg",
       alt: "Heavyweight tee, coal colourway",
       aspect: "4/5",
     },
+
     shortDescription:
       "A 260gsm tee that holds its shape and takes branding cleanly. The teamwear baseline.",
-    features: ["260gsm single jersey", "Shoulder-to-shoulder tape", "Ribbed collar"],
+
+    features: [
+      "260gsm single jersey",
+      "Shoulder-to-shoulder tape",
+      "Ribbed collar",
+    ],
+
     brandingMethods: ["screen-print", "dtf", "embroidery"],
+
     colours: [
       { name: "Coal", hex: "#1a1a1a" },
       { name: "Bone", hex: "#f0ece2" },
     ],
+
     sizes: ["XS", "S", "M", "L", "XL", "2XL"],
     moq: 50,
     leadTimeWeeks: [5, 7],
+
     specs: [
       { label: "Fabric", value: "100% cotton jersey" },
       { label: "Weight", value: "260gsm" },
     ],
-    relatedSlugs: ["heavyweight-hoodie", "crew-sweat"],
-    tags: ["apparel", "tee"],
+
+    relatedSlugs: ["heavyweight-hoodie", "structured-cap", "field-bottle"],
+    tags: ["apparel", "tee", "teamwear"],
   },
 
   {
@@ -175,27 +148,136 @@ export const PRODUCTS: Product[] = [
     category: "headwear",
     subcategory: "Caps",
     descriptor: "Six-panel, mid-crown, cotton twill. Clean canvas for embroidery.",
+
     hero: {
       src: "/catalogue/structured-cap/hero.jpg",
       alt: "Structured six-panel cap",
       aspect: "1/1",
     },
+
     shortDescription:
       "A structured six-panel cap in heavy cotton twill. Pairs cleanly with any of the apparel set.",
-    features: ["Six-panel structured crown", "Pre-curved brim", "Metal buckle back"],
+
+    features: [
+      "Six-panel structured crown",
+      "Pre-curved brim",
+      "Metal buckle back",
+    ],
+
     brandingMethods: ["embroidery", "woven-label"],
+
     colours: [
       { name: "Coal", hex: "#1a1a1a" },
       { name: "Bone", hex: "#f0ece2" },
       { name: "Lime", hex: "#b8f400" },
     ],
+
+    sizes: ["One size"],
     moq: 100,
     leadTimeWeeks: [5, 7],
+
     specs: [
       { label: "Fabric", value: "Heavy cotton twill" },
       { label: "Closure", value: "Metal buckle" },
     ],
-    relatedSlugs: ["heavyweight-hoodie"],
-    tags: ["headwear", "cap"],
+
+    relatedSlugs: ["heavyweight-hoodie", "heavyweight-tee", "field-bottle"],
+    tags: ["headwear", "cap", "teamwear"],
+  },
+
+  {
+    slug: "field-bottle",
+    title: "The Field Bottle",
+    category: "drinkware",
+    subcategory: "Bottles",
+    descriptor: "Built to the spec you’d buy for yourself.",
+    badges: ["premium"],
+
+    hero: {
+      src: "/catalogue/field-bottle/editorial-hero.jpeg",
+      alt: "Field bottle",
+      aspect: "4/5",
+    },
+
+    gallery: [
+      {
+        src: "/catalogue/field-bottle/studio.jpeg",
+        alt: "Studio shot",
+        label: "Studio",
+        aspect: "5/4",
+      },
+      {
+        src: "/catalogue/field-bottle/macro.jpeg",
+        alt: "Finish detail",
+        label: "Finish",
+        aspect: "5/4",
+      },
+      {
+        src: "/catalogue/field-bottle/branding-detail.jpg",
+        alt: "Branding detail",
+        label: "Branding",
+        aspect: "5/4",
+      },
+      {
+        src: "/catalogue/field-bottle/construction-detail.jpg",
+        alt: "Construction detail",
+        label: "Construction",
+        aspect: "5/4",
+      },
+      {
+        src: "/catalogue/field-bottle/scale-reference.jpg",
+        alt: "Scale reference",
+        label: "Scale",
+        aspect: "5/4",
+      },
+    ],
+
+    shortDescription:
+      "The Field Bottle is built to the spec of the bottles you’d actually use — not the ones handed out at events. 18/8 food-grade stainless steel, double-walled with a full vacuum seal. Cold for 24 hours, hot for 12. A single-piece threaded lid with a silicone gasket. No straws. No moving parts. Finished in a matte powder-coat that won’t chip against a key and won’t fade in a dishwasher.",
+
+    features: [
+      "750ml insulated steel bottle",
+      "18/8 food-grade stainless steel",
+      "24 hours cold / 12 hours hot",
+      "Matte powder-coated finish",
+      "Single-piece threaded lid",
+    ],
+
+    brandingMethods: ["laser-etch", "pad-print"],
+
+    colours: [
+      { name: "Bone", hex: "#E8E1D5" },
+      { name: "Fog", hex: "#BFC3C0" },
+      { name: "Sage", hex: "#8E9B84" },
+      { name: "Slate", hex: "#596067" },
+      { name: "Oxblood", hex: "#4A161A" },
+      { name: "Ink", hex: "#151B2D" },
+      { name: "Black", hex: "#080808" },
+    ],
+
+    sizes: ["750ml"],
+    moq: 100,
+    leadTimeWeeks: [4, 8],
+    sourcing: "Manufactured in Ningbo under audited conditions.",
+
+    specs: [
+      { label: "Capacity", value: "750ml" },
+      { label: "Material", value: "18/8 food-grade stainless steel" },
+      { label: "Insulation", value: "24 hours cold / 12 hours hot" },
+      { label: "Finish", value: "Matte powder-coat" },
+      { label: "Cap", value: "Threaded lid with silicone seal" },
+      { label: "Weight", value: "340g empty" },
+      { label: "Origin", value: "Ningbo, audited production" },
+      { label: "Certifications", value: "LFGB, FDA, BPA-free" },
+    ],
+
+    useCases: [
+      "Corporate kits",
+      "Retail merchandise",
+      "Event and conference gifting",
+    ],
+
+    relatedSlugs: ["structured-cap", "heavyweight-hoodie", "heavyweight-tee"],
+    tags: ["drinkware", "bottle", "premium", "corporate-gifting"],
   },
 ];

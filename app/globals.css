@@ -6,10 +6,12 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
-}›
+  overflow-x: hidden;
+}
 
 /* ============================= */
 /* TOKENS                        */
@@ -18,9 +20,9 @@ html, body {
 :root {
   --bg: #080808;
   --fg: #f5f5f0;
-  --muted: rgba(255,255,255,0.56);
-  --soft: rgba(255,255,255,0.08);
-  --line: rgba(255,255,255,0.06);
+  --muted: rgba(255, 255, 255, 0.56);
+  --soft: rgba(255, 255, 255, 0.08);
+  --line: rgba(255, 255, 255, 0.06);
   --lime: #b8f400;
 
   --max: 1280px;
@@ -82,11 +84,11 @@ body {
   font-size: 10px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .h1 {
-  font-size: clamp(72px, 10vw, 152px);
+  font-size: clamp(48px, 16vw, 152px);
   font-weight: 900;
   letter-spacing: -0.065em;
   line-height: 0.85;
@@ -95,7 +97,7 @@ body {
 }
 
 .h2 {
-  font-size: clamp(40px, 4vw, 56px);
+  font-size: clamp(36px, 10vw, 56px);
   font-weight: 900;
   letter-spacing: -0.04em;
   line-height: 0.94;
@@ -124,12 +126,16 @@ body {
 }
 
 .section-hero {
-  padding: 104px 0 64px;
+  padding: 104px 48px 64px;
 }
 
 @media (max-width: 900px) {
   .section {
     padding: var(--section-pad-mobile) 0;
+  }
+
+  .section-hero {
+    padding: clamp(88px, 12vw, 104px) clamp(20px, 5vw, 48px) 64px;
   }
 }
 
@@ -191,14 +197,14 @@ body {
 }
 
 /* ============================= */
-/* BUTTONS (CSS ONLY)            */
+/* BUTTONS                       */
 /* ============================= */
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 48px;
+  min-height: 48px;
   padding: 0 26px;
   border-radius: var(--radius-pill);
   font-size: 12px;
@@ -209,42 +215,61 @@ body {
   transition: all 0.2s ease;
 }
 
-/* primary */
 .btn-primary {
   background: var(--lime);
   color: var(--bg);
 }
 
-.btn-primary:hover {
-  opacity: 0.85;
-}
-
-/* secondary dark */
 .btn-secondary {
-  border: 1px solid rgba(255,255,255,0.18);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   color: #fff;
 }
 
-.btn-secondary:hover {
-  border-color: rgba(255,255,255,0.35);
-  background: rgba(255,255,255,0.04);
+/* ============================= */
+/* MOBILE NAV                    */
+/* ============================= */
+
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none !important;
+  }
+
+  .hamburger {
+    display: flex !important;
+  }
 }
 
-/* dark button (on lime bg) */
-.btn-dark {
-  background: #080808;
-  color: var(--lime);
+/* ============================= */
+/* HERO FIXES                    */
+/* ============================= */
+
+.hero-bottom {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 32px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* outline dark */
-.btn-outline-dark {
-  border: 1px solid rgba(8,8,8,0.6);
-  color: #080808;
+.hero-buttons {
+  display: flex;
+  gap: 10px;
 }
 
-.btn-outline-dark:hover {
-  background: #080808;
-  color: var(--lime);
+@media (max-width: 640px) {
+  .hero-bottom {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+  }
+
+  .hero-buttons a {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* ============================= */
@@ -276,26 +301,10 @@ body {
   border-top: 1px solid var(--line);
 }
 
-.step-number {
-  font-size: 48px;
-  font-weight: 900;
-}
-
-.step-title {
-  font-size: 18px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.step-time {
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  color: var(--lime);
-}
-
 @media (max-width: 900px) {
   .step {
     grid-template-columns: 64px 1fr;
+    padding: 24px 0;
   }
 }
 
@@ -309,6 +318,34 @@ body {
   padding: 96px 0;
 }
 
-.cta p {
-  color: rgba(8,8,8,0.7);
+@media (max-width: 900px) {
+  .cta {
+    padding: 64px 0;
+  }
+/* ============================= */
+/* STATEMENT SECTION FIX         */
+/* ============================= */
+
+.statement-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .statement-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .statement-left {
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 56px 24px !important;
+  }
+
+  .statement-right {
+    padding: 48px 24px !important;
+  }
+}
 }

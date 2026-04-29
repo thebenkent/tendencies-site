@@ -1,44 +1,77 @@
-"use client";
+type GalleryImage = {
+  src: string;
+  alt: string;
+  label?: string;
+};
 
-import { FramedImage, SectionLabel, T, useIsMobile } from "./shared";
-import type { ProductImage } from "@/lib/products/types";
+type ProductGalleryProps = {
+  images?: GalleryImage[];
+};
 
-export function ProductGallery({ images }: { images: ProductImage[] }) {
-  const isMobile = useIsMobile();
+export default function ProductGallery({ images = [] }: ProductGalleryProps) {
+  if (!images.length) return null;
 
-  if (!images || images.length === 0) return null;
+  const padded = [...images].slice(0, 6);
 
   return (
     <section
       style={{
-        padding: isMobile ? "40px 0" : "56px 0",
-        borderTop: `1px solid ${T.border}`,
+        display: "grid",
+        gridTemplateColumns: "1.15fr 0.8fr 0.8fr",
+        gridTemplateRows: "360px 360px",
+        gap: "6px",
+        marginTop: "72px",
       }}
     >
-      <SectionLabel>Detail</SectionLabel>
+      {padded.map((image, index) => {
+        const isHero = index === 0;
+        const isScale = index === 3;
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: isMobile
-            ? "1fr"
-            : images.length === 2
-            ? "1fr 1fr"
-            : "repeat(2, 1fr)",
-          gap: "12px",
-        }}
-      >
-        {images.map((img) => (
-          <FramedImage
-            key={img.src}
-            src={img.src}
-            alt={img.alt}
-            label={img.label}
-            aspect={img.aspect ?? "5/4"}
-            brightness={0.95}
-          />
-        ))}
-      </div>
+        return (
+          <figure
+            key={`${image.src}-${index}`}
+            style={{
+              position: "relative",
+              margin: 0,
+              overflow: "hidden",
+              background: "#111",
+              gridColumn: isHero || isScale ? "1 / 2" : "auto",
+              gridRow: isHero ? "1 / 2" : isScale ? "2 / 3" : "auto",
+              minHeight: 0,
+            }}
+          >
+            <img
+              src={image.src}
+              alt={image.alt}
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                display: "block",
+              }}
+            />
+
+            {image.label && (
+              <figcaption
+                style={{
+                  position: "absolute",
+                  left: 16,
+                  bottom: 14,
+                  fontFamily: "Helvetica, Arial, sans-serif",
+                  fontSize: 13,
+                  fontWeight: 800,
+                  letterSpacing: "0.02em",
+                  textTransform: "uppercase",
+                  color: "#f5f5f0",
+                  textShadow: "0 1px 10px rgba(0,0,0,0.45)",
+                }}
+              >
+                {image.label}
+              </figcaption>
+            )}
+          </figure>
+        );
+      })}
     </section>
   );
 }

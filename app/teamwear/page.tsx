@@ -82,19 +82,19 @@ const SECTORS = [
 
 const RECENT_KITS = [
   {
-    image: "/teamwear-te-atatu.jpg",
+    image: "teamwear-te-atatu1.jpg",
     title: "Te Atatu Netball",
-    meta: "Netball · 120 units · 8 week turnaround",
+    meta: "Netball · 50 units · 5 week turnaround",
   },
   {
-    image: "/teamwear-school-rugby.jpg",
-    title: "Senior School Rugby",
-    meta: "Rugby · 60 units · 9 week turnaround",
+    image: "teamwear-pride-tee1.jpg",
+    title: "Festival staff kit",
+    meta: "Event · 50 units · 2 week turnaround",
   },
   {
-    image: "/teamwear-corporate-crew.jpg",
-    title: "Corporate Event Crew",
-    meta: "Event polos · 85 units · 6 week turnaround",
+    image: "/teamwear-wheellanders.jpg",
+    title: "Otago Wheelchair Rugby",
+    meta: "Team tees & hoodies · 30 units · 2 week turnaround",
   },
 ];
 
