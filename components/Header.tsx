@@ -104,18 +104,16 @@ export default function Header() {
           height:       "64px",
           // Tighter padding on mobile so nothing overflows
           padding: isMobile ? "0 16px" : "0 48px",
-          overflow: "visible",
           alignItems:   "center",
           justifyContent: "space-between",
           background:   "rgba(8,8,8,0.94)",
           backdropFilter:       "blur(10px)",
           WebkitBackdropFilter: "blur(10px)",
           borderBottom: "1px solid rgba(255,255,255,0.06)",
-          // Prevent any child from creating a horizontal scrollbar
           boxSizing:    "border-box",
           overflow:     "hidden",
         }}
-      >
+        >
         {/* Logo */}
         <a
           href="/"
