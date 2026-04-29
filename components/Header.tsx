@@ -103,8 +103,8 @@ export default function Header() {
           zIndex:       1000,
           height:       "64px",
           // Tighter padding on mobile so nothing overflows
-          padding:      isMobile ? "0 20px" : "0 48px",
-          display:      "flex",
+          padding: isMobile ? "0 16px" : "0 48px",
+          overflow: "visible",
           alignItems:   "center",
           justifyContent: "space-between",
           background:   "rgba(8,8,8,0.94)",
@@ -129,7 +129,10 @@ export default function Header() {
           <img
             src="/tendencies-logo.svg"
             alt="Tendencies"
-            style={{ height: "30px", width: "auto", display: "block" }}
+            style={{ height: "30px",
+            width: "auto",
+          maxWidth: isMobile ? "210px" : "260px",
+          display: "block" }}
           />
         </a>
 
