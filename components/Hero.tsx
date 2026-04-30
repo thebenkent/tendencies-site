@@ -55,16 +55,6 @@ export default function Hero() {
           <span style={{ color: "#b8f400" }}>.</span>
         </h1>
 
-        <div
-          className="hero-bottom"
-        >
-          <div style={{ maxWidth: "560px" }}>
-            <p style={{ fontSize: "15px", lineHeight: 1.6, color: "rgba(255,255,255,0.56)", margin: "0 0 18px" }}>
-              Always delivering client expectations.
-               </p>
-              <br />
-          </div>
-
           <div className="hero-buttons">
             <a href="/start-a-project" className="btn btn-primary">
               Start a Project
