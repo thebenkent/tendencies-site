@@ -39,7 +39,7 @@ export default function Hero() {
 
         <h1
           style={{
-           fontSize: "clamp(52px, 14vw, 140px)",
+           fontSize: "clamp(72px, 10vw, 152px)",
             fontWeight: 900,
             letterSpacing: "-0.065em",
             lineHeight: 0.84,
@@ -61,31 +61,8 @@ export default function Hero() {
           <div style={{ maxWidth: "560px" }}>
             <p style={{ fontSize: "15px", lineHeight: 1.6, color: "rgba(255,255,255,0.56)", margin: "0 0 18px" }}>
               Always delivering client expectations.
+               </p>
               <br />
-            </p>
-
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-              {["Custom merch", "Apparel", "Global production"].map((item) => (
-                <span
-                  key={item}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    height: "30px",
-                    padding: "0 12px",
-                    borderRadius: "999px",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    color: "rgba(255,255,255,0.65)",
-                    fontSize: "10px",
-                    fontWeight: 700,
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
           </div>
 
           <div className="hero-buttons">
