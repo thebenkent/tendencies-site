@@ -4,7 +4,7 @@ export default function Hero() {
   return (
     <section
       style={{
-        padding: "clamp(88px, 12vw, 120px) clamp(20px, 5vw, 48px) 72px",
+        padding: "clamp(72px, 10vw, 152px) clamp(20px, 5vw, 48px) 72px",
         borderBottom: "1px solid rgba(255,255,255,0.08)",
         overflowX: "clip",
       }}
@@ -32,7 +32,7 @@ export default function Hero() {
             <div style={{ fontSize: "10px", letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)", lineHeight: 1.55 }}>
               Custom merch & apparel.
               <br />
-              Built to be used, not wasted.
+              Designed to be re-used.
             </div>
           </div>
         </div>
@@ -60,11 +60,8 @@ export default function Hero() {
         >
           <div style={{ maxWidth: "560px" }}>
             <p style={{ fontSize: "15px", lineHeight: 1.6, color: "rgba(255,255,255,0.56)", margin: "0 0 18px" }}>
-              Custom merch and apparel. Designed to be re-used.
+              Always delivering client expectations.
               <br />
-              <span style={{ color: "#fff", fontWeight: 600 }}>
-                Always delivering client expectations.
-              </span>
             </p>
 
             <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
