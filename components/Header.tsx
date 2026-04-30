@@ -19,7 +19,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 1023px)");
+    const mq = window.matchMedia("(max-width: 767px)");
 
     const handle = (e: MediaQueryListEvent | MediaQueryList) => {
       setIsMobile(e.matches);
@@ -63,7 +63,7 @@ export default function Header() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: isMobile ? "0 20px" : "0 48px",
+          padding: isMobile ? "0 20px" : "0 24px",
           background: "rgba(8,8,8,0.94)",
           backdropFilter: "blur(10px)",
           WebkitBackdropFilter: "blur(10px)",
@@ -84,7 +84,7 @@ export default function Header() {
             src="/tendencies-logo.svg"
             alt="Tendencies"
             style={{
-              height: isMobile ? "22px" : "30px",
+              height: isMobile ? "22px" : "24px",
               width: "auto",
               display: "block",
             }}

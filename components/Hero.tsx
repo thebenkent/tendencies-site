@@ -6,7 +6,7 @@ export default function Hero() {
       style={{
         padding: "clamp(88px, 12vw, 120px) clamp(20px, 5vw, 48px) 72px",
         borderBottom: "1px solid rgba(255,255,255,0.08)",
-        overflow: "hidden",
+        overflowX: "clip",
       }}
     >
       <div style={{ maxWidth: "1440px", margin: "0 auto" }}>
@@ -39,7 +39,7 @@ export default function Hero() {
 
         <h1
           style={{
-            fontSize: "clamp(52px, 14vw, 140px)",
+           fontSize: "clamp(52px, 14vw, 140px)",
             fontWeight: 900,
             letterSpacing: "-0.065em",
             lineHeight: 0.84,
