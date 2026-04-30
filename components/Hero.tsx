@@ -39,7 +39,7 @@ export default function Hero() {
 
         <h1
           style={{
-           fontSize: "clamp(72px, 10vw, 152px)",
+            fontSize: "clamp(72px, 10vw, 152px)",
             fontWeight: 900,
             letterSpacing: "-0.065em",
             lineHeight: 0.84,
@@ -54,6 +54,20 @@ export default function Hero() {
           PROPERLY
           <span style={{ color: "#b8f400" }}>.</span>
         </h1>
+
+        <div className="hero-bottom">
+          <div style={{ maxWidth: "560px" }}>
+            <p
+              style={{
+                fontSize: "15px",
+                lineHeight: 1.6,
+                color: "rgba(255,255,255,0.56)",
+                margin: "0 0 18px",
+              }}
+            >
+              Always delivering client expectations.
+            </p>
+          </div>
 
           <div className="hero-buttons">
             <a href="/start-a-project" className="btn btn-primary">
