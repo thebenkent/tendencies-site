@@ -1,4 +1,3 @@
-import Header from "../components/Header";
 import Hero from "../components/Hero";
 import Statement from "../components/Statement";
 import ClientMarquee from "../components/ClientMarquee";
@@ -8,7 +7,6 @@ import CTA from "../components/CTA";
 export default function Home() {
   return (
     <main style={{ background: "#080808" }}>
-      <Header />
       <Hero />
       <Statement />
       <ClientMarquee />

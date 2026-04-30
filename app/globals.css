@@ -87,7 +87,6 @@ body {
   color: rgba(255, 255, 255, 0.5);
 }
 
-.h1 {
  .h1 {
   font-size: clamp(72px, 10vw, 152px);
   font-weight: 900;
@@ -380,5 +379,4 @@ body {
 
   }
 
-}
 }

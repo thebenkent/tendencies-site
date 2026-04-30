@@ -102,7 +102,7 @@ export default function Header() {
           right:        0,
           zIndex:       1000,
           height:       "64px",
-          // Tighter padding on mobile so nothing overflows
+          display: "flex",
           padding: isMobile ? "0 16px" : "0 48px",
           alignItems:   "center",
           justifyContent: "space-between",
@@ -111,7 +111,7 @@ export default function Header() {
           WebkitBackdropFilter: "blur(10px)",
           borderBottom: "1px solid rgba(255,255,255,0.06)",
           boxSizing:    "border-box",
-          overflow:     "hidden",
+          overflow:     "visible",
         }}
         >
         {/* Logo */}
@@ -127,9 +127,10 @@ export default function Header() {
           <img
             src="/tendencies-logo.svg"
             alt="Tendencies"
-            style={{ height: "30px",
+            style={{
+            height: isMobile ? "22px" : "30px",
             width: "auto",
-          maxWidth: isMobile ? "210px" : "260px",
+          maxWidth: isMobile ? "170px" : "260px",
           display: "block" }}
           />
         </a>
@@ -176,9 +177,9 @@ export default function Header() {
               border:         "none",
               cursor:         "pointer",
               // 44 × 44 px minimum tap target
-              minWidth:  "44px",
-              minHeight: "44px",
-              padding:   "11px",
+              minWidth:  "40px",
+              minHeight: "40px",
+              padding:   "9px",
               flexShrink: 0,
             }}
           >
