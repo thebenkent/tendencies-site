@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lead Time Calculator — Tendencies</title>
+    <style>
+        :root {
+            --bg: #080808;
+            --fg: #f5f5f0;
+            --muted: rgba(255, 255, 255, 0.56);
+            --soft: rgba(255, 255, 255, 0.08);
+            --line: rgba(255, 255, 255, 0.06);
+            --lime: #b8f400;
+            --card: #0f0f0f;
+            --pill: 999px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* ── Header ── */
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 48px;
+            background: rgba(8, 8, 8, 0.94);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .logo {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--fg);
+            text-decoration: none;
+        }
+
+        .header-tag {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+        }
+
+        /* ── Hero ── */
+        .hero {
+            padding: 72px 48px 56px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .eyebrow {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--lime);
+            margin-bottom: 16px;
+        }
+
+        .hero h1 {
+            font-size: clamp(52px, 8vw, 104px);
+            font-weight: 900;
+            letter-spacing: -0.055em;
+            line-height: 0.88;
+            text-transform: uppercase;
+            color: var(--fg);
+            margin-bottom: 24px;
+        }
+
+        .hero h1 .accent { color: var(--lime); }
+
+        .hero p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--muted);
+            max-width: 440px;
+        }
+
+        /* ── Main ── */
+        .main {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 56px 48px 80px;
+        }
+
+        /* ── Tabs ── */
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 40px;
+            background: var(--card);
+            border: 1px solid var(--soft);
+            border-radius: var(--pill);
+            padding: 4px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px 20px;
+            background: transparent;
+            border: none;
+            border-radius: var(--pill);
+            cursor: pointer;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+            transition: all 0.2s ease;
+        }
+
+        .tab.active {
+            background: var(--lime);
+            color: #080808;
+        }
+
+        /* ── Form ── */
+        .field { margin-bottom: 28px; }
+
+        .field-label {
+            display: block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+            margin-bottom: 12px;
+        }
+
+        input[type="date"] {
+            width: 100%;
+            padding: 16px 18px;
+            background: var(--card);
+            border: 1px solid var(--soft);
+            border-radius: 4px;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 15px;
+            color: var(--fg);
+            outline: none;
+            transition: border-color 0.2s;
+            appearance: none;
+        }
+
+        input[type="date"]:focus { border-color: var(--lime); }
+        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.5); cursor: pointer; }
+
+        .radio-row { display: flex; gap: 10px; }
+        .radio-opt { flex: 1; }
+        .radio-opt input { display: none; }
+        .radio-opt label {
+            display: block;
+            padding: 14px 16px;
+            background: var(--card);
+            border: 1px solid var(--soft);
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+            transition: all 0.2s;
+        }
+        .radio-opt input:checked + label {
+            border-color: var(--lime);
+            color: var(--lime);
+        }
+
+        .check-list { display: flex; flex-direction: column; gap: 10px; }
+
+        .check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 16px 18px;
+            background: var(--card);
+            border: 1px solid var(--soft);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .check-item:hover { border-color: rgba(255,255,255,0.14); }
+
+        .check-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            margin-top: 2px;
+            accent-color: var(--lime);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .check-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--fg);
+            margin-bottom: 4px;
+        }
+
+        .check-sub {
+            font-size: 12px;
+            color: rgba(255,255,255,0.3);
+            line-height: 1.5;
+        }
+
+        /* ── Button ── */
+        .btn-calc {
+            width: 100%;
+            padding: 18px;
+            background: var(--lime);
+            color: #080808;
+            border: none;
+            border-radius: var(--pill);
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            margin-top: 8px;
+        }
+
+        .btn-calc:hover { opacity: 0.88; }
+
+        /* ── Divider ── */
+        .divider {
+            border: none;
+            border-top: 1px solid var(--line);
+            margin: 48px 0;
+        }
+
+        /* ── Results ── */
+        .results { display: none; }
+        .results.on { display: block; }
+
+        /* Summary grid */
+        .summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border: 1px solid var(--soft);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .s-block {
+            background: var(--card);
+            padding: 28px 28px 24px;
+        }
+
+        .s-block + .s-block {
+            border-left: 1px solid var(--soft);
+        }
+
+        .s-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            margin-bottom: 10px;
+        }
+
+        .s-val {
+            font-size: 46px;
+            font-weight: 900;
+            letter-spacing: -0.045em;
+            line-height: 1;
+            color: var(--fg);
+        }
+
+        .s-sub {
+            font-size: 12px;
+            color: rgba(255,255,255,0.25);
+            margin-top: 8px;
+        }
+
+        .s-block.hi .s-label { color: rgba(184,244,0,0.7); }
+        .s-block.hi .s-val { font-size: 20px; letter-spacing: -0.02em; color: var(--lime); line-height: 1.15; }
+
+        /* Timeline */
+        .tl-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            margin-bottom: 20px;
+        }
+
+        .milestone {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 18px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .milestone:last-child { border-bottom: none; }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 6px;
+        }
+
+        .dot.start { background: var(--lime); }
+        .dot.mid { background: rgba(255,255,255,0.2); }
+        .dot.warning { background: #f0a500; }
+        .dot.end { background: rgba(255,255,255,0.5); }
+
+        .m-body { flex: 1; min-width: 0; }
+        .m-name { font-size: 14px; font-weight: 600; color: var(--fg); margin-bottom: 3px; }
+        .m-desc { font-size: 12px; color: rgba(255,255,255,0.28); line-height: 1.4; }
+        .m-date { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.6); text-align: right; white-space: nowrap; min-width: 150px; }
+
+        /* Alert */
+        .alert {
+            padding: 18px 20px;
+            border-radius: 4px;
+            margin-top: 24px;
+        }
+
+        .alert.overdue { background: rgba(180,30,30,0.12); border: 1px solid rgba(180,30,30,0.3); }
+        .alert.urgent  { background: rgba(240,165,0,0.08); border: 1px solid rgba(240,165,0,0.3); }
+
+        .alert h4 {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .alert.overdue h4 { color: #ff6060; }
+        .alert.urgent  h4 { color: #f0a500; }
+        .alert p { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+        .results-note {
+            font-size: 12px;
+            color: rgba(255,255,255,0.22);
+            line-height: 1.7;
+            border-top: 1px solid var(--line);
+            padding-top: 20px;
+            margin-top: 24px;
+        }
+
+        .btn-print {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            color: rgba(255,255,255,0.25);
+            border: 1px solid var(--soft);
+            border-radius: var(--pill);
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: all 0.2s;
+        }
+
+        .btn-print:hover { border-color: rgba(255,255,255,0.18); color: rgba(255,255,255,0.5); }
+
+        /* ── Footer ── */
+        .site-footer {
+            border-top: 1px solid var(--line);
+            padding: 28px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .site-footer span {
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.2);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            .site-header { padding: 0 24px; }
+            .hero { padding: 56px 24px 40px; }
+            .main { padding: 40px 24px 60px; }
+            .summary { grid-template-columns: 1fr; }
+            .s-block + .s-block { border-left: none; border-top: 1px solid var(--soft); }
+            .m-date { min-width: auto; font-size: 12px; }
+            .milestone { gap: 12px; }
+            .site-footer { padding: 24px; flex-direction: column; gap: 6px; }
+        }
+
+        @media print {
+            .site-header, .tabs, .field, .btn-calc, .divider, .btn-print { display: none !important; }
+            .results { display: block !important; }
+            body { background: #fff; color: #000; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <a href="https://tendencies.co.nz" class="logo">Tendencies</a>
+    <span class="header-tag">Lead Time Calculator</span>
+</header>
+
+<div class="hero">
+    <div class="eyebrow">Planning tool</div>
+    <h1>KNOW YOUR<br>DATES<span class="accent">.</span></h1>
+    <p>Enter your required delivery date. We'll map every milestone from order confirmation through to your door.</p>
+</div>
+
+<div class="main">
+
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab('local')">Local — NZ</button>
+        <button class="tab" onclick="switchTab('offshore')">Offshore — China</button>
+    </div>
+
+    <!-- LOCAL -->
+    <div id="form-local">
+        <div class="field">
+            <label class="field-label">Required delivery date</label>
+            <input type="date" id="local-date">
+        </div>
+    </div>
+
+    <!-- OFFSHORE -->
+    <div id="form-offshore" style="display:none;">
+        <div class="field">
+            <label class="field-label">Required delivery date</label>
+            <input type="date" id="offshore-date">
+        </div>
+        <div class="field">
+            <label class="field-label">Freight method</label>
+            <div class="radio-row">
+                <div class="radio-opt">
+                    <input type="radio" name="freight" id="sea" value="sea" checked>
+                    <label for="sea">Sea freight — 35 days</label>
+                </div>
+                <div class="radio-opt">
+                    <input type="radio" name="freight" id="air" value="air">
+                    <label for="air">Air freight — 10 days</label>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label class="field-label">Additional requirements</label>
+            <div class="check-list">
+                <label class="check-item">
+                    <input type="checkbox" id="sampling">
+                    <div>
+                        <div class="check-name">Sampling required</div>
+                        <div class="check-sub">Factory produces a physical sample before bulk production — adds 3 weeks</div>
+                    </div>
+                </label>
+                <label class="check-item">
+                    <input type="checkbox" id="tooling">
+                    <div>
+                        <div class="check-name">Custom mold / tooling required</div>
+                        <div class="check-sub">Fully bespoke products needing new tooling — adds 2 weeks before sampling</div>
+                    </div>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn-calc" onclick="calculate()">Calculate Milestones →</button>
+
+    <hr class="divider" id="divider" style="display:none;">
+
+    <!-- RESULTS -->
+    <div class="results" id="results">
+        <div class="summary">
+            <div class="s-block">
+                <div class="s-label">Total lead time</div>
+                <div class="s-val" id="total-days">—</div>
+                <div class="s-sub">calendar days from today</div>
+            </div>
+            <div class="s-block hi">
+                <div class="s-label">Must start by</div>
+                <div class="s-val" id="start-date">—</div>
+                <div class="s-sub" id="days-to-start"></div>
+            </div>
+        </div>
+
+        <div class="tl-label">Milestones</div>
+        <div id="timeline"></div>
+
+        <div id="alert-box" style="display:none;"></div>
+
+        <p class="results-note" id="results-note"></p>
+        <button class="btn-print" onclick="window.print()">Print / Save as PDF</button>
+    </div>
+
+</div>
+
+<footer class="site-footer">
+    <span>Tendencies Ltd — Auckland, NZ</span>
+    <span>tendencies.co.nz</span>
+</footer>
+
+<script>
+    let tab = 'local';
+
+    function switchTab(t) {
+        tab = t;
+        document.querySelectorAll('.tab').forEach((el, i) => {
+            el.classList.toggle('active', (t === 'local' && i === 0) || (t === 'offshore' && i === 1));
+        });
+        document.getElementById('form-local').style.display = t === 'local' ? 'block' : 'none';
+        document.getElementById('form-offshore').style.display = t === 'offshore' ? 'block' : 'none';
+        document.getElementById('results').classList.remove('on');
+        document.getElementById('divider').style.display = 'none';
+    }
+
+    const addDays = (d, n) => { const r = new Date(d); r.setDate(r.getDate() + n); return r; };
+    const sub     = (d, n) => addDays(d, -n);
+    const fmt     = d => d.toLocaleDateString('en-NZ', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+    const diff    = (a, b) => Math.round((b - a) / 86400000);
+    const today   = () => { const d = new Date(); d.setHours(0,0,0,0); return d; };
+
+    function calculate() {
+        tab === 'local' ? calcLocal() : calcOffshore();
+    }
+
+    function calcLocal() {
+        const raw = document.getElementById('local-date').value;
+        if (!raw) { alert('Please enter a required delivery date.'); return; }
+        const delivery = new Date(raw);
+        const prodDone = sub(delivery, 2);
+        const artworkBy = sub(prodDone, 7);
+        render([
+            { name: 'Artwork approved by client', desc: 'Production cannot start until artwork is signed off', date: artworkBy, type: 'start' },
+            { name: 'Production & decoration complete', desc: '1 week NZ print / decoration', date: prodDone, type: 'mid' },
+            { name: 'Delivered to client', desc: 'Standard 2-day delivery', date: delivery, type: 'end' },
+        ], artworkBy, 'Lead time assumes artwork is finalised and approved on day one. Revision rounds will push all dates out. Local NZ production uses existing blank stock — no sourcing or sampling required.');
+    }
+
+    function calcOffshore() {
+        const raw = document.getElementById('offshore-date').value;
+        if (!raw) { alert('Please enter a required delivery date.'); return; }
+        const delivery   = new Date(raw);
+        const freight    = document.querySelector('input[name="freight"]:checked').value;
+        const wantSample = document.getElementById('sampling').checked;
+        const wantTool   = document.getElementById('tooling').checked;
+        const fDays      = freight === 'sea' ? 35 : 10;
+
+        const nzArrival  = sub(delivery, 3);
+        const depart     = sub(nzArrival, fDays);
+        const prodStart  = sub(depart, 30);
+
+        let ms = [];
+        let orderStart = prodStart;
+
+        if (wantSample) {
+            const dispatch      = sub(prodStart, 7);
+            const sampleStart   = sub(dispatch, 14);
+            orderStart = sampleStart;
+            if (wantTool) {
+                const toolStart = sub(sampleStart, 14);
+                orderStart = toolStart;
+                ms.push({ name: 'Order confirmed — tooling begins', desc: 'Custom mold or tooling created before sampling can start', date: toolStart, type: 'start' });
+                ms.push({ name: 'Tooling complete — sampling begins', desc: '2 weeks for custom tooling', date: sampleStart, type: 'mid' });
+            } else {
+                ms.push({ name: 'Order confirmed — sampling begins', desc: 'Factory starts producing samples for approval', date: sampleStart, type: 'start' });
+            }
+            ms.push({ name: 'Samples dispatched from China', desc: '2 weeks factory sampling complete', date: dispatch, type: 'mid' });
+            ms.push({ name: 'Sample arrives NZ — client approval needed', desc: '1 week courier — must be approved before production starts', date: prodStart, type: 'warning' });
+            ms.push({ name: 'Sample approved — bulk production begins', desc: 'Any delay here pushes the delivery date out', date: prodStart, type: 'mid' });
+        } else if (wantTool) {
+            const toolStart = sub(prodStart, 14);
+            orderStart = toolStart;
+            ms.push({ name: 'Order confirmed — tooling begins', desc: 'Custom mold or tooling created before production starts', date: toolStart, type: 'start' });
+            ms.push({ name: 'Tooling complete — production begins', desc: '2 weeks for custom tooling', date: prodStart, type: 'mid' });
+        } else {
+            ms.push({ name: 'Artwork approved — production begins', desc: 'Factory confirmed, artwork signed off, order placed', date: prodStart, type: 'start' });
+        }
+
+        ms.push({ name: 'Production complete — freight departs China', desc: '30 days including branding & decoration', date: depart, type: 'mid' });
+        ms.push({ name: 'Arrives NZ', desc: freight === 'sea' ? 'Sea freight — 35 days (inc. China customs, warehouse & weekly sailing schedule)' : 'Air freight — 10 days China to NZ', date: nzArrival, type: 'mid' });
+        ms.push({ name: 'Delivered to warehouse / client', desc: 'NZ customs clearance + local delivery (~3 days)', date: delivery, type: 'end' });
+
+        render(ms, orderStart, freight === 'sea'
+            ? 'Sea freight of 35 days includes 1 week for China-side customs clearance, warehouse consolidation, and weekly sailing schedule. Actual sailing time is ~4 weeks. NZ customs adds ~3 days. All dates are estimates — confirm with your freight forwarder.'
+            : 'Air freight is significantly faster but will cost more. NZ customs adds ~3 days on arrival. All dates are estimates — confirm with your freight forwarder.');
+    }
+
+    function render(milestones, startDate, note) {
+        const now = today();
+        const delivery = milestones[milestones.length - 1].date;
+        const totalDays = diff(now, delivery);
+        const daysToStart = diff(now, startDate);
+
+        document.getElementById('total-days').textContent = totalDays >= 0 ? totalDays : '–';
+        document.getElementById('start-date').textContent = fmt(startDate);
+        document.getElementById('days-to-start').textContent =
+            daysToStart > 0  ? `${daysToStart} days from today`
+          : daysToStart === 0 ? 'Today'
+          : `${Math.abs(daysToStart)} days ago`;
+
+        document.getElementById('timeline').innerHTML = milestones.map(m => `
+            <div class="milestone">
+                <div class="dot ${m.type}"></div>
+                <div class="m-body">
+                    <div class="m-name">${m.name}</div>
+                    <div class="m-desc">${m.desc}</div>
+                </div>
+                <div class="m-date">${fmt(m.date)}</div>
+            </div>`).join('');
+
+        const alertEl = document.getElementById('alert-box');
+        if (daysToStart < 0) {
+            alertEl.style.display = 'block';
+            alertEl.innerHTML = `<div class="alert overdue"><h4>Start date passed</h4><p>This project needed to kick off ${Math.abs(daysToStart)} day${Math.abs(daysToStart)===1?'':'s'} ago. Talk to the client about adjusting the delivery date, switching to a faster freight option, or reducing product complexity.</p></div>`;
+        } else if (daysToStart <= 5) {
+            alertEl.style.display = 'block';
+            alertEl.innerHTML = `<div class="alert urgent"><h4>Action required now</h4><p>You need to kick this off within ${daysToStart} day${daysToStart===1?'':'s'}. Get artwork confirmed and the order placed immediately.</p></div>`;
+        } else {
+            alertEl.style.display = 'none';
+        }
+
+        document.getElementById('results-note').textContent = note;
+        document.getElementById('divider').style.display = 'block';
+        document.getElementById('results').classList.add('on');
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+</body>
+</html>
