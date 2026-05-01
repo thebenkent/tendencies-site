@@ -5,6 +5,9 @@ import type { Metadata, Viewport } from "next";
 export const metadata: Metadata = {
   title: "Tendencies",
   description: "Custom merch & apparel.",
+  icons: {
+    icon: "/icon-v2.png",
+  },
 };
 
 export const viewport: Viewport = {
