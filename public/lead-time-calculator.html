@@ -49,6 +49,11 @@
             color: var(--fg);
             text-decoration: none;
         }
+            .logo img {
+  height: 22px;
+  width: auto;
+  display: block;
+}
 
         .header-tag {
             font-size: 10px;
@@ -424,8 +429,9 @@
 <body>
 
 <header class="site-header">
-    <a href="https://tendencies.co.nz" class="logo">Tendencies</a>
-    <span class="header-tag">Lead Time Calculator</span>
+    <a href="https://tendencies.co.nz" class="logo">
+  <img src="/tendencies-logo.svg" alt="Tendencies" />
+</a>
 </header>
 
 <div class="hero">
@@ -490,9 +496,51 @@
     </div>
 
     <button class="btn-calc" onclick="calculate()">Calculate Milestones →</button>
+<div class="lead-box">
 
+  <h3>Want us to sense-check your timeline?</h3>
+
+  <p>Send us your delivery date, product idea, and rough quantity. We’ll let you know what’s realistic before it becomes urgent.</p>
+
+  <a class="btn-lead" href="mailto:ben@tendencies.co.nz?subject=Lead time check&body=Hi Ben,%0D%0A%0D%0AI used the lead time calculator and want to sense-check a project.%0D%0A%0D%0AProduct idea:%0D%0AQuantity:%0D%0ARequired delivery date:%0D%0AAny notes:%0D%0A">
+    Send project details →
+  </a>
+</div>
     <hr class="divider" id="divider" style="display:none;">
+.lead-box {
+  margin-top: 28px;
+  padding: 28px;
+  background: var(--lime);
+  color: #080808;
+  border-radius: 8px;
+}
 
+.lead-box h3 {
+  font-size: 24px;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.lead-box p {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 18px;
+  max-width: 560px;
+}
+
+.btn-lead {
+  display: inline-block;
+  padding: 14px 20px;
+  background: #080808;
+  color: var(--lime);
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
     <!-- RESULTS -->
     <div class="results" id="results">
         <div class="summary">
