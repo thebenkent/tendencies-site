@@ -1,11 +1,16 @@
 "use client";
 
+import { useIsMobile } from "@/hooks/useIsMobile";
+
 export default function CTA() {
+  const isMobile = useIsMobile();
+
   return (
     <section
       style={{
         background: "#b8f400",
-        padding: "96px 48px",
+        padding: isMobile ? "56px 20px 64px" : "96px 48px",
+        overflowX: "hidden",
       }}
     >
       <div
@@ -13,9 +18,9 @@ export default function CTA() {
           maxWidth: "1440px",
           margin: "0 auto",
           display: "grid",
-          gridTemplateColumns: "minmax(0, 1fr) auto",
+          gridTemplateColumns: isMobile ? "1fr" : "minmax(0, 1fr) auto",
           alignItems: "end",
-          gap: "48px",
+          gap: isMobile ? "32px" : "48px",
         }}
       >
         <div>
@@ -34,13 +39,16 @@ export default function CTA() {
 
           <h2
             style={{
-              fontSize: "clamp(64px, 10vw, 120px)",
+              fontSize: isMobile
+                ? "clamp(52px, 16vw, 72px)"
+                : "clamp(64px, 10vw, 120px)",
               fontWeight: 900,
               lineHeight: 0.84,
               letterSpacing: "-0.06em",
               textTransform: "uppercase",
               margin: 0,
               color: "#080808",
+              wordBreak: "break-word",
             }}
           >
             LET&apos;S
@@ -53,8 +61,8 @@ export default function CTA() {
 
         <div
           style={{
-            textAlign: "right",
-            maxWidth: "280px",
+            textAlign: isMobile ? "left" : "right",
+            maxWidth: isMobile ? "100%" : "280px",
           }}
         >
           <p
@@ -63,7 +71,7 @@ export default function CTA() {
               lineHeight: 1.5,
               fontWeight: 500,
               color: "rgba(8,8,8,0.66)",
-              margin: "0 0 20px",
+              margin: isMobile ? "0 0 24px" : "0 0 20px",
             }}
           >
             Big enough to deliver.
@@ -71,29 +79,36 @@ export default function CTA() {
             Small enough to care.
           </p>
 
-          <a
-            href="/start-a-project"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "52px",
-              padding: "0 28px",
-              borderRadius: "999px",
-              background: "#080808",
-              color: "#b8f400",
-              textDecoration: "none",
-              fontSize: "12px",
-              fontWeight: 700,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              transition: "opacity 0.2s ease",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.88")}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-          >
-            Start a Project →
-          </a>
+     <a
+  href="/start-a-project"
+  style={{
+    display: isMobile ? "flex" : "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "52px",
+    padding: "0 28px",
+    borderRadius: "999px",
+    background: "#080808",
+    color: "#b8f400",
+    textDecoration: "none",
+    fontSize: "12px",
+    fontWeight: 700,
+    letterSpacing: "0.08em",
+    textTransform: "uppercase",
+    transition: "opacity 0.2s ease",
+    width: isMobile ? "100%" : "auto",
+    maxWidth: isMobile ? "300px" : "none",
+    boxSizing: "border-box",
+  }}
+  onMouseEnter={
+    !isMobile ? (e) => (e.currentTarget.style.opacity = "0.88") : undefined
+  }
+  onMouseLeave={
+    !isMobile ? (e) => (e.currentTarget.style.opacity = "1") : undefined
+  }
+>
+  Start a Project →
+</a>
         </div>
       </div>
     </section>
