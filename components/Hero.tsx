@@ -21,6 +21,7 @@ export default function Hero() {
   return (
     <section
       style={{
+        position: "relative",
         padding: isMobile
           ? "40px 20px 56px"
           : "clamp(72px, 10vw, 152px) clamp(20px, 5vw, 48px) 72px",
@@ -28,9 +29,41 @@ export default function Hero() {
         overflowX: "clip",
       }}
     >
-      <div style={{ maxWidth: "1440px", margin: "0 auto" }}>
-        
-        {/* TOP META */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "radial-gradient(circle at 75% 20%, rgba(184,244,0,0.09), transparent 28%), radial-gradient(circle at 20% 80%, rgba(255,255,255,0.045), transparent 24%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: 0,
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)",
+          backgroundSize: "44px 44px",
+          maskImage:
+            "linear-gradient(to bottom, rgba(0,0,0,0.55), transparent 70%)",
+          WebkitMaskImage:
+            "linear-gradient(to bottom, rgba(0,0,0,0.55), transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      <div
+        style={{
+          maxWidth: "1440px",
+          margin: "0 auto",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
         <div
           style={{
             display: "flex",
@@ -84,7 +117,6 @@ export default function Hero() {
           )}
         </div>
 
-        {/* LIME ACCENT */}
         <div
           style={{
             width: isMobile ? "32px" : "48px",
@@ -95,7 +127,6 @@ export default function Hero() {
           }}
         />
 
-        {/* HEADLINE */}
         <h1
           style={{
             fontSize: "clamp(72px, 10vw, 152px)",
@@ -115,7 +146,6 @@ export default function Hero() {
           <span style={{ color: "#b8f400" }}>.</span>
         </h1>
 
-        {/* BOTTOM SECTION */}
         <div
           style={{
             display: "flex",
