@@ -1,27 +1,6 @@
 "use client";
 
-// -----------------------------------------------------------------------------
-// Catalogue page — curated product showcase.
-// File path in repo: app/catalogue/page.tsx
-//
-// Image mapping — all tiles use /public/cat-*.jpg (swap later).
-//   Featured (Shortlist):
-//     • /cat-tee-heavy.jpg       → Heavyweight Tee
-//     • /cat-keychain.jpg        → Resin Keychains
-//     • /cat-bottle.jpg          → Insulated Bottle
-//   Apparel:
-//     • /cat-hoodie.jpg          → Premium Hoodie
-//     • /cat-overshirt.jpg       → Overshirt
-//     • /cat-cap.jpg             → Structured Cap
-//   Giveaways:
-//     • /cat-ball.jpg            → Promo Ball
-//     • /cat-pin.jpg             → Enamel Pin
-//     • /cat-notebook.jpg        → Hardcover Notebook
-//   Teamwear & Custom:
-//     • /cat-jersey.jpg          → Performance Jersey
-//     • /cat-jacket.jpg          → Training Shell
-//     • /cat-resin.jpg           → Moulded Resin
-// -----------------------------------------------------------------------------
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 type Product = {
   name: string;
@@ -29,6 +8,7 @@ type Product = {
   line: string;
   image: string;
   href: string;
+  bestFor?: string;
 };
 
 const FEATURED: Product[] = [
@@ -38,6 +18,7 @@ const FEATURED: Product[] = [
     line: "Built to last. Cut to fit.",
     image: "/cat-tee-heavy.jpg",
     href: "/catalogue/heavyweight-tee",
+    bestFor: "staff & retail",
   },
   {
     name: "Resin Keychains",
@@ -45,6 +26,7 @@ const FEATURED: Product[] = [
     line: "Small format, high impact.",
     image: "/cat-keychain.jpg",
     href: "/catalogue/resin-keychains",
+    bestFor: "campaigns & events",
   },
   {
     name: "Insulated Bottle",
@@ -52,6 +34,7 @@ const FEATURED: Product[] = [
     line: "Premium steel, daily use.",
     image: "/cat-bottle.jpg",
     href: "/catalogue/insulated-bottle",
+    bestFor: "staff & premium gifting",
   },
 ];
 
@@ -62,6 +45,7 @@ const APPAREL: Product[] = [
     line: "Weighted fleece, considered cut.",
     image: "/cat-hoodie.jpg",
     href: "/catalogue/premium-hoodie",
+    bestFor: "staff & retail",
   },
   {
     name: "Overshirt",
@@ -69,6 +53,7 @@ const APPAREL: Product[] = [
     line: "Midweight layer, finished properly.",
     image: "/cat-overshirt.jpg",
     href: "/catalogue/overshirt",
+    bestFor: "campaigns & staff",
   },
   {
     name: "Structured Cap",
@@ -76,23 +61,26 @@ const APPAREL: Product[] = [
     line: "Low profile. Clean finish.",
     image: "/cat-cap.jpg",
     href: "/catalogue/structured-cap",
+    bestFor: "campaigns & events",
   },
 ];
 
-const GIVEAWAYS: Product[] = [
+const PROMOTIONAL: Product[] = [
   {
     name: "Promo Ball",
-    type: "Giveaway",
+    type: "Promotional",
     line: "Simple, useful, memorable.",
     image: "/cat-ball.jpg",
     href: "/catalogue/promo-ball",
+    bestFor: "campaigns & retail",
   },
   {
     name: "Enamel Pin",
-    type: "Giveaway",
+    type: "Promotional",
     line: "Hard enamel. Keepable.",
     image: "/cat-pin.jpg",
     href: "/catalogue/enamel-pin",
+    bestFor: "events & gifting",
   },
   {
     name: "Hardcover Notebook",
@@ -100,16 +88,18 @@ const GIVEAWAYS: Product[] = [
     line: "Thick stock, brand-debossed.",
     image: "/cat-notebook.jpg",
     href: "/catalogue/hardcover-notebook",
+    bestFor: "corporate & staff",
   },
 ];
 
-const TEAMWEAR_CUSTOM: Product[] = [
+const CUSTOM: Product[] = [
   {
     name: "Performance Jersey",
     type: "Teamwear",
     line: "Technical fabric, team-ready.",
     image: "/cat-jersey.jpg",
     href: "/catalogue/performance-jersey",
+    bestFor: "sports & staff",
   },
   {
     name: "Training Shell",
@@ -117,6 +107,7 @@ const TEAMWEAR_CUSTOM: Product[] = [
     line: "Weatherproof, sideline-proof.",
     image: "/cat-jacket.jpg",
     href: "/catalogue/training-shell",
+    bestFor: "staff & outdoors",
   },
   {
     name: "Moulded Resin",
@@ -124,15 +115,21 @@ const TEAMWEAR_CUSTOM: Product[] = [
     line: "Mould to hand, one-off or run.",
     image: "/cat-resin.jpg",
     href: "/catalogue/moulded-resin",
+    bestFor: "campaigns & retail",
   },
 ];
 
+// ---------------------------------------------------------------------------
+// FIX 1 — PrimaryButton
+// ---------------------------------------------------------------------------
 function PrimaryButton({
   href,
   children,
+  fullWidth = false,
 }: {
   href: string;
   children: React.ReactNode;
+  fullWidth?: boolean;
 }) {
   return (
     <a
@@ -153,19 +150,25 @@ function PrimaryButton({
         letterSpacing: "0.08em",
         textTransform: "uppercase",
         transition: "opacity 0.2s ease",
+        width: fullWidth ? "100%" : "auto",
       }}
-       >
+    >
       {children}
     </a>
   );
 }
 
+// ---------------------------------------------------------------------------
+// FIX 2 — SecondaryButton
+// ---------------------------------------------------------------------------
 function SecondaryButton({
   href,
   children,
+  fullWidth = false,
 }: {
   href: string;
   children: React.ReactNode;
+  fullWidth?: boolean;
 }) {
   return (
     <a
@@ -187,6 +190,7 @@ function SecondaryButton({
         textTransform: "uppercase",
         background: "transparent",
         transition: "border-color 0.2s ease, background 0.2s ease",
+        width: fullWidth ? "100%" : "auto",
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = "rgba(255,255,255,0.32)";
@@ -202,6 +206,9 @@ function SecondaryButton({
   );
 }
 
+// ---------------------------------------------------------------------------
+// FIX 3 — FeaturedCard
+// ---------------------------------------------------------------------------
 function FeaturedCard({
   product,
   large = false,
@@ -243,7 +250,6 @@ function FeaturedCard({
           transition: "filter 0.35s ease",
         }}
       />
-
       <div
         style={{
           position: "absolute",
@@ -252,7 +258,6 @@ function FeaturedCard({
             "linear-gradient(to top, rgba(8,8,8,0.96) 0%, rgba(8,8,8,0.32) 55%, transparent 100%)",
         }}
       />
-
       <div
         style={{
           position: "absolute",
@@ -271,7 +276,6 @@ function FeaturedCard({
       >
         {product.type}
       </div>
-
       <div
         style={{
           position: "absolute",
@@ -290,7 +294,6 @@ function FeaturedCard({
       >
         ↗
       </div>
-
       <div
         style={{
           position: "relative",
@@ -318,7 +321,6 @@ function FeaturedCard({
         >
           {product.name}
         </div>
-
         <div
           style={{
             fontFamily: "Helvetica, Arial, sans-serif",
@@ -327,15 +329,32 @@ function FeaturedCard({
             textTransform: "uppercase",
             color: "rgba(255,255,255,0.6)",
             lineHeight: 1.45,
+            marginBottom: product.bestFor ? "6px" : "0",
           }}
         >
           {product.line}
         </div>
+        {product.bestFor && (
+          <div
+            style={{
+              fontFamily: "Helvetica, Arial, sans-serif",
+              fontSize: "10px",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "rgba(184,244,0,0.6)",
+            }}
+          >
+            Best for: {product.bestFor}
+          </div>
+        )}
       </div>
     </a>
   );
 }
 
+// ---------------------------------------------------------------------------
+// FIX 4 — ProductCard
+// ---------------------------------------------------------------------------
 function ProductCard({ product }: { product: Product }) {
   return (
     <a
@@ -353,31 +372,26 @@ function ProductCard({ product }: { product: Product }) {
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = "translateY(-4px)";
         e.currentTarget.style.borderColor = "rgba(255,255,255,0.18)";
-
         const img = e.currentTarget.querySelector("img") as HTMLImageElement;
         if (img) {
           img.style.transform = "scale(1.04)";
           img.style.filter = "brightness(0.85)";
         }
-
         const arrow = e.currentTarget.querySelector(".arrow");
         if (arrow) (arrow as HTMLElement).style.transform = "translateX(4px)";
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = "translateY(0)";
         e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
-
         const img = e.currentTarget.querySelector("img") as HTMLImageElement;
         if (img) {
           img.style.transform = "scale(1)";
           img.style.filter = "brightness(0.7)";
         }
-
         const arrow = e.currentTarget.querySelector(".arrow");
         if (arrow) (arrow as HTMLElement).style.transform = "translateX(0)";
       }}
     >
-      {/* IMAGE */}
       <img
         src={product.image}
         alt={product.name}
@@ -392,8 +406,6 @@ function ProductCard({ product }: { product: Product }) {
           transition: "all 0.45s ease",
         }}
       />
-
-      {/* GRADIENT */}
       <div
         style={{
           position: "absolute",
@@ -402,8 +414,6 @@ function ProductCard({ product }: { product: Product }) {
             "linear-gradient(to top, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.35) 60%, transparent 100%)",
         }}
       />
-
-      {/* TYPE TAG */}
       <div
         style={{
           position: "absolute",
@@ -416,12 +426,11 @@ function ProductCard({ product }: { product: Product }) {
           background: "rgba(8,8,8,0.8)",
           padding: "6px 10px",
           border: "1px solid rgba(255,255,255,0.1)",
+          fontFamily: "Helvetica, Arial, sans-serif",
         }}
       >
         {product.type}
       </div>
-
-      {/* CTA ARROW */}
       <div
         className="arrow"
         style={{
@@ -442,8 +451,6 @@ function ProductCard({ product }: { product: Product }) {
       >
         →
       </div>
-
-      {/* CONTENT */}
       <div
         style={{
           position: "relative",
@@ -464,38 +471,58 @@ function ProductCard({ product }: { product: Product }) {
             color: "#fff",
             lineHeight: 0.95,
             marginBottom: "4px",
+            fontFamily: "Helvetica, Arial, sans-serif",
           }}
         >
           {product.name}
         </div>
-
         <div
           style={{
             fontSize: "11px",
             letterSpacing: "0.06em",
             color: "rgba(255,255,255,0.55)",
             lineHeight: 1.5,
+            fontFamily: "Helvetica, Arial, sans-serif",
           }}
         >
           {product.line}
         </div>
+        {product.bestFor && (
+          <div
+            style={{
+              marginTop: "5px",
+              fontSize: "10px",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "rgba(184,244,0,0.55)",
+              fontFamily: "Helvetica, Arial, sans-serif",
+            }}
+          >
+            Best for: {product.bestFor}
+          </div>
+        )}
       </div>
     </a>
   );
 }
 
+// ---------------------------------------------------------------------------
+// CategoryBlock — FIX 5: "View all" link
+// ---------------------------------------------------------------------------
 function CategoryBlock({
   index,
   title,
+  subtitle,
   items,
   viewAllHref,
-  columns = 3,
+  isMobile,
 }: {
   index: string;
   title: string;
+  subtitle: string;
   items: Product[];
   viewAllHref: string;
-  columns?: number;
+  isMobile: boolean;
 }) {
   return (
     <section
@@ -507,9 +534,9 @@ function CategoryBlock({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "1fr auto",
+          gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
           alignItems: "end",
-          gap: "32px",
+          gap: isMobile ? "12px" : "32px",
           marginBottom: "22px",
         }}
       >
@@ -527,24 +554,33 @@ function CategoryBlock({
           >
             {index}
           </div>
-
           <h2
             style={{
               fontFamily: "Helvetica, Arial, sans-serif",
-              fontSize: "clamp(40px, 5vw, 72px)",
+              fontSize: "clamp(36px, 5vw, 72px)",
               fontWeight: 900,
               letterSpacing: "-0.05em",
               lineHeight: 0.9,
               textTransform: "uppercase",
               color: "#f5f5f0",
-              margin: 0,
+              margin: "0 0 8px",
             }}
           >
             {title}
             <span style={{ color: "#b8f400" }}>.</span>
           </h2>
+          <div
+            style={{
+              fontFamily: "Helvetica, Arial, sans-serif",
+              fontSize: "13px",
+              color: "rgba(255,255,255,0.38)",
+              letterSpacing: "0.02em",
+              lineHeight: 1.5,
+            }}
+          >
+            {subtitle}
+          </div>
         </div>
-
         <a
           href={viewAllHref}
           style={{
@@ -557,6 +593,7 @@ function CategoryBlock({
             textDecoration: "none",
             borderBottom: "1px solid rgba(255,255,255,0.2)",
             paddingBottom: "3px",
+            alignSelf: isMobile ? "flex-start" : "flex-end",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.color = "#fff";
@@ -574,7 +611,7 @@ function CategoryBlock({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: `repeat(${columns}, 1fr)`,
+          gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
           gap: "14px",
         }}
       >
@@ -586,28 +623,29 @@ function CategoryBlock({
   );
 }
 
+// ---------------------------------------------------------------------------
+// Page
+// ---------------------------------------------------------------------------
 export default function CataloguePage() {
+  const isMobile = useIsMobile();
+  const px = isMobile ? "20px" : "48px";
+
   return (
-    <section
-      style={{
-        background: "#080808",
-        color: "#f5f5f0",
-      }}
-    >
+    <section style={{ background: "#080808", color: "#f5f5f0" }}>
       <div
         style={{
           maxWidth: "1440px",
           margin: "0 auto",
-          padding: "96px 48px 0",
+          padding: `96px ${px} 0`,
         }}
       >
-        {/* HERO */}
+        {/* ── HERO ── */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr",
+            gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
             alignItems: "start",
-            gap: "24px",
+            gap: isMobile ? "8px" : "24px",
             marginBottom: "20px",
           }}
         >
@@ -624,7 +662,6 @@ export default function CataloguePage() {
             >
               Since · 2009
             </div>
-
             <div
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
@@ -637,11 +674,10 @@ export default function CataloguePage() {
               Auckland · Melbourne · Shenzhen
             </div>
           </div>
-
           <div
             style={{
-              justifySelf: "end",
-              textAlign: "right",
+              justifySelf: isMobile ? "start" : "end",
+              textAlign: isMobile ? "left" : "right",
               maxWidth: "360px",
             }}
           >
@@ -662,6 +698,7 @@ export default function CataloguePage() {
           </div>
         </div>
 
+        {/* H1 */}
         <div style={{ marginBottom: "20px" }}>
           <div
             style={{
@@ -676,17 +713,16 @@ export default function CataloguePage() {
           >
             Catalogue
           </div>
-
           <h1
             style={{
               fontFamily: "Helvetica, Arial, sans-serif",
-              fontSize: "clamp(72px, 10vw, 152px)",
+              fontSize: "clamp(56px, 10vw, 152px)",
               fontWeight: 900,
               letterSpacing: "-0.065em",
               lineHeight: 0.88,
               textTransform: "uppercase",
               color: "#f5f5f0",
-              margin: 0,
+              margin: "0 0 16px",
             }}
           >
             MERCH
@@ -695,13 +731,26 @@ export default function CataloguePage() {
             WORTH KEEPING
             <span style={{ color: "#b8f400" }}>.</span>
           </h1>
+          <p
+            style={{
+              fontFamily: "Helvetica, Arial, sans-serif",
+              fontSize: "15px",
+              color: "rgba(255,255,255,0.42)",
+              letterSpacing: "0.04em",
+              lineHeight: 1.6,
+              margin: 0,
+            }}
+          >
+            Merch worth keeping. Ideas worth backing.
+          </p>
         </div>
 
+        {/* Hero sub-row */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr auto",
-            gap: "32px",
+            gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
+            gap: isMobile ? "20px" : "32px",
             alignItems: "center",
             paddingTop: "18px",
             paddingBottom: "48px",
@@ -719,29 +768,173 @@ export default function CataloguePage() {
               }}
             >
               An edited selection of apparel, giveaways, and branded product
-              worth putting your name on.
-              <br />
+              worth putting your name on.{" "}
               <span style={{ color: "#ffffff", fontWeight: 600 }}>
                 Curated, not dumped. Custom always available.
               </span>
             </p>
           </div>
-
           <div
             style={{
               display: "flex",
+              flexDirection: isMobile ? "column" : "row",
               gap: "10px",
-              alignItems: "center",
-              flexWrap: "wrap",
-              justifyContent: "flex-end",
+              alignItems: isMobile ? "stretch" : "center",
+              width: isMobile ? "100%" : "auto",
             }}
           >
-            <PrimaryButton href="/start-a-project">Start a Project</PrimaryButton>
-            <SecondaryButton href="/work">See Our Work</SecondaryButton>
+            <PrimaryButton href="/start-a-project" fullWidth={isMobile}>
+              Start a Project
+            </PrimaryButton>
+            <SecondaryButton href="/work" fullWidth={isMobile}>
+              See Our Work
+            </SecondaryButton>
           </div>
         </div>
 
-        {/* FEATURED — THE SHORTLIST */}
+        {/* ── CRICKET COOLER — FIX 6: View Product link ── */}
+        <section
+          style={{
+            borderTop: "1px solid rgba(255,255,255,0.06)",
+            paddingTop: "40px",
+            paddingBottom: "40px",
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "Helvetica, Arial, sans-serif",
+              fontSize: "11px",
+              fontWeight: 700,
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              color: "#b8f400",
+              marginBottom: "20px",
+            }}
+          >
+            Featured Product
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+              gap: isMobile ? "0" : "2px",
+              border: "1px solid rgba(255,255,255,0.08)",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                position: "relative",
+                aspectRatio: isMobile ? "4 / 3" : "5 / 4",
+                background: "#0f0f0f",
+                overflow: "hidden",
+              }}
+            >
+              <img
+                src="/cat-cricket-cooler.jpg"
+                alt="The Cricket Cooler — exclusive to Tendencies in New Zealand"
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  filter: "brightness(0.8)",
+                }}
+              />
+            </div>
+
+            <div
+              style={{
+                background: "#0f0f0f",
+                padding: isMobile ? "28px 20px" : "48px 44px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                gap: "32px",
+              }}
+            >
+              <div>
+                <div
+                  style={{
+                    fontFamily: "Helvetica, Arial, sans-serif",
+                    fontSize: "10px",
+                    fontWeight: 700,
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    color: "rgba(255,255,255,0.32)",
+                    marginBottom: "16px",
+                  }}
+                >
+                  Exclusive to Tendencies in New Zealand.
+                </div>
+                <h2
+                  style={{
+                    fontFamily: "Helvetica, Arial, sans-serif",
+                    fontSize: "clamp(32px, 4vw, 56px)",
+                    fontWeight: 900,
+                    letterSpacing: "-0.045em",
+                    lineHeight: 0.92,
+                    textTransform: "uppercase",
+                    color: "#f5f5f0",
+                    margin: "0 0 20px",
+                  }}
+                >
+                  The Cricket
+                  <br />
+                  Cooler
+                  <span style={{ color: "#b8f400" }}>.</span>
+                </h2>
+                <p
+                  style={{
+                    fontFamily: "Helvetica, Arial, sans-serif",
+                    fontSize: "14px",
+                    lineHeight: 1.65,
+                    color: "rgba(255,255,255,0.5)",
+                    margin: 0,
+                    maxWidth: "360px",
+                  }}
+                >
+                  Built for campaigns that need a reason to engage. A
+                  functional, premium cooler that does the promotional work
+                  long after the campaign ends.
+                </p>
+              </div>
+              <div>
+                <a
+                  href="/catalogue/cricket-cooler"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    fontFamily: "Helvetica, Arial, sans-serif",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    color: "#b8f400",
+                    textDecoration: "none",
+                    borderBottom: "1px solid rgba(184,244,0,0.3)",
+                    paddingBottom: "4px",
+                    transition: "border-color 0.2s",
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.borderBottomColor = "#b8f400")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.borderBottomColor =
+                      "rgba(184,244,0,0.3)")
+                  }
+                >
+                  View Product →
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── THE SHORTLIST ── */}
         <section
           style={{
             paddingTop: "28px",
@@ -762,28 +955,38 @@ export default function CataloguePage() {
             >
               Featured
             </div>
-
             <h2
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
-                fontSize: "clamp(40px, 5vw, 72px)",
+                fontSize: "clamp(36px, 5vw, 72px)",
                 fontWeight: 900,
                 letterSpacing: "-0.05em",
                 lineHeight: 0.9,
                 textTransform: "uppercase",
                 color: "#f5f5f0",
-                margin: 0,
+                margin: "0 0 10px",
               }}
             >
               The Shortlist
               <span style={{ color: "#b8f400" }}>.</span>
             </h2>
+            <p
+              style={{
+                fontFamily: "Helvetica, Arial, sans-serif",
+                fontSize: "13px",
+                color: "rgba(255,255,255,0.38)",
+                margin: 0,
+                letterSpacing: "0.04em",
+              }}
+            >
+              What we&apos;d actually recommend.
+            </p>
           </div>
 
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1.4fr 1fr 1fr",
+              gridTemplateColumns: isMobile ? "1fr" : "1.4fr 1fr 1fr",
               gap: "14px",
             }}
           >
@@ -793,44 +996,188 @@ export default function CataloguePage() {
           </div>
         </section>
 
-        {/* CATEGORY BLOCKS */}
-        <div style={{ paddingTop: "40px" }}>
+        {/* ── SHOP BY USE — FIX 7: tile links ── */}
+        <section style={{ paddingTop: "56px", paddingBottom: "8px" }}>
+          <div
+            style={{
+              borderTop: "1px solid rgba(255,255,255,0.06)",
+              paddingTop: "40px",
+            }}
+          >
+            <div
+              style={{
+                fontFamily: "Helvetica, Arial, sans-serif",
+                fontSize: "11px",
+                fontWeight: 700,
+                letterSpacing: "0.22em",
+                textTransform: "uppercase",
+                color: "#b8f400",
+                marginBottom: "10px",
+              }}
+            >
+              Shop by use
+            </div>
+            <h2
+              style={{
+                fontFamily: "Helvetica, Arial, sans-serif",
+                fontSize: "clamp(28px, 3.5vw, 48px)",
+                fontWeight: 900,
+                letterSpacing: "-0.04em",
+                lineHeight: 0.92,
+                textTransform: "uppercase",
+                color: "#f5f5f0",
+                margin: "0 0 8px",
+              }}
+            >
+              What are you building
+              <span style={{ color: "#b8f400" }}>?</span>
+            </h2>
+            <p
+              style={{
+                fontFamily: "Helvetica, Arial, sans-serif",
+                fontSize: "13px",
+                color: "rgba(255,255,255,0.36)",
+                margin: "0 0 28px",
+                maxWidth: "480px",
+                lineHeight: 1.55,
+              }}
+            >
+              Not sure where to start? Use this as a guide.
+            </p>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
+                gap: "2px",
+              }}
+            >
+              {[
+                {
+                  label: "Campaigns & Promotions",
+                  desc: "GWP, giveaways, product launches, and activation product. Built to move, built to be kept.",
+                  examples: "Promo balls · Keychains · Notebooks · Coolers",
+                  href: "#promotional",
+                },
+                {
+                  label: "Staff & Team",
+                  desc: "Uniforms, apparel, and internal gear. Product your people will actually wear.",
+                  examples: "Tees · Hoodies · Caps · Performance jerseys",
+                  href: "#apparel",
+                },
+                {
+                  label: "Premium & High Impact",
+                  desc: "Standout items and hero products for campaigns that need a centrepiece. Higher-value, longer-lasting.",
+                  examples:
+                    "Cricket Cooler · Moulded Resin · Custom development",
+                  href: "#custom",
+                },
+              ].map((tile) => (
+                <a
+                  key={tile.label}
+                  href={tile.href}
+                  style={{
+                    display: "block",
+                    background: "#0f0f0f",
+                    border: "1px solid rgba(255,255,255,0.06)",
+                    padding: isMobile ? "24px 20px" : "32px 28px",
+                    textDecoration: "none",
+                    transition: "border-color 0.2s, background 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(184,244,0,0.25)";
+                    e.currentTarget.style.background = "#111";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor =
+                      "rgba(255,255,255,0.06)";
+                    e.currentTarget.style.background = "#0f0f0f";
+                  }}
+                >
+                  <div
+                    style={{
+                      fontFamily: "Helvetica, Arial, sans-serif",
+                      fontSize: "13px",
+                      fontWeight: 700,
+                      letterSpacing: "0.04em",
+                      textTransform: "uppercase",
+                      color: "#fff",
+                      marginBottom: "10px",
+                      lineHeight: 1.2,
+                    }}
+                  >
+                    {tile.label}
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: "Helvetica, Arial, sans-serif",
+                      fontSize: "13px",
+                      color: "rgba(255,255,255,0.42)",
+                      lineHeight: 1.6,
+                      marginBottom: "14px",
+                    }}
+                  >
+                    {tile.desc}
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: "Helvetica, Arial, sans-serif",
+                      fontSize: "10px",
+                      letterSpacing: "0.14em",
+                      textTransform: "uppercase",
+                      color: "rgba(184,244,0,0.55)",
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    {tile.examples}
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── CATEGORY BLOCKS ── */}
+        <div id="apparel" style={{ paddingTop: "40px" }}>
           <CategoryBlock
             index="01"
             title="Apparel"
+            subtitle="Designed to be worn. Not issued."
             items={APPAREL}
             viewAllHref="/catalogue/apparel"
-            columns={3}
+            isMobile={isMobile}
           />
         </div>
 
-        <div style={{ paddingTop: "40px" }}>
+        <div id="promotional" style={{ paddingTop: "40px" }}>
           <CategoryBlock
             index="02"
-            title="Giveaways"
-            items={GIVEAWAYS}
-            viewAllHref="/catalogue/giveaways"
-            columns={3}
+            title="Promotional"
+            subtitle="Simple, useful, and built to be kept."
+            items={PROMOTIONAL}
+            viewAllHref="/catalogue/promotional"
+            isMobile={isMobile}
           />
         </div>
 
-        <div style={{ paddingTop: "40px", paddingBottom: "64px" }}>
+        <div id="custom" style={{ paddingTop: "40px", paddingBottom: "64px" }}>
           <CategoryBlock
             index="03"
-            title="Teamwear & Custom"
-            items={TEAMWEAR_CUSTOM}
+            title="Custom"
+            subtitle="If it doesn&apos;t exist, we make it."
+            items={CUSTOM}
             viewAllHref="/catalogue/custom"
-            columns={3}
+            isMobile={isMobile}
           />
         </div>
       </div>
 
-      {/* CTA BAND */}
+      {/* ── CTA BAND — FIX 8: Start a Project link ── */}
       <section
         style={{
           background: "#b8f400",
           color: "#080808",
-          padding: "80px 48px",
+          padding: isMobile ? "60px 20px" : "80px 48px",
           marginTop: "12px",
         }}
       >
@@ -839,7 +1186,7 @@ export default function CataloguePage() {
             maxWidth: "1440px",
             margin: "0 auto",
             display: "grid",
-            gridTemplateColumns: "1fr auto",
+            gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
             gap: "32px",
             alignItems: "end",
           }}
@@ -848,7 +1195,7 @@ export default function CataloguePage() {
             <h2
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
-                fontSize: "clamp(72px, 10vw, 140px)",
+                fontSize: "clamp(56px, 10vw, 140px)",
                 fontWeight: 900,
                 letterSpacing: "-0.065em",
                 lineHeight: 0.84,
@@ -856,15 +1203,14 @@ export default function CataloguePage() {
                 margin: 0,
               }}
             >
-              LET’S
+              LET&apos;S
               <br />
               BUILD
               <br />
               SOMETHING.
             </h2>
           </div>
-
-          <div style={{ textAlign: "right" }}>
+          <div style={{ textAlign: isMobile ? "left" : "right" }}>
             <p
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
@@ -872,16 +1218,15 @@ export default function CataloguePage() {
                 lineHeight: 1.55,
                 color: "rgba(8,8,8,0.7)",
                 maxWidth: "240px",
-                margin: "0 0 18px auto",
+                margin: isMobile ? "0 0 20px" : "0 0 18px auto",
               }}
             >
               Big enough to deliver. Small enough to care.
             </p>
-
             <a
               href="/start-a-project"
               style={{
-                display: "inline-flex",
+                display: isMobile ? "flex" : "inline-flex",
                 alignItems: "center",
                 justifyContent: "center",
                 height: "48px",
@@ -897,6 +1242,7 @@ export default function CataloguePage() {
                 textTransform: "uppercase",
                 background: "transparent",
                 transition: "background 0.2s ease, color 0.2s ease",
+                width: isMobile ? "100%" : "auto",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = "#080808";
