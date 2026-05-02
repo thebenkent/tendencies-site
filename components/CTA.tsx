@@ -79,36 +79,48 @@ export default function CTA() {
             Small enough to care.
           </p>
 
-     <a
-  href="/start-a-project"
-  style={{
-    display: isMobile ? "flex" : "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "52px",
-    padding: "0 28px",
-    borderRadius: "999px",
-    background: "#080808",
-    color: "#b8f400",
-    textDecoration: "none",
-    fontSize: "12px",
-    fontWeight: 700,
-    letterSpacing: "0.08em",
-    textTransform: "uppercase",
-    transition: "opacity 0.2s ease",
-    width: isMobile ? "100%" : "auto",
-    maxWidth: isMobile ? "300px" : "none",
-    boxSizing: "border-box",
-  }}
-  onMouseEnter={
-    !isMobile ? (e) => (e.currentTarget.style.opacity = "0.88") : undefined
-  }
-  onMouseLeave={
-    !isMobile ? (e) => (e.currentTarget.style.opacity = "1") : undefined
-  }
->
-  Start a Project →
-</a>
+          <a
+            href="/start-a-project"
+            style={{
+              display: isMobile ? "flex" : "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "52px",
+              padding: "0 28px",
+              borderRadius: "999px",
+              background: "#080808",
+              color: "#b8f400",
+              textDecoration: "none",
+              fontSize: "12px",
+              fontWeight: 700,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              width: isMobile ? "100%" : "auto",
+              maxWidth: isMobile ? "300px" : "none",
+              boxSizing: "border-box",
+              boxShadow: "0 6px 18px rgba(0,0,0,0.25)",
+              transform: "translateY(0)",
+              transition: "opacity 0.2s ease, transform 0.2s ease",
+            }}
+            onMouseEnter={
+              !isMobile
+                ? (e) => {
+                    e.currentTarget.style.opacity = "0.88";
+                    e.currentTarget.style.transform = "translateY(-1px)";
+                  }
+                : undefined
+            }
+            onMouseLeave={
+              !isMobile
+                ? (e) => {
+                    e.currentTarget.style.opacity = "1";
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }
+                : undefined
+            }
+          >
+            Start a Project →
+          </a>
         </div>
       </div>
     </section>
