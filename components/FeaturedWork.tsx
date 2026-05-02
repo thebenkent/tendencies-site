@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const PROJECTS = [
   {
@@ -25,7 +26,8 @@ const PROJECTS = [
     id: "knitwear",
     client: "Corporate Apparel",
     title: "Embroidered Knitwear",
-    outcome: "Clean, elevated teamwear designed to be worn well beyond day one.",
+    outcome:
+      "Clean, elevated teamwear designed to be worn well beyond day one.",
     tag: "Corporate Apparel",
     img: "/work-knitwear.jpg",
   },
@@ -34,9 +36,11 @@ const PROJECTS = [
 function Card({
   project,
   large = false,
+  isMobile = false,
 }: {
   project: (typeof PROJECTS)[0];
   large?: boolean;
+  isMobile?: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -51,14 +55,20 @@ function Card({
   return (
     <div
       ref={ref}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onMouseMove={onMove}
+      onMouseEnter={!isMobile ? () => setHovered(true) : undefined}
+      onMouseLeave={!isMobile ? () => setHovered(false) : undefined}
+      onMouseMove={!isMobile ? onMove : undefined}
       style={{
         position: "relative",
         overflow: "hidden",
         cursor: "pointer",
-        minHeight: large ? "560px" : "274px",
+        minHeight: large
+          ? isMobile
+            ? "320px"
+            : "560px"
+          : isMobile
+          ? "240px"
+          : "274px",
         background: "#0f0f0f",
         border: "1px solid rgba(255,255,255,0.06)",
         transition: "border-color 0.35s ease, transform 0.35s ease",
@@ -68,10 +78,10 @@ function Card({
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-end",
-        transform: hovered ? "translateY(-2px)" : "translateY(0)",
+        transform: hovered && !isMobile ? "translateY(-2px)" : "translateY(0)",
       }}
     >
-      {hovered && (
+      {hovered && !isMobile && (
         <div
           style={{
             position: "absolute",
@@ -95,10 +105,14 @@ function Card({
           backgroundImage: `url(${project.img})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          transform: hovered ? "scale(1.06)" : "scale(1)",
+          transform:
+            hovered && !isMobile ? "scale(1.06)" : "scale(1)",
           transition:
             "transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.35s ease",
-          filter: hovered ? "brightness(0.42)" : "brightness(0.3)",
+          filter:
+            hovered && !isMobile
+              ? "brightness(0.42)"
+              : "brightness(0.3)",
         }}
       />
 
@@ -151,9 +165,10 @@ function Card({
           fontSize: "14px",
           color: hovered ? "#000" : "#fff",
           background: hovered ? "#b8f400" : "transparent",
-          opacity: hovered ? 1 : 0,
+          opacity: hovered && !isMobile ? 1 : 0,
           transition: "all 0.25s ease",
-          transform: hovered ? "scale(1)" : "scale(0.8)",
+          transform:
+            hovered && !isMobile ? "scale(1)" : "scale(0.8)",
         }}
       >
         ↗
@@ -163,7 +178,7 @@ function Card({
         style={{
           position: "relative",
           zIndex: 3,
-          padding: large ? "28px" : "22px",
+          padding: isMobile ? "20px" : large ? "28px" : "22px",
           fontFamily: "Helvetica, Arial, sans-serif",
         }}
       >
@@ -181,14 +196,19 @@ function Card({
 
         <div
           style={{
-            fontSize: large ? "clamp(28px, 2.4vw, 38px)" : "22px",
+            fontSize: large
+              ? "clamp(28px, 2.4vw, 38px)"
+              : isMobile
+              ? "clamp(20px, 5.5vw, 28px)"
+              : "22px",
             fontWeight: 800,
             letterSpacing: "-0.03em",
             textTransform: "uppercase",
             color: "#fff",
             lineHeight: 0.95,
             marginBottom: "10px",
-            maxWidth: large ? "440px" : "260px",
+            maxWidth: large ? "440px" : "100%",
+            wordBreak: "break-word",
           }}
         >
           {project.title}
@@ -199,9 +219,12 @@ function Card({
             fontSize: "13px",
             color: "rgba(255,255,255,0.68)",
             lineHeight: 1.55,
-            maxWidth: large ? "340px" : "260px",
+            maxWidth: large ? "340px" : "100%",
             opacity: hovered ? 1 : 0.76,
-            transform: hovered ? "translateY(0)" : "translateY(4px)",
+            transform:
+              hovered && !isMobile
+                ? "translateY(0)"
+                : "translateY(4px)",
             transition: "opacity 0.3s ease, transform 0.3s ease",
           }}
         >
@@ -215,6 +238,7 @@ function Card({
 export default function FeaturedWork() {
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLElement>(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -232,22 +256,18 @@ export default function FeaturedWork() {
       ref={ref}
       style={{
         background: "#080808",
-        padding: "88px 48px 96px",
+        padding: isMobile ? "52px 20px 64px" : "88px 48px 96px",
       }}
     >
-      <div
-        style={{
-          maxWidth: "1440px",
-          margin: "0 auto",
-        }}
-      >
+      <div style={{ maxWidth: "1440px", margin: "0 auto" }}>
         <div
           style={{
             display: "flex",
+            flexDirection: isMobile ? "column" : "row",
             justifyContent: "space-between",
-            alignItems: "flex-end",
-            gap: "24px",
-            marginBottom: "36px",
+            alignItems: isMobile ? "flex-start" : "flex-end",
+            gap: isMobile ? "12px" : "24px",
+            marginBottom: isMobile ? "24px" : "36px",
             opacity: visible ? 1 : 0,
             transform: visible ? "translateY(0)" : "translateY(24px)",
             transition: "opacity 0.8s ease, transform 0.8s ease",
@@ -256,7 +276,6 @@ export default function FeaturedWork() {
           <div>
             <div
               style={{
-                fontFamily: "Helvetica, Arial, sans-serif",
                 fontSize: "10px",
                 fontWeight: 700,
                 letterSpacing: "0.2em",
@@ -270,7 +289,6 @@ export default function FeaturedWork() {
 
             <h2
               style={{
-                fontFamily: "Helvetica, Arial, sans-serif",
                 fontSize: "clamp(48px, 6.2vw, 88px)",
                 fontWeight: 900,
                 letterSpacing: "-0.05em",
@@ -289,7 +307,6 @@ export default function FeaturedWork() {
           <a
             href="/work"
             style={{
-              fontFamily: "Helvetica, Arial, sans-serif",
               fontSize: "11px",
               letterSpacing: "0.14em",
               textTransform: "uppercase",
@@ -307,7 +324,7 @@ export default function FeaturedWork() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1.1fr 1fr",
+            gridTemplateColumns: isMobile ? "1fr" : "1.1fr 1fr",
             gap: "12px",
             alignItems: "stretch",
             opacity: visible ? 1 : 0,
@@ -315,17 +332,17 @@ export default function FeaturedWork() {
             transition: "opacity 0.9s ease 0.12s, transform 0.9s ease 0.12s",
           }}
         >
-          <Card project={PROJECTS[0]} large />
+          <Card project={PROJECTS[0]} large isMobile={isMobile} />
 
           <div
             style={{
               display: "grid",
-              gridTemplateRows: "1fr 1fr",
+              gridTemplateRows: isMobile ? "auto" : "1fr 1fr",
               gap: "12px",
             }}
           >
-            <Card project={PROJECTS[1]} />
-            <Card project={PROJECTS[2]} />
+            <Card project={PROJECTS[1]} isMobile={isMobile} />
+            <Card project={PROJECTS[2]} isMobile={isMobile} />
           </div>
         </div>
       </div>
