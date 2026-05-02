@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const NAV_LINKS = [
   { href: "/work", label: "Work" },
@@ -15,21 +16,12 @@ const BG = "#080808";
 const FONT = "Helvetica, Arial, sans-serif";
 
 export default function Header() {
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 767px)");
-
-    const handle = (e: MediaQueryListEvent | MediaQueryList) => {
-      setIsMobile(e.matches);
-      if (!e.matches) setOpen(false);
-    };
-
-    handle(mq);
-    mq.addEventListener("change", handle);
-    return () => mq.removeEventListener("change", handle);
-  }, []);
+    if (!isMobile) setOpen(false);
+  }, [isMobile]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -154,7 +146,10 @@ export default function Header() {
 
         {isMobile && (
           <button
-            onClick={() => setOpen((p) => !p)}
+  <button
+
+  type="button"
+  onClick={() => setOpen((p) => !p)}
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             style={{
