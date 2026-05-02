@@ -71,14 +71,15 @@ function Card({
           : "274px",
         background: "#0f0f0f",
         border: "1px solid rgba(255,255,255,0.06)",
-        transition: "border-color 0.35s ease, transform 0.35s ease",
+        transition:
+  "border-color 0.4s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
         borderColor: hovered
           ? "rgba(184,244,0,0.25)"
           : "rgba(255,255,255,0.06)",
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-end",
-        transform: hovered && !isMobile ? "translateY(-2px)" : "translateY(0)",
+        transform: hovered && !isMobile ? "translateY(-4px)" : "translateY(0)",
       }}
     >
       {hovered && !isMobile && (
@@ -102,18 +103,17 @@ function Card({
         style={{
           position: "absolute",
           inset: 0,
-          backgroundImage: `url(${project.img})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          transform:
-            hovered && !isMobile ? "scale(1.06)" : "scale(1)",
-          transition:
-            "transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.35s ease",
-          filter:
-            hovered && !isMobile
-              ? "brightness(0.42)"
-              : "brightness(0.3)",
-        }}
+         backgroundImage: `url(${project.img})`,
+backgroundSize: "cover",
+backgroundPosition: "center",
+transform: hovered && !isMobile ? "scale(1.08)" : "scale(1)",
+
+transition:
+  "transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), filter 0.35s ease",
+
+filter: hovered && !isMobile
+  ? "brightness(0.42) contrast(1.1) saturate(1.05)"
+  : "brightness(0.32) contrast(1.08) saturate(1.02)", }}
       />
 
       <div
@@ -126,7 +126,18 @@ function Card({
           zIndex: 2,
         }}
       />
-
+<div
+  style={{
+    position: "absolute",
+    inset: 0,
+    backgroundImage:
+      "url('https://grainy-gradients.vercel.app/noise.svg')",
+    opacity: 0.06,
+    mixBlendMode: "overlay",
+    zIndex: 2,
+    pointerEvents: "none",
+  }}
+/>
       <div
         style={{
           position: "absolute",
@@ -202,7 +213,7 @@ function Card({
               ? "clamp(20px, 5.5vw, 28px)"
               : "22px",
             fontWeight: 800,
-            letterSpacing: "-0.03em",
+            letterSpacing: "-0.035em",
             textTransform: "uppercase",
             color: "#fff",
             lineHeight: 0.95,
