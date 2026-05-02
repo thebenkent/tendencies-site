@@ -146,7 +146,6 @@ export default function Header() {
 
         {isMobile && (
           <button
-  <button
 
   type="button"
   onClick={() => setOpen((p) => !p)}
