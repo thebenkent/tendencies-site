@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState } from "react";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 type Product = {
@@ -119,9 +120,6 @@ const CUSTOM: Product[] = [
   },
 ];
 
-// ---------------------------------------------------------------------------
-// FIX 1 — PrimaryButton
-// ---------------------------------------------------------------------------
 function PrimaryButton({
   href,
   children,
@@ -151,6 +149,7 @@ function PrimaryButton({
         textTransform: "uppercase",
         transition: "opacity 0.2s ease",
         width: fullWidth ? "100%" : "auto",
+        boxSizing: "border-box",
       }}
     >
       {children}
@@ -158,9 +157,6 @@ function PrimaryButton({
   );
 }
 
-// ---------------------------------------------------------------------------
-// FIX 2 — SecondaryButton
-// ---------------------------------------------------------------------------
 function SecondaryButton({
   href,
   children,
@@ -191,6 +187,7 @@ function SecondaryButton({
         background: "transparent",
         transition: "border-color 0.2s ease, background 0.2s ease",
         width: fullWidth ? "100%" : "auto",
+        boxSizing: "border-box",
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = "rgba(255,255,255,0.32)";
@@ -206,9 +203,6 @@ function SecondaryButton({
   );
 }
 
-// ---------------------------------------------------------------------------
-// FIX 3 — FeaturedCard
-// ---------------------------------------------------------------------------
 function FeaturedCard({
   product,
   large = false,
@@ -216,25 +210,34 @@ function FeaturedCard({
   product: Product;
   large?: boolean;
 }) {
+  const [hovered, setHovered] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleMouseEnter = () => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    setHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    timerRef.current = setTimeout(() => setHovered(false), 80);
+  };
+
   return (
     <a
       href={product.href}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       style={{
         position: "relative",
         display: "block",
         aspectRatio: large ? "5 / 6" : "4 / 5",
         overflow: "hidden",
-        border: "1px solid rgba(255,255,255,0.08)",
-        background: "#0f0f0f",
+        background: "#0a0a0a",
         textDecoration: "none",
-      }}
-      onMouseEnter={(e) => {
-        const img = e.currentTarget.querySelector("img") as HTMLImageElement;
-        if (img) img.style.filter = "brightness(0.82)";
-      }}
-      onMouseLeave={(e) => {
-        const img = e.currentTarget.querySelector("img") as HTMLImageElement;
-        if (img) img.style.filter = "brightness(0.7)";
+        border: hovered
+          ? "1px solid rgba(184,244,0,0.28)"
+          : "1px solid rgba(255,255,255,0.07)",
+        transition: "border-color 0.55s ease",
       }}
     >
       <img
@@ -246,18 +249,28 @@ function FeaturedCard({
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          filter: "brightness(0.7)",
-          transition: "filter 0.35s ease",
+          filter: hovered
+            ? "brightness(0.78) saturate(1.1)"
+            : "brightness(0.6) saturate(0.9)",
+          transform: hovered ? "scale(1.06)" : "scale(1)",
+          transition:
+            "transform 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.9s ease",
+          willChange: "transform",
         }}
       />
+
       <div
         style={{
           position: "absolute",
           inset: 0,
-          background:
-            "linear-gradient(to top, rgba(8,8,8,0.96) 0%, rgba(8,8,8,0.32) 55%, transparent 100%)",
+          background: hovered
+            ? "linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.22) 52%, transparent 100%)"
+            : "linear-gradient(to top, rgba(8,8,8,0.97) 0%, rgba(8,8,8,0.38) 55%, transparent 100%)",
+          transition: "background 0.7s ease",
+          pointerEvents: "none",
         }}
       />
+
       <div
         style={{
           position: "absolute",
@@ -272,10 +285,12 @@ function FeaturedCard({
           letterSpacing: "0.18em",
           textTransform: "uppercase",
           padding: "7px 10px",
+          pointerEvents: "none",
         }}
       >
         {product.type}
       </div>
+
       <div
         style={{
           position: "absolute",
@@ -284,16 +299,24 @@ function FeaturedCard({
           width: "34px",
           height: "34px",
           borderRadius: "50%",
-          border: "1px solid rgba(255,255,255,0.18)",
+          border: hovered
+            ? "1px solid rgba(184,244,0,0.5)"
+            : "1px solid rgba(255,255,255,0.18)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: "#fff",
+          color: hovered ? "#b8f400" : "rgba(255,255,255,0.55)",
           fontSize: "14px",
+          opacity: hovered ? 1 : 0.6,
+          transform: hovered ? "translate(2px, -2px)" : "translate(0, 0)",
+          transition:
+            "border-color 0.4s ease, color 0.4s ease, opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+          pointerEvents: "none",
         }}
       >
         ↗
       </div>
+
       <div
         style={{
           position: "relative",
@@ -303,6 +326,8 @@ function FeaturedCard({
           flexDirection: "column",
           justifyContent: "flex-end",
           height: "100%",
+          transform: hovered ? "translateY(-5px)" : "translateY(0)",
+          transition: "transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
         }}
       >
         <div
@@ -321,19 +346,24 @@ function FeaturedCard({
         >
           {product.name}
         </div>
+
         <div
           style={{
             fontFamily: "Helvetica, Arial, sans-serif",
             fontSize: "12px",
             letterSpacing: "0.14em",
             textTransform: "uppercase",
-            color: "rgba(255,255,255,0.6)",
+            color: hovered
+              ? "rgba(255,255,255,0.75)"
+              : "rgba(255,255,255,0.5)",
             lineHeight: 1.45,
             marginBottom: product.bestFor ? "6px" : "0",
+            transition: "color 0.4s ease",
           }}
         >
           {product.line}
         </div>
+
         {product.bestFor && (
           <div
             style={{
@@ -341,7 +371,10 @@ function FeaturedCard({
               fontSize: "10px",
               letterSpacing: "0.12em",
               textTransform: "uppercase",
-              color: "rgba(184,244,0,0.6)",
+              color: hovered
+                ? "rgba(184,244,0,0.8)"
+                : "rgba(184,244,0,0.5)",
+              transition: "color 0.4s ease",
             }}
           >
             Best for: {product.bestFor}
@@ -352,9 +385,6 @@ function FeaturedCard({
   );
 }
 
-// ---------------------------------------------------------------------------
-// FIX 4 — ProductCard
-// ---------------------------------------------------------------------------
 function ProductCard({ product }: { product: Product }) {
   return (
     <a
@@ -406,6 +436,7 @@ function ProductCard({ product }: { product: Product }) {
           transition: "all 0.45s ease",
         }}
       />
+
       <div
         style={{
           position: "absolute",
@@ -414,6 +445,7 @@ function ProductCard({ product }: { product: Product }) {
             "linear-gradient(to top, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.35) 60%, transparent 100%)",
         }}
       />
+
       <div
         style={{
           position: "absolute",
@@ -431,6 +463,7 @@ function ProductCard({ product }: { product: Product }) {
       >
         {product.type}
       </div>
+
       <div
         className="arrow"
         style={{
@@ -451,6 +484,7 @@ function ProductCard({ product }: { product: Product }) {
       >
         →
       </div>
+
       <div
         style={{
           position: "relative",
@@ -476,6 +510,7 @@ function ProductCard({ product }: { product: Product }) {
         >
           {product.name}
         </div>
+
         <div
           style={{
             fontSize: "11px",
@@ -487,6 +522,7 @@ function ProductCard({ product }: { product: Product }) {
         >
           {product.line}
         </div>
+
         {product.bestFor && (
           <div
             style={{
@@ -506,9 +542,6 @@ function ProductCard({ product }: { product: Product }) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// CategoryBlock — FIX 5: "View all" link
-// ---------------------------------------------------------------------------
 function CategoryBlock({
   index,
   title,
@@ -554,6 +587,7 @@ function CategoryBlock({
           >
             {index}
           </div>
+
           <h2
             style={{
               fontFamily: "Helvetica, Arial, sans-serif",
@@ -569,6 +603,7 @@ function CategoryBlock({
             {title}
             <span style={{ color: "#b8f400" }}>.</span>
           </h2>
+
           <div
             style={{
               fontFamily: "Helvetica, Arial, sans-serif",
@@ -581,6 +616,7 @@ function CategoryBlock({
             {subtitle}
           </div>
         </div>
+
         <a
           href={viewAllHref}
           style={{
@@ -623,9 +659,6 @@ function CategoryBlock({
   );
 }
 
-// ---------------------------------------------------------------------------
-// Page
-// ---------------------------------------------------------------------------
 export default function CataloguePage() {
   const isMobile = useIsMobile();
   const px = isMobile ? "20px" : "48px";
@@ -639,7 +672,6 @@ export default function CataloguePage() {
           padding: `96px ${px} 0`,
         }}
       >
-        {/* ── HERO ── */}
         <div
           style={{
             display: "grid",
@@ -662,6 +694,7 @@ export default function CataloguePage() {
             >
               Since · 2009
             </div>
+
             <div
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
@@ -674,6 +707,7 @@ export default function CataloguePage() {
               Auckland · Melbourne · Shenzhen
             </div>
           </div>
+
           <div
             style={{
               justifySelf: isMobile ? "start" : "end",
@@ -698,7 +732,6 @@ export default function CataloguePage() {
           </div>
         </div>
 
-        {/* H1 */}
         <div style={{ marginBottom: "20px" }}>
           <div
             style={{
@@ -713,6 +746,7 @@ export default function CataloguePage() {
           >
             Catalogue
           </div>
+
           <h1
             style={{
               fontFamily: "Helvetica, Arial, sans-serif",
@@ -731,6 +765,7 @@ export default function CataloguePage() {
             WORTH KEEPING
             <span style={{ color: "#b8f400" }}>.</span>
           </h1>
+
           <p
             style={{
               fontFamily: "Helvetica, Arial, sans-serif",
@@ -745,7 +780,6 @@ export default function CataloguePage() {
           </p>
         </div>
 
-        {/* Hero sub-row */}
         <div
           style={{
             display: "grid",
@@ -774,6 +808,7 @@ export default function CataloguePage() {
               </span>
             </p>
           </div>
+
           <div
             style={{
               display: "flex",
@@ -792,7 +827,6 @@ export default function CataloguePage() {
           </div>
         </div>
 
-        {/* ── CRICKET COOLER — FIX 6: View Product link ── */}
         <section
           style={{
             borderTop: "1px solid rgba(255,255,255,0.06)",
@@ -869,6 +903,7 @@ export default function CataloguePage() {
                 >
                   Exclusive to Tendencies in New Zealand.
                 </div>
+
                 <h2
                   style={{
                     fontFamily: "Helvetica, Arial, sans-serif",
@@ -886,6 +921,7 @@ export default function CataloguePage() {
                   Cooler
                   <span style={{ color: "#b8f400" }}>.</span>
                 </h2>
+
                 <p
                   style={{
                     fontFamily: "Helvetica, Arial, sans-serif",
@@ -901,6 +937,7 @@ export default function CataloguePage() {
                   long after the campaign ends.
                 </p>
               </div>
+
               <div>
                 <a
                   href="/catalogue/cricket-cooler"
@@ -934,7 +971,6 @@ export default function CataloguePage() {
           </div>
         </section>
 
-        {/* ── THE SHORTLIST ── */}
         <section
           style={{
             paddingTop: "28px",
@@ -955,6 +991,7 @@ export default function CataloguePage() {
             >
               Featured
             </div>
+
             <h2
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
@@ -970,6 +1007,7 @@ export default function CataloguePage() {
               The Shortlist
               <span style={{ color: "#b8f400" }}>.</span>
             </h2>
+
             <p
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
@@ -996,7 +1034,6 @@ export default function CataloguePage() {
           </div>
         </section>
 
-        {/* ── SHOP BY USE — FIX 7: tile links ── */}
         <section style={{ paddingTop: "56px", paddingBottom: "8px" }}>
           <div
             style={{
@@ -1017,6 +1054,7 @@ export default function CataloguePage() {
             >
               Shop by use
             </div>
+
             <h2
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
@@ -1032,6 +1070,7 @@ export default function CataloguePage() {
               What are you building
               <span style={{ color: "#b8f400" }}>?</span>
             </h2>
+
             <p
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
@@ -1108,6 +1147,7 @@ export default function CataloguePage() {
                   >
                     {tile.label}
                   </div>
+
                   <div
                     style={{
                       fontFamily: "Helvetica, Arial, sans-serif",
@@ -1119,6 +1159,7 @@ export default function CataloguePage() {
                   >
                     {tile.desc}
                   </div>
+
                   <div
                     style={{
                       fontFamily: "Helvetica, Arial, sans-serif",
@@ -1137,7 +1178,6 @@ export default function CataloguePage() {
           </div>
         </section>
 
-        {/* ── CATEGORY BLOCKS ── */}
         <div id="apparel" style={{ paddingTop: "40px" }}>
           <CategoryBlock
             index="01"
@@ -1164,7 +1204,7 @@ export default function CataloguePage() {
           <CategoryBlock
             index="03"
             title="Custom"
-            subtitle="If it doesn&apos;t exist, we make it."
+            subtitle="If it doesn't exist, we make it."
             items={CUSTOM}
             viewAllHref="/catalogue/custom"
             isMobile={isMobile}
@@ -1172,7 +1212,6 @@ export default function CataloguePage() {
         </div>
       </div>
 
-      {/* ── CTA BAND — FIX 8: Start a Project link ── */}
       <section
         style={{
           background: "#b8f400",
@@ -1210,6 +1249,7 @@ export default function CataloguePage() {
               SOMETHING.
             </h2>
           </div>
+
           <div style={{ textAlign: isMobile ? "left" : "right" }}>
             <p
               style={{
@@ -1223,6 +1263,7 @@ export default function CataloguePage() {
             >
               Big enough to deliver. Small enough to care.
             </p>
+
             <a
               href="/start-a-project"
               style={{
@@ -1243,6 +1284,7 @@ export default function CataloguePage() {
                 background: "transparent",
                 transition: "background 0.2s ease, color 0.2s ease",
                 width: isMobile ? "100%" : "auto",
+                boxSizing: "border-box",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = "#080808";
