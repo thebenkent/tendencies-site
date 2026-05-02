@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "Tendencies",
   description: "Custom merch & apparel.",
   icons: {
-    icon: "/icon-v2.png",
+    icon: "/icon-v2.png?v=3",
   },
 };
 
