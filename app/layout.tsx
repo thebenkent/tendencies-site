@@ -6,7 +6,10 @@ export const metadata: Metadata = {
   title: "Tendencies",
   description: "Custom merch & apparel.",
   icons: {
-    icon: "/icon-v2.png?v=3",
+        icon: "/icon-v2.png?v=3",
+  },
+  verification: {
+    google: "google4ad118bd24d3f279",
   },
 };
 
