@@ -302,8 +302,8 @@ function FeaturedCard({
         background: "#0a0a0a",
         textDecoration: "none",
         border: hovered
-          ? "1px solid rgba(184,244,0,0.28)"
-          : "1px solid rgba(255,255,255,0.07)",
+          ? "1px solid rgba(184,244,0,0.22)"
+          : "1px solid rgba(255,255,255,0.04)",
         transition: "border-color 0.55s ease",
       }}
     >
@@ -327,8 +327,8 @@ function FeaturedCard({
             height: "100%",
             objectFit: "cover",
             filter: hovered
-              ? "brightness(0.78) saturate(1.1)"
-              : "brightness(0.6) saturate(0.9)",
+              ? "brightness(0.82) saturate(1.08)"
+              : "brightness(0.68) saturate(0.92)",
             transition: "filter 0.9s ease",
           }}
         />
@@ -340,8 +340,8 @@ function FeaturedCard({
           position: "absolute",
           inset: 0,
           background: hovered
-            ? "linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.22) 52%, transparent 100%)"
-            : "linear-gradient(to top, rgba(8,8,8,0.97) 0%, rgba(8,8,8,0.38) 55%, transparent 100%)",
+            ? "linear-gradient(to top, rgba(8,8,8,0.88) 0%, rgba(8,8,8,0.18) 50%, transparent 100%)"
+            : "linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.28) 52%, transparent 100%)",
           transition: "background 0.7s ease",
           pointerEvents: "none",
         }}
@@ -351,17 +351,17 @@ function FeaturedCard({
       <div
         style={{
           position: "absolute",
-          top: "14px",
-          left: "14px",
-          background: "rgba(8,8,8,0.82)",
+          top: "16px",
+          left: "16px",
+          background: "rgba(8,8,8,0.72)",
           color: "#b8f400",
-          border: "1px solid rgba(255,255,255,0.12)",
+          border: "1px solid rgba(184,244,0,0.18)",
           fontFamily: "Helvetica, Arial, sans-serif",
-          fontSize: "10px",
+          fontSize: "9px",
           fontWeight: 700,
-          letterSpacing: "0.18em",
+          letterSpacing: "0.2em",
           textTransform: "uppercase",
-          padding: "7px 10px",
+          padding: "6px 10px",
           pointerEvents: "none",
         }}
       >
@@ -372,20 +372,20 @@ function FeaturedCard({
       <div
         style={{
           position: "absolute",
-          top: "14px",
-          right: "14px",
-          width: "34px",
-          height: "34px",
+          top: "16px",
+          right: "16px",
+          width: "32px",
+          height: "32px",
           borderRadius: "50%",
           border: hovered
-            ? "1px solid rgba(184,244,0,0.5)"
-            : "1px solid rgba(255,255,255,0.18)",
+            ? "1px solid rgba(184,244,0,0.45)"
+            : "1px solid rgba(255,255,255,0.14)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: hovered ? "#b8f400" : "rgba(255,255,255,0.55)",
-          fontSize: "14px",
-          opacity: hovered ? 1 : 0.6,
+          color: hovered ? "#b8f400" : "rgba(255,255,255,0.45)",
+          fontSize: "13px",
+          opacity: hovered ? 1 : 0.5,
           transform: hovered ? "translate(2px, -2px)" : "translate(0, 0)",
           transition:
             "border-color 0.4s ease, color 0.4s ease, opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
@@ -400,7 +400,7 @@ function FeaturedCard({
         style={{
           position: "relative",
           zIndex: 2,
-          padding: large ? "28px" : "22px",
+          padding: large ? "32px" : "26px",
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-end",
@@ -413,14 +413,14 @@ function FeaturedCard({
           style={{
             fontFamily: "Helvetica, Arial, sans-serif",
             fontSize: large
-              ? "clamp(32px, 3vw, 44px)"
-              : "clamp(24px, 2vw, 32px)",
+              ? "clamp(36px, 3.2vw, 50px)"
+              : "clamp(26px, 2.2vw, 36px)",
             fontWeight: 900,
-            letterSpacing: "-0.035em",
+            letterSpacing: "-0.04em",
             textTransform: "uppercase",
             color: "#fff",
             lineHeight: 0.95,
-            marginBottom: "8px",
+            marginBottom: "10px",
           }}
         >
           {product.name}
@@ -429,14 +429,14 @@ function FeaturedCard({
         <div
           style={{
             fontFamily: "Helvetica, Arial, sans-serif",
-            fontSize: "12px",
-            letterSpacing: "0.14em",
+            fontSize: "11px",
+            letterSpacing: "0.12em",
             textTransform: "uppercase",
             color: hovered
-              ? "rgba(255,255,255,0.75)"
-              : "rgba(255,255,255,0.5)",
-            lineHeight: 1.45,
-            marginBottom: product.bestFor ? "6px" : "0",
+              ? "rgba(255,255,255,0.72)"
+              : "rgba(255,255,255,0.46)",
+            lineHeight: 1.5,
+            marginBottom: product.bestFor ? "8px" : "0",
             transition: "color 0.4s ease",
           }}
         >
@@ -447,16 +447,16 @@ function FeaturedCard({
           <div
             style={{
               fontFamily: "Helvetica, Arial, sans-serif",
-              fontSize: "10px",
-              letterSpacing: "0.12em",
+              fontSize: "9px",
+              letterSpacing: "0.14em",
               textTransform: "uppercase",
               color: hovered
-                ? "rgba(184,244,0,0.8)"
-                : "rgba(184,244,0,0.5)",
+                ? "rgba(184,244,0,0.65)"
+                : "rgba(184,244,0,0.35)",
               transition: "color 0.4s ease",
             }}
           >
-            Best for: {product.bestFor}
+            {product.bestFor}
           </div>
         )}
       </div>
@@ -478,27 +478,27 @@ function ProductCard({ product }: { product: Product }) {
         overflow: "hidden",
         background: "#0f0f0f",
         textDecoration: "none",
-        border: "1px solid rgba(255,255,255,0.06)",
-        transition: "transform 0.35s ease, border-color 0.35s ease",
+        border: "1px solid rgba(255,255,255,0.05)",
+        transition: "transform 0.4s ease, border-color 0.4s ease",
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateY(-4px)";
-        e.currentTarget.style.borderColor = "rgba(255,255,255,0.18)";
+        e.currentTarget.style.transform = "translateY(-3px)";
+        e.currentTarget.style.borderColor = "rgba(184,244,0,0.18)";
         const img = e.currentTarget.querySelector("img") as HTMLImageElement;
         if (img) {
           img.style.transform = "scale(1.04)";
-          img.style.filter = "brightness(0.85)";
+          img.style.filter = "brightness(0.92)";
         }
         const arrow = e.currentTarget.querySelector(".arrow");
-        if (arrow) (arrow as HTMLElement).style.transform = "translateX(4px)";
+        if (arrow) (arrow as HTMLElement).style.transform = "translateX(3px)";
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = "translateY(0)";
-        e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
+        e.currentTarget.style.borderColor = "rgba(255,255,255,0.05)";
         const img = e.currentTarget.querySelector("img") as HTMLImageElement;
         if (img) {
           img.style.transform = "scale(1)";
-          img.style.filter = "brightness(0.7)";
+          img.style.filter = "brightness(0.82)";
         }
         const arrow = e.currentTarget.querySelector(".arrow");
         if (arrow) (arrow as HTMLElement).style.transform = "translateX(0)";
@@ -513,9 +513,9 @@ function ProductCard({ product }: { product: Product }) {
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          filter: "brightness(0.7)",
+          filter: "brightness(0.82)",
           transform: "scale(1)",
-          transition: "all 0.45s ease",
+          transition: "transform 0.5s ease, filter 0.5s ease",
         }}
       />
       <div
@@ -523,22 +523,23 @@ function ProductCard({ product }: { product: Product }) {
           position: "absolute",
           inset: 0,
           background:
-            "linear-gradient(to top, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.35) 60%, transparent 100%)",
+            "linear-gradient(to top, rgba(8,8,8,0.86) 0%, rgba(8,8,8,0.18) 55%, transparent 100%)",
         }}
       />
       <div
         style={{
           position: "absolute",
-          top: "12px",
-          left: "12px",
-          fontSize: "10px",
-          letterSpacing: "0.18em",
+          top: "14px",
+          left: "14px",
+          fontSize: "9px",
+          letterSpacing: "0.2em",
           textTransform: "uppercase",
           color: "#b8f400",
-          background: "rgba(8,8,8,0.8)",
-          padding: "6px 10px",
-          border: "1px solid rgba(255,255,255,0.1)",
+          background: "rgba(8,8,8,0.72)",
+          padding: "5px 9px",
+          border: "1px solid rgba(184,244,0,0.15)",
           fontFamily: "Helvetica, Arial, sans-serif",
+          fontWeight: 700,
         }}
       >
         {product.type}
@@ -547,18 +548,18 @@ function ProductCard({ product }: { product: Product }) {
         className="arrow"
         style={{
           position: "absolute",
-          top: "12px",
-          right: "12px",
-          width: "32px",
-          height: "32px",
+          top: "14px",
+          right: "14px",
+          width: "30px",
+          height: "30px",
           borderRadius: "50%",
-          border: "1px solid rgba(255,255,255,0.18)",
+          border: "1px solid rgba(255,255,255,0.15)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           color: "#fff",
-          fontSize: "13px",
-          transition: "all 0.3s ease",
+          fontSize: "12px",
+          transition: "transform 0.35s ease",
         }}
       >
         →
@@ -571,18 +572,18 @@ function ProductCard({ product }: { product: Product }) {
           display: "flex",
           flexDirection: "column",
           justifyContent: "flex-end",
-          padding: "20px",
+          padding: "22px",
         }}
       >
         <div
           style={{
-            fontSize: "clamp(20px, 1.6vw, 26px)",
+            fontSize: "clamp(20px, 1.7vw, 28px)",
             fontWeight: 800,
             letterSpacing: "-0.03em",
             textTransform: "uppercase",
             color: "#fff",
             lineHeight: 0.95,
-            marginBottom: "4px",
+            marginBottom: "5px",
             fontFamily: "Helvetica, Arial, sans-serif",
           }}
         >
@@ -591,9 +592,9 @@ function ProductCard({ product }: { product: Product }) {
         <div
           style={{
             fontSize: "11px",
-            letterSpacing: "0.06em",
-            color: "rgba(255,255,255,0.55)",
-            lineHeight: 1.5,
+            letterSpacing: "0.04em",
+            color: "rgba(255,255,255,0.52)",
+            lineHeight: 1.55,
             fontFamily: "Helvetica, Arial, sans-serif",
           }}
         >
@@ -602,15 +603,15 @@ function ProductCard({ product }: { product: Product }) {
         {product.bestFor && (
           <div
             style={{
-              marginTop: "5px",
-              fontSize: "10px",
-              letterSpacing: "0.1em",
+              marginTop: "6px",
+              fontSize: "9px",
+              letterSpacing: "0.12em",
               textTransform: "uppercase",
-              color: "rgba(184,244,0,0.55)",
+              color: "rgba(184,244,0,0.38)",
               fontFamily: "Helvetica, Arial, sans-serif",
             }}
           >
-            Best for: {product.bestFor}
+            {product.bestFor}
           </div>
         )}
       </div>
@@ -640,7 +641,7 @@ function CategoryBlock({
     <section
       style={{
         borderTop: "1px solid rgba(255,255,255,0.06)",
-        paddingTop: "40px",
+        paddingTop: "56px",
       }}
     >
       <div
@@ -648,20 +649,20 @@ function CategoryBlock({
           display: "grid",
           gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
           alignItems: "end",
-          gap: isMobile ? "12px" : "32px",
-          marginBottom: "22px",
+          gap: isMobile ? "16px" : "32px",
+          marginBottom: "36px",
         }}
       >
         <div>
           <div
             style={{
               fontFamily: "Helvetica, Arial, sans-serif",
-              fontSize: "11px",
+              fontSize: "10px",
               fontWeight: 700,
-              letterSpacing: "0.22em",
+              letterSpacing: "0.24em",
               textTransform: "uppercase",
-              color: "#b8f400",
-              marginBottom: "10px",
+              color: "rgba(184,244,0,0.7)",
+              marginBottom: "12px",
             }}
           >
             {index}
@@ -669,13 +670,13 @@ function CategoryBlock({
           <h2
             style={{
               fontFamily: "Helvetica, Arial, sans-serif",
-              fontSize: "clamp(36px, 5vw, 72px)",
+              fontSize: "clamp(48px, 6vw, 88px)",
               fontWeight: 900,
-              letterSpacing: "-0.05em",
-              lineHeight: 0.9,
+              letterSpacing: "-0.055em",
+              lineHeight: 0.88,
               textTransform: "uppercase",
               color: "#f5f5f0",
-              margin: "0 0 8px",
+              margin: "0 0 10px",
             }}
           >
             {title}
@@ -685,9 +686,9 @@ function CategoryBlock({
             style={{
               fontFamily: "Helvetica, Arial, sans-serif",
               fontSize: "13px",
-              color: "rgba(255,255,255,0.38)",
-              letterSpacing: "0.02em",
-              lineHeight: 1.5,
+              color: "rgba(255,255,255,0.36)",
+              letterSpacing: "0.01em",
+              lineHeight: 1.6,
             }}
           >
             {subtitle}
@@ -701,19 +702,20 @@ function CategoryBlock({
             fontWeight: 700,
             letterSpacing: "0.18em",
             textTransform: "uppercase",
-            color: "rgba(255,255,255,0.6)",
+            color: "rgba(255,255,255,0.5)",
             textDecoration: "none",
-            borderBottom: "1px solid rgba(255,255,255,0.2)",
+            borderBottom: "1px solid rgba(255,255,255,0.16)",
             paddingBottom: "3px",
             alignSelf: isMobile ? "flex-start" : "flex-end",
+            transition: "color 0.25s ease, border-color 0.25s ease",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.color = "#fff";
-            e.currentTarget.style.borderBottomColor = "rgba(255,255,255,0.6)";
+            e.currentTarget.style.borderBottomColor = "rgba(255,255,255,0.5)";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.color = "rgba(255,255,255,0.6)";
-            e.currentTarget.style.borderBottomColor = "rgba(255,255,255,0.2)";
+            e.currentTarget.style.color = "rgba(255,255,255,0.5)";
+            e.currentTarget.style.borderBottomColor = "rgba(255,255,255,0.16)";
           }}
         >
           View all →
@@ -723,7 +725,7 @@ function CategoryBlock({
         style={{
           display: "grid",
           gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
-          gap: "14px",
+          gap: "20px",
         }}
       >
         {items.map((product) => (
@@ -739,12 +741,12 @@ function CategoryBlock({
 // ---------------------------------------------------------------------------
 const HERO_PRODUCTS = [
   {
-    key: "cooler",
-    image: "/cat-cricket-cooler.jpg",
-    exclusivity: "Exclusive to Tendencies in New Zealand.",
-    title: ["The Cricket", "Cooler"],
-    body: "Built for campaigns that need a reason to engage. A functional, premium cooler that does the promotional work long after the campaign ends.",
-    href: "/catalogue/cricket-cooler",
+    key: "hoodie",
+    image: "/cat-hoodie.jpg",
+    exclusivity: "Apparel · Weighted and considered.",
+    title: ["Premium", "Hoodie"],
+    body: "Weighted fleece, considered cut. The kind of hoodie that earns its place in a regular rotation — not the lost-and-found box.",
+    href: "/catalogue/premium-hoodie",
     cta: "View Product",
   },
   {
@@ -784,8 +786,8 @@ function RotatingHero({ isMobile }: { isMobile: boolean }) {
     <section
       style={{
         borderTop: "1px solid rgba(255,255,255,0.06)",
-        paddingTop: "40px",
-        paddingBottom: "40px",
+        paddingTop: "48px",
+        paddingBottom: "48px",
       }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -795,7 +797,7 @@ function RotatingHero({ isMobile }: { isMobile: boolean }) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginBottom: "20px",
+          marginBottom: "24px",
           gap: "16px",
         }}
       >
@@ -812,7 +814,6 @@ function RotatingHero({ isMobile }: { isMobile: boolean }) {
           Featured Product
         </div>
 
-        {/* Dot indicators */}
         <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
           {HERO_PRODUCTS.map((_, i) => (
             <button
@@ -839,7 +840,7 @@ function RotatingHero({ isMobile }: { isMobile: boolean }) {
           display: "grid",
           gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
           gap: isMobile ? "0" : "2px",
-          border: "1px solid rgba(255,255,255,0.08)",
+          border: "1px solid rgba(255,255,255,0.05)",
           overflow: "hidden",
         }}
       >
@@ -867,7 +868,7 @@ function RotatingHero({ isMobile }: { isMobile: boolean }) {
                 width: "100%",
                 height: "100%",
                 objectFit: "cover",
-                filter: "brightness(0.8)",
+                filter: "brightness(0.88)",
               }}
             />
           </AnimatePresence>
@@ -876,13 +877,13 @@ function RotatingHero({ isMobile }: { isMobile: boolean }) {
         {/* Copy panel */}
         <div
           style={{
-            background: "#0f0f0f",
-            padding: isMobile ? "28px 20px" : "48px 44px",
+            background: "#0d0d0d",
+            padding: isMobile ? "32px 24px" : "56px 52px",
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
-            gap: "32px",
-            minHeight: isMobile ? "auto" : "360px",
+            gap: "40px",
+            minHeight: isMobile ? "auto" : "400px",
           }}
         >
           <AnimatePresence mode="wait">
@@ -897,11 +898,11 @@ function RotatingHero({ isMobile }: { isMobile: boolean }) {
                 style={{
                   fontFamily: "Helvetica, Arial, sans-serif",
                   fontSize: "10px",
-                  fontWeight: 700,
+                  fontWeight: 600,
                   letterSpacing: "0.2em",
                   textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.32)",
-                  marginBottom: "16px",
+                  color: "rgba(255,255,255,0.28)",
+                  marginBottom: "20px",
                 }}
               >
                 {product.exclusivity}
@@ -910,13 +911,13 @@ function RotatingHero({ isMobile }: { isMobile: boolean }) {
               <h2
                 style={{
                   fontFamily: "Helvetica, Arial, sans-serif",
-                  fontSize: "clamp(32px, 4vw, 56px)",
+                  fontSize: "clamp(36px, 4.5vw, 64px)",
                   fontWeight: 900,
-                  letterSpacing: "-0.045em",
-                  lineHeight: 0.92,
+                  letterSpacing: "-0.05em",
+                  lineHeight: 0.9,
                   textTransform: "uppercase",
                   color: "#f5f5f0",
-                  margin: "0 0 20px",
+                  margin: "0 0 24px",
                 }}
               >
                 {product.title[0]}
@@ -929,10 +930,10 @@ function RotatingHero({ isMobile }: { isMobile: boolean }) {
                 style={{
                   fontFamily: "Helvetica, Arial, sans-serif",
                   fontSize: "14px",
-                  lineHeight: 1.65,
-                  color: "rgba(255,255,255,0.5)",
+                  lineHeight: 1.7,
+                  color: "rgba(255,255,255,0.48)",
                   margin: 0,
-                  maxWidth: "360px",
+                  maxWidth: "380px",
                 }}
               >
                 {product.body}
@@ -954,16 +955,16 @@ function RotatingHero({ isMobile }: { isMobile: boolean }) {
                 textTransform: "uppercase",
                 color: "#b8f400",
                 textDecoration: "none",
-                borderBottom: "1px solid rgba(184,244,0,0.3)",
+                borderBottom: "1px solid rgba(184,244,0,0.28)",
                 paddingBottom: "4px",
-                transition: "border-color 0.2s",
+                transition: "border-color 0.25s ease",
               }}
               onMouseEnter={(e) =>
                 (e.currentTarget.style.borderBottomColor = "#b8f400")
               }
               onMouseLeave={(e) =>
                 (e.currentTarget.style.borderBottomColor =
-                  "rgba(184,244,0,0.3)")
+                  "rgba(184,244,0,0.28)")
               }
             >
               {product.cta} →
@@ -988,7 +989,7 @@ export default function CataloguePage() {
         style={{
           maxWidth: "1440px",
           margin: "0 auto",
-          padding: `96px ${px} 0`,
+          padding: `120px ${px} 0`,
         }}
       >
         {/* ── HERO META ROW ── */}
@@ -998,7 +999,7 @@ export default function CataloguePage() {
             gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
             alignItems: "start",
             gap: isMobile ? "8px" : "24px",
-            marginBottom: "20px",
+            marginBottom: "28px",
           }}
         >
           <div>
@@ -1006,9 +1007,9 @@ export default function CataloguePage() {
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
                 fontSize: "10px",
-                letterSpacing: "0.18em",
+                letterSpacing: "0.16em",
                 textTransform: "uppercase",
-                color: "rgba(255,255,255,0.42)",
+                color: "rgba(255,255,255,0.32)",
                 marginBottom: "4px",
               }}
             >
@@ -1018,9 +1019,9 @@ export default function CataloguePage() {
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
                 fontSize: "10px",
-                letterSpacing: "0.16em",
+                letterSpacing: "0.14em",
                 textTransform: "uppercase",
-                color: "rgba(255,255,255,0.56)",
+                color: "rgba(255,255,255,0.42)",
               }}
             >
               Auckland · Melbourne · Shenzhen
@@ -1037,10 +1038,10 @@ export default function CataloguePage() {
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
                 fontSize: "10px",
-                letterSpacing: "0.16em",
+                letterSpacing: "0.14em",
                 textTransform: "uppercase",
-                color: "rgba(255,255,255,0.6)",
-                lineHeight: 1.5,
+                color: "rgba(255,255,255,0.42)",
+                lineHeight: 1.6,
               }}
             >
               An edited selection
@@ -1051,7 +1052,7 @@ export default function CataloguePage() {
         </div>
 
         {/* ── H1 ── */}
-        <div style={{ marginBottom: "20px" }}>
+        <div style={{ marginBottom: "36px" }}>
           <div
             style={{
               fontFamily: "Helvetica, Arial, sans-serif",
@@ -1060,7 +1061,7 @@ export default function CataloguePage() {
               letterSpacing: "0.22em",
               textTransform: "uppercase",
               color: "#b8f400",
-              marginBottom: "12px",
+              marginBottom: "16px",
             }}
           >
             Catalogue
@@ -1074,7 +1075,7 @@ export default function CataloguePage() {
               lineHeight: 0.88,
               textTransform: "uppercase",
               color: "#f5f5f0",
-              margin: "0 0 16px",
+              margin: "0 0 20px",
             }}
           >
             MERCH
@@ -1086,11 +1087,12 @@ export default function CataloguePage() {
           <p
             style={{
               fontFamily: "Helvetica, Arial, sans-serif",
-              fontSize: "15px",
-              color: "rgba(255,255,255,0.42)",
+              fontSize: "13px",
+              color: "rgba(255,255,255,0.38)",
               letterSpacing: "0.04em",
-              lineHeight: 1.6,
+              lineHeight: 1.65,
               margin: 0,
+              maxWidth: "520px",
             }}
           >
             Merch worth keeping. Ideas worth backing.
@@ -1102,26 +1104,26 @@ export default function CataloguePage() {
           style={{
             display: "grid",
             gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
-            gap: isMobile ? "20px" : "32px",
+            gap: isMobile ? "24px" : "48px",
             alignItems: "center",
-            paddingTop: "18px",
-            paddingBottom: "48px",
-            borderTop: "1px solid rgba(255,255,255,0.08)",
+            paddingTop: "24px",
+            paddingBottom: "72px",
+            borderTop: "1px solid rgba(255,255,255,0.07)",
           }}
         >
-          <div style={{ maxWidth: "580px" }}>
+          <div style={{ maxWidth: "560px" }}>
             <p
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
                 fontSize: "14px",
-                lineHeight: 1.55,
-                color: "rgba(255,255,255,0.48)",
+                lineHeight: 1.65,
+                color: "rgba(255,255,255,0.44)",
                 margin: 0,
               }}
             >
               An edited selection of apparel, giveaways, and branded product
               worth putting your name on.{" "}
-              <span style={{ color: "#ffffff", fontWeight: 600 }}>
+              <span style={{ color: "rgba(255,255,255,0.82)", fontWeight: 500 }}>
                 Curated, not dumped. Custom always available.
               </span>
             </p>
@@ -1153,11 +1155,11 @@ export default function CataloguePage() {
         <Reveal>
           <section
             style={{
-              paddingTop: "40px",
+              paddingTop: "80px",
               borderTop: "1px solid rgba(255,255,255,0.06)",
             }}
           >
-            <div style={{ marginBottom: "32px", maxWidth: "720px" }}>
+            <div style={{ marginBottom: "40px", maxWidth: "720px" }}>
               <div
                 style={{
                   fontFamily: "Helvetica, Arial, sans-serif",
@@ -1166,7 +1168,7 @@ export default function CataloguePage() {
                   letterSpacing: "0.22em",
                   textTransform: "uppercase",
                   color: "#b8f400",
-                  marginBottom: "12px",
+                  marginBottom: "14px",
                 }}
               >
                 Featured
@@ -1180,7 +1182,7 @@ export default function CataloguePage() {
                   lineHeight: 0.9,
                   textTransform: "uppercase",
                   color: "#f5f5f0",
-                  margin: "0 0 12px",
+                  margin: "0 0 14px",
                 }}
               >
                 The Shortlist
@@ -1189,10 +1191,11 @@ export default function CataloguePage() {
               <p
                 style={{
                   fontFamily: "Helvetica, Arial, sans-serif",
-                  fontSize: "14px",
-                  color: "rgba(255,255,255,0.42)",
-                  letterSpacing: "0.04em",
+                  fontSize: "13px",
+                  color: "rgba(255,255,255,0.38)",
+                  letterSpacing: "0.02em",
                   margin: 0,
+                  lineHeight: 1.6,
                 }}
               >
                 Not everything. Just the right things.
@@ -1201,13 +1204,9 @@ export default function CataloguePage() {
 
             {isMobile ? (
               <div
-                style={{ display: "flex", flexDirection: "column", gap: "18px" }}
+                style={{ display: "flex", flexDirection: "column", gap: "24px" }}
               >
-                <FeaturedCard
-                  product={FEATURED[0]}
-                  large
-                  disableParallax
-                />
+                <FeaturedCard product={FEATURED[0]} large disableParallax />
                 <FeaturedCard product={FEATURED[1]} disableParallax />
                 <FeaturedCard product={FEATURED[2]} disableParallax />
               </div>
@@ -1216,11 +1215,10 @@ export default function CataloguePage() {
                 style={{
                   display: "grid",
                   gridTemplateColumns: "1.2fr 1fr",
-                  gap: "18px",
+                  gap: "24px",
                   alignItems: "start",
                 }}
               >
-                {/* LEFT — sticky */}
                 <div
                   style={{
                     position: "sticky",
@@ -1231,11 +1229,11 @@ export default function CataloguePage() {
                   <FeaturedCard product={FEATURED[0]} large />
                   <div
                     style={{
-                      marginTop: "12px",
-                      fontSize: "11px",
+                      marginTop: "14px",
+                      fontSize: "10px",
                       letterSpacing: "0.18em",
                       textTransform: "uppercase",
-                      color: "rgba(255,255,255,0.28)",
+                      color: "rgba(255,255,255,0.22)",
                       fontFamily: "Helvetica, Arial, sans-serif",
                     }}
                   >
@@ -1243,12 +1241,11 @@ export default function CataloguePage() {
                   </div>
                 </div>
 
-                {/* RIGHT — scrolls */}
                 <div
                   style={{
                     display: "flex",
                     flexDirection: "column",
-                    gap: "18px",
+                    gap: "24px",
                   }}
                 >
                   <FeaturedCard product={FEATURED[1]} />
@@ -1259,10 +1256,10 @@ export default function CataloguePage() {
 
             <div
               style={{
-                marginTop: "60px",
+                marginTop: "72px",
                 height: "1px",
                 background:
-                  "linear-gradient(to right, transparent, rgba(255,255,255,0.18), transparent)",
+                  "linear-gradient(to right, transparent, rgba(255,255,255,0.12), transparent)",
               }}
             />
           </section>
@@ -1270,26 +1267,13 @@ export default function CataloguePage() {
 
         {/* ── SHOP BY USE ── */}
         <Reveal>
-          <section style={{ paddingTop: "56px", paddingBottom: "8px" }}>
+          <section style={{ paddingTop: "88px", paddingBottom: "8px" }}>
             <div
               style={{
                 borderTop: "1px solid rgba(255,255,255,0.06)",
-                paddingTop: "40px",
+                paddingTop: "56px",
               }}
             >
-              <div
-                style={{
-                  fontFamily: "Helvetica, Arial, sans-serif",
-                  fontSize: "11px",
-                  fontWeight: 700,
-                  letterSpacing: "0.22em",
-                  textTransform: "uppercase",
-                  color: "#b8f400",
-                  marginBottom: "10px",
-                }}
-              >
-                Shop by use
-              </div>
               <h2
                 style={{
                   fontFamily: "Helvetica, Arial, sans-serif",
@@ -1299,7 +1283,7 @@ export default function CataloguePage() {
                   lineHeight: 0.92,
                   textTransform: "uppercase",
                   color: "#f5f5f0",
-                  margin: "0 0 8px",
+                  margin: "0 0 10px",
                 }}
               >
                 What are you building
@@ -1309,10 +1293,10 @@ export default function CataloguePage() {
                 style={{
                   fontFamily: "Helvetica, Arial, sans-serif",
                   fontSize: "13px",
-                  color: "rgba(255,255,255,0.36)",
-                  margin: "0 0 28px",
+                  color: "rgba(255,255,255,0.34)",
+                  margin: "0 0 36px",
                   maxWidth: "480px",
-                  lineHeight: 1.55,
+                  lineHeight: 1.65,
                 }}
               >
                 Not sure where to start? Use this as a guide.
@@ -1322,29 +1306,26 @@ export default function CataloguePage() {
                 style={{
                   display: "grid",
                   gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
-                  gap: "2px",
+                  gap: isMobile ? "2px" : "12px",
                 }}
               >
                 {[
                   {
                     label: "Campaigns & Promotions",
                     desc: "GWP, giveaways, product launches, and activation product. Built to move, built to be kept.",
-                    examples:
-                      "Promo balls · Keychains · Notebooks · Coolers",
+                    examples: "Promo balls · Keychains · Notebooks · Coolers",
                     href: "#promotional",
                   },
                   {
                     label: "Staff & Team",
                     desc: "Uniforms, apparel, and internal gear. Product your people will actually wear.",
-                    examples:
-                      "Tees · Hoodies · Caps · Performance jerseys",
+                    examples: "Tees · Hoodies · Caps · Performance jerseys",
                     href: "#apparel",
                   },
                   {
                     label: "Premium & High Impact",
                     desc: "Standout items and hero products for campaigns that need a centrepiece. Higher-value, longer-lasting.",
-                    examples:
-                      "Cricket Cooler · Moulded Resin · Custom development",
+                    examples: "Cricket Cooler · Moulded Resin · Custom development",
                     href: "#custom",
                   },
                 ].map((tile) => (
@@ -1355,18 +1336,16 @@ export default function CataloguePage() {
                       display: "block",
                       background: "#0f0f0f",
                       border: "1px solid rgba(255,255,255,0.06)",
-                      padding: isMobile ? "24px 20px" : "32px 28px",
+                      padding: isMobile ? "28px 22px" : "40px 36px",
                       textDecoration: "none",
-                      transition: "border-color 0.2s, background 0.2s",
+                      transition: "border-color 0.3s ease, background 0.3s ease",
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor =
-                        "rgba(184,244,0,0.25)";
-                      e.currentTarget.style.background = "#111";
+                      e.currentTarget.style.borderColor = "rgba(184,244,0,0.18)";
+                      e.currentTarget.style.background = "rgba(255,255,255,0.02)";
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor =
-                        "rgba(255,255,255,0.06)";
+                      e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
                       e.currentTarget.style.background = "#0f0f0f";
                     }}
                   >
@@ -1375,11 +1354,11 @@ export default function CataloguePage() {
                         fontFamily: "Helvetica, Arial, sans-serif",
                         fontSize: "13px",
                         fontWeight: 700,
-                        letterSpacing: "0.04em",
+                        letterSpacing: "0.03em",
                         textTransform: "uppercase",
                         color: "#fff",
-                        marginBottom: "10px",
-                        lineHeight: 1.2,
+                        marginBottom: "12px",
+                        lineHeight: 1.25,
                       }}
                     >
                       {tile.label}
@@ -1388,9 +1367,9 @@ export default function CataloguePage() {
                       style={{
                         fontFamily: "Helvetica, Arial, sans-serif",
                         fontSize: "13px",
-                        color: "rgba(255,255,255,0.42)",
-                        lineHeight: 1.6,
-                        marginBottom: "14px",
+                        color: "rgba(255,255,255,0.4)",
+                        lineHeight: 1.72,
+                        marginBottom: "16px",
                       }}
                     >
                       {tile.desc}
@@ -1401,8 +1380,8 @@ export default function CataloguePage() {
                         fontSize: "10px",
                         letterSpacing: "0.14em",
                         textTransform: "uppercase",
-                        color: "rgba(184,244,0,0.55)",
-                        lineHeight: 1.6,
+                        color: "rgba(184,244,0,0.5)",
+                        lineHeight: 1.7,
                       }}
                     >
                       {tile.examples}
@@ -1415,7 +1394,7 @@ export default function CataloguePage() {
         </Reveal>
 
         {/* ── CATEGORY BLOCKS ── */}
-        <div id="apparel" style={{ paddingTop: "40px" }}>
+        <div id="apparel" style={{ paddingTop: "88px" }}>
           <Reveal>
             <CategoryBlock
               index="01"
@@ -1428,7 +1407,7 @@ export default function CataloguePage() {
           </Reveal>
         </div>
 
-        <div id="promotional" style={{ paddingTop: "40px" }}>
+        <div id="promotional" style={{ paddingTop: "88px" }}>
           <Reveal>
             <CategoryBlock
               index="02"
@@ -1441,7 +1420,7 @@ export default function CataloguePage() {
           </Reveal>
         </div>
 
-        <div id="custom" style={{ paddingTop: "40px", paddingBottom: "64px" }}>
+        <div id="custom" style={{ paddingTop: "88px", paddingBottom: "96px" }}>
           <Reveal>
             <CategoryBlock
               index="03"
@@ -1460,8 +1439,7 @@ export default function CataloguePage() {
         style={{
           background: "#b8f400",
           color: "#080808",
-          padding: isMobile ? "60px 20px" : "80px 48px",
-          marginTop: "12px",
+          padding: isMobile ? "72px 24px" : "100px 64px",
         }}
       >
         <div
@@ -1470,7 +1448,7 @@ export default function CataloguePage() {
             margin: "0 auto",
             display: "grid",
             gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
-            gap: "32px",
+            gap: isMobile ? "32px" : "64px",
             alignItems: "end",
           }}
         >
@@ -1481,7 +1459,7 @@ export default function CataloguePage() {
                 fontSize: "clamp(56px, 10vw, 140px)",
                 fontWeight: 900,
                 letterSpacing: "-0.065em",
-                lineHeight: 0.84,
+                lineHeight: 0.88,
                 textTransform: "uppercase",
                 margin: 0,
               }}
@@ -1498,10 +1476,10 @@ export default function CataloguePage() {
               style={{
                 fontFamily: "Helvetica, Arial, sans-serif",
                 fontSize: "14px",
-                lineHeight: 1.55,
-                color: "rgba(8,8,8,0.7)",
-                maxWidth: "240px",
-                margin: isMobile ? "0 0 20px" : "0 0 18px auto",
+                lineHeight: 1.65,
+                color: "rgba(8,8,8,0.62)",
+                maxWidth: "260px",
+                margin: isMobile ? "0 0 24px" : "0 0 24px auto",
               }}
             >
               Big enough to deliver. Small enough to care.
@@ -1513,9 +1491,9 @@ export default function CataloguePage() {
                 alignItems: "center",
                 justifyContent: "center",
                 height: "48px",
-                padding: "0 26px",
+                padding: "0 28px",
                 borderRadius: "999px",
-                border: "1px solid rgba(8,8,8,0.6)",
+                border: "1px solid rgba(8,8,8,0.5)",
                 color: "#080808",
                 textDecoration: "none",
                 fontFamily: "Helvetica, Arial, sans-serif",
@@ -1524,7 +1502,7 @@ export default function CataloguePage() {
                 letterSpacing: "0.08em",
                 textTransform: "uppercase",
                 background: "transparent",
-                transition: "background 0.2s ease, color 0.2s ease",
+                transition: "background 0.25s ease, color 0.25s ease",
                 width: isMobile ? "100%" : "auto",
                 boxSizing: "border-box",
               }}

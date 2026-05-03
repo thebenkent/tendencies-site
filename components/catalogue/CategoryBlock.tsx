@@ -1,7 +1,23 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import type { CatalogueProduct } from "@/lib/catalogue/products";
 import CatalogueProductCard from "./CatalogueProductCard";
+
+function useGridCols() {
+  const [cols, setCols] = useState(3);
+  useEffect(() => {
+    const update = () => {
+      if (window.innerWidth < 640) setCols(1);
+      else if (window.innerWidth < 1024) setCols(2);
+      else setCols(3);
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+  return cols;
+}
 
 export default function CategoryBlock({
   index,
@@ -18,6 +34,8 @@ export default function CategoryBlock({
   viewAllHref: string;
   isMobile: boolean;
 }) {
+  const cols = useGridCols();
+
   return (
     <section
       style={{
@@ -31,7 +49,7 @@ export default function CategoryBlock({
           gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
           alignItems: "end",
           gap: isMobile ? "12px" : "32px",
-          marginBottom: "22px",
+          marginBottom: "28px",
         }}
       >
         <div>
@@ -104,8 +122,8 @@ export default function CategoryBlock({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
-          gap: "14px",
+          gridTemplateColumns: `repeat(${cols}, 1fr)`,
+          gap: "16px",
         }}
       >
         {items.map((product) => (
