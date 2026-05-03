@@ -69,7 +69,8 @@ export async function POST(req: Request) {
       items.map((i) => `${i.product[0]}/${i.fit[0]}/${i.size}/${i.name}`).join(";")
     );
 
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
+    const baseUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://www.tendencies.co.nz";
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
