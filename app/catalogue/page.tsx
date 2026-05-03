@@ -3,6 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import EditorialSection from "@/components/catalogue/EditorialSection";
 
 // ---------------------------------------------------------------------------
 // Reveal wrapper
@@ -56,7 +57,7 @@ const FEATURED: Product[] = [
   {
     name: "Heavyweight Tee",
     type: "Apparel",
-    line: "Built to last. Cut to fit.",
+    line: "Built properly. Worn daily.",
     image: "/cat-tee-heavy.jpg",
     href: "/catalogue/heavyweight-tee",
     bestFor: "staff & retail",
@@ -64,7 +65,7 @@ const FEATURED: Product[] = [
   {
     name: "Resin Keychains",
     type: "Custom Product",
-    line: "Small format, high impact.",
+    line: "Small. Keeps.",
     image: "/cat-keychain.jpg",
     href: "/catalogue/resin-keychains",
     bestFor: "campaigns & events",
@@ -72,7 +73,7 @@ const FEATURED: Product[] = [
   {
     name: "Insulated Bottle",
     type: "Everyday Carry",
-    line: "Premium steel, daily use.",
+    line: "Steel. On the desk every day.",
     image: "/cat-bottle.jpg",
     href: "/catalogue/insulated-bottle",
     bestFor: "staff & premium gifting",
@@ -83,7 +84,7 @@ const APPAREL: Product[] = [
   {
     name: "Premium Hoodie",
     type: "Apparel",
-    line: "Weighted fleece, considered cut.",
+    line: "Proper weight. Clean cut.",
     image: "/cat-hoodie.jpg",
     href: "/catalogue/premium-hoodie",
     bestFor: "staff & retail",
@@ -91,7 +92,7 @@ const APPAREL: Product[] = [
   {
     name: "Overshirt",
     type: "Apparel",
-    line: "Midweight layer, finished properly.",
+    line: "Midweight. Finishes the fit.",
     image: "/cat-overshirt.jpg",
     href: "/catalogue/overshirt",
     bestFor: "campaigns & staff",
@@ -110,7 +111,7 @@ const PROMOTIONAL: Product[] = [
   {
     name: "Promo Ball",
     type: "Promotional",
-    line: "Simple, useful, memorable.",
+    line: "Simple. Gets used.",
     image: "/cat-ball.jpg",
     href: "/catalogue/promo-ball",
     bestFor: "campaigns & retail",
@@ -126,7 +127,7 @@ const PROMOTIONAL: Product[] = [
   {
     name: "Hardcover Notebook",
     type: "Stationery",
-    line: "Thick stock, brand-debossed.",
+    line: "Thick stock. Brand-debossed.",
     image: "/cat-notebook.jpg",
     href: "/catalogue/hardcover-notebook",
     bestFor: "corporate & staff",
@@ -137,7 +138,7 @@ const CUSTOM: Product[] = [
   {
     name: "Performance Jersey",
     type: "Teamwear",
-    line: "Technical fabric, team-ready.",
+    line: "Technical. Built for the team.",
     image: "/cat-jersey.jpg",
     href: "/catalogue/performance-jersey",
     bestFor: "sports & staff",
@@ -145,7 +146,7 @@ const CUSTOM: Product[] = [
   {
     name: "Training Shell",
     type: "Teamwear",
-    line: "Weatherproof, sideline-proof.",
+    line: "Weatherproof. Sideline to office.",
     image: "/cat-jacket.jpg",
     href: "/catalogue/training-shell",
     bestFor: "staff & outdoors",
@@ -153,7 +154,7 @@ const CUSTOM: Product[] = [
   {
     name: "Moulded Resin",
     type: "Custom Product",
-    line: "Mould to hand, one-off or run.",
+    line: "One-off or run. Anything goes.",
     image: "/cat-resin.jpg",
     href: "/catalogue/moulded-resin",
     bestFor: "campaigns & retail",
@@ -301,10 +302,7 @@ function FeaturedCard({
         overflow: "hidden",
         background: "#0a0a0a",
         textDecoration: "none",
-        border: hovered
-          ? "1px solid rgba(184,244,0,0.22)"
-          : "1px solid rgba(255,255,255,0.04)",
-        transition: "border-color 0.55s ease",
+        border: "none",
       }}
     >
       {/* Image with parallax */}
@@ -327,8 +325,8 @@ function FeaturedCard({
             height: "100%",
             objectFit: "cover",
             filter: hovered
-              ? "brightness(0.82) saturate(1.08)"
-              : "brightness(0.68) saturate(0.92)",
+              ? "brightness(0.92) saturate(1.05)"
+              : "brightness(0.78) saturate(0.95)",
             transition: "filter 0.9s ease",
           }}
         />
@@ -340,8 +338,8 @@ function FeaturedCard({
           position: "absolute",
           inset: 0,
           background: hovered
-            ? "linear-gradient(to top, rgba(8,8,8,0.88) 0%, rgba(8,8,8,0.18) 50%, transparent 100%)"
-            : "linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.28) 52%, transparent 100%)",
+            ? "linear-gradient(to top, rgba(8,8,8,0.72) 0%, rgba(8,8,8,0.08) 50%, transparent 100%)"
+            : "linear-gradient(to top, rgba(8,8,8,0.80) 0%, rgba(8,8,8,0.18) 52%, transparent 100%)",
           transition: "background 0.7s ease",
           pointerEvents: "none",
         }}
@@ -467,14 +465,14 @@ function FeaturedCard({
 // ---------------------------------------------------------------------------
 // ProductCard
 // ---------------------------------------------------------------------------
-function ProductCard({ product }: { product: Product }) {
+function ProductCard({ product, featured = false }: { product: Product; featured?: boolean }) {
   return (
     <a
       href={product.href}
       style={{
         position: "relative",
         display: "block",
-        aspectRatio: "1 / 1",
+        aspectRatio: featured ? "4 / 3" : "1 / 1",
         overflow: "hidden",
         background: "#0f0f0f",
         textDecoration: "none",
@@ -486,7 +484,7 @@ function ProductCard({ product }: { product: Product }) {
         e.currentTarget.style.borderColor = "rgba(184,244,0,0.18)";
         const img = e.currentTarget.querySelector("img") as HTMLImageElement;
         if (img) {
-          img.style.transform = "scale(1.04)";
+          img.style.transform = "scale(1.05)";
           img.style.filter = "brightness(0.92)";
         }
         const arrow = e.currentTarget.querySelector(".arrow");
@@ -577,7 +575,7 @@ function ProductCard({ product }: { product: Product }) {
       >
         <div
           style={{
-            fontSize: "clamp(20px, 1.7vw, 28px)",
+            fontSize: featured ? "clamp(24px, 2vw, 32px)" : "clamp(20px, 1.7vw, 28px)",
             fontWeight: 800,
             letterSpacing: "-0.03em",
             textTransform: "uppercase",
@@ -724,12 +722,12 @@ function CategoryBlock({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)",
+          gridTemplateColumns: isMobile ? "1fr" : "1.5fr 1fr 1fr",
           gap: "20px",
         }}
       >
-        {items.map((product) => (
-          <ProductCard key={product.name} product={product} />
+        {items.map((product, i) => (
+          <ProductCard key={product.name} product={product} featured={i === 0} />
         ))}
       </div>
     </section>
@@ -1263,6 +1261,11 @@ export default function CataloguePage() {
               }}
             />
           </section>
+        </Reveal>
+
+        {/* ── EDITORIAL / STAFF PICKS ── */}
+        <Reveal>
+          <EditorialSection isMobile={isMobile} />
         </Reveal>
 
         {/* ── SHOP BY USE ── */}
