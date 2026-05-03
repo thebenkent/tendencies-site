@@ -186,6 +186,57 @@ export const PRODUCTS: Product[] = [
   },
 
   {
+    slug: "union-mug",
+    title: "Union Mug",
+    category: "drinkware",
+    subcategory: "Mugs",
+    descriptor: "Heavy ceramic. Sits on the desk and stays there.",
+    badges: ["premium"],
+
+    hero: {
+      src: "/cat-union-mug.jpg",
+      alt: "Union Mug — branded ceramic mug, front view",
+      aspect: "4/5",
+    },
+
+    shortDescription:
+      "The Union Mug is built to replace whatever was already on the desk. Heavy ceramic body, clean cylindrical form, comfortable C-handle. Takes branding cleanly — pad-print for crisp graphics, laser-etch for permanence. Not a giveaway. A keeper.",
+
+    features: [
+      "Heavy ceramic body, 350ml",
+      "Clean cylindrical form — full-wrap branding canvas",
+      "Comfortable C-handle",
+      "Gloss or matte glaze options",
+      "Dishwasher-safe finish",
+    ],
+
+    brandingMethods: ["pad-print", "laser-etch"],
+
+    moq: 72,
+    leadTimeWeeks: [4, 6],
+    sourcing: "Produced through our ceramics partner. Sampling available before run.",
+
+    specs: [
+      { label: "Capacity", value: "350ml" },
+      { label: "Material", value: "Ceramic" },
+      { label: "Finish", value: "Gloss or matte glaze" },
+      { label: "Branding area", value: "Full wrap or spot — up to 120 × 80mm" },
+      { label: "Dishwasher safe", value: "Yes" },
+      { label: "MOQ", value: "72 units" },
+    ],
+
+    useCases: [
+      "Staff and team gifting",
+      "Café and hospitality merch",
+      "Premium campaign drops",
+      "Corporate welcome kits",
+    ],
+
+    relatedSlugs: ["field-bottle", "heavyweight-hoodie", "structured-cap"],
+    tags: ["drinkware", "mug", "premium", "corporate-gifting"],
+  },
+
+  {
     slug: "field-bottle",
     title: "The Field Bottle",
     category: "drinkware",

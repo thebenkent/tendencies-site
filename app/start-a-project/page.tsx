@@ -71,6 +71,7 @@ const PRODUCT_PREFILL: Record<string, Prefill> = {
   "field-bottle":       { need: "Merch",          productName: "Field Bottle" },
   "resin-keychains":    { need: "Custom Product", productName: "Resin Keychains" },
   "insulated-bottle":   { need: "Merch",          productName: "Insulated Bottle" },
+  "union-mug":          { need: "Merch",          productName: "Union Mug" },
 };
 
 function buildDetailsSeed(productName: string): string {
