@@ -794,126 +794,130 @@ export default function TeAtatuStorePage() {
               gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
               gap: "2px",
             }}
-          >
-            {(
-              [
-                {
-                  product: "Tee" as ProductType,
-                  label: "Te Atatū Tee",
-                  price: TEE_PRICE,
-                  detail: "Short-sleeve, crew neck.",
-                  images: ["/tanc-tee-front.jpg", "/tanc-tee-back.jpg"],
-                },
-                {
-                  product: "Hoodie" as ProductType,
-                  label: "Te Atatū Hoodie",
-                  price: HOODIE_PRICE,
-                  detail: "Pullover, kangaroo pocket.",
-                  images: ["/tanc-hoodie-front.jpg", "/tanc-hoodie-back.jpg"],
-                },
-              ] as const
-            ).map(({ product, label, price, detail }) => (
-              <div
-                key={product}
-                style={{
-                  background: CARD_BG,
-                  border: `1px solid ${BORDER}`,
-                  padding: isMobile ? "24px 20px" : "32px 28px",
+          >{[
+  {
+    product: "Tee" as ProductType,
+    label: "Te Atatū Tee",
+    price: TEE_PRICE,
+    detail: "Short-sleeve, crew neck.",
+    images: ["/tanc-tee-front.jpg", "/tanc-tee-back.jpg"],
+  },
+  {
+    product: "Hoodie" as ProductType,
+    label: "Te Atatū Hoodie",
+    price: HOODIE_PRICE,
+    detail: "Pullover, kangaroo pocket.",
+    images: ["/tanc-hoodie-front.jpg", "/tanc-hoodie-back.jpg"],
+  },
+].map(({ product, label, price, detail, images }) => (
+  <div
+    key={product}
+    style={{
+      background: CARD_BG,
+      border: `1px solid ${BORDER}`,
+      overflow: "hidden",
+    }}
+  >
+    {/* IMAGE */}
+    <div
+      style={{
+        position: "relative",
+        aspectRatio: "1 / 1",
+        background: "#111",
+        overflow: "hidden",
+      }}
+    >
+      <img
+        src={images[0]}
+        alt={label}
+        style={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          display: "block",
+          transition: "opacity 0.3s ease",
+        }}
+        onMouseOver={(e) => {
+          if (images[1]) e.currentTarget.src = images[1];
+        }}
+        onMouseOut={(e) => {
+          e.currentTarget.src = images[0];
+        }}
+      />
+    </div>
+
+    {/* CONTENT */}
+    <div style={{ padding: isMobile ? "20px" : "24px" }}>
+      <div
+        style={{
+          fontSize: "10px",
+          letterSpacing: "0.2em",
+          textTransform: "uppercase",
+          color: "rgba(255,255,255,0.35)",
+          marginBottom: "6px",
+        }}
+      >
+        {product}
+      </div>
+
+      <div
+        style={{
+          fontSize: "24px",
+          fontWeight: 900,
+          letterSpacing: "-0.02em",
+          textTransform: "uppercase",
+          marginBottom: "6px",
+        }}
+      >
+        {label}
+      </div>
+
+      <div
+        style={{
+          fontSize: "13px",
+          color: "rgba(255,255,255,0.4)",
+          marginBottom: "16px",
+        }}
+      >
+        {detail}
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
                 }}
-              >
-                <div
-                  style={{
-                    fontSize: "10px",
-                    fontWeight: 700,
-                    letterSpacing: "0.2em",
-                    textTransform: "uppercase",
-                    color: "rgba(255,255,255,0.35)",
-                    marginBottom: "8px",
-                  }}
-                >
-                  {product}
-                </div>
-                <div
-                  style={{
-                    fontSize: isMobile ? "26px" : "32px",
-                    fontWeight: 900,
-                    letterSpacing: "-0.03em",
-                    textTransform: "uppercase",
-                    color: FG,
-                    lineHeight: 1,
-                    marginBottom: "4px",
-                  }}
-                >
-                  {label}
-                </div>
-                <div
-                  style={{
-                    fontSize: "13px",
-                    color: "rgba(255,255,255,0.38)",
-                    marginBottom: "20px",
-                  }}
-                >
-                  {detail}
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    flexWrap: "wrap",
-                    gap: "12px",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "22px",
-                      fontWeight: 900,
-                      letterSpacing: "-0.02em",
-                      color: FG,
-                    }}
-                  >
-                    ${price}{" "}
-                    <span
-                      style={{
-                        fontSize: "11px",
-                        fontWeight: 700,
-                        letterSpacing: "0.1em",
-                        color: "rgba(255,255,255,0.38)",
-                      }}
-                    >
-                      NZD incl. GST
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setOpenChart(product)}
-                    style={{
-                      background: "transparent",
-                      border: `1px solid rgba(255,255,255,0.18)`,
-                      color: "rgba(255,255,255,0.55)",
-                      fontFamily: FONT,
-                      fontSize: "10px",
-                      fontWeight: 700,
-                      letterSpacing: "0.14em",
-                      textTransform: "uppercase",
-                      padding: "8px 14px",
-                      cursor: "pointer",
-                      transition: "color 0.2s, border-color 0.2s",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.color = FG;
-                      e.currentTarget.style.borderColor = "rgba(255,255,255,0.4)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color = "rgba(255,255,255,0.55)";
-                      e.currentTarget.style.borderColor = "rgba(255,255,255,0.18)";
-                    }}
-                  >
-                    View size chart
-                  </button>
-                </div>
-              </div>
-            ))}
+      >
+        <div
+          style={{
+            fontSize: "20px",
+            fontWeight: 900,
+          }}
+        >
+          ${price}
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setOpenChart(product)}
+          style={{
+            background: "transparent",
+            border: `1px solid ${BORDER}`,
+            color: "rgba(255,255,255,0.6)",
+            fontSize: "10px",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            padding: "6px 10px",
+            cursor: "pointer",
+          }}
+        >
+          Size chart
+        </button>
+      </div>
+    </div>
+  </div>
+))}
           </div>
         </div>
 
