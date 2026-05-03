@@ -7,6 +7,9 @@ export type CatalogueProduct = {
   bestFor?: string;
 };
 
+// ---------------------------------------------------------------------------
+// FEATURED
+// ---------------------------------------------------------------------------
 export const FEATURED: CatalogueProduct[] = [
   {
     name: "Heavyweight Tee",
@@ -34,6 +37,9 @@ export const FEATURED: CatalogueProduct[] = [
   },
 ];
 
+// ---------------------------------------------------------------------------
+// APPAREL
+// ---------------------------------------------------------------------------
 export const APPAREL: CatalogueProduct[] = [
   {
     name: "Premium Hoodie",
@@ -61,7 +67,18 @@ export const APPAREL: CatalogueProduct[] = [
   },
 ];
 
+// ---------------------------------------------------------------------------
+// PROMOTIONAL (UPDATED — MUG ADDED)
+// ---------------------------------------------------------------------------
 export const PROMOTIONAL: CatalogueProduct[] = [
+  {
+    name: "Union Mug",
+    type: "Promotional",
+    line: "The mug you actually keep.",
+    image: "/cat-union-mug.jpg",
+    href: "/catalogue/union-mug",
+    bestFor: "staff, cafés & premium merch",
+  },
   {
     name: "Promo Ball",
     type: "Promotional",
@@ -88,6 +105,9 @@ export const PROMOTIONAL: CatalogueProduct[] = [
   },
 ];
 
+// ---------------------------------------------------------------------------
+// CUSTOM
+// ---------------------------------------------------------------------------
 export const CUSTOM: CatalogueProduct[] = [
   {
     name: "Performance Jersey",
@@ -115,6 +135,9 @@ export const CUSTOM: CatalogueProduct[] = [
   },
 ];
 
+// ---------------------------------------------------------------------------
+// HERO PRODUCTS
+// ---------------------------------------------------------------------------
 export type HeroProduct = {
   key: string;
   image: string;
@@ -131,7 +154,7 @@ export const HERO_PRODUCTS: HeroProduct[] = [
     image: "/cat-cricket-cooler.jpg",
     exclusivity: "Exclusive to Tendencies in New Zealand.",
     title: ["The Cricket", "Cooler"],
-    body: "Built for campaigns that need a reason to engage. A functional, premium cooler that does the promotional work long after the campaign ends.",
+    body: "Built for campaigns that need a reason to engage.",
     href: "/catalogue/cricket-cooler",
     cta: "View Product",
   },
@@ -140,7 +163,7 @@ export const HERO_PRODUCTS: HeroProduct[] = [
     image: "/cat-tee-heavy.jpg",
     exclusivity: "Apparel · Built to last.",
     title: ["Heavyweight", "Tee"],
-    body: "Premium weight, considered cut. The kind of tee that earns its place in a regular rotation — not the bin.",
+    body: "Premium weight, considered cut.",
     href: "/catalogue/heavyweight-tee",
     cta: "View Product",
   },
@@ -149,7 +172,7 @@ export const HERO_PRODUCTS: HeroProduct[] = [
     image: "/cat-bottle.jpg",
     exclusivity: "Everyday Carry · Staff & retail.",
     title: ["Insulated", "Bottle"],
-    body: "Premium steel, daily use. The product that sits on the desk and does the brand work without asking.",
+    body: "Premium steel, daily use.",
     href: "/catalogue/insulated-bottle",
     cta: "View Product",
   },

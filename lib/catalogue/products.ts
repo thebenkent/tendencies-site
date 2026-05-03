@@ -106,6 +106,14 @@ export const APPAREL: CatalogueProduct[] = [
 // ---------------------------------------------------------------------------
 export const PROMOTIONAL: CatalogueProduct[] = [
   {
+    name: "Union Mug",
+    type: "Promotional",
+    line: "The mug you actually keep.",
+    image: "/cat-union-mug.jpg",
+    href: "/catalogue/union-mug",
+    bestFor: "staff, cafés & premium merch",
+  },
+  {
     name: "Promo Ball",
     type: "Promotional",
     line: "Simple, useful, memorable.",
