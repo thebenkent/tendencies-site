@@ -1050,79 +1050,99 @@ export default function TeAtatuStorePage() {
       >
 
         {/* ── HERO ────────────────────────────────────────────────── */}
-        <div style={{ marginBottom: sectionGap }}>
-          <Eyebrow>Te Atatū Netball Club · Team Store</Eyebrow>
+        <div
+          style={{
+            marginBottom: sectionGap,
+            display: "flex",
+            flexDirection: isMobile ? "column" : "row",
+            justifyContent: "space-between",
+            alignItems: isMobile ? "flex-start" : "flex-end",
+            gap: isMobile ? "0" : "48px",
+          }}
+        >
+          {/* Left: heading + copy + delivery badge */}
+          <div style={{ maxWidth: isMobile ? "100%" : "640px" }}>
+            <Eyebrow>Te Atatū Netball Club · Team Store</Eyebrow>
 
-          <h1
-            style={{
-              fontFamily: FONT,
-              fontSize: isMobile
-                ? "clamp(56px, 16vw, 88px)"
-                : "clamp(80px, 12vw, 140px)",
-              fontWeight: 900,
-              letterSpacing: "-0.065em",
-              lineHeight: 0.86,
-              textTransform: "uppercase",
-              margin: "0 0 32px",
-            }}
-          >
-            TEAM
-            <br />
-            WEAR
-            <span style={{ color: LIME }}>.</span>
-          </h1>
-
-          <p
-            style={{
-              fontFamily: FONT,
-              fontSize: "15px",
-              lineHeight: 1.65,
-              color: "rgba(255,255,255,0.55)",
-              margin: "0 0 28px",
-              maxWidth: "500px",
-            }}
-          >
-            Order your kit below. Each garment is personalised with your name
-            and delivered to the club.
-          </p>
-
-          {/* Delivery badge */}
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "10px",
-              padding: "10px 16px",
-              border: `1px solid rgba(184,244,0,0.2)`,
-              background: "rgba(184,244,0,0.04)",
-              marginBottom: "40px",
-            }}
-          >
-            <span
-              style={{
-                width: "7px",
-                height: "7px",
-                borderRadius: "50%",
-                background: LIME,
-                flexShrink: 0,
-              }}
-            />
-            <span
+            <h1
               style={{
                 fontFamily: FONT,
-                fontSize: "12px",
-                fontWeight: 700,
-                letterSpacing: "0.1em",
+                fontSize: isMobile
+                  ? "clamp(56px, 16vw, 88px)"
+                  : "clamp(80px, 12vw, 140px)",
+                fontWeight: 900,
+                letterSpacing: "-0.065em",
+                lineHeight: 0.86,
                 textTransform: "uppercase",
-                color: "rgba(255,255,255,0.7)",
+                margin: "0 0 36px",
               }}
             >
-              Delivered to the club · {DELIVERY_DATE}
-            </span>
+              TEAM
+              <br />
+              WEAR
+              <span style={{ color: LIME }}>.</span>
+            </h1>
+
+            <p
+              style={{
+                fontFamily: FONT,
+                fontSize: "15px",
+                lineHeight: 1.65,
+                color: "rgba(255,255,255,0.55)",
+                margin: "0 0 28px",
+                maxWidth: "500px",
+              }}
+            >
+              Order your kit below. Each garment is personalised with your name
+              and delivered to the club.
+            </p>
+
+            {/* Delivery badge */}
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "10px",
+                padding: "10px 16px",
+                border: `1px solid rgba(184,244,0,0.2)`,
+                background: "rgba(184,244,0,0.04)",
+              }}
+            >
+              <span
+                style={{
+                  width: "7px",
+                  height: "7px",
+                  borderRadius: "50%",
+                  background: LIME,
+                  flexShrink: 0,
+                }}
+              />
+              <span
+                style={{
+                  fontFamily: FONT,
+                  fontSize: "12px",
+                  fontWeight: 700,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.7)",
+                }}
+              >
+                Delivered to the club · {DELIVERY_DATE}
+              </span>
+            </div>
           </div>
 
-          {/* Countdown */}
-          <CountdownBlock timeLeft={timeLeft} isMobile={isMobile} />
+          {/* Right: countdown */}
+          <div
+            style={{
+              minWidth: isMobile ? "auto" : "320px",
+              width: isMobile ? "100%" : "auto",
+              marginTop: isMobile ? "32px" : "0",
+              flexShrink: 0,
+            }}
+          >
+            <CountdownBlock timeLeft={timeLeft} isMobile={isMobile} />
+          </div>
         </div>
 
         {/* ── PRODUCTS ────────────────────────────────────────────── */}
