@@ -27,8 +27,8 @@ const HOODIE_CHART_SRC = "/tanc-hoodie-size-chart.png";
 const TEE_CHART_SRC = "/tanc-tee-size-chart.png";
 
 // ── Showcase product catalogue ────────────────────────────────────────────────
-const SHOWCASE_PRODUCTS = [
-  { name: "Scrunchies",   category: "Accessories", detail: "Branded elastic in team colours. Minimum 50 units." },
+const SHOWCASE_PRODUCTS: { name: string; category: string; detail: string; image?: string }[] = [
+  { name: "Scrunchies",   category: "Accessories", detail: "Branded elastic in team colours. Minimum 50 units.",         image: "/tanc-scrunchie.jpg" },
   { name: "Drink Bottle", category: "Drinkware",   detail: "Insulated stainless. Club logo printed or laser-etched." },
   { name: "Scarf",        category: "Accessories", detail: "Woven or printed. Full team colourway." },
   { name: "Bucket Hat",   category: "Headwear",    detail: "Embroidered crest. Structured brim, adjustable fit." },
@@ -246,17 +246,22 @@ function ProductCard({ product, label, price, detail, frontSrc, backSrc, isMobil
 }
 
 // ── Showcase card (display only) ──────────────────────────────────────────────
-function ShowcaseCard({ name, category, detail }: { name: string; category: string; detail: string }) {
+function ShowcaseCard({ name, category, detail, image }: { name: string; category: string; detail: string; image?: string }) {
   const initial = name[0].toUpperCase();
   return (
     <div style={{ background: CARD_BG, border: `1px solid ${BORDER}`, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-      {/* Placeholder image area */}
+      {/* Image or placeholder */}
       <div style={{ position: "relative", aspectRatio: "4 / 3", background: "#111", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-        {/* Subtle diagonal stripe */}
-        <div style={{ position: "absolute", inset: 0, backgroundImage: "repeating-linear-gradient(135deg, transparent, transparent 12px, rgba(255,255,255,0.018) 12px, rgba(255,255,255,0.018) 13px)" }} />
-        <div style={{ fontFamily: FONT, fontSize: "72px", fontWeight: 900, color: "rgba(255,255,255,0.06)", letterSpacing: "-0.05em", userSelect: "none", position: "relative" }}>
-          {initial}
-        </div>
+        {image ? (
+          <img src={image} alt={name} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+        ) : (
+          <>
+            <div style={{ position: "absolute", inset: 0, backgroundImage: "repeating-linear-gradient(135deg, transparent, transparent 12px, rgba(255,255,255,0.018) 12px, rgba(255,255,255,0.018) 13px)" }} />
+            <div style={{ fontFamily: FONT, fontSize: "72px", fontWeight: 900, color: "rgba(255,255,255,0.06)", letterSpacing: "-0.05em", userSelect: "none", position: "relative" }}>
+              {initial}
+            </div>
+          </>
+        )}
         {/* "Available for club stores" badge */}
         <div style={{ position: "absolute", top: "14px", left: "14px", background: "rgba(184,244,0,0.12)", border: `1px solid rgba(184,244,0,0.3)`, padding: "5px 10px", display: "flex", alignItems: "center", gap: "6px" }}>
           <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: LIME, flexShrink: 0, display: "inline-block" }} />
@@ -546,7 +551,7 @@ export default function TeAtatuDemoPage() {
 
           <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(3, 1fr)", gap: "2px" }}>
             {SHOWCASE_PRODUCTS.map((p) => (
-              <ShowcaseCard key={p.name} name={p.name} category={p.category} detail={p.detail} />
+              <ShowcaseCard key={p.name} name={p.name} category={p.category} detail={p.detail} image={p.image} />
             ))}
           </div>
 
