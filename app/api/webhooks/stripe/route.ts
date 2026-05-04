@@ -60,7 +60,45 @@ export async function POST(req: Request) {
     const orderSummary = metadata.order_summary || "";
     const itemCount = metadata.item_count || "";
     const total = formatCurrency(session.amount_total);
+const sheetsUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
 
+if (sheetsUrl) {
+  try {
+    const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
+      limit: 100,
+    });
+
+    const items = lineItems.data.map((item) => {
+      const text = item.description || "";
+      const [, detail = ""] = text.split("—");
+      const parts = detail.split("/").map((p) => p.trim());
+
+      return {
+        product: text.includes("Hoodie") ? "Hoodie" : "Tee",
+        fit: parts[0] || "",
+        size: parts[1] || "",
+        garmentName: parts.slice(2).join(" / ") || "",
+      };
+    });
+
+    await fetch(sheetsUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        orderId: session.id,
+        customerName,
+        email: customerEmail || "",
+        phone,
+        notes,
+        items,
+      }),
+    });
+
+    console.log("ORDER SENT TO SHEETS", session.id);
+  } catch (err) {
+    console.error("SHEETS LOGGING FAILED", err);
+  }
+}
     const subject = "Te Atatū Netball — Order Confirmed";
 
     const customerHtml = `
