@@ -137,6 +137,16 @@ async function handleCompletedSession(
     });
   }
 
+  // ── Google Sheets order log ────────────────────────────────────────────
+  await logToSheets({
+    orderId: stripeRef,
+    customerName,
+    email,
+    phone,
+    notes,
+    lineItems,
+  });
+
   // ── Internal production email ──────────────────────────────────────────
   const internalTo = process.env.TEAMWEAR_INTERNAL_EMAIL;
   if (internalTo) {
@@ -210,6 +220,51 @@ async function handleCompletedSession(
       html: internalHtml,
       text: internalText,
     });
+  }
+}
+
+// ── Google Sheets logger ─────────────────────────────────────────────────────
+async function logToSheets({
+  orderId,
+  customerName,
+  email,
+  phone,
+  notes,
+  lineItems,
+}: {
+  orderId: string;
+  customerName: string;
+  email: string;
+  phone: string;
+  notes: string;
+  lineItems: Stripe.LineItem[];
+}) {
+  const url = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+  if (!url) return;
+
+  const items = lineItems.map((li) => {
+    const desc = li.description ?? "";
+    // Format: "Te Atatū Tee — Mens / M / John Smith"
+    const [productPart = "", rest = ""] = desc.split(" — ");
+    const product = productPart.replace("Te Atatū ", "").trim();
+    const parts = rest.split(" / ");
+    const fit = parts[0]?.trim() ?? "";
+    const size = parts[1]?.trim() ?? "";
+    const garmentName = parts.slice(2).join(" / ").trim();
+    return { product, fit, size, garmentName };
+  });
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ orderId, customerName, email, phone, notes, items }),
+    });
+    if (!res.ok) {
+      console.error("Sheets log failed:", res.status, await res.text());
+    }
+  } catch (err) {
+    console.error("Sheets log error:", err);
   }
 }
 
