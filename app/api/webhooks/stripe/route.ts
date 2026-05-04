@@ -6,10 +6,12 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
 const INTERNAL_EMAIL =
+
   process.env.TEAMWEAR_INTERNAL_EMAIL || "ben@tendencies.co.nz";
 
 const FROM_EMAIL =
-  process.env.ENQUIRY_FROM_EMAIL || "orders@tendencies.co.nz";
+
+  process.env.EMAIL_FROM || "orders@mail.tendencies.co.nz";
 
 function formatCurrency(amount?: number | null) {
   if (!amount) return "$0.00 NZD";
