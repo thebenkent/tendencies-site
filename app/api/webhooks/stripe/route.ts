@@ -9,9 +9,7 @@ const INTERNAL_EMAIL =
 
   process.env.TEAMWEAR_INTERNAL_EMAIL || "ben@tendencies.co.nz";
 
-const FROM_EMAIL =
-
-  process.env.EMAIL_FROM || "orders@mail.tendencies.co.nz";
+const FROM_EMAIL = "orders@mail.tendencies.co.nz";
 
 function formatCurrency(amount?: number | null) {
   if (!amount) return "$0.00 NZD";
