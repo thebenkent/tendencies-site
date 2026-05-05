@@ -61,8 +61,7 @@ async function handleCompletedSession(
   );
   const lineItems = lineItemsPage.data;
 
-  const fromEmail =
-    process.env.ENQUIRY_FROM_EMAIL ?? "orders@tendencies.co.nz";
+  const fromEmail = "orders@mail.tendencies.co.nz";
 
   const itemsRowsHtml = lineItems
     .map(
