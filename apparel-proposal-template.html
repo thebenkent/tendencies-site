@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Apparel Proposal</title>
+  <style>
+    /* ─────────────────────────────────────────────────────────────────
+       TENDENCIES APPAREL PROPOSAL TEMPLATE
+       Single-file HTML — click any text to edit it live
+       To export PDF: File > Print > Save as PDF
+       Settings: A4 Landscape · Margins: None · Background graphics: ON
+    ───────────────────────────────────────────────────────────────── */
+
+    :root {
+      --black:    #080808;
+      --white:    #f5f5f0;
+      --green:    #b8f400;
+      --gray-100: #f4f4f0;
+      --gray-200: #e8e8e4;
+      --gray-300: #d0d0cc;
+      --gray-500: #888884;
+      --gray-700: #444440;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #b0b0b0;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Page shell ── */
+    .page {
+      width: 297mm;
+      height: 210mm;
+      background: var(--white);
+      display: block;
+      margin: 16px auto;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.22);
+      page-break-after: always;
+      break-after: page;
+    }
+
+    /* ── Editable text ── */
+    @media screen {
+      [contenteditable]:hover  { outline: 1.5px dashed var(--green); outline-offset: 2px; cursor: text; }
+      [contenteditable]:focus  { outline: 2px solid var(--green); outline-offset: 2px; }
+    }
+
+    /* ── Image placeholders ── */
+    .img {
+      background: var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .img::before {
+      content: attr(data-label);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      text-align: center;
+      padding: 8px;
+      pointer-events: none;
+    }
+    .img--dark { background: #1c1c1c; }
+    .img--dark::before { color: #444; }
+
+    /* ── Shared type ── */
+    .label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+    }
+    .label--g  { color: var(--green); }
+    .label--w  { color: rgba(255,255,255,0.4); }
+
+    .page-n {
+      position: absolute;
+      bottom: 9mm;
+      right: 12mm;
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+    }
+    .page-n--w { color: rgba(255,255,255,0.25); }
+
+    /* ═══════════════════════════════════════════════════════
+       PAGE 1 — COVER
+    ═══════════════════════════════════════════════════════ */
+    .cover {
+      background: var(--black);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .cover__l {
+      padding: 17mm 13mm 13mm 15mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+    }
+    .cover__logo {
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+    .cover__logo span { color: var(--green); }
+    .cover__mid { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .cover__client {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: rgba(255,255,255,0.38); margin-bottom: 7px;
+    }
+    .cover__h1 {
+      font-size: 46px; font-weight: 900; line-height: 0.93;
+      letter-spacing: -0.035em; text-transform: uppercase; color: var(--white);
+    }
+    .cover__h1 span { color: var(--green); }
+    .cover__sub {
+      font-size: 12px; line-height: 1.6;
+      color: rgba(255,255,255,0.38); margin-top: 14px;
+    }
+    .cover__foot {
+      font-size: 8px; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(255,255,255,0.25); line-height: 1.9;
+    }
+    .cover__r { position: relative; }
+    .cover__bar {
+      position: absolute; left: 0; top: 0;
+      width: 4px; height: 100%; background: var(--green); z-index: 3;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       PAGE 2 — WHY TENDENCIES
+    ═══════════════════════════════════════════════════════ */
+    .why { display: grid; grid-template-columns: 1fr 1.65fr; }
+    .why__l {
+      background: var(--black);
+      padding: 15mm 12mm 13mm 15mm;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .why__h {
+      font-size: 34px; font-weight: 900; line-height: 0.95;
+      letter-spacing: -0.03em; text-transform: uppercase;
+      color: var(--white); margin-top: 8mm;
+    }
+    .why__h span { color: var(--green); }
+    .why__intro {
+      font-size: 11px; line-height: 1.7;
+      color: rgba(255,255,255,0.48); margin-top: 7mm;
+    }
+    .why__r {
+      padding: 15mm 14mm 13mm 13mm;
+      display: flex; flex-direction: column; justify-content: center; gap: 5.5mm;
+    }
+    .proof {
+      border-top: 1px solid var(--gray-200);
+      padding-top: 4.5mm;
+    }
+    .proof__n {
+      font-size: 8.5px; font-weight: 900; letter-spacing: 0.2em;
+      color: var(--green); margin-bottom: 3px;
+    }
+    .proof__title {
+      font-size: 15px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: -0.02em; color: var(--black); margin-bottom: 4px;
+    }
+    .proof__body { font-size: 11px; line-height: 1.65; color: var(--gray-700); }
+
+    /* ═══════════════════════════════════════════════════════
+       PAGE 3 — APPAREL DIRECTION
+    ═══════════════════════════════════════════════════════ */
+    .dir { display: grid; grid-template-columns: 1.45fr 1fr; }
+    .dir__mood {
+      padding: 11mm 7mm 11mm 12mm;
+      display: flex; flex-direction: column; gap: 3.5mm;
+    }
+    .mood-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 2.5mm; flex: 1;
+    }
+    .mood-grid .img:first-child { grid-column: span 2; }
+    .dir__notes {
+      background: var(--black);
+      padding: 13mm 12mm 13mm 10mm;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .dir__h {
+      font-size: 21px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: -0.02em; color: var(--white); line-height: 1.05;
+      margin: 6mm 0 5mm;
+    }
+    .dir__h span { color: var(--green); }
+    .dir__body {
+      font-size: 10.5px; line-height: 1.75;
+      color: rgba(255,255,255,0.42); flex: 1; margin-bottom: 5mm;
+    }
+    .swatches { display: flex; gap: 2mm; margin-top: 2.5mm; }
+    .swatch { width: 9mm; height: 9mm; }
+    .keywords { display: flex; flex-wrap: wrap; gap: 2mm; }
+    .kw {
+      font-size: 8px; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; border: 1px solid rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.45); padding: 3px 7px;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       PAGE 4 — RANGE OVERVIEW
+    ═══════════════════════════════════════════════════════ */
+    .range {
+      padding: 11mm 12mm 10mm;
+      display: flex; flex-direction: column;
+    }
+    .range__hdr {
+      display: flex; align-items: flex-end;
+      justify-content: space-between; margin-bottom: 7mm;
+    }
+    .range__h {
+      font-size: 28px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: -0.03em; color: var(--black); line-height: 1;
+    }
+    .range__h span { color: var(--green); }
+    .range__note {
+      font-size: 10px; color: var(--gray-500);
+      max-width: 82mm; line-height: 1.65; padding-bottom: 2px;
+    }
+    .prod-grid {
+      display: grid; grid-template-columns: repeat(5,1fr);
+      gap: 4mm; flex: 1;
+    }
+    .prod { display: flex; flex-direction: column; gap: 2mm; }
+    .prod__img { flex: 1; }
+    .prod__name {
+      font-size: 8.5px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 0.1em; color: var(--black);
+    }
+    .prod__detail { font-size: 8px; color: var(--gray-500); }
+
+    /* ═══════════════════════════════════════════════════════
+       PAGE 5 & 6 — CORE APPAREL / WORKWEAR (shared layout)
+    ═══════════════════════════════════════════════════════ */
+    .cat { display: grid; grid-template-columns: 58mm 1fr; }
+    .cat__sb {
+      background: var(--black);
+      padding: 13mm 9mm 11mm 13mm;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .cat__h {
+      font-size: 24px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: -0.03em; line-height: 0.95; color: var(--white); margin-top: 4mm;
+    }
+    .cat__h span { color: var(--green); }
+    .cat__nav { list-style: none; margin-top: 7mm; }
+    .cat__nav li {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: rgba(255,255,255,0.3);
+      border-top: 1px solid rgba(255,255,255,0.07); padding: 2.5mm 0;
+    }
+    .cat__nav li.on { color: var(--green); }
+    .cat__blurb {
+      font-size: 9px; line-height: 1.7;
+      color: rgba(255,255,255,0.3);
+    }
+    .cat__main {
+      padding: 11mm 11mm 11mm 9mm;
+      display: flex; flex-direction: column;
+    }
+    .ap-grid {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      grid-template-rows: 1fr 1fr; gap: 2.5mm; flex: 1; margin-top: 5mm;
+    }
+    .ap { display: flex; flex-direction: column; gap: 1.5mm; }
+    .ap__img { flex: 1; }
+    .ap__name {
+      font-size: 8px; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 0.1em; color: var(--black);
+    }
+    .ap__desc { font-size: 7.5px; color: var(--gray-500); line-height: 1.4; }
+
+    /* ═══════════════════════════════════════════════════════
+       PAGE 7 — PREMIUM / LIFESTYLE
+    ═══════════════════════════════════════════════════════ */
+    .prem { display: grid; grid-template-columns: 1.65fr 1fr; }
+    .prem__main {
+      padding: 11mm 9mm 11mm 13mm;
+      display: flex; flex-direction: column;
+    }
+    .prem__h {
+      font-size: 26px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: -0.03em; color: var(--black); line-height: 0.95; margin: 4mm 0 5mm;
+    }
+    .prem__h span { color: var(--green); }
+    .prem__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 2.5mm; flex: 1;
+    }
+    .prem__grid .ap:first-child { grid-row: span 2; }
+    .prem__sb {
+      background: var(--gray-100);
+      padding: 11mm 13mm 11mm 9mm;
+      display: flex; flex-direction: column; gap: 5mm;
+    }
+    .bn { border-left: 2.5px solid var(--green); padding-left: 4mm; }
+    .bn__name {
+      font-size: 9px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: 0.14em; color: var(--black); margin-bottom: 2px;
+    }
+    .bn__desc { font-size: 9.5px; line-height: 1.55; color: var(--gray-700); }
+
+    /* ═══════════════════════════════════════════════════════
+       PAGE 8 — DECORATION METHODS
+    ═══════════════════════════════════════════════════════ */
+    .deco { display: grid; grid-template-rows: auto 1fr; }
+    .deco__hdr {
+      background: var(--black);
+      padding: 9mm 14mm 8mm;
+      display: flex; align-items: flex-end; justify-content: space-between;
+    }
+    .deco__h {
+      font-size: 26px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: -0.03em; color: var(--white); line-height: 1;
+    }
+    .deco__h span { color: var(--green); }
+    .deco__intro {
+      font-size: 10px; color: rgba(255,255,255,0.38);
+      max-width: 84mm; line-height: 1.65;
+    }
+    .deco__cols { display: grid; grid-template-columns: repeat(5,1fr); }
+    .mth {
+      padding: 7mm 6.5mm 9mm;
+      border-right: 1px solid var(--gray-200);
+      display: flex; flex-direction: column;
+    }
+    .mth:last-child { border-right: none; }
+    .mth__img { height: 26mm; margin-bottom: 3.5mm; }
+    .mth__n {
+      font-size: 8px; font-weight: 900; letter-spacing: 0.2em;
+      color: var(--green); margin-bottom: 2px;
+    }
+    .mth__name {
+      font-size: 11.5px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: -0.01em; color: var(--black); margin-bottom: 3px;
+    }
+    .mth__desc { font-size: 9px; line-height: 1.6; color: var(--gray-700); flex: 1; }
+    .mth__for {
+      font-size: 7.5px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--gray-500); margin-top: 3.5mm;
+    }
+    .mth__for span { color: var(--black); }
+
+    /* ═══════════════════════════════════════════════════════
+       PAGE 9 — KIT OPTIONS
+    ═══════════════════════════════════════════════════════ */
+    .kits { display: grid; grid-template-rows: auto 1fr; }
+    .kits__hdr {
+      padding: 9mm 14mm 7mm;
+      display: flex; align-items: flex-end; gap: 8mm;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .kits__h {
+      font-size: 26px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: -0.03em; color: var(--black); line-height: 1;
+      white-space: nowrap;
+    }
+    .kits__h span { color: var(--green); }
+    .kits__sub {
+      font-size: 10px; color: var(--gray-500);
+      line-height: 1.6; max-width: 94mm; padding-bottom: 2px;
+    }
+    .tiers { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+    .tier {
+      padding: 7mm 10mm 9mm;
+      border-right: 1px solid var(--gray-200);
+      display: flex; flex-direction: column;
+    }
+    .tier:last-child { border-right: none; }
+    .tier--best { background: var(--black); }
+    .tier__badge {
+      font-size: 8px; font-weight: 900;
+      letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 2.5mm;
+    }
+    .tier__badge--good   { color: var(--gray-500); }
+    .tier__badge--better { color: var(--black); }
+    .tier__badge--best   { color: var(--green); }
+    .tier__name {
+      font-size: 20px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: -0.02em; color: var(--black); margin-bottom: 3.5mm; line-height: 1;
+    }
+    .tier--best .tier__name { color: var(--white); }
+    .tier__items { list-style: none; flex: 1; margin-bottom: 5mm; }
+    .tier__items li {
+      font-size: 9.5px; line-height: 1.45; color: var(--gray-700);
+      padding: 1.8mm 0; border-top: 1px solid var(--gray-200);
+      display: flex; align-items: center; gap: 3mm;
+    }
+    .tier__items li::before {
+      content: ''; width: 3px; height: 3px;
+      background: var(--green); border-radius: 50%; flex-shrink: 0;
+    }
+    .tier--best .tier__items li {
+      border-top-color: rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.5);
+    }
+    .tier__price-wrap { border-top: 2px solid var(--green); padding-top: 2.5mm; }
+    .tier__plabel {
+      font-size: 7.5px; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--gray-500); margin-bottom: 1mm;
+    }
+    .tier--best .tier__plabel { color: rgba(255,255,255,0.38); }
+    .tier__price {
+      font-size: 17px; font-weight: 900;
+      letter-spacing: -0.02em; color: var(--black);
+    }
+    .tier--best .tier__price { color: var(--green); }
+    .tier__pnote { font-size: 8px; color: var(--gray-500); margin-top: 1mm; }
+    .tier--best .tier__pnote { color: rgba(255,255,255,0.28); }
+
+    /* ═══════════════════════════════════════════════════════
+       PAGE 10 — TIMELINE
+    ═══════════════════════════════════════════════════════ */
+    .tl { display: grid; grid-template-columns: 70mm 1fr; }
+    .tl__l {
+      background: var(--black);
+      padding: 15mm 11mm 13mm 14mm;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .tl__h {
+      font-size: 30px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: -0.03em; color: var(--white); line-height: 0.95; margin-top: 5mm;
+    }
+    .tl__h span { color: var(--green); }
+    .tl__note { font-size: 9.5px; line-height: 1.7; color: rgba(255,255,255,0.38); }
+    .tl__r {
+      padding: 14mm 13mm 11mm 11mm;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .step { display: grid; grid-template-columns: 26mm 1fr; gap: 4mm; }
+    .step__wk {
+      font-size: 8.5px; font-weight: 900; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--green);
+      text-align: right; padding-top: 1.5mm;
+    }
+    .step__body {
+      border-left: 2px solid var(--gray-200);
+      padding: 0 0 7mm 5mm; position: relative;
+    }
+    .step:last-child .step__body { padding-bottom: 0; }
+    .step__body::before {
+      content: ''; width: 8px; height: 8px;
+      background: var(--green); border-radius: 50%;
+      position: absolute; left: -5px; top: 2px;
+    }
+    .step__name {
+      font-size: 12px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: -0.01em; color: var(--black); margin-bottom: 2px;
+    }
+    .step__detail { font-size: 9px; line-height: 1.65; color: var(--gray-500); }
+
+    /* ═══════════════════════════════════════════════════════
+       PAGE 11 — NEXT STEPS
+    ═══════════════════════════════════════════════════════ */
+    .nxt { background: var(--black); display: grid; grid-template-columns: 1fr 1fr; }
+    .nxt__l {
+      padding: 15mm 13mm 13mm 15mm;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .nxt__h {
+      font-size: 50px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: -0.04em; color: var(--white); line-height: 0.88; margin-top: 5mm;
+    }
+    .nxt__h span { color: var(--green); }
+    .nxt__contact { font-size: 10px; line-height: 1.85; color: rgba(255,255,255,0.42); }
+    .nxt__contact strong { color: var(--white); display: block; font-size: 10.5px; }
+    .nxt__r {
+      padding: 15mm 14mm 13mm 11mm;
+      display: flex; flex-direction: column; justify-content: center; gap: 3.5mm;
+    }
+    .act {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      padding: 4.5mm 5.5mm;
+      display: flex; align-items: flex-start; gap: 3.5mm;
+    }
+    .act__box {
+      width: 15px; height: 15px;
+      border: 1.5px solid rgba(255,255,255,0.2);
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .act__text { font-size: 10px; line-height: 1.55; color: rgba(255,255,255,0.55); }
+    .act__text strong {
+      color: var(--white); display: block; font-size: 10.5px;
+      text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1px;
+    }
+    .nxt__tag {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--green); margin-top: 5mm;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       PRINT
+    ═══════════════════════════════════════════════════════ */
+    @media print {
+      body { background: none; }
+      .page { margin: 0; box-shadow: none; width: 297mm; height: 210mm; }
+      @page { size: A4 landscape; margin: 0; }
+      [contenteditable]:hover, [contenteditable]:focus { outline: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PAGE 1 — COVER
+══════════════════════════════════════════════════════════════════ -->
+<div class="page cover">
+
+  <div class="cover__l">
+    <div class="cover__logo">Tendencies<span>.</span></div>
+
+    <div class="cover__mid">
+      <!-- REPLACE: client name -->
+      <div class="cover__client" contenteditable="true">Client Name</div>
+      <!-- REPLACE: proposal headline (line breaks intentional) -->
+      <h1 class="cover__h1" contenteditable="true">Apparel<br>Proposal<span>.</span></h1>
+      <!-- REPLACE: one-line descriptor -->
+      <p class="cover__sub" contenteditable="true">
+        A curated uniform and branded apparel program<br>
+        developed for [Client Name], [Year].
+      </p>
+    </div>
+
+    <!-- REPLACE: date / preparer -->
+    <div class="cover__foot" contenteditable="true">
+      Prepared by Tendencies<br>
+      [Month Year] — Confidential
+    </div>
+  </div>
+
+  <div class="cover__r">
+    <div class="cover__bar"></div>
+    <!-- REPLACE: hero image — add background-image:url(...) or swap in an <img> -->
+    <div class="img img--dark" style="width:100%;height:100%;"
+         data-label="Hero Image — Replace with photography"></div>
+  </div>
+
+  <div class="page-n page-n--w">01 / 11</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PAGE 2 — WHY TENDENCIES
+══════════════════════════════════════════════════════════════════ -->
+<div class="page why">
+
+  <div class="why__l">
+    <div class="label label--g">About Us</div>
+    <!-- REPLACE: heading and intro copy -->
+    <h2 class="why__h" contenteditable="true">Why<br>Tendencies<span>.</span></h2>
+    <p class="why__intro" contenteditable="true">
+      Tendencies is a premium creative merchandise and apparel agency based in New Zealand.
+      We work with brands, clubs, businesses, and events to develop apparel programs built
+      to perform, wear well, and represent who you are.
+    </p>
+    <div class="label label--w">tendencies.co.nz</div>
+  </div>
+
+  <div class="why__r">
+    <!-- REPLACE: proof points — duplicate or remove .proof blocks as needed -->
+    <div class="proof">
+      <div class="proof__n">01</div>
+      <div class="proof__title" contenteditable="true">End-to-end delivery</div>
+      <p class="proof__body" contenteditable="true">From concept to door — we handle sourcing, sampling, decoration, quality checking, and logistics. One contact, no gaps.</p>
+    </div>
+    <div class="proof">
+      <div class="proof__n">02</div>
+      <div class="proof__title" contenteditable="true">Premium brands, real expertise</div>
+      <p class="proof__body" contenteditable="true">We work with AS Colour, Stormtech, and other leading blanks — and we know which products perform. No guesswork, no catalogue roulette.</p>
+    </div>
+    <div class="proof">
+      <div class="proof__n">03</div>
+      <div class="proof__title" contenteditable="true">Built for your brand</div>
+      <p class="proof__body" contenteditable="true">Every program is tailored. We don't do generic. Your apparel should feel like an extension of your brand, not an afterthought.</p>
+    </div>
+  </div>
+
+  <div class="page-n">02 / 11</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PAGE 3 — APPAREL DIRECTION
+══════════════════════════════════════════════════════════════════ -->
+<div class="page dir">
+
+  <div class="dir__mood">
+    <div class="label" style="margin-bottom:3mm;">Visual Direction</div>
+    <div class="mood-grid">
+      <!-- REPLACE: 5 moodboard images. First spans 2 columns. -->
+      <div class="img" style="min-height:40mm;" data-label="Hero Image"></div>
+      <div class="img" data-label="Image 2"></div>
+      <div class="img" data-label="Image 3"></div>
+      <div class="img" data-label="Image 4"></div>
+      <div class="img" data-label="Image 5"></div>
+    </div>
+  </div>
+
+  <div class="dir__notes">
+    <div>
+      <div class="label label--g">Direction</div>
+      <!-- REPLACE: heading -->
+      <h2 class="dir__h" contenteditable="true">The look<br>&amp; feel<span>.</span></h2>
+      <!-- REPLACE: visual direction notes -->
+      <p class="dir__body" contenteditable="true">
+        Clean, structured, and confident. The apparel direction leans into a premium
+        workwear aesthetic — functional where it needs to be, elevated where it counts.
+        Colour palette anchored by [Brand Colour], with neutral bases and minimal branding.
+      </p>
+    </div>
+
+    <div>
+      <!-- REPLACE: colour swatches — update background hex values, add more as needed -->
+      <div class="label label--w" style="margin-bottom:2.5mm;">Colour palette</div>
+      <div class="swatches">
+        <div class="swatch" style="background:#080808;" title="Black"></div>
+        <div class="swatch" style="background:#b8f400;" title="Tendencies Green"></div>
+        <div class="swatch" style="background:#f5f5f0;" title="Off-white"></div>
+        <div class="swatch" style="background:#888884;" title="Mid grey"></div>
+        <!-- ADD MORE: <div class="swatch" style="background:#HEXCODE;"></div> -->
+      </div>
+
+      <!-- REPLACE: keywords — edit text, add/remove spans -->
+      <div class="keywords" style="margin-top:4mm;">
+        <span class="kw" contenteditable="true">Premium</span>
+        <span class="kw" contenteditable="true">Structured</span>
+        <span class="kw" contenteditable="true">Minimal</span>
+        <span class="kw" contenteditable="true">Functional</span>
+        <span class="kw" contenteditable="true">On-brand</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-n page-n--w">03 / 11</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PAGE 4 — RANGE OVERVIEW
+══════════════════════════════════════════════════════════════════ -->
+<div class="page range">
+
+  <div class="range__hdr">
+    <div>
+      <div class="label" style="margin-bottom:2mm;">Recommended Range</div>
+      <h2 class="range__h" contenteditable="true">The full<br>program<span>.</span></h2>
+    </div>
+    <!-- REPLACE: brief overview note -->
+    <p class="range__note" contenteditable="true">
+      A curated selection across [X] garment styles and categories.
+      Mix-and-match for your team's needs, or select a full kit from the options overleaf.
+    </p>
+  </div>
+
+  <div class="prod-grid">
+    <!-- REPLACE: product cards — duplicate for more, delete for fewer. 5 across fits well. -->
+    <div class="prod">
+      <div class="img prod__img" style="min-height:34mm;" data-label="Product"></div>
+      <div class="prod__name" contenteditable="true">Classic Tee</div>
+      <div class="prod__detail" contenteditable="true">AS Colour Staple / Various colourways</div>
+    </div>
+    <div class="prod">
+      <div class="img prod__img" style="min-height:34mm;" data-label="Product"></div>
+      <div class="prod__name" contenteditable="true">Polo Shirt</div>
+      <div class="prod__detail" contenteditable="true">AS Colour Pique / 10 colours</div>
+    </div>
+    <div class="prod">
+      <div class="img prod__img" style="min-height:34mm;" data-label="Product"></div>
+      <div class="prod__name" contenteditable="true">Midweight Hoodie</div>
+      <div class="prod__detail" contenteditable="true">AS Colour Supply / Fleece-back</div>
+    </div>
+    <div class="prod">
+      <div class="img prod__img" style="min-height:34mm;" data-label="Product"></div>
+      <div class="prod__name" contenteditable="true">Softshell Jacket</div>
+      <div class="prod__detail" contenteditable="true">Stormtech Olympia / Waterproof</div>
+    </div>
+    <div class="prod">
+      <div class="img prod__img" style="min-height:34mm;" data-label="Product"></div>
+      <div class="prod__name" contenteditable="true">Structured Cap</div>
+      <div class="prod__detail" contenteditable="true">6-panel / Embroidered logo</div>
+    </div>
+  </div>
+
+  <div class="page-n">04 / 11</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PAGE 5 — CORE APPAREL
+══════════════════════════════════════════════════════════════════ -->
+<div class="page cat">
+
+  <div class="cat__sb">
+    <div>
+      <div class="label label--g">Section 01</div>
+      <!-- REPLACE: section heading -->
+      <h2 class="cat__h" contenteditable="true" style="margin-top:3mm;">Core<br>Apparel<span>.</span></h2>
+    </div>
+    <!-- Active item reflects current page — update when duplicating pages -->
+    <ul class="cat__nav">
+      <li class="on">Core apparel</li>
+      <li>Workwear / Teamwear</li>
+      <li>Premium lifestyle</li>
+      <li>Accessories</li>
+    </ul>
+    <!-- REPLACE: section descriptor -->
+    <p class="cat__blurb" contenteditable="true">
+      Our everyday essentials — versatile garments that form the backbone
+      of any uniform or branded kit program.
+    </p>
+  </div>
+
+  <div class="cat__main">
+    <div class="label">Garment selection</div>
+    <div class="ap-grid">
+      <!-- REPLACE: 8 garment items — duplicate or remove .ap blocks as needed -->
+      <div class="ap">
+        <div class="img ap__img" style="min-height:27mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Classic Tee</div>
+        <div class="ap__desc" contenteditable="true">AS Colour Staple / 180gsm / Unisex</div>
+      </div>
+      <div class="ap">
+        <div class="img ap__img" style="min-height:27mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Fitted Tee</div>
+        <div class="ap__desc" contenteditable="true">AS Colour Maple / 155gsm / Fitted</div>
+      </div>
+      <div class="ap">
+        <div class="img ap__img" style="min-height:27mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Polo</div>
+        <div class="ap__desc" contenteditable="true">AS Colour Chad / Pique / 220gsm</div>
+      </div>
+      <div class="ap">
+        <div class="img ap__img" style="min-height:27mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Hoodie</div>
+        <div class="ap__desc" contenteditable="true">AS Colour Supply / Fleece-back</div>
+      </div>
+      <div class="ap">
+        <div class="img ap__img" style="min-height:27mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Crew Sweat</div>
+        <div class="ap__desc" contenteditable="true">AS Colour Fleetwood / 340gsm</div>
+      </div>
+      <div class="ap">
+        <div class="img ap__img" style="min-height:27mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Zip Hoodie</div>
+        <div class="ap__desc" contenteditable="true">AS Colour Torquay / Full zip</div>
+      </div>
+      <div class="ap">
+        <div class="img ap__img" style="min-height:27mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Long Sleeve Tee</div>
+        <div class="ap__desc" contenteditable="true">AS Colour Trouper / 180gsm</div>
+      </div>
+      <div class="ap">
+        <div class="img ap__img" style="min-height:27mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Coach Jacket</div>
+        <div class="ap__desc" contenteditable="true">AS Colour / Woven / Snap collar</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-n page-n--w">05 / 11</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PAGE 6 — WORKWEAR / TEAMWEAR
+══════════════════════════════════════════════════════════════════ -->
+<div class="page cat">
+
+  <div class="cat__sb">
+    <div>
+      <div class="label label--g">Section 02</div>
+      <h2 class="cat__h" contenteditable="true" style="margin-top:3mm;">Workwear &amp;<br>Teamwear<span>.</span></h2>
+    </div>
+    <ul class="cat__nav">
+      <li>Core apparel</li>
+      <li class="on">Workwear / Teamwear</li>
+      <li>Premium lifestyle</li>
+      <li>Accessories</li>
+    </ul>
+    <p class="cat__blurb" contenteditable="true">
+      Built for sites, fields, and environments where function is
+      non-negotiable — without sacrificing how your team looks on the job.
+    </p>
+  </div>
+
+  <div class="cat__main">
+    <div class="label">Workwear selection</div>
+    <div class="ap-grid">
+      <!-- REPLACE: workwear items -->
+      <div class="ap">
+        <div class="img ap__img" style="min-height:27mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Hi-Vis Tee</div>
+        <div class="ap__desc" contenteditable="true">Class 2 compliant / Tape trim</div>
+      </div>
+      <div class="ap">
+        <div class="img ap__img" style="min-height:27mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Hi-Vis Polo</div>
+        <div class="ap__desc" contenteditable="true">Moisture-wicking / Tape trim</div>
+      </div>
+      <div class="ap">
+        <div class="img ap__img" style="min-height:27mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Softshell Jacket</div>
+        <div class="ap__desc" contenteditable="true">Stormtech Olympia / Waterproof</div>
+      </div>
+      <div class="ap">
+        <div class="img ap__img" style="min-height:27mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Vest / Body Warmer</div>
+        <div class="ap__desc" contenteditable="true">Stormtech / Insulated / Full zip</div>
+      </div>
+      <div class="ap">
+        <div class="img ap__img" style="min-height:27mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Work Pants</div>
+        <div class="ap__desc" contenteditable="true">Cargo / Ripstop / Multi-pocket</div>
+      </div>
+      <div class="ap">
+        <div class="img ap__img" style="min-height:27mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Fleece Midlayer</div>
+        <div class="ap__desc" contenteditable="true">Stormtech Reactor / Full zip</div>
+      </div>
+      <div class="ap">
+        <div class="img ap__img" style="min-height:27mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Structured Cap</div>
+        <div class="ap__desc" contenteditable="true">6-panel / Hi-vis or branded</div>
+      </div>
+      <div class="ap">
+        <div class="img ap__img" style="min-height:27mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Beanie</div>
+        <div class="ap__desc" contenteditable="true">Ribbed knit / Embroidered patch</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-n page-n--w">06 / 11</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PAGE 7 — PREMIUM / LIFESTYLE
+══════════════════════════════════════════════════════════════════ -->
+<div class="page prem">
+
+  <div class="prem__main">
+    <div class="label">Section 03</div>
+    <h2 class="prem__h" contenteditable="true">Premium &amp;<br>Lifestyle<span>.</span></h2>
+    <div class="prem__grid">
+      <!-- REPLACE: first item spans full height (hero garment) -->
+      <div class="ap">
+        <div class="img ap__img" style="min-height:58mm;" data-label="Hero Garment"></div>
+        <div class="ap__name" contenteditable="true">Premium Tee</div>
+        <div class="ap__desc" contenteditable="true">AS Colour Organic / Heavyweight</div>
+      </div>
+      <div class="ap">
+        <div class="img ap__img" style="min-height:25mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Merino Polo</div>
+        <div class="ap__desc" contenteditable="true">100% NZ merino / Swanndri</div>
+      </div>
+      <div class="ap">
+        <div class="img ap__img" style="min-height:25mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Outdoor Jacket</div>
+        <div class="ap__desc" contenteditable="true">Stormtech shell / Breathable</div>
+      </div>
+      <div class="ap">
+        <div class="img ap__img" style="min-height:25mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Quarter Zip</div>
+        <div class="ap__desc" contenteditable="true">AS Colour / Merino blend</div>
+      </div>
+      <div class="ap">
+        <div class="img ap__img" style="min-height:25mm;" data-label="Garment"></div>
+        <div class="ap__name" contenteditable="true">Waxed Cap</div>
+        <div class="ap__desc" contenteditable="true">Woven label / Heritage finish</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="prem__sb">
+    <div class="label" style="margin-bottom:3.5mm;">Featured brands</div>
+    <!-- REPLACE: brand notes — add .bn blocks as needed -->
+    <div class="bn">
+      <div class="bn__name" contenteditable="true">AS Colour</div>
+      <p class="bn__desc" contenteditable="true">New Zealand's go-to premium blank brand. Exceptional fit consistency, 30+ colourways, and retail-quality construction.</p>
+    </div>
+    <div class="bn">
+      <div class="bn__name" contenteditable="true">Stormtech</div>
+      <p class="bn__desc" contenteditable="true">Technical outerwear and performance fleece. Waterproof, windproof, built for real conditions — not just the carpark.</p>
+    </div>
+    <div class="bn">
+      <div class="bn__name" contenteditable="true">Swanndri / NZ Merino</div>
+      <p class="bn__desc" contenteditable="true">Premium NZ wool and merino options for hospitality, lifestyle, and heritage-led brands.</p>
+    </div>
+    <div class="bn">
+      <div class="bn__name" contenteditable="true">Custom blanks</div>
+      <p class="bn__desc" contenteditable="true">For programs requiring full cut-and-sew garments, we source and develop custom blanks to your specification.</p>
+    </div>
+  </div>
+
+  <div class="page-n">07 / 11</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PAGE 8 — DECORATION METHODS
+══════════════════════════════════════════════════════════════════ -->
+<div class="page deco">
+
+  <div class="deco__hdr">
+    <h2 class="deco__h" contenteditable="true">Decoration<br>Methods<span>.</span></h2>
+    <!-- REPLACE: intro note -->
+    <p class="deco__intro" contenteditable="true">
+      The right decoration method depends on your garment, artwork, and end use.
+      We'll recommend the best approach for each piece in your program.
+    </p>
+  </div>
+
+  <div class="deco__cols">
+    <!-- REPLACE: method details — duplicate or remove .mth columns as needed -->
+    <div class="mth">
+      <div class="img mth__img" data-label="Image"></div>
+      <div class="mth__n">01</div>
+      <div class="mth__name" contenteditable="true">Embroidery</div>
+      <p class="mth__desc" contenteditable="true">Premium and durable. Ideal for logos on polos, caps, jackets, and fleece. Available in standard or 3D puff.</p>
+      <div class="mth__for">Best for: <span contenteditable="true">Caps, polos, jackets</span></div>
+    </div>
+    <div class="mth">
+      <div class="img mth__img" data-label="Image"></div>
+      <div class="mth__n">02</div>
+      <div class="mth__name" contenteditable="true">Screen Print</div>
+      <p class="mth__desc" contenteditable="true">Cost-effective for volume runs. Bold, vibrant colour on tees, hoodies, and flat garments with spot colour artwork.</p>
+      <div class="mth__for">Best for: <span contenteditable="true">Tees, hoodies, large runs</span></div>
+    </div>
+    <div class="mth">
+      <div class="img mth__img" data-label="Image"></div>
+      <div class="mth__n">03</div>
+      <div class="mth__name" contenteditable="true">Heat Transfer</div>
+      <p class="mth__desc" contenteditable="true">Flexible for small runs or complex artwork. Includes DTF (direct to film) for photographic-quality results on any fabric.</p>
+      <div class="mth__for">Best for: <span contenteditable="true">Small runs, complex art</span></div>
+    </div>
+    <div class="mth">
+      <div class="img mth__img" data-label="Image"></div>
+      <div class="mth__n">04</div>
+      <div class="mth__name" contenteditable="true">Sublimation</div>
+      <p class="mth__desc" contenteditable="true">Full all-over print. Permanent and fade-resistant. Requires polyester-based fabrics — ideal for sportswear and teamwear.</p>
+      <div class="mth__for">Best for: <span contenteditable="true">Sportswear, all-over print</span></div>
+    </div>
+    <div class="mth">
+      <div class="img mth__img" data-label="Image"></div>
+      <div class="mth__n">05</div>
+      <div class="mth__name" contenteditable="true">Woven Labels &amp; Patches</div>
+      <p class="mth__desc" contenteditable="true">Elevated brand detail. Woven labels, rubber patches, and badge applications for a retail-quality finish on premium garments.</p>
+      <div class="mth__for">Best for: <span contenteditable="true">Premium, retail-style kits</span></div>
+    </div>
+  </div>
+
+  <div class="page-n">08 / 11</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PAGE 9 — KIT OPTIONS
+══════════════════════════════════════════════════════════════════ -->
+<div class="page kits">
+
+  <div class="kits__hdr">
+    <div>
+      <div class="label" style="margin-bottom:2mm;">Kit Options</div>
+      <h2 class="kits__h" contenteditable="true">Good / Better<br>/ Best<span>.</span></h2>
+    </div>
+    <!-- REPLACE: subtitle -->
+    <p class="kits__sub" contenteditable="true">
+      Three levels of kit to suit different budgets and ambitions.
+      Mix and match across tiers, or start with Good and build over time.
+    </p>
+  </div>
+
+  <div class="tiers">
+
+    <!-- TIER 1: GOOD -->
+    <div class="tier">
+      <div class="tier__badge tier__badge--good">Good</div>
+      <div class="tier__name" contenteditable="true">Essentials Kit</div>
+      <ul class="tier__items">
+        <!-- REPLACE: list items -->
+        <li contenteditable="true">Classic tee ×2</li>
+        <li contenteditable="true">Polo shirt</li>
+        <li contenteditable="true">Fleece hoodie</li>
+        <li contenteditable="true">Structured cap</li>
+        <li contenteditable="true">Screen print or heat transfer</li>
+      </ul>
+      <div class="tier__price-wrap">
+        <div class="tier__plabel">Indicative price per head</div>
+        <!-- REPLACE: pricing -->
+        <div class="tier__price" contenteditable="true">$XXX</div>
+        <div class="tier__pnote" contenteditable="true">Based on [X] units — TBC</div>
+      </div>
+    </div>
+
+    <!-- TIER 2: BETTER -->
+    <div class="tier">
+      <div class="tier__badge tier__badge--better">Better</div>
+      <div class="tier__name" contenteditable="true">Full Kit</div>
+      <ul class="tier__items">
+        <li contenteditable="true">Classic tee ×2</li>
+        <li contenteditable="true">Polo shirt</li>
+        <li contenteditable="true">Midweight hoodie or crew</li>
+        <li contenteditable="true">Softshell jacket</li>
+        <li contenteditable="true">Structured cap</li>
+        <li contenteditable="true">Embroidery + screen print</li>
+      </ul>
+      <div class="tier__price-wrap">
+        <div class="tier__plabel">Indicative price per head</div>
+        <div class="tier__price" contenteditable="true">$XXX</div>
+        <div class="tier__pnote" contenteditable="true">Based on [X] units — TBC</div>
+      </div>
+    </div>
+
+    <!-- TIER 3: BEST -->
+    <div class="tier tier--best">
+      <div class="tier__badge tier__badge--best">Best</div>
+      <div class="tier__name" contenteditable="true">Premium Kit</div>
+      <ul class="tier__items">
+        <li contenteditable="true">Premium heavyweight tee ×2</li>
+        <li contenteditable="true">Merino polo or AS Colour knit</li>
+        <li contenteditable="true">Premium hoodie + crew</li>
+        <li contenteditable="true">Stormtech softshell jacket</li>
+        <li contenteditable="true">Woven-label cap</li>
+        <li contenteditable="true">Bag or tote</li>
+        <li contenteditable="true">Embroidery + woven labels + patches</li>
+      </ul>
+      <div class="tier__price-wrap">
+        <div class="tier__plabel">Indicative price per head</div>
+        <div class="tier__price" contenteditable="true">$XXX</div>
+        <div class="tier__pnote" contenteditable="true">Based on [X] units — TBC</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-n">09 / 11</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PAGE 10 — TIMELINE
+══════════════════════════════════════════════════════════════════ -->
+<div class="page tl">
+
+  <div class="tl__l">
+    <div class="label label--g">Program timeline</div>
+    <!-- REPLACE: heading -->
+    <h2 class="tl__h" contenteditable="true">From<br>approval<br>to door<span>.</span></h2>
+    <!-- REPLACE: caveat note -->
+    <p class="tl__note" contenteditable="true">
+      Indicative timelines — actual lead times vary by decoration method, garment
+      availability, and order volume. We'll confirm specifics once quantities and
+      artwork are finalised.
+    </p>
+  </div>
+
+  <div class="tl__r">
+    <!-- REPLACE: steps — duplicate or remove .step blocks, update week labels and copy -->
+    <div class="step">
+      <div class="step__wk" contenteditable="true">Week 1–2</div>
+      <div class="step__body">
+        <div class="step__name" contenteditable="true">Design approval</div>
+        <p class="step__detail" contenteditable="true">Artwork supplied or developed. Colour separations, logo clean-up, and placement sign-off. Digital mockups provided for approval.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step__wk" contenteditable="true">Week 3</div>
+      <div class="step__body">
+        <div class="step__name" contenteditable="true">Sampling</div>
+        <p class="step__detail" contenteditable="true">Physical sample or pre-production strike-off for sign-off. Optional for high-volume orders.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step__wk" contenteditable="true">Week 4–8</div>
+      <div class="step__body">
+        <div class="step__name" contenteditable="true">Production</div>
+        <p class="step__detail" contenteditable="true">Garment procurement, decoration, quality checking, and packing. Timeline varies by method and quantity.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step__wk" contenteditable="true">Week 8–9</div>
+      <div class="step__body">
+        <div class="step__name" contenteditable="true">Delivery</div>
+        <p class="step__detail" contenteditable="true">Nationwide NZ courier delivery to a single address, or distributed direct to team members. Collection also available.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-n page-n--w">10 / 11</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     PAGE 11 — NEXT STEPS
+══════════════════════════════════════════════════════════════════ -->
+<div class="page nxt">
+
+  <div class="nxt__l">
+    <div class="label label--g">Ready to go</div>
+    <!-- REPLACE: heading -->
+    <h2 class="nxt__h" contenteditable="true">Next<br>steps<span>.</span></h2>
+    <!-- REPLACE: contact details -->
+    <div class="nxt__contact">
+      <strong contenteditable="true">Your Tendencies contact</strong>
+      <span contenteditable="true">Ben — ben@tendencies.co.nz</span>
+      <span contenteditable="true">tendencies.co.nz</span>
+    </div>
+  </div>
+
+  <div class="nxt__r">
+    <div class="label label--g" style="margin-bottom:3mm;">To get started, we need:</div>
+
+    <!-- REPLACE: action items — duplicate or remove .act blocks as needed -->
+    <div class="act">
+      <div class="act__box"></div>
+      <div class="act__text">
+        <strong contenteditable="true">Approval on direction</strong>
+        <span contenteditable="true">Confirm the kit tier, garment selections, and colour palette.</span>
+      </div>
+    </div>
+    <div class="act">
+      <div class="act__box"></div>
+      <div class="act__text">
+        <strong contenteditable="true">Quantities per garment</strong>
+        <span contenteditable="true">A size breakdown (XS–3XL) for each garment type in the program.</span>
+      </div>
+    </div>
+    <div class="act">
+      <div class="act__box"></div>
+      <div class="act__text">
+        <strong contenteditable="true">Artwork / logo files</strong>
+        <span contenteditable="true">Vector files preferred (AI, EPS, SVG). We can assist with artwork if needed.</span>
+      </div>
+    </div>
+    <div class="act">
+      <div class="act__box"></div>
+      <div class="act__text">
+        <strong contenteditable="true">Delivery address and date</strong>
+        <span contenteditable="true">Where and when you need the order — we'll work back from there.</span>
+      </div>
+    </div>
+
+    <!-- REPLACE: closing tagline -->
+    <div class="nxt__tag" contenteditable="true">Let's make something worth wearing.</div>
+  </div>
+
+  <div class="page-n page-n--w">11 / 11</div>
+</div>
+
+</body>
+</html>
