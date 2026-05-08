@@ -1,3 +1,4 @@
+import type React from 'react'
 import { getPortalConfig, getProductById } from '@/lib/portal/config'
 import PortalHeader from '@/components/portal/PortalHeader'
 import { notFound } from 'next/navigation'
@@ -196,6 +197,7 @@ export default async function PortalHomePage({
             <a
               key={btn.id}
               href={btn.href}
+              className="portal-cta-btn"
               style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -209,14 +211,6 @@ export default async function PortalHomePage({
                 textDecoration: 'none',
                 transition: 'all 0.2s ease',
                 cursor: 'pointer',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(184,244,0,0.08)'
-                e.currentTarget.style.borderColor = LIME
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255,255,255,0.04)'
-                e.currentTarget.style.borderColor = BORDER
               }}
             >
               <div style={{ fontSize: '28px' }}>{btn.emoji}</div>
@@ -295,6 +289,7 @@ export default async function PortalHomePage({
                   </p>
                   <a
                     href={`/portal/${slug}/${collection.categorySlug}`}
+                    className="portal-view-cat-link"
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -306,12 +301,6 @@ export default async function PortalHomePage({
                       color: LIME,
                       textDecoration: 'none',
                       transition: 'gap 0.2s ease',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.gap = '12px'
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.gap = '8px'
                     }}
                   >
                     View Full Category →
@@ -329,6 +318,7 @@ export default async function PortalHomePage({
                     <a
                       key={product.id}
                       href={`/portal/${slug}/${collection.categorySlug}/${product.slug}`}
+                      className="portal-featured-product"
                       style={{
                         background: '#0f0f0f',
                         border: `1px solid ${BORDER}`,
@@ -338,15 +328,8 @@ export default async function PortalHomePage({
                         gap: '12px',
                         textDecoration: 'none',
                         transition: 'all 0.2s ease',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.borderColor = config.accentColor
-                        e.currentTarget.style.background = 'rgba(255,255,255,0.02)'
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.borderColor = BORDER
-                        e.currentTarget.style.background = '#0f0f0f'
-                      }}
+                        '--portal-accent': config.accentColor,
+                      } as React.CSSProperties}
                     >
                       <div
                         style={{
@@ -489,12 +472,6 @@ export default async function PortalHomePage({
                 textDecoration: 'none',
                 border: '1px solid rgba(255,255,255,0.05)',
                 transition: 'border-color 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.05)'
               }}
             >
               <img
