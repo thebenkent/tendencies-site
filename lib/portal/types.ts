@@ -1,6 +1,37 @@
 export type PortalColour = {
   name: string
-  hex: string
+  hex?: string
+  image?: string
+}
+
+export type PortalSizeChartRow = {
+  label: string
+  values: string[]
+}
+
+export type PortalSizeChart = {
+  type: 'mens' | 'womens'
+  headers: string[]
+  rows: PortalSizeChartRow[]
+}
+
+export type PortalBrandPillar = {
+  title: string
+  description: string
+}
+
+export type PortalBrandStory = {
+  headline: string
+  body: string
+  pillars?: PortalBrandPillar[]
+}
+
+export type PortalFeaturedCollection = {
+  id: string
+  title: string
+  subtitle: string
+  categorySlug: string
+  productIds: string[]
 }
 
 export type PortalProduct = {
@@ -18,6 +49,8 @@ export type PortalProduct = {
   priceCents: number
   requiresStaffName: boolean
   sku?: string
+  measureGuide?: string
+  sizeChart?: PortalSizeChart
 }
 
 export type PortalCategory = {
@@ -35,10 +68,15 @@ export type PortalDeliveryOption = {
   address?: string
 }
 
+export type PortalLogo =
+  | { type: 'image'; src: string; alt: string }
+  | { type: 'text'; text: string }
+
 export type ClientPortalConfig = {
   slug: string
   clientName: string
   portalTitle: string
+  logo?: PortalLogo
   logoText?: string
   logoUrl?: string
   accentColor: string
@@ -48,6 +86,8 @@ export type ClientPortalConfig = {
     subtitle: string
   }
   categories: PortalCategory[]
+  brandStory?: PortalBrandStory
+  featuredCollections?: PortalFeaturedCollection[]
   ordering: {
     requiresStaffName: boolean
     requiresDeliveryAddress: boolean

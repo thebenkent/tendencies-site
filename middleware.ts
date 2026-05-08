@@ -21,7 +21,7 @@ export function middleware(request: NextRequest) {
 
   const accessCode = getAccessCode(slug)
   if (!accessCode) {
-    // Portal not configured — let the page handle the 404
+    // Portal slug not configured — let the page handle the 404
     return NextResponse.next()
   }
 

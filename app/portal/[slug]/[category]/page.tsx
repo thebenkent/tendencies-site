@@ -1,6 +1,6 @@
 import { getPortalConfig, getPortalCategory } from '@/lib/portal/config'
 import PortalHeader from '@/components/portal/PortalHeader'
-import PortalProductCard from '@/components/portal/PortalProductCard'
+import ProductOrderCard from '@/components/portal/ProductOrderCard'
 import { notFound } from 'next/navigation'
 
 const BG = '#080808'
@@ -125,16 +125,17 @@ export default async function CategoryPage({
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-            gap: '16px',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))',
+            gap: '2px',
           }}
         >
           {category.products.map((product) => (
-            <PortalProductCard
+            <ProductOrderCard
               key={product.id}
               product={product}
+              category={category}
               slug={slug}
-              categorySlug={categorySlug}
+              accentColor={config.accentColor}
             />
           ))}
         </div>

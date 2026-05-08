@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useCart } from '@/components/portal/CartContext'
+import SizeChartModal from '@/components/portal/SizeChartModal'
 import type { ClientPortalConfig, PortalProduct } from '@/lib/portal/types'
 
 const BG = '#080808'
@@ -33,6 +34,11 @@ export default function ProductOrderClient({
   const [staffName, setStaffName] = useState('')
   const [qty, setQty] = useState(1)
   const [added, setAdded] = useState(false)
+  const [showSizeChart, setShowSizeChart] = useState(false)
+
+  const activeColour = product.colours?.find((c) => c.name === selectedColour)
+  const displayImage = activeColour?.image ?? product.image
+  const hasSizeGuide = !!(product.sizeChart || product.measureGuide)
 
   const canAdd =
     (product.sizes.length === 0 || selectedSize !== '') &&
@@ -56,6 +62,13 @@ export default function ProductOrderClient({
   }
 
   return (
+    <>
+    <SizeChartModal
+      isOpen={showSizeChart}
+      onClose={() => setShowSizeChart(false)}
+      sizeChart={product.sizeChart}
+      measureGuide={product.measureGuide}
+    />
     <div
       style={{
         background: BG,
@@ -140,7 +153,7 @@ export default function ProductOrderClient({
             }}
           >
             <img
-              src={product.image}
+              src={displayImage}
               alt={product.name}
               style={{
                 width: '100%',
@@ -276,21 +289,23 @@ export default function ProductOrderClient({
                 {product.colours.map((colour) => (
                   <button
                     key={colour.name}
-                    title={colour.name}
                     onClick={() => setSelectedColour(colour.name)}
                     style={{
-                      width: '32px',
-                      height: '32px',
-                      background: colour.hex,
-                      border:
-                        selectedColour === colour.name
-                          ? `2px solid ${LIME}`
-                          : '2px solid rgba(255,255,255,0.15)',
+                      padding: '7px 16px',
+                      background: selectedColour === colour.name ? LIME : 'transparent',
+                      color: selectedColour === colour.name ? '#080808' : 'rgba(255,255,255,0.6)',
+                      border: `1px solid ${selectedColour === colour.name ? LIME : BORDER}`,
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
                       cursor: 'pointer',
-                      outline: 'none',
-                      transition: 'border-color 0.15s ease',
+                      fontFamily: 'Helvetica, Arial, sans-serif',
+                      transition: 'all 0.15s ease',
                     }}
-                  />
+                  >
+                    {colour.name}
+                  </button>
                 ))}
               </div>
             </div>
@@ -299,7 +314,28 @@ export default function ProductOrderClient({
           {/* Size selector */}
           {product.sizes.length > 0 && product.sizes[0] !== 'One Size' && (
             <div style={{ marginBottom: '24px' }}>
-              <div style={labelStyle}>Size</div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                <div style={labelStyle}>Size</div>
+                {hasSizeGuide && (
+                  <button
+                    onClick={() => setShowSizeChart(true)}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: LIME,
+                      fontSize: '9px',
+                      fontWeight: 700,
+                      letterSpacing: '0.14em',
+                      textTransform: 'uppercase',
+                      cursor: 'pointer',
+                      fontFamily: 'Helvetica, Arial, sans-serif',
+                      padding: '0',
+                    }}
+                  >
+                    Size Chart →
+                  </button>
+                )}
+              </div>
               <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                 {product.sizes.map((size) => (
                   <button
@@ -452,6 +488,7 @@ export default function ProductOrderClient({
         </div>
       </div>
     </div>
+    </>
   )
 }
 

@@ -23,3 +23,15 @@ export function getPortalProduct(
   const cat = getPortalCategory(config, categorySlug)
   return cat?.products.find((p) => p.slug === productSlug) ?? null
 }
+
+export function getProductById(
+  config: ClientPortalConfig,
+  productId: string,
+) {
+  for (const category of config.categories) {
+    const product = category.products.find((p) => p.id === productId)
+    if (product) return product
+  }
+  return null
+}
+

@@ -36,18 +36,26 @@ export default function PortalHeader({
           textDecoration: 'none',
         }}
       >
-        <span
-          style={{
-            fontSize: '11px',
-            fontWeight: 900,
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: config.accentColor,
-            fontFamily: 'Helvetica, Arial, sans-serif',
-          }}
-        >
-          {config.logoText ?? config.clientName}
-        </span>
+        {config.logo?.type === 'image' ? (
+          <img
+            src={config.logo.src}
+            alt={config.logo.alt}
+            style={{ maxHeight: '44px', width: 'auto', display: 'block' }}
+          />
+        ) : (
+          <span
+            style={{
+              fontSize: '11px',
+              fontWeight: 900,
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              color: config.accentColor,
+              fontFamily: 'Helvetica, Arial, sans-serif',
+            }}
+          >
+            {config.logo?.type === 'text' ? config.logo.text : (config.logoText ?? config.clientName)}
+          </span>
+        )}
         <span
           style={{
             width: '1px',
