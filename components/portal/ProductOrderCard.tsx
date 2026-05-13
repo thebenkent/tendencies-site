@@ -7,6 +7,7 @@ import type { PortalProduct, PortalCategory } from '@/lib/portal/types'
 
 const BORDER = 'rgba(255,255,255,0.07)'
 const LIME = '#b8f400'
+const IMG_BG = '#f2f1ed'
 
 function fmt(cents: number) {
   return new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD' }).format(cents / 100)
@@ -43,7 +44,7 @@ export default function ProductOrderCard({
 
   const decorationMeta = [
     product.decorationMethod !== 'None' ? product.decorationMethod : null,
-    `${product.leadWeeks[0]}–${product.leadWeeks[1]}wk`,
+    `${product.leadWeeks[0]}–${product.leadWeeks[1]}wk lead`,
   ]
     .filter(Boolean)
     .join(' · ')
@@ -78,7 +79,7 @@ export default function ProductOrderCard({
 
       <div
         style={{
-          background: '#0f0f0f',
+          background: '#0e0e0e',
           border: `1px solid ${BORDER}`,
           display: 'flex',
           flexDirection: 'column',
@@ -89,9 +90,9 @@ export default function ProductOrderCard({
         <div
           style={{
             position: 'relative',
-            aspectRatio: '4/3',
+            aspectRatio: '1/1',
             overflow: 'hidden',
-            background: '#1c1c1c',
+            background: IMG_BG,
             flexShrink: 0,
           }}
         >
@@ -99,10 +100,12 @@ export default function ProductOrderCard({
             src={displayImage}
             alt={`${product.name}${selectedColour ? ` — ${selectedColour}` : ''}`}
             style={{
+              position: 'absolute',
+              inset: 0,
               width: '100%',
               height: '100%',
               objectFit: 'contain',
-              padding: '20px',
+              padding: '24px',
               transition: 'opacity 0.18s ease',
             }}
           />
@@ -111,25 +114,25 @@ export default function ProductOrderCard({
           <div
             style={{
               position: 'absolute',
-              top: '12px',
-              left: '12px',
+              top: '14px',
+              left: '14px',
               display: 'flex',
               flexDirection: 'column',
-              gap: '5px',
+              gap: '6px',
               alignItems: 'flex-start',
             }}
           >
             {product.sku && (
               <span
                 style={{
-                  fontSize: '8px',
+                  fontSize: '9px',
                   fontWeight: 700,
                   letterSpacing: '0.14em',
                   textTransform: 'uppercase',
-                  color: accentColor,
-                  background: 'rgba(8,8,8,0.88)',
-                  padding: '4px 8px',
-                  border: `1px solid ${accentColor}40`,
+                  color: '#f5f5f0',
+                  background: 'rgba(8,8,8,0.82)',
+                  padding: '5px 10px',
+                  border: `1px solid rgba(255,255,255,0.1)`,
                 }}
               >
                 {product.sku}
@@ -138,13 +141,13 @@ export default function ProductOrderCard({
             {product.requiresStaffName && (
               <span
                 style={{
-                  fontSize: '8px',
+                  fontSize: '9px',
                   fontWeight: 700,
                   letterSpacing: '0.14em',
                   textTransform: 'uppercase',
                   color: LIME,
-                  background: 'rgba(8,8,8,0.88)',
-                  padding: '4px 8px',
+                  background: 'rgba(8,8,8,0.82)',
+                  padding: '5px 10px',
                   border: '1px solid rgba(184,244,0,0.22)',
                 }}
               >
@@ -157,7 +160,7 @@ export default function ProductOrderCard({
         {/* Body */}
         <div
           style={{
-            padding: '20px',
+            padding: '24px',
             flex: 1,
             display: 'flex',
             flexDirection: 'column',
@@ -165,28 +168,28 @@ export default function ProductOrderCard({
           }}
         >
           {/* Product title + price */}
-          <div style={{ marginBottom: '18px' }}>
+          <div style={{ marginBottom: '20px' }}>
             <div
               style={{
-                fontSize: '9px',
+                fontSize: '10px',
                 fontWeight: 700,
                 letterSpacing: '0.2em',
                 textTransform: 'uppercase',
                 color: accentColor,
-                marginBottom: '5px',
+                marginBottom: '6px',
               }}
             >
               {category.name}
             </div>
             <div
               style={{
-                fontSize: '17px',
+                fontSize: '18px',
                 fontWeight: 900,
                 letterSpacing: '-0.025em',
                 textTransform: 'uppercase',
                 color: '#f5f5f0',
                 lineHeight: 1.05,
-                marginBottom: '10px',
+                marginBottom: '14px',
               }}
             >
               {product.name}
@@ -201,7 +204,7 @@ export default function ProductOrderCard({
             >
               <span
                 style={{
-                  fontSize: '20px',
+                  fontSize: '22px',
                   fontWeight: 900,
                   color: '#f5f5f0',
                   letterSpacing: '-0.02em',
@@ -212,9 +215,10 @@ export default function ProductOrderCard({
               <span
                 style={{
                   fontSize: '10px',
-                  color: 'rgba(255,255,255,0.28)',
-                  letterSpacing: '0.08em',
+                  color: 'rgba(255,255,255,0.3)',
+                  letterSpacing: '0.06em',
                   whiteSpace: 'nowrap',
+                  textAlign: 'right',
                 }}
               >
                 {decorationMeta}
@@ -227,8 +231,8 @@ export default function ProductOrderCard({
             <div
               style={{
                 borderTop: `1px solid ${BORDER}`,
-                paddingTop: '16px',
-                marginBottom: '16px',
+                paddingTop: '18px',
+                marginBottom: '18px',
               }}
             >
               <div style={labelStyle}>
@@ -254,7 +258,7 @@ export default function ProductOrderCard({
                     key={colour.name}
                     onClick={() => setSelectedColour(colour.name)}
                     style={{
-                      padding: '6px 14px',
+                      padding: '7px 14px',
                       background:
                         selectedColour === colour.name ? LIME : 'transparent',
                       color:
@@ -287,8 +291,8 @@ export default function ProductOrderCard({
             <div
               style={{
                 borderTop: `1px solid ${BORDER}`,
-                paddingTop: '16px',
-                marginBottom: '16px',
+                paddingTop: '18px',
+                marginBottom: '18px',
               }}
             >
               <div
@@ -296,7 +300,7 @@ export default function ProductOrderCard({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  marginBottom: '10px',
+                  marginBottom: '12px',
                 }}
               >
                 <div style={labelStyle}>Size</div>
@@ -320,13 +324,13 @@ export default function ProductOrderCard({
                   </button>
                 )}
               </div>
-              <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                 {product.sizes.map((size) => (
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
                     style={{
-                      padding: '7px 11px',
+                      padding: '8px 12px',
                       background: selectedSize === size ? LIME : 'transparent',
                       color:
                         selectedSize === size
@@ -341,7 +345,7 @@ export default function ProductOrderCard({
                       cursor: 'pointer',
                       fontFamily: 'Helvetica, Arial, sans-serif',
                       transition: 'all 0.12s ease',
-                      minWidth: '38px',
+                      minWidth: '40px',
                       textAlign: 'center',
                     }}
                   >
@@ -357,8 +361,8 @@ export default function ProductOrderCard({
             <div
               style={{
                 borderTop: `1px solid ${BORDER}`,
-                paddingTop: '16px',
-                marginBottom: '16px',
+                paddingTop: '18px',
+                marginBottom: '18px',
               }}
             >
               <div style={labelStyle}>Name for embroidery</div>
@@ -373,7 +377,7 @@ export default function ProductOrderCard({
                   border: `1px solid ${BORDER}`,
                   color: '#f5f5f0',
                   fontSize: '13px',
-                  padding: '10px 12px',
+                  padding: '11px 14px',
                   outline: 'none',
                   fontFamily: 'Helvetica, Arial, sans-serif',
                   boxSizing: 'border-box',
@@ -386,7 +390,7 @@ export default function ProductOrderCard({
           <div
             style={{
               borderTop: `1px solid ${BORDER}`,
-              paddingTop: '16px',
+              paddingTop: '18px',
               marginTop: 'auto',
             }}
           >
@@ -402,7 +406,7 @@ export default function ProductOrderCard({
                 <button
                   onClick={() => setQty((q) => Math.max(1, q - 1))}
                   style={{
-                    width: '36px',
+                    width: '38px',
                     background: 'transparent',
                     border: 'none',
                     color: 'rgba(255,255,255,0.5)',
@@ -418,7 +422,7 @@ export default function ProductOrderCard({
                 </button>
                 <div
                   style={{
-                    width: '40px',
+                    width: '42px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -434,7 +438,7 @@ export default function ProductOrderCard({
                 <button
                   onClick={() => setQty((q) => q + 1)}
                   style={{
-                    width: '36px',
+                    width: '38px',
                     background: 'transparent',
                     border: 'none',
                     color: 'rgba(255,255,255,0.5)',
@@ -456,20 +460,20 @@ export default function ProductOrderCard({
                 disabled={!canAdd}
                 style={{
                   flex: 1,
-                  height: '44px',
-                  background: added ? '#6cba00' : canAdd ? LIME : 'rgba(184,244,0,0.15)',
-                  color: canAdd ? '#080808' : 'rgba(8,8,8,0.4)',
+                  height: '46px',
+                  background: added ? '#6cba00' : canAdd ? LIME : 'rgba(184,244,0,0.12)',
+                  color: canAdd ? '#080808' : 'rgba(8,8,8,0.35)',
                   border: 'none',
                   fontSize: '10px',
-                  fontWeight: 700,
-                  letterSpacing: '0.14em',
+                  fontWeight: 800,
+                  letterSpacing: '0.16em',
                   textTransform: 'uppercase',
                   cursor: canAdd ? 'pointer' : 'not-allowed',
                   fontFamily: 'Helvetica, Arial, sans-serif',
                   transition: 'background 0.2s ease',
                 }}
               >
-                {added ? '✓ Added' : 'Add to Order'}
+                {added ? '✓ Added to Order' : 'Add to Order'}
               </button>
             </div>
 
@@ -479,7 +483,7 @@ export default function ProductOrderCard({
                 style={{
                   fontSize: '10px',
                   color: 'rgba(255,255,255,0.28)',
-                  marginTop: '8px',
+                  marginTop: '10px',
                   letterSpacing: '0.04em',
                 }}
               >
@@ -498,7 +502,7 @@ export default function ProductOrderCard({
                 style={{
                   display: 'block',
                   textAlign: 'center',
-                  marginTop: '10px',
+                  marginTop: '12px',
                   fontSize: '10px',
                   fontWeight: 700,
                   letterSpacing: '0.12em',
@@ -518,12 +522,12 @@ export default function ProductOrderCard({
 }
 
 const labelStyle: React.CSSProperties = {
-  fontSize: '8px',
+  fontSize: '9px',
   fontWeight: 700,
   letterSpacing: '0.2em',
   textTransform: 'uppercase',
   color: 'rgba(255,255,255,0.35)',
   fontFamily: 'Helvetica, Arial, sans-serif',
   display: 'inline',
-  marginBottom: '10px',
+  marginBottom: '12px',
 }

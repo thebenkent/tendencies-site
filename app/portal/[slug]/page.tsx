@@ -6,13 +6,7 @@ import { notFound } from 'next/navigation'
 const BG = '#080808'
 const BORDER = 'rgba(255,255,255,0.07)'
 const LIME = '#b8f400'
-
-const ctaButtons = [
-  { id: 'request-pricing', label: 'Request Pricing', emoji: '💬', href: '#contact' },
-  { id: 'build-kit', label: 'Build a Staff Kit', emoji: '🛠', href: '#categories' },
-  { id: 'branding', label: 'Discuss Branding', emoji: '✏️', href: '#contact' },
-  { id: 'download', label: 'Download Range', emoji: '📥', href: '#collections' },
-]
+const IMG_BG = '#f2f1ed'
 
 export default async function PortalHomePage({
   params,
@@ -29,8 +23,9 @@ export default async function PortalHomePage({
 
       {/* Hero */}
       <div
+        className="portal-px"
         style={{
-          padding: '72px 48px 64px',
+          padding: '88px 64px 72px',
           borderBottom: `1px solid ${BORDER}`,
           maxWidth: '1280px',
           margin: '0 auto',
@@ -40,196 +35,178 @@ export default async function PortalHomePage({
           style={{
             fontSize: '10px',
             fontWeight: 700,
-            letterSpacing: '0.22em',
+            letterSpacing: '0.24em',
             textTransform: 'uppercase',
             color: config.accentColor,
-            marginBottom: '16px',
+            marginBottom: '20px',
           }}
         >
-          {config.clientName}
+          {config.clientName} · Staff Uniform Programme
         </div>
         <h1
           style={{
-            fontSize: 'clamp(40px, 6vw, 80px)',
+            fontSize: 'clamp(44px, 6.5vw, 88px)',
             fontWeight: 900,
             letterSpacing: '-0.04em',
             textTransform: 'uppercase',
             color: '#f5f5f0',
             lineHeight: 0.9,
-            marginBottom: '20px',
+            marginBottom: '28px',
+            maxWidth: '900px',
           }}
         >
           {config.hero.tagline}
         </h1>
         <p
           style={{
-            fontSize: '15px',
-            color: 'rgba(255,255,255,0.5)',
-            lineHeight: 1.65,
-            maxWidth: '480px',
+            fontSize: '16px',
+            color: 'rgba(255,255,255,0.52)',
+            lineHeight: 1.7,
+            maxWidth: '520px',
           }}
         >
           {config.hero.subtitle}
         </p>
+
+        <div style={{ marginTop: '40px', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+          <a
+            href="#categories"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: '13px 28px',
+              background: LIME,
+              color: '#080808',
+              fontSize: '11px',
+              fontWeight: 800,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              textDecoration: 'none',
+            }}
+          >
+            Browse the Range
+          </a>
+          <a
+            href={`mailto:${config.contact.email}`}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: '13px 28px',
+              background: 'transparent',
+              color: 'rgba(255,255,255,0.55)',
+              border: `1px solid rgba(255,255,255,0.12)`,
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              textDecoration: 'none',
+            }}
+          >
+            Contact Account Manager
+          </a>
+        </div>
       </div>
 
       {/* Brand story section */}
       {config.brandStory && (
         <div
+          className="portal-px"
           style={{
             borderBottom: `1px solid ${BORDER}`,
-            padding: '64px 48px',
+            padding: '72px 64px',
             maxWidth: '1280px',
             margin: '0 auto',
           }}
         >
-          <h2
-            style={{
-              fontSize: 'clamp(32px, 4vw, 56px)',
-              fontWeight: 900,
-              letterSpacing: '-0.03em',
-              textTransform: 'uppercase',
-              color: '#f5f5f0',
-              lineHeight: 1,
-              marginBottom: '20px',
-              maxWidth: '700px',
-            }}
-          >
-            {config.brandStory.headline}
-          </h2>
-          <p
-            style={{
-              fontSize: '15px',
-              color: 'rgba(255,255,255,0.5)',
-              lineHeight: 1.7,
-              maxWidth: '640px',
-              marginBottom: '48px',
-            }}
-          >
-            {config.brandStory.body}
-          </p>
-
-          {/* Pillars grid */}
-          {config.brandStory.pillars && config.brandStory.pillars.length > 0 && (
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                gap: '32px',
-              }}
-            >
-              {config.brandStory.pillars.map((pillar) => (
-                <div key={pillar.title}>
-                  <div
-                    style={{
-                      fontSize: '12px',
-                      fontWeight: 700,
-                      letterSpacing: '0.2em',
-                      textTransform: 'uppercase',
-                      color: config.accentColor,
-                      marginBottom: '12px',
-                    }}
-                  >
-                    {pillar.title}
-                  </div>
-                  <p
-                    style={{
-                      fontSize: '14px',
-                      color: 'rgba(255,255,255,0.45)',
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    {pillar.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* CTA Section */}
-      <div
-        style={{
-          borderBottom: `1px solid ${BORDER}`,
-          padding: '56px 48px',
-          maxWidth: '1280px',
-          margin: '0 auto',
-          background: 'rgba(184,244,0,0.03)',
-        }}
-        id="contact"
-      >
-        <div style={{ marginBottom: '28px' }}>
           <div
             style={{
-              fontSize: '10px',
-              fontWeight: 700,
-              letterSpacing: '0.22em',
-              textTransform: 'uppercase',
-              color: LIME,
-              marginBottom: '8px',
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '80px',
+              alignItems: 'start',
             }}
+            className="portal-story-grid"
           >
-            Ready to Order?
-          </div>
-          <h3
-            style={{
-              fontSize: 'clamp(24px, 3vw, 42px)',
-              fontWeight: 900,
-              letterSpacing: '-0.03em',
-              textTransform: 'uppercase',
-              color: '#f5f5f0',
-              lineHeight: 1,
-            }}
-          >
-            Get Started Today
-          </h3>
-        </div>
-
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '16px',
-          }}
-        >
-          {ctaButtons.map((btn) => (
-            <a
-              key={btn.id}
-              href={btn.href}
-              className="portal-cta-btn"
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '12px',
-                padding: '24px 20px',
-                background: 'rgba(255,255,255,0.04)',
-                border: `1px solid ${BORDER}`,
-                borderRadius: '4px',
-                textDecoration: 'none',
-                transition: 'all 0.2s ease',
-                cursor: 'pointer',
-              }}
-            >
-              <div style={{ fontSize: '28px' }}>{btn.emoji}</div>
-              <div
+            <div>
+              <h2
                 style={{
-                  fontSize: '13px',
-                  fontWeight: 700,
-                  letterSpacing: '0.1em',
+                  fontSize: 'clamp(28px, 3.5vw, 48px)',
+                  fontWeight: 900,
+                  letterSpacing: '-0.03em',
                   textTransform: 'uppercase',
-                  color: LIME,
-                  textAlign: 'center',
+                  color: '#f5f5f0',
+                  lineHeight: 1,
+                  marginBottom: '20px',
                 }}
               >
-                {btn.label}
+                {config.brandStory.headline}
+              </h2>
+              <p
+                style={{
+                  fontSize: '15px',
+                  color: 'rgba(255,255,255,0.5)',
+                  lineHeight: 1.75,
+                }}
+              >
+                {config.brandStory.body}
+              </p>
+            </div>
+
+            {config.brandStory.pillars && config.brandStory.pillars.length > 0 && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+                {config.brandStory.pillars.map((pillar, i) => (
+                  <div
+                    key={pillar.title}
+                    style={{
+                      display: 'flex',
+                      gap: '20px',
+                      alignItems: 'flex-start',
+                      paddingTop: i > 0 ? '32px' : undefined,
+                      borderTop: i > 0 ? `1px solid ${BORDER}` : undefined,
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: '2px',
+                        height: '32px',
+                        background: config.accentColor,
+                        flexShrink: 0,
+                        marginTop: '2px',
+                      }}
+                    />
+                    <div>
+                      <div
+                        style={{
+                          fontSize: '11px',
+                          fontWeight: 700,
+                          letterSpacing: '0.18em',
+                          textTransform: 'uppercase',
+                          color: '#f5f5f0',
+                          marginBottom: '8px',
+                        }}
+                      >
+                        {pillar.title}
+                      </div>
+                      <p
+                        style={{
+                          fontSize: '13px',
+                          color: 'rgba(255,255,255,0.45)',
+                          lineHeight: 1.65,
+                          margin: 0,
+                        }}
+                      >
+                        {pillar.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </a>
-          ))}
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Featured collections */}
       {config.featuredCollections && config.featuredCollections.length > 0 && (
@@ -245,48 +222,60 @@ export default async function PortalHomePage({
             return (
               <div
                 key={collection.id}
+                className="portal-px"
                 style={{
-                  padding: '56px 48px',
+                  padding: '64px 64px 72px',
                   maxWidth: '1280px',
                   margin: '0 auto',
                   borderBottom: idx < config.featuredCollections!.length - 1 ? `1px solid ${BORDER}` : 'none',
                 }}
               >
-                <div style={{ marginBottom: '32px' }}>
-                  <div
-                    style={{
-                      fontSize: '10px',
-                      fontWeight: 700,
-                      letterSpacing: '0.22em',
-                      textTransform: 'uppercase',
-                      color: 'rgba(255,255,255,0.35)',
-                      marginBottom: '8px',
-                    }}
-                  >
-                    Featured Collection
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-end',
+                    justifyContent: 'space-between',
+                    gap: '24px',
+                    marginBottom: '40px',
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  <div>
+                    <div
+                      style={{
+                        fontSize: '10px',
+                        fontWeight: 700,
+                        letterSpacing: '0.22em',
+                        textTransform: 'uppercase',
+                        color: 'rgba(255,255,255,0.3)',
+                        marginBottom: '10px',
+                      }}
+                    >
+                      Featured Collection
+                    </div>
+                    <h3
+                      style={{
+                        fontSize: 'clamp(22px, 2.8vw, 40px)',
+                        fontWeight: 900,
+                        letterSpacing: '-0.03em',
+                        textTransform: 'uppercase',
+                        color: '#f5f5f0',
+                        lineHeight: 1.05,
+                        marginBottom: '8px',
+                      }}
+                    >
+                      {collection.title}
+                    </h3>
+                    <p
+                      style={{
+                        fontSize: '14px',
+                        color: 'rgba(255,255,255,0.42)',
+                        margin: 0,
+                      }}
+                    >
+                      {collection.subtitle}
+                    </p>
                   </div>
-                  <h3
-                    style={{
-                      fontSize: 'clamp(24px, 3vw, 42px)',
-                      fontWeight: 900,
-                      letterSpacing: '-0.03em',
-                      textTransform: 'uppercase',
-                      color: '#f5f5f0',
-                      lineHeight: 1.1,
-                      marginBottom: '8px',
-                    }}
-                  >
-                    {collection.title}
-                  </h3>
-                  <p
-                    style={{
-                      fontSize: '14px',
-                      color: 'rgba(255,255,255,0.45)',
-                      marginBottom: '20px',
-                    }}
-                  >
-                    {collection.subtitle}
-                  </p>
                   <a
                     href={`/portal/${slug}/${collection.categorySlug}`}
                     className="portal-view-cat-link"
@@ -294,13 +283,14 @@ export default async function PortalHomePage({
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '8px',
-                      fontSize: '11px',
+                      fontSize: '10px',
                       fontWeight: 700,
-                      letterSpacing: '0.12em',
+                      letterSpacing: '0.14em',
                       textTransform: 'uppercase',
                       color: LIME,
                       textDecoration: 'none',
-                      transition: 'gap 0.2s ease',
+                      whiteSpace: 'nowrap',
+                      flexShrink: 0,
                     }}
                   >
                     View Full Category →
@@ -310,8 +300,8 @@ export default async function PortalHomePage({
                 <div
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                    gap: '2px',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+                    gap: '20px',
                   }}
                 >
                   {products.map((product) => (
@@ -320,60 +310,58 @@ export default async function PortalHomePage({
                       href={`/portal/${slug}/${collection.categorySlug}/${product.slug}`}
                       className="portal-featured-product"
                       style={{
-                        background: '#0f0f0f',
+                        background: '#111',
                         border: `1px solid ${BORDER}`,
-                        padding: '20px',
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: '12px',
                         textDecoration: 'none',
-                        transition: 'all 0.2s ease',
+                        transition: 'border-color 0.2s ease',
                         '--portal-accent': config.accentColor,
                       } as React.CSSProperties}
                     >
                       <div
                         style={{
-                          aspectRatio: '4/3',
-                          background: '#1c1c1c',
+                          aspectRatio: '1/1',
+                          background: IMG_BG,
                           overflow: 'hidden',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
+                          flexShrink: 0,
                         }}
                       >
                         <img
                           src={product.image}
                           alt={product.name}
                           style={{
-                            width: '100%',
-                            height: '100%',
+                            width: '85%',
+                            height: '85%',
                             objectFit: 'contain',
-                            padding: '20px',
                           }}
                         />
                       </div>
-                      <div>
+                      <div style={{ padding: '18px 20px 20px' }}>
                         <div
                           style={{
-                            fontSize: '10px',
+                            fontSize: '9px',
                             fontWeight: 700,
-                            letterSpacing: '0.15em',
+                            letterSpacing: '0.18em',
                             textTransform: 'uppercase',
                             color: config.accentColor,
-                            marginBottom: '4px',
+                            marginBottom: '5px',
                           }}
                         >
                           {product.sku}
                         </div>
                         <div
                           style={{
-                            fontSize: '14px',
-                            fontWeight: 900,
-                            letterSpacing: '-0.025em',
+                            fontSize: '13px',
+                            fontWeight: 800,
+                            letterSpacing: '-0.02em',
                             textTransform: 'uppercase',
                             color: '#f5f5f0',
-                            lineHeight: 1.1,
-                            marginBottom: '8px',
+                            lineHeight: 1.15,
+                            marginBottom: '12px',
                           }}
                         >
                           {product.name}
@@ -388,7 +376,7 @@ export default async function PortalHomePage({
                         >
                           <span
                             style={{
-                              fontSize: '16px',
+                              fontSize: '15px',
                               fontWeight: 900,
                               color: '#f5f5f0',
                             }}
@@ -397,9 +385,9 @@ export default async function PortalHomePage({
                           </span>
                           <span
                             style={{
-                              fontSize: '10px',
+                              fontSize: '9px',
                               color: 'rgba(255,255,255,0.28)',
-                              letterSpacing: '0.08em',
+                              letterSpacing: '0.06em',
                             }}
                           >
                             {product.leadWeeks[0]}–{product.leadWeeks[1]}wk
@@ -417,29 +405,30 @@ export default async function PortalHomePage({
 
       {/* Category grid */}
       <div
+        className="portal-px"
         style={{
           maxWidth: '1280px',
           margin: '0 auto',
-          padding: '56px 48px 80px',
+          padding: '64px 64px 88px',
         }}
         id="categories"
       >
-        <div style={{ marginBottom: '32px' }}>
+        <div style={{ marginBottom: '40px' }}>
           <div
             style={{
-              fontSize: '9px',
+              fontSize: '10px',
               fontWeight: 700,
               letterSpacing: '0.22em',
               textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.35)',
-              marginBottom: '8px',
+              color: 'rgba(255,255,255,0.3)',
+              marginBottom: '10px',
             }}
           >
             Complete Range
           </div>
           <h3
             style={{
-              fontSize: 'clamp(24px, 3vw, 42px)',
+              fontSize: 'clamp(24px, 3vw, 44px)',
               fontWeight: 900,
               letterSpacing: '-0.03em',
               textTransform: 'uppercase',
@@ -454,8 +443,8 @@ export default async function PortalHomePage({
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-            gap: '2px',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            gap: '20px',
           }}
         >
           {config.categories.map((cat) => (
@@ -470,8 +459,7 @@ export default async function PortalHomePage({
                 overflow: 'hidden',
                 background: '#111',
                 textDecoration: 'none',
-                border: '1px solid rgba(255,255,255,0.05)',
-                transition: 'border-color 0.2s ease',
+                border: '1px solid rgba(255,255,255,0.07)',
               }}
             >
               <img
@@ -483,7 +471,7 @@ export default async function PortalHomePage({
                   width: '100%',
                   height: '100%',
                   objectFit: 'cover',
-                  filter: 'brightness(0.35)',
+                  filter: 'brightness(0.32)',
                 }}
               />
 
@@ -492,7 +480,7 @@ export default async function PortalHomePage({
                   position: 'absolute',
                   inset: 0,
                   background:
-                    'linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.3) 60%, transparent 100%)',
+                    'linear-gradient(to top, rgba(8,8,8,0.96) 0%, rgba(8,8,8,0.2) 55%, transparent 100%)',
                 }}
               />
 
@@ -502,39 +490,39 @@ export default async function PortalHomePage({
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  padding: '24px',
+                  padding: '28px',
                 }}
               >
                 <div
                   style={{
                     fontSize: '9px',
                     fontWeight: 700,
-                    letterSpacing: '0.18em',
+                    letterSpacing: '0.2em',
                     textTransform: 'uppercase',
                     color: config.accentColor,
-                    marginBottom: '6px',
+                    marginBottom: '8px',
                   }}
                 >
                   {cat.products.length} item{cat.products.length !== 1 ? 's' : ''}
                 </div>
                 <div
                   style={{
-                    fontSize: 'clamp(18px, 2vw, 24px)',
+                    fontSize: 'clamp(16px, 1.8vw, 22px)',
                     fontWeight: 900,
                     letterSpacing: '-0.03em',
                     textTransform: 'uppercase',
                     color: '#f5f5f0',
                     lineHeight: 1,
-                    marginBottom: '6px',
+                    marginBottom: '8px',
                   }}
                 >
                   {cat.name}
                 </div>
                 <div
                   style={{
-                    fontSize: '11px',
-                    color: 'rgba(255,255,255,0.45)',
-                    lineHeight: 1.5,
+                    fontSize: '12px',
+                    color: 'rgba(255,255,255,0.42)',
+                    lineHeight: 1.55,
                   }}
                 >
                   {cat.description}
@@ -545,42 +533,86 @@ export default async function PortalHomePage({
         </div>
       </div>
 
-      {/* Order info footer strip */}
-      {config.ordering.orderNote && (
-        <div
-          style={{
-            borderTop: `1px solid ${BORDER}`,
-            padding: '24px 48px',
-            maxWidth: '1280px',
-            margin: '0 auto',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '16px',
-          }}
-        >
+      {/* Contact strip */}
+      <div
+        style={{
+          borderTop: `1px solid ${BORDER}`,
+          maxWidth: '1280px',
+          margin: '0 auto',
+          padding: '48px 64px',
+          display: 'grid',
+          gridTemplateColumns: '1fr auto',
+          gap: '48px',
+          alignItems: 'center',
+        }}
+        id="contact"
+        className="portal-contact-strip portal-px"
+      >
+        <div>
           <div
             style={{
-              fontSize: '9px',
+              fontSize: '10px',
               fontWeight: 700,
-              letterSpacing: '0.18em',
+              letterSpacing: '0.22em',
               textTransform: 'uppercase',
               color: LIME,
-              flexShrink: 0,
+              marginBottom: '8px',
             }}
           >
-            Note
+            Account Manager
           </div>
+          <div
+            style={{
+              fontSize: '18px',
+              fontWeight: 800,
+              color: '#f5f5f0',
+              letterSpacing: '-0.01em',
+              marginBottom: '4px',
+            }}
+          >
+            {config.contact.manager}
+          </div>
+          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', marginTop: '8px' }}>
+            <a
+              href={`mailto:${config.contact.email}`}
+              style={{
+                fontSize: '13px',
+                color: 'rgba(255,255,255,0.45)',
+                textDecoration: 'none',
+              }}
+            >
+              {config.contact.email}
+            </a>
+            {config.contact.phone && (
+              <a
+                href={`tel:${config.contact.phone}`}
+                style={{
+                  fontSize: '13px',
+                  color: 'rgba(255,255,255,0.45)',
+                  textDecoration: 'none',
+                }}
+              >
+                {config.contact.phone}
+              </a>
+            )}
+          </div>
+        </div>
+        {config.ordering.orderNote && (
           <p
             style={{
               fontSize: '12px',
-              color: 'rgba(255,255,255,0.38)',
-              lineHeight: 1.6,
+              color: 'rgba(255,255,255,0.3)',
+              lineHeight: 1.65,
+              maxWidth: '380px',
+              margin: 0,
+              textAlign: 'right',
             }}
+            className="portal-note-text"
           >
             {config.ordering.orderNote}
           </p>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }
