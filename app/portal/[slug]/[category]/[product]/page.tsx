@@ -2,6 +2,7 @@ import { getPortalConfig, getPortalCategory, getPortalProduct } from '@/lib/port
 import PortalHeader from '@/components/portal/PortalHeader'
 import ProductOrderClient from './ProductOrderClient'
 import { notFound } from 'next/navigation'
+import { resolvePortalVisual } from '@/lib/portal/visual'
 
 export default async function ProductPage({
   params,
@@ -19,8 +20,10 @@ export default async function ProductPage({
   const product = getPortalProduct(config, categorySlug, productSlug)
   if (!product) notFound()
 
+  const v = resolvePortalVisual(config)
+
   return (
-    <div style={{ background: '#080808', minHeight: 'calc(100vh - 64px)', fontFamily: 'Helvetica, Arial, sans-serif' }}>
+    <div style={{ background: v.canvas, minHeight: 'calc(100vh - 64px)', fontFamily: 'Helvetica, Arial, sans-serif' }}>
       <PortalHeader config={config} slug={slug} />
       <ProductOrderClient
         config={config}

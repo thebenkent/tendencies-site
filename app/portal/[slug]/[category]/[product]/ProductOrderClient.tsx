@@ -1,13 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type CSSProperties } from 'react'
 import { useCart } from '@/components/portal/CartContext'
 import SizeChartModal from '@/components/portal/SizeChartModal'
-import type { ClientPortalConfig, PortalProduct } from '@/lib/portal/types'
-
-const BG = '#080808'
-const BORDER = 'rgba(255,255,255,0.08)'
-const LIME = '#b8f400'
+import type { ClientPortalConfig, PortalProduct, PortalVisualTokens } from '@/lib/portal/types'
+import { resolvePortalUiCopy, resolvePortalVisual } from '@/lib/portal/visual'
 
 function fmt(cents: number) {
   return new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD' }).format(cents / 100)
@@ -26,11 +23,11 @@ export default function ProductOrderClient({
   categorySlug: string
   categoryName: string
 }) {
+  const v = resolvePortalVisual(config)
+  const ui = resolvePortalUiCopy(config)
   const { addItem } = useCart()
   const [selectedSize, setSelectedSize] = useState('')
-  const [selectedColour, setSelectedColour] = useState(
-    product.colours?.[0]?.name ?? '',
-  )
+  const [selectedColour, setSelectedColour] = useState(product.colours?.[0]?.name ?? '')
   const [staffName, setStaffName] = useState('')
   const [qty, setQty] = useState(1)
   const [added, setAdded] = useState(false)
@@ -43,6 +40,9 @@ export default function ProductOrderClient({
   const canAdd =
     (product.sizes.length === 0 || selectedSize !== '') &&
     (!product.requiresStaffName || staffName.trim() !== '')
+
+  const selBorder = v.accent
+  const selBg = `${v.accent}22`
 
   function handleAdd() {
     if (!canAdd) return
@@ -63,455 +63,416 @@ export default function ProductOrderClient({
 
   return (
     <>
-    <SizeChartModal
-      isOpen={showSizeChart}
-      onClose={() => setShowSizeChart(false)}
-      sizeChart={product.sizeChart}
-      measureGuide={product.measureGuide}
-    />
-    <div
-      style={{
-        background: BG,
-        minHeight: 'calc(100vh - 116px)',
-        fontFamily: 'Helvetica, Arial, sans-serif',
-      }}
-    >
-      {/* Breadcrumb */}
+      <SizeChartModal
+        isOpen={showSizeChart}
+        onClose={() => setShowSizeChart(false)}
+        sizeChart={product.sizeChart}
+        measureGuide={product.measureGuide}
+      />
       <div
         style={{
-          borderBottom: `1px solid ${BORDER}`,
-          padding: '16px 48px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          maxWidth: '1280px',
-          margin: '0 auto',
+          background: v.canvas,
+          minHeight: 'calc(100vh - 116px)',
+          fontFamily: 'Helvetica, Arial, sans-serif',
         }}
       >
-        {[
-          { label: config.clientName, href: `/portal/${slug}` },
-          { label: categoryName, href: `/portal/${slug}/${categorySlug}` },
-          { label: product.name, href: null },
-        ].map((crumb, i, arr) => (
-          <span key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            {crumb.href ? (
-              <a
-                href={crumb.href}
-                style={{
-                  fontSize: '10px',
-                  fontWeight: 700,
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  color: 'rgba(255,255,255,0.3)',
-                  textDecoration: 'none',
-                }}
-              >
-                {crumb.label}
-              </a>
-            ) : (
-              <span
-                style={{
-                  fontSize: '10px',
-                  fontWeight: 700,
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  color: '#f5f5f0',
-                }}
-              >
-                {crumb.label}
-              </span>
-            )}
-            {i < arr.length - 1 && (
-              <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: '10px' }}>›</span>
-            )}
-          </span>
-        ))}
-      </div>
-
-      {/* Product layout */}
-      <div
-        style={{
-          maxWidth: '1280px',
-          margin: '0 auto',
-          padding: '0 48px 80px',
-          display: 'grid',
-          gridTemplateColumns: '1fr 420px',
-          gap: '64px',
-          alignItems: 'start',
-        }}
-      >
-        {/* Image */}
-        <div>
-          <div
-            style={{
-              position: 'relative',
-              aspectRatio: '4/3',
-              overflow: 'hidden',
-              background: '#0f0f0f',
-              border: `1px solid ${BORDER}`,
-              marginTop: '48px',
-            }}
-          >
-            <img
-              src={displayImage}
-              alt={product.name}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                filter: 'brightness(0.8)',
-              }}
-            />
-          </div>
-
-          {/* Decoration + lead time info */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '1px',
-              marginTop: '2px',
-            }}
-          >
-            {[
-              { label: 'Decoration', value: product.decorationMethod },
-              {
-                label: 'Lead time',
-                value: `${product.leadWeeks[0]}–${product.leadWeeks[1]} weeks`,
-              },
-            ].map((item) => (
-              <div
-                key={item.label}
-                style={{
-                  background: '#0d0d0d',
-                  border: `1px solid ${BORDER}`,
-                  padding: '16px 18px',
-                }}
-              >
-                <div
+        <div
+          className="portal-px"
+          style={{
+            borderBottom: `1px solid ${v.border}`,
+            padding: '16px 64px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            maxWidth: '1200px',
+            margin: '0 auto',
+            flexWrap: 'wrap',
+          }}
+        >
+          {[
+            { label: config.clientName, href: `/portal/${slug}` },
+            { label: categoryName, href: `/portal/${slug}/${categorySlug}` },
+            { label: product.name, href: null },
+          ].map((crumb, i, arr) => (
+            <span key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {crumb.href ? (
+                <a
+                  href={crumb.href}
                   style={{
-                    fontSize: '8px',
+                    fontSize: '11px',
                     fontWeight: 700,
-                    letterSpacing: '0.2em',
+                    letterSpacing: '0.12em',
                     textTransform: 'uppercase',
-                    color: 'rgba(255,255,255,0.3)',
-                    marginBottom: '4px',
+                    color: v.inkFaint,
+                    textDecoration: 'none',
+                    minHeight: '44px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
                   }}
                 >
-                  {item.label}
-                </div>
-                <div
+                  {crumb.label}
+                </a>
+              ) : (
+                <span
                   style={{
-                    fontSize: '13px',
+                    fontSize: '11px',
                     fontWeight: 700,
-                    color: '#f5f5f0',
+                    letterSpacing: '0.12em',
+                    textTransform: 'uppercase',
+                    color: v.ink,
                   }}
                 >
-                  {item.value}
-                </div>
-              </div>
-            ))}
-          </div>
+                  {crumb.label}
+                </span>
+              )}
+              {i < arr.length - 1 && (
+                <span style={{ color: v.inkFaint, fontSize: '11px' }} aria-hidden>
+                  ›
+                </span>
+              )}
+            </span>
+          ))}
         </div>
 
-        {/* Order form */}
-        <div style={{ paddingTop: '48px' }}>
-          <div
-            style={{
-              fontSize: '9px',
-              fontWeight: 700,
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              color: config.accentColor,
-              marginBottom: '10px',
-            }}
-          >
-            {categoryName}
-          </div>
-          <h1
-            style={{
-              fontSize: 'clamp(28px, 3vw, 40px)',
-              fontWeight: 900,
-              letterSpacing: '-0.03em',
-              textTransform: 'uppercase',
-              color: '#f5f5f0',
-              lineHeight: 0.92,
-              marginBottom: '16px',
-            }}
-          >
-            {product.name}
-          </h1>
-          <p
-            style={{
-              fontSize: '13px',
-              color: 'rgba(255,255,255,0.5)',
-              lineHeight: 1.7,
-              marginBottom: '32px',
-              borderTop: `1px solid ${BORDER}`,
-              paddingTop: '20px',
-            }}
-          >
-            {product.description}
-          </p>
-
-          <div
-            style={{
-              fontSize: '22px',
-              fontWeight: 900,
-              letterSpacing: '-0.02em',
-              color: '#f5f5f0',
-              marginBottom: '32px',
-            }}
-          >
-            {fmt(product.priceCents)}{' '}
-            <span
+        <div
+          style={{
+            maxWidth: '1200px',
+            margin: '0 auto',
+            padding: '0 64px 88px',
+            display: 'grid',
+            gridTemplateColumns: '1fr 400px',
+            gap: '56px',
+            alignItems: 'start',
+          }}
+          className="portal-pdp-grid portal-px"
+        >
+          <div>
+            <div
               style={{
-                fontSize: '11px',
-                fontWeight: 400,
-                color: 'rgba(255,255,255,0.35)',
-                letterSpacing: '0.06em',
+                position: 'relative',
+                aspectRatio: '1 / 1.05',
+                minHeight: '280px',
+                overflow: 'hidden',
+                background: v.imageWell,
+                border: `1px solid ${v.border}`,
+                marginTop: '40px',
+                borderRadius: '6px',
               }}
             >
-              NZD incl. GST
-            </span>
-          </div>
-
-          {/* Colour selector */}
-          {product.colours && product.colours.length > 0 && (
-            <div style={{ marginBottom: '24px' }}>
-              <div style={labelStyle}>
-                Colour{' '}
-                {selectedColour && (
-                  <span style={{ color: '#f5f5f0', fontWeight: 400 }}>— {selectedColour}</span>
-                )}
-              </div>
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                {product.colours.map((colour) => (
-                  <button
-                    key={colour.name}
-                    onClick={() => setSelectedColour(colour.name)}
-                    style={{
-                      padding: '7px 16px',
-                      background: selectedColour === colour.name ? LIME : 'transparent',
-                      color: selectedColour === colour.name ? '#080808' : 'rgba(255,255,255,0.6)',
-                      border: `1px solid ${selectedColour === colour.name ? LIME : BORDER}`,
-                      fontSize: '11px',
-                      fontWeight: 700,
-                      letterSpacing: '0.08em',
-                      textTransform: 'uppercase',
-                      cursor: 'pointer',
-                      fontFamily: 'Helvetica, Arial, sans-serif',
-                      transition: 'all 0.15s ease',
-                    }}
-                  >
-                    {colour.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Size selector */}
-          {product.sizes.length > 0 && product.sizes[0] !== 'One Size' && (
-            <div style={{ marginBottom: '24px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                <div style={labelStyle}>Size</div>
-                {hasSizeGuide && (
-                  <button
-                    onClick={() => setShowSizeChart(true)}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: LIME,
-                      fontSize: '9px',
-                      fontWeight: 700,
-                      letterSpacing: '0.14em',
-                      textTransform: 'uppercase',
-                      cursor: 'pointer',
-                      fontFamily: 'Helvetica, Arial, sans-serif',
-                      padding: '0',
-                    }}
-                  >
-                    Size Chart →
-                  </button>
-                )}
-              </div>
-              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                {product.sizes.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    style={{
-                      padding: '8px 14px',
-                      background: selectedSize === size ? LIME : 'transparent',
-                      color: selectedSize === size ? '#080808' : 'rgba(255,255,255,0.6)',
-                      border: `1px solid ${selectedSize === size ? LIME : BORDER}`,
-                      fontSize: '11px',
-                      fontWeight: 700,
-                      letterSpacing: '0.1em',
-                      cursor: 'pointer',
-                      fontFamily: 'Helvetica, Arial, sans-serif',
-                      transition: 'all 0.15s ease',
-                    }}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Staff name */}
-          {product.requiresStaffName && (
-            <div style={{ marginBottom: '24px' }}>
-              <div style={labelStyle}>Staff name for personalisation</div>
-              <input
-                type="text"
-                value={staffName}
-                onChange={(e) => setStaffName(e.target.value)}
-                placeholder="e.g. Jordan Smith"
+              <img
+                src={displayImage}
+                alt={product.name}
                 style={{
                   width: '100%',
-                  background: '#0d0d0d',
-                  border: `1px solid ${BORDER}`,
-                  color: '#f5f5f0',
-                  fontSize: '14px',
-                  padding: '12px 14px',
-                  outline: 'none',
-                  fontFamily: 'Helvetica, Arial, sans-serif',
-                  boxSizing: 'border-box',
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = LIME
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = BORDER
+                  height: '100%',
+                  objectFit: 'contain',
+                  padding: '28px',
                 }}
               />
             </div>
-          )}
 
-          {/* Qty */}
-          <div style={{ marginBottom: '28px' }}>
-            <div style={labelStyle}>Quantity</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0' }}>
-              <button
-                onClick={() => setQty((q) => Math.max(1, q - 1))}
-                style={qtyBtnStyle}
-              >
-                −
-              </button>
-              <div
-                style={{
-                  width: '56px',
-                  height: '40px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  background: '#0d0d0d',
-                  border: `1px solid ${BORDER}`,
-                  borderLeft: 'none',
-                  borderRight: 'none',
-                  fontSize: '14px',
-                  fontWeight: 700,
-                  color: '#f5f5f0',
-                }}
-              >
-                {qty}
-              </div>
-              <button
-                onClick={() => setQty((q) => q + 1)}
-                style={qtyBtnStyle}
-              >
-                +
-              </button>
+            <div
+              style={{
+                marginTop: '16px',
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '10px',
+              }}
+            >
+              <span style={metaPill(v)}>
+                {fmt(product.priceCents)} <span style={{ fontWeight: 500, opacity: 0.85 }}>incl. GST</span>
+              </span>
+              <span style={metaPill(v)}>
+                {product.leadWeeks[0]}–{product.leadWeeks[1]} wk
+              </span>
+              {product.decorationMethod && product.decorationMethod !== 'None' && (
+                <span style={metaPill(v)}>{product.decorationMethod}</span>
+              )}
             </div>
           </div>
 
-          {/* Add to cart */}
-          <button
-            onClick={handleAdd}
-            disabled={!canAdd}
-            style={{
-              width: '100%',
-              background: added ? '#6cba00' : canAdd ? LIME : 'rgba(184,244,0,0.25)',
-              color: '#080808',
-              border: 'none',
-              padding: '16px',
-              fontSize: '12px',
-              fontWeight: 700,
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              cursor: canAdd ? 'pointer' : 'not-allowed',
-              fontFamily: 'Helvetica, Arial, sans-serif',
-              transition: 'background 0.2s ease',
-            }}
-          >
-            {added ? '✓ Added to cart' : 'Add to cart'}
-          </button>
-
-          {!canAdd && (
-            <p
+          <div style={{ paddingTop: '40px' }}>
+            <div
               style={{
-                fontSize: '11px',
-                color: 'rgba(255,255,255,0.3)',
-                marginTop: '8px',
-                letterSpacing: '0.04em',
+                fontSize: '10px',
+                fontWeight: 700,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: v.accentSecondary,
+                marginBottom: '10px',
               }}
             >
-              {product.sizes[0] !== 'One Size' && !selectedSize
-                ? 'Select a size to continue.'
-                : product.requiresStaffName && !staffName.trim()
-                ? 'Enter a staff name to continue.'
-                : ''}
-            </p>
-          )}
-
-          {added && (
-            <a
-              href={`/portal/${slug}/cart`}
+              {categoryName}
+            </div>
+            <h1
               style={{
-                display: 'block',
-                textAlign: 'center',
-                marginTop: '12px',
-                fontSize: '11px',
+                fontSize: 'clamp(26px, 2.8vw, 36px)',
+                fontWeight: 800,
+                letterSpacing: '-0.03em',
+                color: v.ink,
+                lineHeight: 1.05,
+                marginBottom: '16px',
+              }}
+            >
+              {product.name}
+            </h1>
+            <p
+              style={{
+                fontSize: '15px',
+                color: v.inkMuted,
+                lineHeight: 1.65,
+                marginBottom: '28px',
+                borderTop: `1px solid ${v.border}`,
+                paddingTop: '20px',
+              }}
+            >
+              {product.description}
+            </p>
+
+            {product.colours && product.colours.length > 0 && (
+              <div style={{ marginBottom: '22px' }}>
+                <div style={labelStyle(v)}>Colour</div>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '10px' }}>
+                  {product.colours.map((colour) => (
+                    <button
+                      key={colour.name}
+                      type="button"
+                      onClick={() => setSelectedColour(colour.name)}
+                      style={{
+                        minHeight: '44px',
+                        padding: '0 16px',
+                        background: selectedColour === colour.name ? selBg : 'transparent',
+                        color: selectedColour === colour.name ? v.ink : v.inkMuted,
+                        border: `1px solid ${selectedColour === colour.name ? selBorder : v.border}`,
+                        fontSize: '11px',
+                        fontWeight: 700,
+                        letterSpacing: '0.06em',
+                        textTransform: 'uppercase',
+                        cursor: 'pointer',
+                        fontFamily: 'Helvetica, Arial, sans-serif',
+                        borderRadius: '4px',
+                      }}
+                    >
+                      {colour.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {product.sizes.length > 0 && product.sizes[0] !== 'One Size' && (
+              <div style={{ marginBottom: '22px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={labelStyle(v)}>Size</div>
+                  {hasSizeGuide && (
+                    <button
+                      type="button"
+                      onClick={() => setShowSizeChart(true)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: v.accent,
+                        fontSize: '10px',
+                        fontWeight: 700,
+                        letterSpacing: '0.12em',
+                        textTransform: 'uppercase',
+                        cursor: 'pointer',
+                        fontFamily: 'Helvetica, Arial, sans-serif',
+                        padding: '8px 0',
+                        minHeight: '44px',
+                      }}
+                    >
+                      Size chart
+                    </button>
+                  )}
+                </div>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '10px' }}>
+                  {product.sizes.map((size) => (
+                    <button
+                      key={size}
+                      type="button"
+                      onClick={() => setSelectedSize(size)}
+                      style={{
+                        minHeight: '44px',
+                        minWidth: '44px',
+                        padding: '0 14px',
+                        background: selectedSize === size ? selBg : 'transparent',
+                        color: selectedSize === size ? v.ink : v.inkMuted,
+                        border: `1px solid ${selectedSize === size ? selBorder : v.border}`,
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        letterSpacing: '0.06em',
+                        cursor: 'pointer',
+                        fontFamily: 'Helvetica, Arial, sans-serif',
+                        borderRadius: '4px',
+                      }}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {product.requiresStaffName && (
+              <div style={{ marginBottom: '22px' }}>
+                <div style={labelStyle(v)}>Staff name</div>
+                <input
+                  type="text"
+                  value={staffName}
+                  onChange={(e) => setStaffName(e.target.value)}
+                  placeholder="e.g. Jordan Smith"
+                  style={{
+                    width: '100%',
+                    minHeight: '48px',
+                    background: v.panelElevated,
+                    border: `1px solid ${v.border}`,
+                    color: v.ink,
+                    fontSize: '15px',
+                    padding: '12px 14px',
+                    outline: 'none',
+                    fontFamily: 'Helvetica, Arial, sans-serif',
+                    boxSizing: 'border-box',
+                    borderRadius: '4px',
+                    marginTop: '10px',
+                  }}
+                />
+              </div>
+            )}
+
+            <div style={{ marginBottom: '24px' }}>
+              <div style={labelStyle(v)}>Quantity</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 0, marginTop: '10px' }}>
+                <button type="button" onClick={() => setQty((q) => Math.max(1, q - 1))} style={qtyBtnStyle(v)}>
+                  −
+                </button>
+                <div
+                  style={{
+                    minWidth: '52px',
+                    height: '48px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: v.panelElevated,
+                    border: `1px solid ${v.border}`,
+                    borderLeft: 'none',
+                    borderRight: 'none',
+                    fontSize: '15px',
+                    fontWeight: 700,
+                    color: v.ink,
+                  }}
+                >
+                  {qty}
+                </div>
+                <button type="button" onClick={() => setQty((q) => q + 1)} style={qtyBtnStyle(v)}>
+                  +
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleAdd}
+              disabled={!canAdd}
+              style={{
+                width: '100%',
+                minHeight: '52px',
+                background: added ? v.accentSecondary : canAdd ? v.accent : `${v.accent}33`,
+                color: '#fff',
+                border: 'none',
+                padding: '0 16px',
+                fontSize: '12px',
                 fontWeight: 700,
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                color: '#b8f400',
-                textDecoration: 'none',
+                cursor: canAdd ? 'pointer' : 'not-allowed',
+                fontFamily: 'Helvetica, Arial, sans-serif',
+                borderRadius: '4px',
+                boxShadow: added ? `inset 3px 0 0 ${v.limeSpot}` : undefined,
               }}
             >
-              View cart →
-            </a>
-          )}
+              {added ? ui.addedToShortlist : ui.addToShortlist}
+            </button>
+
+            {!canAdd && (
+              <p
+                style={{
+                  fontSize: '13px',
+                  color: v.inkFaint,
+                  marginTop: '10px',
+                }}
+              >
+                {product.sizes[0] !== 'One Size' && !selectedSize
+                  ? 'Select a size to continue.'
+                  : product.requiresStaffName && !staffName.trim()
+                    ? 'Enter a staff name to continue.'
+                    : ''}
+              </p>
+            )}
+
+            {added && (
+              <a
+                href={`/portal/${slug}/cart`}
+                style={{
+                  display: 'block',
+                  textAlign: 'center',
+                  marginTop: '14px',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  color: v.accent,
+                  textDecoration: 'none',
+                  minHeight: '44px',
+                  lineHeight: '44px',
+                }}
+              >
+                {ui.viewShortlist} →
+              </a>
+            )}
+          </div>
         </div>
       </div>
-    </div>
     </>
   )
 }
 
-const labelStyle: React.CSSProperties = {
-  fontSize: '9px',
-  fontWeight: 700,
-  letterSpacing: '0.2em',
-  textTransform: 'uppercase',
-  color: 'rgba(255,255,255,0.45)',
-  marginBottom: '10px',
-  fontFamily: 'Helvetica, Arial, sans-serif',
+function labelStyle(v: PortalVisualTokens): CSSProperties {
+  return {
+    fontSize: '10px',
+    fontWeight: 700,
+    letterSpacing: '0.18em',
+    textTransform: 'uppercase',
+    color: v.inkFaint,
+    marginBottom: '0',
+    fontFamily: 'Helvetica, Arial, sans-serif',
+  }
 }
 
-const qtyBtnStyle: React.CSSProperties = {
-  width: '40px',
-  height: '40px',
-  background: '#0d0d0d',
-  border: '1px solid rgba(255,255,255,0.08)',
-  color: '#f5f5f0',
-  fontSize: '18px',
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  fontFamily: 'Helvetica, Arial, sans-serif',
+function qtyBtnStyle(v: PortalVisualTokens): CSSProperties {
+  return {
+    width: '48px',
+    height: '48px',
+    background: v.panelElevated,
+    border: `1px solid ${v.border}`,
+    color: v.ink,
+    fontSize: '18px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontFamily: 'Helvetica, Arial, sans-serif',
+  }
+}
+
+function metaPill(v: PortalVisualTokens): CSSProperties {
+  return {
+    fontSize: '12px',
+    fontWeight: 700,
+    color: v.ink,
+    padding: '10px 14px',
+    borderRadius: '999px',
+    border: `1px solid ${v.border}`,
+    background: v.panelElevated,
+  }
 }

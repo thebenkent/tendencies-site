@@ -1,29 +1,32 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type CSSProperties } from 'react'
 import { useCart } from './CartContext'
 import SizeChartModal from './SizeChartModal'
-import type { PortalProduct, PortalCategory } from '@/lib/portal/types'
-
-const BORDER = 'rgba(255,255,255,0.07)'
-const LIME = '#b8f400'
-const IMG_BG = '#f2f1ed'
+import type { PortalProduct, PortalCategory, PortalVisualTokens, PortalUiCopy } from '@/lib/portal/types'
+import { resolvePortalUiCopy } from '@/lib/portal/visual'
+import type { ClientPortalConfig } from '@/lib/portal/types'
 
 function fmt(cents: number) {
   return new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD' }).format(cents / 100)
 }
 
+type Ui = Required<PortalUiCopy>
+
 export default function ProductOrderCard({
   product,
   category,
   slug,
-  accentColor,
+  visual: v,
+  config,
 }: {
   product: PortalProduct
   category: PortalCategory
   slug: string
-  accentColor: string
+  visual: PortalVisualTokens
+  config: ClientPortalConfig
 }) {
+  const ui: Ui = resolvePortalUiCopy(config)
   const { addItem } = useCart()
 
   const [selectedColour, setSelectedColour] = useState(product.colours?.[0]?.name ?? '')
@@ -42,21 +45,14 @@ export default function ProductOrderCard({
 
   const hasSizeGuide = !!(product.sizeChart || product.measureGuide)
 
-  const decorationMeta = [
-    product.decorationMethod !== 'None' ? product.decorationMethod : null,
-    `${product.leadWeeks[0]}–${product.leadWeeks[1]}wk lead`,
-  ]
-    .filter(Boolean)
-    .join(' · ')
+  const leadLabel = `${product.leadWeeks[0]}–${product.leadWeeks[1]} wk`
 
   function handleAdd() {
     if (!canAdd) return
     addItem({
       productId: product.id,
       categoryId: product.categoryId,
-      productName: selectedColour
-        ? `${product.name} — ${selectedColour}`
-        : product.name,
+      productName: selectedColour ? `${product.name} — ${selectedColour}` : product.name,
       categoryName: category.name,
       size: selectedSize || product.sizes[0] || 'One Size',
       colour: selectedColour || undefined,
@@ -67,6 +63,9 @@ export default function ProductOrderCard({
     setAdded(true)
     setTimeout(() => setAdded(false), 2500)
   }
+
+  const selBorder = v.accent
+  const selBg = `${v.accent}22`
 
   return (
     <>
@@ -79,21 +78,26 @@ export default function ProductOrderCard({
 
       <div
         style={{
-          background: '#0e0e0e',
-          border: `1px solid ${BORDER}`,
+          background: v.panel,
+          border: `1px solid ${v.border}`,
           display: 'flex',
           flexDirection: 'column',
           fontFamily: 'Helvetica, Arial, sans-serif',
+          borderRadius: '6px',
+          overflow: 'hidden',
         }}
       >
-        {/* Image */}
-        <div
+        <a
+          href={`/portal/${slug}/${category.slug}/${product.slug}`}
           style={{
             position: 'relative',
-            aspectRatio: '1/1',
+            aspectRatio: '1 / 1.12',
+            minHeight: '240px',
             overflow: 'hidden',
-            background: IMG_BG,
+            background: v.imageWell,
             flexShrink: 0,
+            display: 'block',
+            textDecoration: 'none',
           }}
         >
           <img
@@ -105,108 +109,84 @@ export default function ProductOrderCard({
               width: '100%',
               height: '100%',
               objectFit: 'contain',
-              padding: '24px',
+              padding: '20px',
               transition: 'opacity 0.18s ease',
             }}
           />
 
-          {/* Badges */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '14px',
-              left: '14px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '6px',
-              alignItems: 'flex-start',
-            }}
-          >
-            {product.sku && (
-              <span
-                style={{
-                  fontSize: '9px',
-                  fontWeight: 700,
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  color: '#f5f5f0',
-                  background: 'rgba(8,8,8,0.82)',
-                  padding: '5px 10px',
-                  border: `1px solid rgba(255,255,255,0.1)`,
-                }}
-              >
-                {product.sku}
-              </span>
-            )}
-            {product.requiresStaffName && (
-              <span
-                style={{
-                  fontSize: '9px',
-                  fontWeight: 700,
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  color: LIME,
-                  background: 'rgba(8,8,8,0.82)',
-                  padding: '5px 10px',
-                  border: '1px solid rgba(184,244,0,0.22)',
-                }}
-              >
-                Personalised
-              </span>
-            )}
-          </div>
-        </div>
+          {product.requiresStaffName && (
+            <span
+              style={{
+                position: 'absolute',
+                top: '14px',
+                left: '14px',
+                fontSize: '9px',
+                fontWeight: 700,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: v.ink,
+                background: 'rgba(26,36,54,0.88)',
+                padding: '8px 12px',
+                border: `1px solid ${v.accentSecondary}`,
+                borderRadius: '2px',
+              }}
+            >
+              Personalised
+            </span>
+          )}
+        </a>
 
-        {/* Body */}
         <div
           style={{
-            padding: '24px',
+            padding: '22px 22px 24px',
             flex: 1,
             display: 'flex',
             flexDirection: 'column',
-            gap: '0',
+            gap: 0,
           }}
         >
-          {/* Product title + price */}
-          <div style={{ marginBottom: '20px' }}>
+          <div style={{ marginBottom: '18px' }}>
             <div
               style={{
                 fontSize: '10px',
                 fontWeight: 700,
-                letterSpacing: '0.2em',
+                letterSpacing: '0.18em',
                 textTransform: 'uppercase',
-                color: accentColor,
-                marginBottom: '6px',
+                color: v.inkFaint,
+                marginBottom: '8px',
               }}
             >
               {category.name}
             </div>
-            <div
+            <a
+              href={`/portal/${slug}/${category.slug}/${product.slug}`}
               style={{
-                fontSize: '18px',
-                fontWeight: 900,
-                letterSpacing: '-0.025em',
-                textTransform: 'uppercase',
-                color: '#f5f5f0',
-                lineHeight: 1.05,
+                fontSize: '17px',
+                fontWeight: 700,
+                letterSpacing: '-0.02em',
+                color: v.ink,
+                lineHeight: 1.25,
                 marginBottom: '14px',
+                display: 'block',
+                textDecoration: 'none',
               }}
             >
               {product.name}
-            </div>
+            </a>
             <div
               style={{
                 display: 'flex',
-                alignItems: 'baseline',
+                alignItems: 'center',
                 justifyContent: 'space-between',
-                gap: '8px',
+                gap: '12px',
+                flexWrap: 'wrap',
               }}
             >
               <span
                 style={{
                   fontSize: '22px',
-                  fontWeight: 900,
-                  color: '#f5f5f0',
+                  fontWeight: 800,
+                  color: v.ink,
                   letterSpacing: '-0.02em',
                 }}
               >
@@ -214,69 +194,48 @@ export default function ProductOrderCard({
               </span>
               <span
                 style={{
-                  fontSize: '10px',
-                  color: 'rgba(255,255,255,0.3)',
-                  letterSpacing: '0.06em',
-                  whiteSpace: 'nowrap',
-                  textAlign: 'right',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  color: v.inkMuted,
+                  padding: '8px 14px',
+                  borderRadius: '999px',
+                  border: `1px solid ${v.border}`,
+                  background: v.panelElevated,
                 }}
               >
-                {decorationMeta}
+                {leadLabel}
               </span>
             </div>
           </div>
 
-          {/* Colour selector */}
           {product.colours && product.colours.length > 0 && (
             <div
               style={{
-                borderTop: `1px solid ${BORDER}`,
-                paddingTop: '18px',
-                marginBottom: '18px',
+                borderTop: `1px solid ${v.border}`,
+                paddingTop: '16px',
+                marginBottom: '16px',
               }}
             >
-              <div style={labelStyle}>
-                Colour
-                {selectedColour && (
-                  <span
-                    style={{
-                      color: '#f5f5f0',
-                      fontWeight: 600,
-                      marginLeft: '8px',
-                      fontSize: '10px',
-                      letterSpacing: '0.04em',
-                      textTransform: 'none',
-                    }}
-                  >
-                    — {selectedColour}
-                  </span>
-                )}
-              </div>
-              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+              <div style={labelStyle(v)}>Colour</div>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '10px' }}>
                 {product.colours.map((colour) => (
                   <button
                     key={colour.name}
+                    type="button"
                     onClick={() => setSelectedColour(colour.name)}
                     style={{
-                      padding: '7px 14px',
-                      background:
-                        selectedColour === colour.name ? LIME : 'transparent',
-                      color:
-                        selectedColour === colour.name
-                          ? '#080808'
-                          : 'rgba(255,255,255,0.55)',
-                      border: `1px solid ${
-                        selectedColour === colour.name
-                          ? LIME
-                          : 'rgba(255,255,255,0.12)'
-                      }`,
-                      fontSize: '10px',
+                      minHeight: '44px',
+                      padding: '0 16px',
+                      background: selectedColour === colour.name ? selBg : 'transparent',
+                      color: selectedColour === colour.name ? v.ink : v.inkMuted,
+                      border: `1px solid ${selectedColour === colour.name ? selBorder : v.border}`,
+                      fontSize: '11px',
                       fontWeight: 700,
-                      letterSpacing: '0.08em',
+                      letterSpacing: '0.06em',
                       textTransform: 'uppercase',
                       cursor: 'pointer',
                       fontFamily: 'Helvetica, Arial, sans-serif',
-                      transition: 'all 0.15s ease',
+                      borderRadius: '4px',
                     }}
                   >
                     {colour.name}
@@ -286,13 +245,12 @@ export default function ProductOrderCard({
             </div>
           )}
 
-          {/* Size selector */}
           {product.sizes.length > 0 && (
             <div
               style={{
-                borderTop: `1px solid ${BORDER}`,
-                paddingTop: '18px',
-                marginBottom: '18px',
+                borderTop: `1px solid ${v.border}`,
+                paddingTop: '16px',
+                marginBottom: '16px',
               }}
             >
               <div
@@ -300,53 +258,51 @@ export default function ProductOrderCard({
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  marginBottom: '12px',
+                  marginBottom: '10px',
                 }}
               >
-                <div style={labelStyle}>Size</div>
+                <div style={labelStyle(v)}>Size</div>
                 {hasSizeGuide && (
                   <button
+                    type="button"
                     onClick={() => setShowSizeChart(true)}
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: LIME,
-                      fontSize: '9px',
+                      color: v.accent,
+                      fontSize: '10px',
                       fontWeight: 700,
-                      letterSpacing: '0.14em',
+                      letterSpacing: '0.12em',
                       textTransform: 'uppercase',
                       cursor: 'pointer',
                       fontFamily: 'Helvetica, Arial, sans-serif',
-                      padding: '0',
+                      padding: '8px 0',
+                      minHeight: '44px',
                     }}
                   >
-                    Size Chart →
+                    Size chart
                   </button>
                 )}
               </div>
-              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                 {product.sizes.map((size) => (
                   <button
                     key={size}
+                    type="button"
                     onClick={() => setSelectedSize(size)}
                     style={{
-                      padding: '8px 12px',
-                      background: selectedSize === size ? LIME : 'transparent',
-                      color:
-                        selectedSize === size
-                          ? '#080808'
-                          : 'rgba(255,255,255,0.5)',
-                      border: `1px solid ${
-                        selectedSize === size ? LIME : 'rgba(255,255,255,0.1)'
-                      }`,
-                      fontSize: '10px',
+                      minWidth: '44px',
+                      minHeight: '44px',
+                      padding: '0 12px',
+                      background: selectedSize === size ? selBg : 'transparent',
+                      color: selectedSize === size ? v.ink : v.inkMuted,
+                      border: `1px solid ${selectedSize === size ? selBorder : v.border}`,
+                      fontSize: '11px',
                       fontWeight: 700,
-                      letterSpacing: '0.06em',
+                      letterSpacing: '0.05em',
                       cursor: 'pointer',
                       fontFamily: 'Helvetica, Arial, sans-serif',
-                      transition: 'all 0.12s ease',
-                      minWidth: '40px',
-                      textAlign: 'center',
+                      borderRadius: '4px',
                     }}
                   >
                     {size}
@@ -356,16 +312,15 @@ export default function ProductOrderCard({
             </div>
           )}
 
-          {/* Staff name */}
           {product.requiresStaffName && (
             <div
               style={{
-                borderTop: `1px solid ${BORDER}`,
-                paddingTop: '18px',
-                marginBottom: '18px',
+                borderTop: `1px solid ${v.border}`,
+                paddingTop: '16px',
+                marginBottom: '16px',
               }}
             >
-              <div style={labelStyle}>Name for embroidery</div>
+              <div style={labelStyle(v)}>Name for embroidery</div>
               <input
                 type="text"
                 value={staffName}
@@ -373,145 +328,147 @@ export default function ProductOrderCard({
                 placeholder="e.g. Jordan Smith"
                 style={{
                   width: '100%',
-                  background: '#111',
-                  border: `1px solid ${BORDER}`,
-                  color: '#f5f5f0',
-                  fontSize: '13px',
-                  padding: '11px 14px',
+                  minHeight: '48px',
+                  background: v.panelElevated,
+                  border: `1px solid ${v.border}`,
+                  color: v.ink,
+                  fontSize: '15px',
+                  padding: '12px 14px',
                   outline: 'none',
                   fontFamily: 'Helvetica, Arial, sans-serif',
                   boxSizing: 'border-box',
+                  borderRadius: '4px',
+                  marginTop: '10px',
                 }}
               />
             </div>
           )}
 
-          {/* Qty + Add to order */}
           <div
             style={{
-              borderTop: `1px solid ${BORDER}`,
+              borderTop: `1px solid ${v.border}`,
               paddingTop: '18px',
               marginTop: 'auto',
             }}
           >
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'stretch' }}>
-              {/* Qty stepper */}
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'stretch' }}>
               <div
                 style={{
                   display: 'flex',
-                  border: `1px solid ${BORDER}`,
+                  border: `1px solid ${v.border}`,
                   flexShrink: 0,
+                  borderRadius: '4px',
+                  overflow: 'hidden',
                 }}
               >
                 <button
+                  type="button"
                   onClick={() => setQty((q) => Math.max(1, q - 1))}
                   style={{
-                    width: '38px',
+                    width: '48px',
+                    minHeight: '48px',
                     background: 'transparent',
                     border: 'none',
-                    color: 'rgba(255,255,255,0.5)',
-                    fontSize: '18px',
+                    color: v.inkMuted,
+                    fontSize: '20px',
                     cursor: 'pointer',
                     fontFamily: 'Helvetica, Arial, sans-serif',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
                   }}
                 >
                   −
                 </button>
                 <div
                   style={{
-                    width: '42px',
+                    minWidth: '48px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    fontSize: '13px',
+                    fontSize: '14px',
                     fontWeight: 700,
-                    color: '#f5f5f0',
-                    borderLeft: `1px solid ${BORDER}`,
-                    borderRight: `1px solid ${BORDER}`,
+                    color: v.ink,
+                    borderLeft: `1px solid ${v.border}`,
+                    borderRight: `1px solid ${v.border}`,
                   }}
                 >
                   {qty}
                 </div>
                 <button
+                  type="button"
                   onClick={() => setQty((q) => q + 1)}
                   style={{
-                    width: '38px',
+                    width: '48px',
+                    minHeight: '48px',
                     background: 'transparent',
                     border: 'none',
-                    color: 'rgba(255,255,255,0.5)',
-                    fontSize: '18px',
+                    color: v.inkMuted,
+                    fontSize: '20px',
                     cursor: 'pointer',
                     fontFamily: 'Helvetica, Arial, sans-serif',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
                   }}
                 >
                   +
                 </button>
               </div>
 
-              {/* Add button */}
               <button
+                type="button"
                 onClick={handleAdd}
                 disabled={!canAdd}
                 style={{
                   flex: 1,
-                  height: '46px',
-                  background: added ? '#6cba00' : canAdd ? LIME : 'rgba(184,244,0,0.12)',
-                  color: canAdd ? '#080808' : 'rgba(8,8,8,0.35)',
+                  minHeight: '48px',
+                  background: added ? v.accentSecondary : canAdd ? v.accent : `${v.accent}33`,
+                  color: '#fff',
                   border: 'none',
-                  fontSize: '10px',
-                  fontWeight: 800,
-                  letterSpacing: '0.16em',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  letterSpacing: '0.12em',
                   textTransform: 'uppercase',
                   cursor: canAdd ? 'pointer' : 'not-allowed',
                   fontFamily: 'Helvetica, Arial, sans-serif',
-                  transition: 'background 0.2s ease',
+                  borderRadius: '4px',
+                  boxShadow: added ? `inset 3px 0 0 ${v.limeSpot}` : undefined,
                 }}
               >
-                {added ? '✓ Added to Order' : 'Add to Order'}
+                {added ? ui.addedToShortlist : ui.addToShortlist}
               </button>
             </div>
 
-            {/* Validation hint */}
             {!canAdd && (
               <p
                 style={{
-                  fontSize: '10px',
-                  color: 'rgba(255,255,255,0.28)',
-                  marginTop: '10px',
-                  letterSpacing: '0.04em',
+                  fontSize: '12px',
+                  color: v.inkFaint,
+                  marginTop: '12px',
+                  letterSpacing: '0.02em',
                 }}
               >
                 {selectedSize === '' && product.sizes.length > 0
-                  ? 'Select a size to continue'
+                  ? 'Choose a size to add this piece.'
                   : product.requiresStaffName && !staffName.trim()
-                  ? 'Enter a name for embroidery'
-                  : ''}
+                    ? 'Add a name for embroidery.'
+                    : ''}
               </p>
             )}
 
-            {/* View cart */}
             {added && (
               <a
                 href={`/portal/${slug}/cart`}
                 style={{
                   display: 'block',
                   textAlign: 'center',
-                  marginTop: '12px',
-                  fontSize: '10px',
+                  marginTop: '14px',
+                  fontSize: '11px',
                   fontWeight: 700,
-                  letterSpacing: '0.12em',
+                  letterSpacing: '0.1em',
                   textTransform: 'uppercase',
-                  color: LIME,
+                  color: v.accent,
                   textDecoration: 'none',
+                  minHeight: '44px',
+                  lineHeight: '44px',
                 }}
               >
-                View cart →
+                {ui.viewShortlist} →
               </a>
             )}
           </div>
@@ -521,13 +478,13 @@ export default function ProductOrderCard({
   )
 }
 
-const labelStyle: React.CSSProperties = {
-  fontSize: '9px',
-  fontWeight: 700,
-  letterSpacing: '0.2em',
-  textTransform: 'uppercase',
-  color: 'rgba(255,255,255,0.35)',
-  fontFamily: 'Helvetica, Arial, sans-serif',
-  display: 'inline',
-  marginBottom: '12px',
+function labelStyle(v: PortalVisualTokens): CSSProperties {
+  return {
+    fontSize: '10px',
+    fontWeight: 700,
+    letterSpacing: '0.18em',
+    textTransform: 'uppercase',
+    color: v.inkFaint,
+    fontFamily: 'Helvetica, Arial, sans-serif',
+  }
 }

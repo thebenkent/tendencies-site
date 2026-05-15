@@ -2,6 +2,7 @@
 
 import { useCart } from './CartContext'
 import type { ClientPortalConfig } from '@/lib/portal/types'
+import { resolvePortalUiCopy, resolvePortalVisual } from '@/lib/portal/visual'
 
 export default function PortalHeader({
   config,
@@ -11,14 +12,16 @@ export default function PortalHeader({
   slug: string
 }) {
   const { itemCount } = useCart()
+  const v = resolvePortalVisual(config)
+  const ui = resolvePortalUiCopy(config)
 
   return (
     <div
       style={{
-        background: '#0a0a0a',
-        borderBottom: '1px solid rgba(255,255,255,0.07)',
-        padding: '0 32px',
-        height: '52px',
+        background: v.headerBg,
+        borderBottom: `1px solid ${v.border}`,
+        padding: '0 24px',
+        minHeight: '56px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -34,22 +37,23 @@ export default function PortalHeader({
           alignItems: 'center',
           gap: '14px',
           textDecoration: 'none',
+          minHeight: '48px',
         }}
       >
         {config.logo?.type === 'image' ? (
           <img
             src={config.logo.src}
             alt={config.logo.alt}
-            style={{ maxHeight: '44px', width: 'auto', display: 'block' }}
+            style={{ maxHeight: '40px', width: 'auto', display: 'block' }}
           />
         ) : (
           <span
             style={{
               fontSize: '11px',
               fontWeight: 900,
-              letterSpacing: '0.22em',
+              letterSpacing: '0.2em',
               textTransform: 'uppercase',
-              color: config.accentColor,
+              color: v.accent,
               fontFamily: 'Helvetica, Arial, sans-serif',
             }}
           >
@@ -59,55 +63,59 @@ export default function PortalHeader({
         <span
           style={{
             width: '1px',
-            height: '14px',
-            background: 'rgba(255,255,255,0.12)',
+            height: '16px',
+            background: v.border,
           }}
         />
         <span
           style={{
-            fontSize: '9px',
+            fontSize: '10px',
             fontWeight: 700,
-            letterSpacing: '0.18em',
+            letterSpacing: '0.16em',
             textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.3)',
+            color: v.inkFaint,
             fontFamily: 'Helvetica, Arial, sans-serif',
           }}
         >
-          Uniform Portal
+          {config.portalTitle}
         </span>
       </a>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
         <a
           href={`/portal/${slug}/cart`}
           style={{
-            display: 'flex',
+            display: 'inline-flex',
             alignItems: 'center',
-            gap: '8px',
+            gap: '10px',
             textDecoration: 'none',
             fontSize: '11px',
             fontWeight: 700,
-            letterSpacing: '0.12em',
+            letterSpacing: '0.1em',
             textTransform: 'uppercase',
-            color: itemCount > 0 ? '#b8f400' : 'rgba(255,255,255,0.45)',
+            color: itemCount > 0 ? v.accent : v.inkMuted,
             transition: 'color 0.2s ease',
             fontFamily: 'Helvetica, Arial, sans-serif',
+            minHeight: '48px',
+            padding: '0 8px',
           }}
         >
-          <span>Cart</span>
+          <span>{ui.cartNavLabel}</span>
           {itemCount > 0 && (
             <span
               style={{
-                background: '#b8f400',
-                color: '#080808',
-                fontSize: '9px',
-                fontWeight: 900,
-                width: '18px',
-                height: '18px',
-                borderRadius: '50%',
+                background: v.accent,
+                color: '#fff',
+                fontSize: '10px',
+                fontWeight: 800,
+                minWidth: '22px',
+                height: '22px',
+                padding: '0 6px',
+                borderRadius: '999px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                boxShadow: `0 0 0 2px ${v.limeSpot}`,
               }}
             >
               {itemCount}
@@ -117,13 +125,15 @@ export default function PortalHeader({
 
         <span
           style={{
-            fontSize: '8px',
+            fontSize: '9px',
             fontWeight: 700,
-            letterSpacing: '0.18em',
+            letterSpacing: '0.16em',
             textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.18)',
+            color: v.inkFaint,
             fontFamily: 'Helvetica, Arial, sans-serif',
+            display: 'none',
           }}
+          className="portal-header-powered"
         >
           Powered by Tendencies
         </span>

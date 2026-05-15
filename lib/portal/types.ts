@@ -72,6 +72,41 @@ export type PortalLogo =
   | { type: 'image'; src: string; alt: string }
   | { type: 'text'; text: string }
 
+/** Optional per-client palette; see `lib/portal/visual.ts` defaults. */
+export type PortalVisualTokens = {
+  canvas: string
+  /** Alternating section background (e.g. warm off-white). */
+  warmSection: string
+  panel: string
+  panelElevated: string
+  ink: string
+  inkMuted: string
+  inkFaint: string
+  border: string
+  imageWell: string
+  accent: string
+  accentSecondary: string
+  limeSpot: string
+  headerBg: string
+  warmInk: string
+  warmInkMuted: string
+  warmBorder: string
+  cardOnWarm: string
+}
+
+export type PortalUiCopy = {
+  heroPrimaryCta?: string
+  heroSecondaryCta?: string
+  collectionEyebrow?: string
+  collectionViewAll?: string
+  categoryIntroEyebrow?: string
+  categoryIntroTitle?: string
+  addToShortlist?: string
+  addedToShortlist?: string
+  viewShortlist?: string
+  cartNavLabel?: string
+}
+
 export type ClientPortalConfig = {
   slug: string
   clientName: string
@@ -80,6 +115,8 @@ export type ClientPortalConfig = {
   logoText?: string
   logoUrl?: string
   accentColor: string
+  visualTokens?: Partial<PortalVisualTokens>
+  uiCopy?: PortalUiCopy
   hero: {
     image?: string
     tagline: string
