@@ -99,6 +99,8 @@ export type PortalUiCopy = {
   heroSecondaryCta?: string
   collectionEyebrow?: string
   collectionViewAll?: string
+  /** Micro-CTA on homepage featured kit cards (links to PDP). */
+  featuredPieceCta?: string
   categoryIntroEyebrow?: string
   categoryIntroTitle?: string
   addToShortlist?: string

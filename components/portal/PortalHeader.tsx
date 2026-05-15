@@ -108,14 +108,14 @@ export default function PortalHeader({
                 color: '#fff',
                 fontSize: '10px',
                 fontWeight: 800,
-                minWidth: '22px',
-                height: '22px',
+                minWidth: '24px',
+                height: '24px',
                 padding: '0 6px',
                 borderRadius: '999px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: `0 0 0 2px ${v.limeSpot}`,
+                boxShadow: `0 0 0 2px ${v.headerBg}, 0 0 0 3px ${v.accent}66`,
               }}
             >
               {itemCount}

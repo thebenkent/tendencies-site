@@ -20,74 +20,59 @@ export default async function PortalHomePage({
     <div style={{ background: v.canvas, minHeight: 'calc(100vh - 64px)', fontFamily: 'Helvetica, Arial, sans-serif' }}>
       <PortalHeader config={config} slug={slug} />
 
-      {/* Hero — minimal above the fold */}
+      {/* Hero — proposal-style, light above-the-fold chrome */}
       <div
         className="portal-px portal-hero"
         style={{
-          padding: '72px 64px 64px',
-          maxWidth: '1200px',
+          padding: '56px 64px 48px',
+          maxWidth: '1120px',
           margin: '0 auto',
         }}
       >
-        <div
+        <p
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-            marginBottom: '22px',
-            flexWrap: 'wrap',
+            fontSize: '11px',
+            fontWeight: 600,
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            color: v.inkMuted,
+            margin: '0 0 28px',
+            maxWidth: '520px',
+            lineHeight: 1.5,
           }}
         >
-          <span
-            style={{
-              fontSize: '10px',
-              fontWeight: 700,
-              letterSpacing: '0.22em',
-              textTransform: 'uppercase',
-              color: v.inkFaint,
-            }}
-          >
-            {config.clientName}
+          <span style={{ color: v.ink }}>{config.clientName}</span>
+          <span style={{ color: v.inkFaint, margin: '0 0.65em' }} aria-hidden>
+            ·
           </span>
-          <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: v.limeSpot }} aria-hidden />
-          <span
-            style={{
-              fontSize: '10px',
-              fontWeight: 700,
-              letterSpacing: '0.22em',
-              textTransform: 'uppercase',
-              color: v.accent,
-            }}
-          >
-            {config.portalTitle}
-          </span>
-        </div>
+          <span style={{ color: v.accent }}>{config.portalTitle}</span>
+        </p>
         <h1
           style={{
-            fontSize: 'clamp(36px, 5.5vw, 64px)',
+            fontSize: 'clamp(34px, 5vw, 56px)',
             fontWeight: 800,
-            letterSpacing: '-0.035em',
+            letterSpacing: '-0.038em',
             color: v.ink,
-            lineHeight: 1.02,
-            marginBottom: '22px',
-            maxWidth: '14ch',
+            lineHeight: 1.05,
+            margin: '0 0 20px',
+            maxWidth: '18ch',
           }}
         >
           {config.hero.tagline}
         </h1>
         <p
           style={{
-            fontSize: '17px',
+            fontSize: 'clamp(16px, 1.35vw, 18px)',
             color: v.inkMuted,
-            lineHeight: 1.65,
-            maxWidth: '560px',
-            marginBottom: '36px',
+            lineHeight: 1.6,
+            maxWidth: '540px',
+            margin: '0 0 32px',
           }}
         >
           {config.hero.subtitle}
         </p>
 
-        <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
           <a
             href="#recommended-kits"
             className="portal-hero-primary-cta"
@@ -95,16 +80,16 @@ export default async function PortalHomePage({
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              minHeight: '48px',
-              padding: '0 28px',
+              minHeight: '52px',
+              padding: '0 32px',
               background: v.accent,
               color: '#fff',
               fontSize: '11px',
               fontWeight: 700,
-              letterSpacing: '0.12em',
+              letterSpacing: '0.14em',
               textTransform: 'uppercase',
               textDecoration: 'none',
-              borderRadius: '2px',
+              borderRadius: '3px',
             }}
           >
             {ui.heroPrimaryCta}
@@ -115,17 +100,17 @@ export default async function PortalHomePage({
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              minHeight: '48px',
-              padding: '0 24px',
+              minHeight: '52px',
+              padding: '0 28px',
               background: 'transparent',
-              color: v.inkMuted,
+              color: v.ink,
               border: `1px solid ${v.border}`,
               fontSize: '11px',
               fontWeight: 700,
-              letterSpacing: '0.1em',
+              letterSpacing: '0.12em',
               textTransform: 'uppercase',
               textDecoration: 'none',
-              borderRadius: '2px',
+              borderRadius: '3px',
             }}
           >
             {ui.heroSecondaryCta}
@@ -149,8 +134,8 @@ export default async function PortalHomePage({
                 key={collection.id}
                 className="portal-px"
                 style={{
-                  padding: '72px 64px 80px',
-                  maxWidth: '1200px',
+                  padding: '64px 64px 72px',
+                  maxWidth: '1120px',
                   margin: '0 auto',
                   borderBottom: idx < config.featuredCollections!.length - 1 ? `1px solid ${v.warmBorder}` : 'none',
                 }}
@@ -158,44 +143,44 @@ export default async function PortalHomePage({
                 <div
                   style={{
                     display: 'flex',
-                    alignItems: 'flex-end',
+                    alignItems: 'flex-start',
                     justifyContent: 'space-between',
-                    gap: '28px',
-                    marginBottom: '36px',
+                    gap: '32px',
+                    marginBottom: '40px',
                     flexWrap: 'wrap',
                   }}
                 >
-                  <div style={{ maxWidth: '640px' }}>
+                  <div style={{ maxWidth: '640px', flex: '1 1 320px' }}>
                     <div
                       style={{
                         fontSize: '10px',
                         fontWeight: 700,
                         letterSpacing: '0.22em',
                         textTransform: 'uppercase',
-                        color: v.accentSecondary,
-                        marginBottom: '12px',
+                        color: v.accent,
+                        marginBottom: '14px',
                       }}
                     >
                       {ui.collectionEyebrow}
                     </div>
                     <h2
                       style={{
-                        fontSize: 'clamp(26px, 3vw, 40px)',
+                        fontSize: 'clamp(24px, 2.8vw, 36px)',
                         fontWeight: 800,
                         letterSpacing: '-0.03em',
                         color: v.warmInk,
                         lineHeight: 1.08,
-                        marginBottom: '12px',
+                        margin: '0 0 14px',
                       }}
                     >
                       {collection.title}
                     </h2>
                     <p
                       style={{
-                        fontSize: '15px',
+                        fontSize: '16px',
                         color: v.warmInkMuted,
                         margin: 0,
-                        lineHeight: 1.6,
+                        lineHeight: 1.65,
                       }}
                     >
                       {collection.subtitle}
@@ -203,21 +188,27 @@ export default async function PortalHomePage({
                   </div>
                   <a
                     href={`/portal/${slug}/${collection.categorySlug}`}
-                    className="portal-view-cat-link"
+                    className="portal-view-cat-link portal-kit-outline-cta"
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
+                      justifyContent: 'center',
                       gap: '8px',
                       fontSize: '11px',
                       fontWeight: 700,
-                      letterSpacing: '0.1em',
+                      letterSpacing: '0.12em',
                       textTransform: 'uppercase',
-                      color: v.accent,
+                      color: v.warmInk,
                       textDecoration: 'none',
                       whiteSpace: 'nowrap',
                       flexShrink: 0,
-                      minHeight: '44px',
-                    }}
+                      minHeight: '48px',
+                      padding: '0 22px',
+                      border: `1px solid ${v.warmBorder}`,
+                      borderRadius: '3px',
+                      background: v.cardOnWarm,
+                      '--portal-accent': v.accent,
+                    } as React.CSSProperties}
                   >
                     {ui.collectionViewAll} →
                   </a>
@@ -235,9 +226,9 @@ export default async function PortalHomePage({
                         display: 'flex',
                         flexDirection: 'column',
                         textDecoration: 'none',
-                        borderRadius: '4px',
+                        borderRadius: '8px',
                         overflow: 'hidden',
-                        boxShadow: '0 12px 40px rgba(28,39,56,0.06)',
+                        boxShadow: '0 14px 44px rgba(28,39,56,0.07)',
                         '--portal-accent': v.accent,
                       } as React.CSSProperties}
                     >
@@ -256,21 +247,21 @@ export default async function PortalHomePage({
                           src={product.image}
                           alt={product.name}
                           style={{
-                            width: '88%',
-                            height: '88%',
+                            width: '86%',
+                            height: '86%',
                             objectFit: 'contain',
                           }}
                         />
                       </div>
-                      <div style={{ padding: '22px 22px 24px' }}>
+                      <div style={{ padding: '20px 22px 22px', display: 'flex', flexDirection: 'column', flex: 1 }}>
                         <div
                           style={{
-                            fontSize: '16px',
+                            fontSize: '17px',
                             fontWeight: 700,
                             letterSpacing: '-0.02em',
                             color: v.warmInk,
-                            lineHeight: 1.25,
-                            marginBottom: '16px',
+                            lineHeight: 1.3,
+                            marginBottom: '18px',
                           }}
                         >
                           {product.name}
@@ -278,34 +269,48 @@ export default async function PortalHomePage({
                         <div
                           style={{
                             display: 'flex',
-                            alignItems: 'center',
+                            alignItems: 'baseline',
                             justifyContent: 'space-between',
-                            gap: '12px',
+                            gap: '14px',
                             flexWrap: 'wrap',
+                            marginTop: 'auto',
+                            paddingTop: '4px',
+                            borderTop: `1px solid ${v.warmBorder}`,
                           }}
                         >
+                          <div>
+                            <span
+                              style={{
+                                fontSize: '20px',
+                                fontWeight: 800,
+                                color: v.warmInk,
+                                letterSpacing: '-0.02em',
+                              }}
+                            >
+                              ${(product.priceCents / 100).toFixed(2)}
+                            </span>
+                            <span
+                              style={{
+                                display: 'block',
+                                fontSize: '12px',
+                                fontWeight: 600,
+                                color: v.warmInkMuted,
+                                marginTop: '4px',
+                              }}
+                            >
+                              Lead {product.leadWeeks[0]}–{product.leadWeeks[1]} weeks
+                            </span>
+                          </div>
                           <span
                             style={{
-                              fontSize: '18px',
-                              fontWeight: 800,
-                              color: v.warmInk,
-                              letterSpacing: '-0.02em',
+                              fontSize: '10px',
+                              fontWeight: 700,
+                              letterSpacing: '0.14em',
+                              textTransform: 'uppercase',
+                              color: v.accent,
                             }}
                           >
-                            ${(product.priceCents / 100).toFixed(2)}
-                          </span>
-                          <span
-                            style={{
-                              fontSize: '11px',
-                              fontWeight: 600,
-                              color: v.warmInkMuted,
-                              padding: '6px 12px',
-                              borderRadius: '999px',
-                              border: `1px solid ${v.warmBorder}`,
-                              background: 'rgba(255,255,255,0.5)',
-                            }}
-                          >
-                            {product.leadWeeks[0]}–{product.leadWeeks[1]} wk
+                            {ui.featuredPieceCta} →
                           </span>
                         </div>
                       </div>
@@ -324,8 +329,8 @@ export default async function PortalHomePage({
           className="portal-px"
           style={{
             borderTop: `1px solid ${v.border}`,
-            padding: '80px 64px',
-            maxWidth: '1200px',
+            padding: '72px 64px',
+            maxWidth: '1120px',
             margin: '0 auto',
           }}
         >
@@ -379,7 +384,7 @@ export default async function PortalHomePage({
                       style={{
                         width: '3px',
                         height: '36px',
-                        background: `linear-gradient(180deg, ${v.accent} 0%, ${v.accentSecondary} 100%)`,
+                        background: `linear-gradient(180deg, ${v.accent} 0%, ${v.accentSecondary} 72%, ${v.limeSpot} 100%)`,
                         flexShrink: 0,
                         marginTop: '2px',
                         borderRadius: '2px',
@@ -428,12 +433,12 @@ export default async function PortalHomePage({
       >
         <div
           style={{
-            maxWidth: '1200px',
+            maxWidth: '1120px',
             margin: '0 auto',
-            padding: '72px 64px 96px',
+            padding: '64px 64px 88px',
           }}
         >
-          <div style={{ marginBottom: '44px', maxWidth: '520px' }}>
+          <div style={{ marginBottom: '48px', maxWidth: '560px' }}>
             <div
               style={{
                 fontSize: '10px',
@@ -513,7 +518,7 @@ export default async function PortalHomePage({
                       fontWeight: 700,
                       letterSpacing: '0.18em',
                       textTransform: 'uppercase',
-                      color: v.limeSpot,
+                      color: v.accent,
                       marginBottom: '10px',
                     }}
                   >
@@ -552,9 +557,9 @@ export default async function PortalHomePage({
         style={{
           borderTop: `1px solid ${v.border}`,
           background: v.canvas,
-          maxWidth: '1200px',
+          maxWidth: '1120px',
           margin: '0 auto',
-          padding: '52px 64px 64px',
+          padding: '48px 64px 64px',
           display: 'grid',
           gridTemplateColumns: '1fr auto',
           gap: '48px',
@@ -582,7 +587,7 @@ export default async function PortalHomePage({
                 width: '6px',
                 height: '6px',
                 borderRadius: '50%',
-                background: v.limeSpot,
+                background: v.accent,
                 flexShrink: 0,
               }}
               aria-hidden

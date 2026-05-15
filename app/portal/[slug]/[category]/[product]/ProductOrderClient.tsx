@@ -150,13 +150,13 @@ export default function ProductOrderClient({
             <div
               style={{
                 position: 'relative',
-                aspectRatio: '1 / 1.05',
-                minHeight: '280px',
+                aspectRatio: '1 / 1.06',
+                minHeight: 'min(85vw, 420px)',
                 overflow: 'hidden',
                 background: v.imageWell,
                 border: `1px solid ${v.border}`,
-                marginTop: '40px',
-                borderRadius: '6px',
+                marginTop: '32px',
+                borderRadius: '8px',
               }}
             >
               <img
@@ -166,14 +166,14 @@ export default function ProductOrderClient({
                   width: '100%',
                   height: '100%',
                   objectFit: 'contain',
-                  padding: '28px',
+                  padding: '24px',
                 }}
               />
             </div>
 
             <div
               style={{
-                marginTop: '16px',
+                marginTop: '20px',
                 display: 'flex',
                 flexWrap: 'wrap',
                 gap: '10px',
@@ -183,7 +183,7 @@ export default function ProductOrderClient({
                 {fmt(product.priceCents)} <span style={{ fontWeight: 500, opacity: 0.85 }}>incl. GST</span>
               </span>
               <span style={metaPill(v)}>
-                {product.leadWeeks[0]}–{product.leadWeeks[1]} wk
+                Lead {product.leadWeeks[0]}–{product.leadWeeks[1]} weeks
               </span>
               {product.decorationMethod && product.decorationMethod !== 'None' && (
                 <span style={metaPill(v)}>{product.decorationMethod}</span>
@@ -388,7 +388,7 @@ export default function ProductOrderClient({
                 cursor: canAdd ? 'pointer' : 'not-allowed',
                 fontFamily: 'Helvetica, Arial, sans-serif',
                 borderRadius: '4px',
-                boxShadow: added ? `inset 3px 0 0 ${v.limeSpot}` : undefined,
+                boxShadow: added ? `inset 3px 0 0 ${v.accent}` : undefined,
               }}
             >
               {added ? ui.addedToShortlist : ui.addToShortlist}

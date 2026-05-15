@@ -26,6 +26,7 @@ export const PORTAL_UI_DEFAULT: Required<PortalUiCopy> = {
   heroSecondaryCta: 'Contact account manager',
   collectionEyebrow: 'Featured collection',
   collectionViewAll: 'View full category',
+  featuredPieceCta: 'View details',
   categoryIntroEyebrow: 'Complete range',
   categoryIntroTitle: 'All categories',
   addToShortlist: 'Add to order',
