@@ -6,8 +6,9 @@ const HIREPOOL: ClientPortalConfig = {
   portalTitle: 'Brand Room',
 
   logo: {
-    type: 'text',
-    text: 'HIREPOOL',
+    type: 'image',
+    src: '/hirepool/hirepool-logo.svg',
+    alt: 'Hirepool',
   },
 
   accentColor: '#F4611C',
