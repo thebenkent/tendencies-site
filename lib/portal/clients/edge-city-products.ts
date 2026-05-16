@@ -34,7 +34,7 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     name: "Hi Vis Squad Singlet",
     categoryId: "hi-vis-essentials",
     description: "Class D/N rated hi-vis singlet. 100% polyester 175 GSM. Moisture-wicking mesh panels for maximum breathability on hot days.",
-    image: "/edge-city/placeholder.png",
+    image: "/edge-city/syzmik-hi-vis-ZH239.png",
     sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
     colours: [
         { name: "Yellow/Navy" },
@@ -681,7 +681,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         name: "Nylon Bucket Hat",
         categoryId: "headwear",
         description: "Nylon wide brim bucket hat. Lightweight and packable. Ideal for sun protection on site.",
-        image: "/edge-city/placeholder.png",
+        image: "/edge-city/as-colour-1174.png",
         sizes: ["One Size"],
         colours: [
             { name: "Navy" },

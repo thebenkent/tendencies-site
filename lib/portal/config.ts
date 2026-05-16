@@ -1,10 +1,10 @@
 import type { ClientPortalConfig } from './types'
 import EDGE_CITY from './clients/edge-city'
+import HIREPOOL from './clients/hirepool'
 
 const CLIENTS: Record<string, ClientPortalConfig> = {
   'edge-city': EDGE_CITY,
-  // Add new clients here:
-  // 'client-slug': CLIENT_CONFIG,
+  'hirepool': HIREPOOL,
 }
 
 export function getPortalConfig(slug: string): ClientPortalConfig | null {

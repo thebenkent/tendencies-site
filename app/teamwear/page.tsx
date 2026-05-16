@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const ENTRY_PATHS = [
   {
@@ -82,12 +83,12 @@ const SECTORS = [
 
 const RECENT_KITS = [
   {
-    image: "teamwear-te-atatu1.jpg",
+    image: "/teamwear-te-atatu1.jpg",
     title: "Te Atatu Netball",
     meta: "Netball · 50 units · 5 week turnaround",
   },
   {
-    image: "teamwear-pride-tee1.jpg",
+    image: "/teamwear-pride-tee1.jpg",
     title: "Festival staff kit",
     meta: "Event · 50 units · 2 week turnaround",
   },
@@ -124,19 +125,6 @@ const FAQS = [
     a: "Yes. Your design and store stay active. Reorders skip the sampling step and typically ship in 4–5 weeks.",
   },
 ];
-
-function useIsMobile(breakpoint = 900) {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth <= breakpoint);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, [breakpoint]);
-
-  return isMobile;
-}
 
 function SecondaryButton({
   href,
@@ -302,7 +290,7 @@ export default function TeamwearPage() {
                 color: "rgba(255,255,255,0.56)",
               }}
             >
-              Aotearoa · Season 2026
+              Aotearoa · New Zealand
             </div>
           </div>
 
@@ -399,9 +387,6 @@ export default function TeamwearPage() {
             <PrimaryButton href="/teamwear/start">Start a Kit</PrimaryButton>
             <SecondaryButton href="/teamwear/styles">
               Browse Styles
-            </SecondaryButton>
-            <SecondaryButton href="/teamwear/stores">
-              Find Your Team Store
             </SecondaryButton>
           </div>
         </div>

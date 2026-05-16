@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 const NAV_LINKS = [
@@ -18,6 +20,7 @@ const FONT = "Helvetica, Arial, sans-serif";
 export default function Header() {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!isMobile) setOpen(false);
@@ -63,7 +66,7 @@ export default function Header() {
           boxSizing: "border-box",
         }}
       >
-        <a
+        <Link
           href="/"
           style={{
             display: "inline-flex",
@@ -81,7 +84,7 @@ export default function Header() {
               display: "block",
             }}
           />
-        </a>
+        </Link>
 
         {!isMobile && (
           <nav
@@ -92,30 +95,37 @@ export default function Header() {
               flexShrink: 0,
             }}
           >
-            {NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                style={{
-                  fontFamily: FONT,
-                  fontSize: "12px",
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.62)",
-                  textDecoration: "none",
-                  whiteSpace: "nowrap",
-                  transition: "color 0.2s ease",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.color = "rgba(255,255,255,0.62)")
-                }
-              >
-                {link.label}
-              </a>
-            ))}
+            {NAV_LINKS.map((link) => {
+              const isActive =
+                pathname === link.href ||
+                pathname.startsWith(link.href + "/");
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  style={{
+                    fontFamily: FONT,
+                    fontSize: "12px",
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                    color: isActive ? "#ffffff" : "rgba(255,255,255,0.62)",
+                    textDecoration: "none",
+                    whiteSpace: "nowrap",
+                    transition: "color 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.color = isActive
+                      ? "#ffffff"
+                      : "rgba(255,255,255,0.62)")
+                  }
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
 
-            <a
+            <Link
               href="/start-a-project"
               style={{
                 display: "inline-flex",
@@ -140,7 +150,7 @@ export default function Header() {
               onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
             >
               Start a Project
-            </a>
+            </Link>
           </nav>
         )}
 
@@ -213,46 +223,51 @@ export default function Header() {
           }}
         >
           <nav style={{ flex: 1 }}>
-            {NAV_LINKS.map((link, i) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={closeDrawer}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  padding: "20px 0",
-                  borderBottom: "1px solid rgba(255,255,255,0.06)",
-                  color: "#fff",
-                  textDecoration: "none",
-                  fontFamily: FONT,
-                  fontSize: "clamp(22px, 6vw, 28px)",
-                  fontWeight: 800,
-                  letterSpacing: "-0.02em",
-                  textTransform: "uppercase",
-                  opacity: open ? 1 : 0,
-                  transform: open ? "translateX(0)" : "translateX(20px)",
-                  transition: `opacity 0.28s ease ${
-                    i * 0.045 + 0.08
-                  }s, transform 0.28s ease ${i * 0.045 + 0.08}s`,
-                }}
-              >
-                {link.label}
-                <span
+            {NAV_LINKS.map((link, i) => {
+              const isActive =
+                pathname === link.href ||
+                pathname.startsWith(link.href + "/");
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={closeDrawer}
                   style={{
-                    color: "rgba(255,255,255,0.2)",
-                    fontSize: "18px",
-                    flexShrink: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "20px 0",
+                    borderBottom: "1px solid rgba(255,255,255,0.06)",
+                    color: isActive ? ACCENT : "#fff",
+                    textDecoration: "none",
+                    fontFamily: FONT,
+                    fontSize: "clamp(22px, 6vw, 28px)",
+                    fontWeight: 800,
+                    letterSpacing: "-0.02em",
+                    textTransform: "uppercase",
+                    opacity: open ? 1 : 0,
+                    transform: open ? "translateX(0)" : "translateX(20px)",
+                    transition: `opacity 0.28s ease ${
+                      i * 0.045 + 0.08
+                    }s, transform 0.28s ease ${i * 0.045 + 0.08}s`,
                   }}
                 >
-                  →
-                </span>
-              </a>
-            ))}
+                  {link.label}
+                  <span
+                    style={{
+                      color: isActive ? ACCENT : "rgba(255,255,255,0.2)",
+                      fontSize: "18px",
+                      flexShrink: 0,
+                    }}
+                  >
+                    →
+                  </span>
+                </Link>
+              );
+            })}
           </nav>
 
-          <a
+          <Link
             href="/start-a-project"
             onClick={closeDrawer}
             style={{
@@ -281,7 +296,7 @@ export default function Header() {
             }}
           >
             Start a Project
-          </a>
+          </Link>
         </div>
       )}
     </>

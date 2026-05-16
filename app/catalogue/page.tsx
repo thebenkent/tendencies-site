@@ -4,6 +4,14 @@ import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import EditorialSection from "@/components/catalogue/EditorialSection";
+import {
+  FEATURED,
+  APPAREL,
+  PROMOTIONAL,
+  CUSTOM,
+  HERO_PRODUCTS,
+  type CatalogueProduct,
+} from "./data";
 
 // ---------------------------------------------------------------------------
 // Reveal wrapper
@@ -38,136 +46,8 @@ function Reveal({
   );
 }
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-type Product = {
-  name: string;
-  type: string;
-  line: string;
-  image: string;
-  href: string;
-  bestFor?: string;
-};
-
-// ---------------------------------------------------------------------------
-// Data
-// ---------------------------------------------------------------------------
-const FEATURED: Product[] = [
-  {
-    name: "Union Mug",
-    type: "Promotional",
-    line: "The mug you actually keep.",
-    image: "/cat-union-mug.jpg",
-    href: "/catalogue/union-mug",
-    bestFor: "staff, cafés & premium merch",
-  },
-  {
-    name: "Resin Keychains",
-    type: "Custom Product",
-    line: "Small. Keeps.",
-    image: "/cat-keychain.jpg",
-    href: "/catalogue/resin-keychains",
-    bestFor: "campaigns & events",
-  },
-  {
-    name: "Insulated Bottle",
-    type: "Everyday Carry",
-    line: "Steel. On the desk every day.",
-    image: "/cat-bottle.jpg",
-    href: "/catalogue/insulated-bottle",
-    bestFor: "staff & premium gifting",
-  },
-];
-
-const APPAREL: Product[] = [
-  {
-    name: "Premium Hoodie",
-    type: "Apparel",
-    line: "Proper weight. Clean cut.",
-    image: "/cat-hoodie.jpg",
-    href: "/catalogue/premium-hoodie",
-    bestFor: "staff & retail",
-  },
-  {
-    name: "Overshirt",
-    type: "Apparel",
-    line: "Midweight. Finishes the fit.",
-    image: "/cat-overshirt.jpg",
-    href: "/catalogue/overshirt",
-    bestFor: "campaigns & staff",
-  },
-  {
-    name: "Structured Cap",
-    type: "Headwear",
-    line: "Low profile. Clean finish.",
-    image: "/cat-cap.jpg",
-    href: "/catalogue/structured-cap",
-    bestFor: "campaigns & events",
-  },
-];
-
-const PROMOTIONAL: Product[] = [
-  {
-    name: "Union Mug",
-    type: "Promotional",
-    line: "The mug you actually keep.",
-    image: "/cat-union-mug.jpg",
-    href: "/catalogue/union-mug",
-    bestFor: "staff, cafés & premium merch",
-  },
-  {
-    name: "Promo Ball",
-    type: "Promotional",
-    line: "Simple. Gets used.",
-    image: "/cat-ball.jpg",
-    href: "/catalogue/promo-ball",
-    bestFor: "campaigns & retail",
-  },
-  {
-    name: "Enamel Pin",
-    type: "Promotional",
-    line: "Hard enamel. Keepable.",
-    image: "/cat-pin.jpg",
-    href: "/catalogue/enamel-pin",
-    bestFor: "events & gifting",
-  },
-  {
-    name: "Hardcover Notebook",
-    type: "Stationery",
-    line: "Thick stock. Brand-debossed.",
-    image: "/cat-notebook.jpg",
-    href: "/catalogue/hardcover-notebook",
-    bestFor: "corporate & staff",
-  },
-];
-
-const CUSTOM: Product[] = [
-  {
-    name: "Performance Jersey",
-    type: "Teamwear",
-    line: "Technical. Built for the team.",
-    image: "/cat-jersey.jpg",
-    href: "/catalogue/performance-jersey",
-    bestFor: "sports & staff",
-  },
-  {
-    name: "Training Shell",
-    type: "Teamwear",
-    line: "Weatherproof. Sideline to office.",
-    image: "/cat-jacket.jpg",
-    href: "/catalogue/training-shell",
-    bestFor: "staff & outdoors",
-  },
-  {
-    name: "Moulded Resin",
-    type: "Custom Product",
-    line: "One-off or run. Anything goes.",
-    image: "/cat-resin.jpg",
-    href: "/catalogue/moulded-resin",
-    bestFor: "campaigns & retail",
-  },
-];
+// CatalogueProduct imported from ./data — type alias for component props
+type Product = CatalogueProduct;
 
 // ---------------------------------------------------------------------------
 // PrimaryButton
@@ -745,36 +625,6 @@ function CategoryBlock({
 // ---------------------------------------------------------------------------
 // Auto-rotating hero
 // ---------------------------------------------------------------------------
-const HERO_PRODUCTS = [
-  {
-    key: "hoodie",
-    image: "/cat-hoodie.jpg",
-    exclusivity: "Apparel · Weighted and considered.",
-    title: ["Premium", "Hoodie"],
-    body: "Weighted fleece, considered cut. The kind of hoodie that earns its place in a regular rotation — not the lost-and-found box.",
-    href: "/catalogue/premium-hoodie",
-    cta: "View Product",
-  },
-  {
-    key: "tee",
-    image: "/cat-tee-heavy.jpg",
-    exclusivity: "Apparel · Built to last.",
-    title: ["Heavyweight", "Tee"],
-    body: "Premium weight, considered cut. The kind of tee that earns its place in a regular rotation — not the bin.",
-    href: "/catalogue/heavyweight-tee",
-    cta: "View Product",
-  },
-  {
-    key: "bottle",
-    image: "/cat-bottle.jpg",
-    exclusivity: "Everyday Carry · Staff & retail.",
-    title: ["Insulated", "Bottle"],
-    body: "Premium steel, daily use. The product that sits on the desk and does the brand work without asking.",
-    href: "/catalogue/insulated-bottle",
-    cta: "View Product",
-  },
-];
-
 function RotatingHero({ isMobile }: { isMobile: boolean }) {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -1412,7 +1262,7 @@ export default function CataloguePage() {
               title="Apparel"
               subtitle="Designed to be worn. Not issued."
               items={APPAREL}
-              viewAllHref="/catalogue/apparel"
+              viewAllHref="#apparel"
               isMobile={isMobile}
             />
           </Reveal>
@@ -1425,7 +1275,7 @@ export default function CataloguePage() {
               title="Promotional"
               subtitle="Simple, useful, and built to be kept."
               items={PROMOTIONAL}
-              viewAllHref="/catalogue/promotional"
+              viewAllHref="#promotional"
               isMobile={isMobile}
             />
           </Reveal>
@@ -1438,7 +1288,7 @@ export default function CataloguePage() {
               title="Custom"
               subtitle="If it doesn&apos;t exist, we make it."
               items={CUSTOM}
-              viewAllHref="/catalogue/custom"
+              viewAllHref="#custom"
               isMobile={isMobile}
             />
           </Reveal>
