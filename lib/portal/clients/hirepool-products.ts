@@ -3,7 +3,7 @@
 // Run: npm run import:hirepool
 // Source: data/hirepool-products.csv (or .xlsx)
 //         data/hirepool-order-history.csv (or .xlsx)
-// Generated: 2026-05-17T01:28:08.031Z
+// Generated: 2026-05-17T10:51:36.163Z
 // ─────────────────────────────────────────────────────────────────────────────
 
 import type { PortalCategory, PortalProduct, PortalFeaturedCollection } from '../types'
@@ -31,6 +31,7 @@ export const HIREPOOL_PRODUCTS: PortalProduct[] = [
     moq: 12,
     material: "Moisture-wicking polyester performance fabric",
     tags: ["polo","uniform","staff","branch","counter"],
+    accountManagerNote: "We've used this polo across several branch openings. The fabric holds up well in yard and counter environments, and the embroidery spec is pre-approved with your current Hirepool artwork.",
     orderHistory: [
       { orderRef: "HP-2024-001", date: "2024-03-15", qty: 48, unitPriceCents: 5200, totalCents: 249600, client: "Hirepool Ltd", notes: "Branch rollout — Auckland North region. 12 branches x 4 polos." },
       { orderRef: "HP-2025-003", date: "2025-07-01", qty: 24, unitPriceCents: 5200, totalCents: 124800, client: "Hirepool Ltd", notes: "Mid-year top-up — replacement polos for wear." },
@@ -58,6 +59,7 @@ export const HIREPOOL_PRODUCTS: PortalProduct[] = [
     moq: 12,
     material: "240gsm 100% cotton",
     tags: ["tee","t-shirt","staff","yard","event","merch"],
+    accountManagerNote: "A step above standard event merchandise — the 240gsm weight means staff actually keep it. Works well for yard team and trade events.",
     orderHistory: [
       { orderRef: "HP-2024-002", date: "2024-06-20", qty: 60, unitPriceCents: 3800, totalCents: 228000, client: "Hirepool Ltd", notes: "Staff tee top-up for summer. Nationwide." },
     ],
@@ -84,6 +86,7 @@ export const HIREPOOL_PRODUCTS: PortalProduct[] = [
     moq: 12,
     material: "Midweight brushed-back fleece",
     tags: ["hoodie","fleece","midlayer","staff","office","site"],
+    accountManagerNote: "The item staff keep beyond the uniform. Embroidery placement is already set up from previous orders.",
     orderHistory: [
       { orderRef: "HP-2025-001", date: "2025-02-14", qty: 40, unitPriceCents: 8900, totalCents: 356000, client: "Hirepool Ltd", notes: "Winter layering programme — nationwide branch issue." },
     ],
@@ -109,6 +112,7 @@ export const HIREPOOL_PRODUCTS: PortalProduct[] = [
     moq: 12,
     material: "Heavy cotton twill",
     tags: ["cap","hat","headwear","staff","uniform"],
+    accountManagerNote: "Pairs directly with the polo for a complete counter or customer-facing look.",
     orderHistory: [
       { orderRef: "HP-2024-001", date: "2024-03-15", qty: 48, unitPriceCents: 4200, totalCents: 201600, client: "Hirepool Ltd", notes: "Same branch rollout order — caps to match." },
       { orderRef: "HP-2025-003", date: "2025-07-01", qty: 24, unitPriceCents: 4200, totalCents: 100800, client: "Hirepool Ltd", notes: "Cap top-up to match polo order." },
@@ -135,6 +139,7 @@ export const HIREPOOL_PRODUCTS: PortalProduct[] = [
     moq: 20,
     material: "Polyester mesh and solid fabric, Class D rated",
     tags: ["hi-vis","vest","safety","site","yard","class-d","compliance"],
+    accountManagerNote: "Class D rated. We've used this across multiple Hirepool site programmes. Back panel screen-print spec is confirmed.",
     orderHistory: [
       { orderRef: "HP-2024-001", date: "2024-03-15", qty: 96, unitPriceCents: 3600, totalCents: 345600, client: "Hirepool Ltd", notes: "Same branch rollout — 8 vests per branch." },
       { orderRef: "HP-2025-001", date: "2025-02-14", qty: 50, unitPriceCents: 3600, totalCents: 180000, client: "Hirepool Ltd", notes: "Additional vests for new yard hires." },
@@ -161,6 +166,7 @@ export const HIREPOOL_PRODUCTS: PortalProduct[] = [
     moq: 12,
     material: "Cotton/polyester blend with reflective tape",
     tags: ["hi-vis","shirt","long-sleeve","safety","site","branch"],
+    accountManagerNote: "The preferred shirt for branch and depot staff year-round. Cotton/poly blend stays cool in summer and layers well in winter.",
     orderHistory: [
       { orderRef: "HP-2024-003", date: "2024-09-10", qty: 36, unitPriceCents: 6500, totalCents: 234000, client: "Hirepool Ltd", notes: "Site operations refresh — yard and depot staff." },
     ],
@@ -185,6 +191,7 @@ export const HIREPOOL_PRODUCTS: PortalProduct[] = [
     moq: 12,
     material: "Performance polyester with contrast reflective tape",
     tags: ["hi-vis","polo","safety","counter","customer-facing","branch"],
+    accountManagerNote: "The right choice where staff need to look professional in front of customers while still meeting site requirements.",
   },
   {
     id: "hp-kit-branch-01",
@@ -205,6 +212,7 @@ export const HIREPOOL_PRODUCTS: PortalProduct[] = [
     moq: 1,
     material: "Mixed — per items in kit",
     tags: ["kit","branch","opening","polo","tee","hi-vis","cap"],
+    accountManagerNote: "We've built this kit for previous Hirepool branch openings. Quantities and sizing are easy to adjust per headcount.",
   },
   {
     id: "hp-kit-counter-01",
@@ -225,6 +233,7 @@ export const HIREPOOL_PRODUCTS: PortalProduct[] = [
     moq: 1,
     material: "Mixed — per items in kit",
     tags: ["kit","counter","staff","polo","tee","cap","top-up"],
+    accountManagerNote: "A quicker, lighter kit for topping up an existing branch. Polo, tee, and cap — the three most-reordered items.",
   },
   {
     id: "hp-pack-trade-01",
@@ -245,6 +254,7 @@ export const HIREPOOL_PRODUCTS: PortalProduct[] = [
     moq: 10,
     material: "Mixed — tee / cap / bottle / tote",
     tags: ["trade","pack","welcome","customer","bottle","tote","key-account"],
+    accountManagerNote: "Works well for new trade account onboarding. The items (tee, cap, bottle) are all things that get used on-site — not forgotten in a drawer.",
     orderHistory: [
       { orderRef: "HP-2024-004", date: "2024-11-01", qty: 25, unitPriceCents: 8500, totalCents: 212500, client: "Hirepool Ltd", notes: "Trade account welcome packs for key account drive Q4." },
     ],
@@ -268,6 +278,7 @@ export const HIREPOOL_PRODUCTS: PortalProduct[] = [
     moq: 10,
     material: "Mixed — vest / cap / notebook",
     tags: ["contractor","pack","hi-vis","safety","notebook","site"],
+    accountManagerNote: "Safety-forward branded pack for contractors on or around Hirepool equipment. The hi-vis vest keeps them visible; the notebook and cap keep Hirepool visible.",
   },
   {
     id: "hp-event-tee-01",
@@ -291,6 +302,7 @@ export const HIREPOOL_PRODUCTS: PortalProduct[] = [
     moq: 25,
     material: "200gsm cotton/poly blend",
     tags: ["tee","event","trade-day","campaign","expo","activation"],
+    accountManagerNote: "Heavier weight than standard promo. Previous Fieldays activation used a similar spec — people kept it.",
     orderHistory: [
       { orderRef: "HP-2025-002", date: "2025-04-22", qty: 150, unitPriceCents: 3800, totalCents: 570000, client: "Hirepool Ltd", notes: "Fieldays 2025 activation — campaign print front and back." },
     ],
@@ -314,6 +326,7 @@ export const HIREPOOL_PRODUCTS: PortalProduct[] = [
     moq: 50,
     material: "Mixed — vest / tote / notebook",
     tags: ["safety","campaign","pack","hi-vis","tote","notebook","seasonal","compliance"],
+    accountManagerNote: "Configurable per campaign. We've run similar packs for seasonal safety pushes — easy to reorder with updated artwork each time.",
   },
 ]
 
@@ -347,6 +360,7 @@ export const HIREPOOL_CATEGORIES: PortalCategory[] = [
         moq: 12,
         material: "Moisture-wicking polyester performance fabric",
         tags: ["polo","uniform","staff","branch","counter"],
+        accountManagerNote: "We've used this polo across several branch openings. The fabric holds up well in yard and counter environments, and the embroidery spec is pre-approved with your current Hirepool artwork.",
         orderHistory: [
           { orderRef: "HP-2024-001", date: "2024-03-15", qty: 48, unitPriceCents: 5200, totalCents: 249600, client: "Hirepool Ltd", notes: "Branch rollout — Auckland North region. 12 branches x 4 polos." },
           { orderRef: "HP-2025-003", date: "2025-07-01", qty: 24, unitPriceCents: 5200, totalCents: 124800, client: "Hirepool Ltd", notes: "Mid-year top-up — replacement polos for wear." },
@@ -374,6 +388,7 @@ export const HIREPOOL_CATEGORIES: PortalCategory[] = [
         moq: 12,
         material: "240gsm 100% cotton",
         tags: ["tee","t-shirt","staff","yard","event","merch"],
+        accountManagerNote: "A step above standard event merchandise — the 240gsm weight means staff actually keep it. Works well for yard team and trade events.",
         orderHistory: [
           { orderRef: "HP-2024-002", date: "2024-06-20", qty: 60, unitPriceCents: 3800, totalCents: 228000, client: "Hirepool Ltd", notes: "Staff tee top-up for summer. Nationwide." },
         ],
@@ -400,6 +415,7 @@ export const HIREPOOL_CATEGORIES: PortalCategory[] = [
         moq: 12,
         material: "Midweight brushed-back fleece",
         tags: ["hoodie","fleece","midlayer","staff","office","site"],
+        accountManagerNote: "The item staff keep beyond the uniform. Embroidery placement is already set up from previous orders.",
         orderHistory: [
           { orderRef: "HP-2025-001", date: "2025-02-14", qty: 40, unitPriceCents: 8900, totalCents: 356000, client: "Hirepool Ltd", notes: "Winter layering programme — nationwide branch issue." },
         ],
@@ -425,6 +441,7 @@ export const HIREPOOL_CATEGORIES: PortalCategory[] = [
         moq: 12,
         material: "Heavy cotton twill",
         tags: ["cap","hat","headwear","staff","uniform"],
+        accountManagerNote: "Pairs directly with the polo for a complete counter or customer-facing look.",
         orderHistory: [
           { orderRef: "HP-2024-001", date: "2024-03-15", qty: 48, unitPriceCents: 4200, totalCents: 201600, client: "Hirepool Ltd", notes: "Same branch rollout order — caps to match." },
           { orderRef: "HP-2025-003", date: "2025-07-01", qty: 24, unitPriceCents: 4200, totalCents: 100800, client: "Hirepool Ltd", notes: "Cap top-up to match polo order." },
@@ -460,6 +477,7 @@ export const HIREPOOL_CATEGORIES: PortalCategory[] = [
         moq: 20,
         material: "Polyester mesh and solid fabric, Class D rated",
         tags: ["hi-vis","vest","safety","site","yard","class-d","compliance"],
+        accountManagerNote: "Class D rated. We've used this across multiple Hirepool site programmes. Back panel screen-print spec is confirmed.",
         orderHistory: [
           { orderRef: "HP-2024-001", date: "2024-03-15", qty: 96, unitPriceCents: 3600, totalCents: 345600, client: "Hirepool Ltd", notes: "Same branch rollout — 8 vests per branch." },
           { orderRef: "HP-2025-001", date: "2025-02-14", qty: 50, unitPriceCents: 3600, totalCents: 180000, client: "Hirepool Ltd", notes: "Additional vests for new yard hires." },
@@ -486,6 +504,7 @@ export const HIREPOOL_CATEGORIES: PortalCategory[] = [
         moq: 12,
         material: "Cotton/polyester blend with reflective tape",
         tags: ["hi-vis","shirt","long-sleeve","safety","site","branch"],
+        accountManagerNote: "The preferred shirt for branch and depot staff year-round. Cotton/poly blend stays cool in summer and layers well in winter.",
         orderHistory: [
           { orderRef: "HP-2024-003", date: "2024-09-10", qty: 36, unitPriceCents: 6500, totalCents: 234000, client: "Hirepool Ltd", notes: "Site operations refresh — yard and depot staff." },
         ],
@@ -510,6 +529,7 @@ export const HIREPOOL_CATEGORIES: PortalCategory[] = [
         moq: 12,
         material: "Performance polyester with contrast reflective tape",
         tags: ["hi-vis","polo","safety","counter","customer-facing","branch"],
+        accountManagerNote: "The right choice where staff need to look professional in front of customers while still meeting site requirements.",
       },
     ],
   },
@@ -539,6 +559,7 @@ export const HIREPOOL_CATEGORIES: PortalCategory[] = [
         moq: 1,
         material: "Mixed — per items in kit",
         tags: ["kit","branch","opening","polo","tee","hi-vis","cap"],
+        accountManagerNote: "We've built this kit for previous Hirepool branch openings. Quantities and sizing are easy to adjust per headcount.",
       },
       {
         id: "hp-kit-counter-01",
@@ -559,6 +580,7 @@ export const HIREPOOL_CATEGORIES: PortalCategory[] = [
         moq: 1,
         material: "Mixed — per items in kit",
         tags: ["kit","counter","staff","polo","tee","cap","top-up"],
+        accountManagerNote: "A quicker, lighter kit for topping up an existing branch. Polo, tee, and cap — the three most-reordered items.",
       },
     ],
   },
@@ -588,6 +610,7 @@ export const HIREPOOL_CATEGORIES: PortalCategory[] = [
         moq: 10,
         material: "Mixed — tee / cap / bottle / tote",
         tags: ["trade","pack","welcome","customer","bottle","tote","key-account"],
+        accountManagerNote: "Works well for new trade account onboarding. The items (tee, cap, bottle) are all things that get used on-site — not forgotten in a drawer.",
         orderHistory: [
           { orderRef: "HP-2024-004", date: "2024-11-01", qty: 25, unitPriceCents: 8500, totalCents: 212500, client: "Hirepool Ltd", notes: "Trade account welcome packs for key account drive Q4." },
         ],
@@ -611,6 +634,7 @@ export const HIREPOOL_CATEGORIES: PortalCategory[] = [
         moq: 10,
         material: "Mixed — vest / cap / notebook",
         tags: ["contractor","pack","hi-vis","safety","notebook","site"],
+        accountManagerNote: "Safety-forward branded pack for contractors on or around Hirepool equipment. The hi-vis vest keeps them visible; the notebook and cap keep Hirepool visible.",
       },
     ],
   },
@@ -643,6 +667,7 @@ export const HIREPOOL_CATEGORIES: PortalCategory[] = [
         moq: 25,
         material: "200gsm cotton/poly blend",
         tags: ["tee","event","trade-day","campaign","expo","activation"],
+        accountManagerNote: "Heavier weight than standard promo. Previous Fieldays activation used a similar spec — people kept it.",
         orderHistory: [
           { orderRef: "HP-2025-002", date: "2025-04-22", qty: 150, unitPriceCents: 3800, totalCents: 570000, client: "Hirepool Ltd", notes: "Fieldays 2025 activation — campaign print front and back." },
         ],
@@ -666,6 +691,7 @@ export const HIREPOOL_CATEGORIES: PortalCategory[] = [
         moq: 50,
         material: "Mixed — vest / tote / notebook",
         tags: ["safety","campaign","pack","hi-vis","tote","notebook","seasonal","compliance"],
+        accountManagerNote: "Configurable per campaign. We've run similar packs for seasonal safety pushes — easy to reorder with updated artwork each time.",
       },
     ],
   },

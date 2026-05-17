@@ -64,6 +64,7 @@ export type PortalProduct = {
   moq?: number
   material?: string
   tags?: string[]
+  accountManagerNote?: string
   orderHistory?: PortalOrderHistoryEntry[]
 }
 

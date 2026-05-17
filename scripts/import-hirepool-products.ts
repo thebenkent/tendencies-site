@@ -238,6 +238,7 @@ function buildProductLiteral(row: Row, orderHistory: OrderRow[]): string {
   const additionalImages = pipe(row.images || '')
   const moq = row.moq?.trim() ? parseInt(row.moq) : undefined
   const material = row.material?.trim()
+  const accountManagerNote = row.account_manager_note?.trim()
 
   const coloursLiteral = colours.length
     ? `[\n        ${colours.map(c => `{ name: ${JSON.stringify(c)} }`).join(',\n        ')},\n      ]`
@@ -252,6 +253,9 @@ function buildProductLiteral(row: Row, orderHistory: OrderRow[]): string {
   const moqLine = moq != null ? `\n    moq: ${moq},` : ''
   const materialLine = material ? `\n    material: ${JSON.stringify(material)},` : ''
   const tagsLine = tags.length ? `\n    tags: ${JSON.stringify(tags)},` : ''
+  const accountManagerNoteLine = accountManagerNote
+    ? `\n    accountManagerNote: ${JSON.stringify(accountManagerNote)},`
+    : ''
 
   const productOrders = orderHistory.filter(o => o.sku === sku)
   const orderHistoryLine = buildOrderHistoryLiteral(productOrders)
@@ -269,7 +273,7 @@ function buildProductLiteral(row: Row, orderHistory: OrderRow[]): string {
     decorationMethod: ${JSON.stringify(decoration)},
     leadWeeks: [${leadMin}, ${leadMax}],
     priceCents: ${priceCents},
-    requiresStaffName: ${requiresStaffName},${moqLine}${materialLine}${tagsLine}${orderHistoryLine}
+    requiresStaffName: ${requiresStaffName},${moqLine}${materialLine}${tagsLine}${accountManagerNoteLine}${orderHistoryLine}
   }`
 }
 

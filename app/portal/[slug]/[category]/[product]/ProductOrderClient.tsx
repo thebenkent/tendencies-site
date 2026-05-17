@@ -10,6 +10,11 @@ function fmt(cents: number) {
   return new Intl.NumberFormat('en-NZ', { style: 'currency', currency: 'NZD' }).format(cents / 100)
 }
 
+function fmtDate(iso: string) {
+  const d = new Date(iso)
+  return d.toLocaleDateString('en-NZ', { day: 'numeric', month: 'short', year: 'numeric' })
+}
+
 export default function ProductOrderClient({
   config,
   product,
@@ -33,9 +38,15 @@ export default function ProductOrderClient({
   const [added, setAdded] = useState(false)
   const [showSizeChart, setShowSizeChart] = useState(false)
 
-  const activeColour = product.colours?.find((c) => c.name === selectedColour)
-  const displayImage = activeColour?.image ?? product.image
+  const galleryImages = [product.image, ...(product.images ?? [])].filter(Boolean)
+  const [activeImage, setActiveImage] = useState(galleryImages[0] ?? product.image)
   const hasSizeGuide = !!(product.sizeChart || product.measureGuide)
+
+  function handleColourSelect(colourName: string) {
+    setSelectedColour(colourName)
+    const colour = product.colours?.find((c) => c.name === colourName)
+    if (colour?.image) setActiveImage(colour.image)
+  }
 
   const canAdd =
     (product.sizes.length === 0 || selectedSize !== '') &&
@@ -160,7 +171,7 @@ export default function ProductOrderClient({
               }}
             >
               <img
-                src={displayImage}
+                src={activeImage}
                 alt={product.name}
                 style={{
                   width: '100%',
@@ -170,6 +181,43 @@ export default function ProductOrderClient({
                 }}
               />
             </div>
+
+            {galleryImages.length > 1 && (
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '8px',
+                  marginTop: '12px',
+                  flexWrap: 'wrap',
+                }}
+              >
+                {galleryImages.map((img, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setActiveImage(img)}
+                    style={{
+                      width: '68px',
+                      height: '68px',
+                      padding: 0,
+                      border: `2px solid ${activeImage === img ? v.accent : v.border}`,
+                      background: v.imageWell,
+                      cursor: 'pointer',
+                      overflow: 'hidden',
+                      borderRadius: '6px',
+                      flexShrink: 0,
+                      transition: 'border-color 0.15s ease',
+                    }}
+                  >
+                    <img
+                      src={img}
+                      alt=""
+                      style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '6px' }}
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
 
             <div
               style={{
@@ -187,6 +235,12 @@ export default function ProductOrderClient({
               </span>
               {product.decorationMethod && product.decorationMethod !== 'None' && (
                 <span style={metaPill(v)}>{product.decorationMethod}</span>
+              )}
+              {product.moq != null && (
+                <span style={metaPill(v)}>From {product.moq} units</span>
+              )}
+              {product.material && (
+                <span style={metaPill(v)}>{product.material}</span>
               )}
             </div>
           </div>
@@ -229,6 +283,45 @@ export default function ProductOrderClient({
               {product.description}
             </p>
 
+            {product.accountManagerNote && (
+              <div
+                style={{
+                  borderLeft: `3px solid ${v.accent}`,
+                  background: v.panelElevated,
+                  padding: '14px 16px',
+                  marginBottom: '28px',
+                  borderRadius: '0 4px 4px 0',
+                }}
+              >
+                <p
+                  style={{
+                    fontSize: '14px',
+                    fontStyle: 'italic',
+                    color: v.inkMuted,
+                    lineHeight: 1.6,
+                    margin: 0,
+                    fontFamily: 'Helvetica, Arial, sans-serif',
+                  }}
+                >
+                  {product.accountManagerNote}
+                </p>
+                <p
+                  style={{
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    color: v.inkFaint,
+                    marginTop: '8px',
+                    marginBottom: 0,
+                    fontFamily: 'Helvetica, Arial, sans-serif',
+                  }}
+                >
+                  From {config.contact.manager}
+                </p>
+              </div>
+            )}
+
             {product.colours && product.colours.length > 0 && (
               <div style={{ marginBottom: '22px' }}>
                 <div style={labelStyle(v)}>Colour</div>
@@ -237,7 +330,7 @@ export default function ProductOrderClient({
                     <button
                       key={colour.name}
                       type="button"
-                      onClick={() => setSelectedColour(colour.name)}
+                      onClick={() => handleColourSelect(colour.name)}
                       style={{
                         minHeight: '44px',
                         padding: '0 16px',
@@ -394,6 +487,53 @@ export default function ProductOrderClient({
               {added ? ui.addedToShortlist : ui.addToShortlist}
             </button>
 
+            <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+              <a
+                href={`mailto:${config.contact.email}?subject=${encodeURIComponent(`Quote request — ${product.name}`)}&body=${encodeURIComponent(`Hi ${config.contact.manager},\n\nI'd like a quote for ${product.name} (SKU: ${product.sku || product.id}).\n\nQty: [your quantity]\nTimeline: [your timeline]`)}`}
+                style={{
+                  flex: 1,
+                  minHeight: '44px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: `1px solid ${v.border}`,
+                  color: v.inkMuted,
+                  background: 'transparent',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  textDecoration: 'none',
+                  borderRadius: '4px',
+                  fontFamily: 'Helvetica, Arial, sans-serif',
+                }}
+              >
+                Request a quote
+              </a>
+              <a
+                href={`mailto:${config.contact.email}?subject=${encodeURIComponent(`Sample request — ${product.name}`)}&body=${encodeURIComponent(`Hi ${config.contact.manager},\n\nI'd like to request a sample of ${product.name} (SKU: ${product.sku || product.id}).\n\nDelivery address: [your address]`)}`}
+                style={{
+                  flex: 1,
+                  minHeight: '44px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: `1px solid ${v.border}`,
+                  color: v.inkMuted,
+                  background: 'transparent',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  textDecoration: 'none',
+                  borderRadius: '4px',
+                  fontFamily: 'Helvetica, Arial, sans-serif',
+                }}
+              >
+                Request a sample
+              </a>
+            </div>
+
             {!canAdd && (
               <p
                 style={{
@@ -432,6 +572,98 @@ export default function ProductOrderClient({
             )}
           </div>
         </div>
+
+        {product.orderHistory && product.orderHistory.length > 0 && (
+          <div style={{ background: v.warmSection, borderTop: `1px solid ${v.warmBorder}` }}>
+            <div
+              className="portal-px"
+              style={{ maxWidth: '1200px', margin: '0 auto', padding: '48px 64px 64px' }}
+            >
+              <div
+                style={{
+                  fontSize: '10px',
+                  fontWeight: 700,
+                  letterSpacing: '0.18em',
+                  textTransform: 'uppercase',
+                  color: v.warmInkMuted,
+                  marginBottom: '24px',
+                  fontFamily: 'Helvetica, Arial, sans-serif',
+                }}
+              >
+                Past orders
+              </div>
+              <div style={{ overflowX: 'auto' }}>
+                <table
+                  style={{
+                    width: '100%',
+                    borderCollapse: 'collapse',
+                    fontSize: '13px',
+                    fontFamily: 'Helvetica, Arial, sans-serif',
+                  }}
+                >
+                  <thead>
+                    <tr style={{ borderBottom: `1px solid ${v.warmBorder}` }}>
+                      {['Date', 'Order ref', 'Qty', 'Unit price', 'Total', 'Notes'].map((col) => (
+                        <th
+                          key={col}
+                          style={{
+                            textAlign: 'left',
+                            fontWeight: 700,
+                            fontSize: '10px',
+                            letterSpacing: '0.12em',
+                            textTransform: 'uppercase',
+                            color: v.warmInkMuted,
+                            paddingBottom: '12px',
+                            paddingRight: '28px',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {col}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {product.orderHistory.map((entry, i) => (
+                      <tr
+                        key={i}
+                        style={{ borderBottom: `1px solid ${v.warmBorder}` }}
+                      >
+                        <td style={{ padding: '14px 28px 14px 0', color: v.warmInk, whiteSpace: 'nowrap', verticalAlign: 'top' }}>
+                          {fmtDate(entry.date)}
+                        </td>
+                        <td
+                          style={{
+                            padding: '14px 28px 14px 0',
+                            color: v.warmInkMuted,
+                            fontFamily: 'monospace',
+                            fontSize: '11px',
+                            whiteSpace: 'nowrap',
+                            verticalAlign: 'top',
+                          }}
+                        >
+                          {entry.orderRef}
+                        </td>
+                        <td style={{ padding: '14px 28px 14px 0', color: v.warmInk, fontWeight: 600, verticalAlign: 'top' }}>
+                          {entry.qty}
+                        </td>
+                        <td style={{ padding: '14px 28px 14px 0', color: v.warmInk, whiteSpace: 'nowrap', verticalAlign: 'top' }}>
+                          {fmt(entry.unitPriceCents)}
+                        </td>
+                        <td style={{ padding: '14px 28px 14px 0', color: v.warmInk, fontWeight: 700, whiteSpace: 'nowrap', verticalAlign: 'top' }}>
+                          {fmt(entry.totalCents)}
+                        </td>
+                        <td style={{ padding: '14px 0 14px 0', color: v.warmInkMuted, maxWidth: '320px', verticalAlign: 'top' }}>
+                          {entry.notes || '—'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   )
