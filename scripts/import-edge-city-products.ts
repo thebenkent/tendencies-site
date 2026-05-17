@@ -13,10 +13,13 @@
  *   sell_price_nzd, requires_staff_name, active
  *
  * Optional columns:
- *   image, collections, buy_price_nzd, material, gender, notes
+ *   image, images, collections, buy_price_nzd, material, gender, notes
  *
- * Pipe-separated list columns:  colours, sizes, collections
+ * Pipe-separated list columns:  colours, sizes, collections, images
  *   e.g.  "Navy|Khaki"   or   "Summer Site Essentials|Winter Site Kit"
+ *   images: "/edge-city/zh320-front.png|/edge-city/zh320-back.png|/edge-city/zh320-yellow.png"
+ *   image:  hero/card image (first thing shown on cards and at top of gallery)
+ *   images: additional gallery images shown as thumbnails on the product page
  *
  * To add a product: add a row to the CSV, run this script, run npm run build.
  * To disable a product without deleting it: set active=false.
@@ -47,27 +50,27 @@ const CATEGORY_META: Record<string, { order: number; description: string; image:
   'hi-vis-essentials': {
     order: 1,
     description: 'Class D/N rated high-visibility wear. Meet site safety standards on day one.',
-    image: '/edge-city/syzmik-hi-vis-zh320.png',
+    image: '/edge-city/syzmik-hi-vis-zh320-hero.png',
   },
   'tees-polos': {
     order: 2,
     description: 'Core workwear tees and polos. Comfortable for long days on site.',
-    image: '/edge-city/syzmik-hi-vis-zh320.png',
+    image: '/edge-city/fashion-biz-p200ms-hero.png',
   },
   'site-shorts': {
     order: 3,
     description: 'Cooling stretch shorts with multiple cargo pockets for site work.',
-    image: '/edge-city/syzmik-hi-vis-zs235-khaki.png',
+    image: '/edge-city/syzmik-shorts-zs235-khaki.png',
   },
   'site-pants': {
     order: 4,
     description: 'Durable work trousers with full pockets and reinforced wear points.',
-    image: '/edge-city/syzmik-hi-vis-zs235-navy.png',
+    image: '/edge-city/syzmik-shorts-zs235-navy.png',
   },
   'hoodies-midlayers': {
     order: 5,
     description: 'Weather protection and layering. Keep crews warm and visible on site.',
-    image: '/edge-city/syzmik-hi-vis-zt467.png',
+    image: '/edge-city/syzmik-hoodie-zt467-hero.png',
   },
   headwear: {
     order: 6,
@@ -178,12 +181,17 @@ function buildProductLiteral(row: Row): string {
   const requiresStaffName = row.requires_staff_name?.toLowerCase() === 'true'
   const image = row.image?.trim()
   const fallbackImage = `/edge-city/placeholder.png`
+  const additionalImages = pipe(row.images || '')
 
   const coloursLiteral = colours.length
     ? `[\n        ${colours.map(c => `{ name: ${JSON.stringify(c)} }`).join(',\n        ')},\n      ]`
     : `[]`
 
   const sizesLiteral = `[${sizes.map(s => JSON.stringify(s)).join(', ')}]`
+
+  const imagesLine = additionalImages.length > 0
+    ? `\n    images: [${additionalImages.map(i => JSON.stringify(i)).join(', ')}],`
+    : ''
 
   return `  {
     id: ${JSON.stringify(id)},
@@ -192,7 +200,7 @@ function buildProductLiteral(row: Row): string {
     name: ${JSON.stringify(name)},
     categoryId: ${JSON.stringify(categoryId)},
     description: ${JSON.stringify(description)},
-    image: ${JSON.stringify(image || fallbackImage)},
+    image: ${JSON.stringify(image || fallbackImage)},${imagesLine}
     sizes: ${sizesLiteral},
     colours: ${coloursLiteral},
     decorationMethod: ${JSON.stringify(decoration)},

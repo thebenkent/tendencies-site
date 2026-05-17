@@ -2,7 +2,7 @@
 // AUTO-GENERATED — do not edit by hand.
 // Run: npm run import:edge-city
 // Source: data/edge-city-products.csv (or .xlsx)
-// Generated: 2026-05-12T05:39:34.455Z
+// Generated: 2026-05-16T01:31:58.441Z
 // ─────────────────────────────────────────────────────────────────────────────
 
 import type { PortalCategory, PortalProduct, PortalFeaturedCollection } from '../types'
@@ -15,7 +15,8 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     name: "Streetworx Tee",
     categoryId: "tees-polos",
     description: "Lightweight cotton tee with modern slim fit and longer curved hem. Available in three colourways.",
-    image: "/edge-city/placeholder.png",
+    image: "/edge-city/syzmik-ZH135-hero.png",
+    images: ["/edge-city/syzmik-ZH135-charcoal.png", "/edge-city/syzmik-ZH135-navy.png", "/edge-city/syzmik-ZH135-petrol-blue"],
     sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
     colours: [
         { name: "Navy" },
@@ -34,7 +35,8 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     name: "Hi Vis Squad Singlet",
     categoryId: "hi-vis-essentials",
     description: "Class D/N rated hi-vis singlet. 100% polyester 175 GSM. Moisture-wicking mesh panels for maximum breathability on hot days.",
-    image: "/edge-city/syzmik-hi-vis-ZH239.png",
+    image: "/edge-city/syzmik-hi-vis-ZH239-hero.png",
+    images: ["/edge-city/syzmik-hi-vis-ZH239-front.png", "/edge-city/syzmik-hi-vis-ZH239-back.png"],
     sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
     colours: [
         { name: "Yellow/Navy" },
@@ -51,7 +53,8 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     name: "Syzmik Hi Vis Polo",
     categoryId: "hi-vis-essentials",
     description: "Class D/N rated hi-vis polo. Moisture management fabric, taped seams, vented back. Staff name embroidered on chest.",
-    image: "/edge-city/syzmik-hi-vis-zh320.png",
+    image: "/edge-city/syzmik-hi-vis-zh320-hero.png",
+    images: ["/edge-city/syzmik-hi-vis-zh320-front.png", "/edge-city/syzmik-hi-vis-zh320-back.png"],
     sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
     colours: [
         { name: "Yellow/Navy" },
@@ -68,7 +71,8 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     name: "Syzmik Hi Vis Spliced Polo",
     categoryId: "hi-vis-essentials",
     description: "Class D/N hi-vis polo with contrast splicing panels. Moisture management, underarm gussets for full mobility. Staff name embroidered on chest.",
-    image: "/edge-city/syzmik-hi-vis-zh415.png",
+    image: "/edge-city/syzmik-hi-vis-zh415-hero.png",
+    images: ["/edge-city/syzmik-hi-vis-zh415-front.png", "/edge-city/syzmik-hi-vis-zh415-back.png"],
     sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
     colours: [
         { name: "Yellow/Navy" },
@@ -102,7 +106,8 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     name: "Balance Short Sleeve Polo",
     categoryId: "tees-polos",
     description: "100% polyester sports interlock. UPF Rating 50+. 155 GSM. Staff name embroidered on chest.",
-    image: "/edge-city/placeholder.png",
+    image: "/edge-city/fashion-biz-p200ms-hero.png",
+    images: ["/edge-city/fashion-biz-p200ms-navy-white-front.png", "/edge-city/fashion-biz-p200ms-navy-white-back.png"],
     sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
     colours: [
         { name: "Navy/Sky" },
@@ -120,7 +125,8 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     name: "Portsea Polo",
     categoryId: "tees-polos",
     description: "Cotton-back polyester polo. 80% polyester / 20% cotton. 180 GSM. Smart appearance for site or office.",
-    image: "/edge-city/placeholder.png",
+    image: "/edge-city/portsea-1321-front.png",
+    images: ["/edge-city/portsea-1321-back.png", "/edge-city/portsea-1321-slate-black.png"],
     sizes: ["8", "10", "12", "14", "16", "18", "20", "22", "24"],
     colours: [
         { name: "Navy/White" },
@@ -137,7 +143,8 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     name: "Essential Stretch Cargo Short",
     categoryId: "site-shorts",
     description: "98% Cotton 2% Elastane 280 GSM. Reinforced seat, multiple cargo pockets. Waist sizes in cm.",
-    image: "/edge-city/syzmik-hi-vis-zs235-khaki.png",
+    image: "/edge-city/syzmik-shorts-zs235-khaki.png",
+    images: ["/edge-city/syzmik-shorts-zs235-navy.png"],
     sizes: ["72", "77", "82", "87", "92", "97", "102", "107", "112", "117", "122", "127", "132"],
     colours: [
         { name: "Navy" },
@@ -155,7 +162,8 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     name: "Rugged Cooling Stretch Short",
     categoryId: "site-shorts",
     description: "98% Cotton 2% Elastane Square Weave Cotton Ripstop 240 GSM. Superior durability for demanding sites.",
-    image: "/edge-city/placeholder.png",
+    image: "/edge-city/ZS607-hero",
+    images: ["/edge-city/ZS607-navy.png", "/edge-city/ZS607-khaki.png", "/edge-city/ZS607-black.png"],
     sizes: ["72", "77", "82", "87", "92", "97", "102", "107", "112", "117", "122", "127", "132"],
     colours: [
         { name: "Navy" },
@@ -173,7 +181,8 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     name: "Womens Essential Stretch Cargo Short",
     categoryId: "site-shorts",
     description: "Women's cut stretch cargo shorts with cooling vents. Reinforced seat, multiple cargo pockets. Waist in cm.",
-    image: "/edge-city/syzmik-hi-vis-zs735-khaki.png",
+    image: "/edge-city/syzmik-shorts-zs735-khaki.png",
+    images: ["/edge-city/syzmik-shorts-zs735-navy.png"],
     sizes: ["6", "8", "10", "12", "14", "16", "18", "20", "22", "24"],
     colours: [
         { name: "Khaki" },
@@ -226,7 +235,8 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     name: "Multi-Pocket Hoodie",
     categoryId: "hoodies-midlayers",
     description: "55% Cotton 45% Polyester 320 GSM. Hi-vis rated warm hoodie. Multiple pockets, drawstring hood, kangaroo pocket.",
-    image: "/edge-city/syzmik-hi-vis-zt467.png",
+    image: "/edge-city/syzmik-hoodie-zt467-hero.png",
+    images: ["/edge-city/syzmik-hoodie-zt467-back.png", "/edge-city/syzmik-hoodie-Charcoal-Black.png", "/edge-city/syzmik-hoodie-Slate-Charcoal.jpeg", "/edge-city/syzmik-hoodie-zt467-navy-charcoal.jpeg"],
     sizes: ["XXS", "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
     colours: [
         { name: "Charcoal/Black" },
@@ -244,6 +254,7 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     categoryId: "hoodies-midlayers",
     description: "100% Polyester Fleece 320 GSM. Segmented reflective tape. Lightweight water resistant shell with warm soft fleece lining.",
     image: "/edge-city/syzmik-hi-vis-zt867.png",
+    images: ["/edge-city/syzmik-hi-vis-zt867-front.png"],
     sizes: ["XXS", "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
     colours: [
         { name: "Yellow" },
@@ -260,7 +271,8 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     name: "XT Performance Pullover Hoodie",
     categoryId: "hoodies-midlayers",
     description: "270 GSM 100% polyester performance fabric. Smart site hoodie for project managers and office-to-site transitions.",
-    image: "/edge-city/placeholder.png",
+    image: "/edge-city/cloke-hoodie-xth-back-aqua-front.png",
+    images: ["/edge-city/cloke-hoodie-xth-black-aqua-back.png", "/edge-city/cloke-hoodie-xth-navy-grey.png", "/edge-city/cloke-hoodie-xth-navy-white.png"],
     sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL"],
     colours: [
         { name: "Navy/Grey" },
@@ -277,7 +289,8 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     name: "Bondi Bucket Hat",
     categoryId: "headwear",
     description: "Premium cotton twill bucket hat with white trim and sweatband. Embroidered club branding.",
-    image: "/edge-city/placeholder.png",
+    image: "/edge-city/trends-bucket-115740-3.png",
+    images: ["/edge-city/trends-bucket-115740-4.png"],
     sizes: ["One Size"],
     colours: [
         { name: "White Sandwich Trim" },
@@ -295,7 +308,8 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     name: "Faded Trucker Cap",
     categoryId: "headwear",
     description: "Structured five panel trucker hat with stylish faded finish. Embroidered logo on front panel.",
-    image: "/edge-city/placeholder.png",
+    image: "/edge-city/trends-trucker-126398-2.png",
+    images: ["/edge-city/trends-trucker-126398-4.png"],
     sizes: ["One Size"],
     colours: [
         { name: "Navy" },
@@ -312,10 +326,13 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     name: "Nylon Bucket Hat",
     categoryId: "headwear",
     description: "Nylon wide brim bucket hat. Lightweight and packable. Ideal for sun protection on site.",
-    image: "/edge-city/placeholder.png",
+    image: "/edge-city/as-colour-1174-hero.png",
+    images: ["/edge-city/as-colour-1174-black.png", "/edge-city/as-colour-1174-navy.png", "/edge-city/as-colour-1174-khaki.png"],
     sizes: ["One Size"],
     colours: [
         { name: "Navy" },
+        { name: "Black" },
+        { name: "Khaki" },
       ],
     decorationMethod: "Embroidery",
     leadWeeks: [2, 3],
@@ -330,7 +347,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
     slug: "hi-vis-essentials",
     name: "Hi-Vis Essentials",
     description: "Class D/N rated high-visibility wear. Meet site safety standards on day one.",
-    image: "/edge-city/syzmik-hi-vis-zh320.png",
+    image: "/edge-city/syzmik-hi-vis-zh320-hero.png",
     products: [
       {
         id: "zh239",
@@ -339,7 +356,8 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         name: "Hi Vis Squad Singlet",
         categoryId: "hi-vis-essentials",
         description: "Class D/N rated hi-vis singlet. 100% polyester 175 GSM. Moisture-wicking mesh panels for maximum breathability on hot days.",
-        image: "/edge-city/placeholder.png",
+        image: "/edge-city/syzmik-hi-vis-ZH239-hero.png",
+        images: ["/edge-city/syzmik-hi-vis-ZH239-front.png", "/edge-city/syzmik-hi-vis-ZH239-back.png"],
         sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
         colours: [
             { name: "Yellow/Navy" },
@@ -356,7 +374,8 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         name: "Syzmik Hi Vis Polo",
         categoryId: "hi-vis-essentials",
         description: "Class D/N rated hi-vis polo. Moisture management fabric, taped seams, vented back. Staff name embroidered on chest.",
-        image: "/edge-city/syzmik-hi-vis-zh320.png",
+        image: "/edge-city/syzmik-hi-vis-zh320-hero.png",
+        images: ["/edge-city/syzmik-hi-vis-zh320-front.png", "/edge-city/syzmik-hi-vis-zh320-back.png"],
         sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
         colours: [
             { name: "Yellow/Navy" },
@@ -373,7 +392,8 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         name: "Syzmik Hi Vis Spliced Polo",
         categoryId: "hi-vis-essentials",
         description: "Class D/N hi-vis polo with contrast splicing panels. Moisture management, underarm gussets for full mobility. Staff name embroidered on chest.",
-        image: "/edge-city/syzmik-hi-vis-zh415.png",
+        image: "/edge-city/syzmik-hi-vis-zh415-hero.png",
+        images: ["/edge-city/syzmik-hi-vis-zh415-front.png", "/edge-city/syzmik-hi-vis-zh415-back.png"],
         sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
         colours: [
             { name: "Yellow/Navy" },
@@ -407,7 +427,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
     slug: "tees-polos",
     name: "Tees & Polos",
     description: "Core workwear tees and polos. Comfortable for long days on site.",
-    image: "/edge-city/syzmik-hi-vis-zh320.png",
+    image: "/edge-city/fashion-biz-p200ms-hero.png",
     products: [
       {
         id: "zh135",
@@ -416,7 +436,8 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         name: "Streetworx Tee",
         categoryId: "tees-polos",
         description: "Lightweight cotton tee with modern slim fit and longer curved hem. Available in three colourways.",
-        image: "/edge-city/placeholder.png",
+        image: "/edge-city/syzmik-ZH135-hero.png",
+        images: ["/edge-city/syzmik-ZH135-charcoal.png", "/edge-city/syzmik-ZH135-navy.png", "/edge-city/syzmik-ZH135-petrol-blue"],
         sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
         colours: [
             { name: "Navy" },
@@ -435,7 +456,8 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         name: "Balance Short Sleeve Polo",
         categoryId: "tees-polos",
         description: "100% polyester sports interlock. UPF Rating 50+. 155 GSM. Staff name embroidered on chest.",
-        image: "/edge-city/placeholder.png",
+        image: "/edge-city/fashion-biz-p200ms-hero.png",
+        images: ["/edge-city/fashion-biz-p200ms-navy-white-front.png", "/edge-city/fashion-biz-p200ms-navy-white-back.png"],
         sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
         colours: [
             { name: "Navy/Sky" },
@@ -453,7 +475,8 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         name: "Portsea Polo",
         categoryId: "tees-polos",
         description: "Cotton-back polyester polo. 80% polyester / 20% cotton. 180 GSM. Smart appearance for site or office.",
-        image: "/edge-city/placeholder.png",
+        image: "/edge-city/portsea-1321-front.png",
+        images: ["/edge-city/portsea-1321-back.png", "/edge-city/portsea-1321-slate-black.png"],
         sizes: ["8", "10", "12", "14", "16", "18", "20", "22", "24"],
         colours: [
             { name: "Navy/White" },
@@ -470,7 +493,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
     slug: "site-shorts",
     name: "Site Shorts",
     description: "Cooling stretch shorts with multiple cargo pockets for site work.",
-    image: "/edge-city/syzmik-hi-vis-zs235-khaki.png",
+    image: "/edge-city/syzmik-shorts-zs235-khaki.png",
     products: [
       {
         id: "zs235",
@@ -479,7 +502,8 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         name: "Essential Stretch Cargo Short",
         categoryId: "site-shorts",
         description: "98% Cotton 2% Elastane 280 GSM. Reinforced seat, multiple cargo pockets. Waist sizes in cm.",
-        image: "/edge-city/syzmik-hi-vis-zs235-khaki.png",
+        image: "/edge-city/syzmik-shorts-zs235-khaki.png",
+        images: ["/edge-city/syzmik-shorts-zs235-navy.png"],
         sizes: ["72", "77", "82", "87", "92", "97", "102", "107", "112", "117", "122", "127", "132"],
         colours: [
             { name: "Navy" },
@@ -497,7 +521,8 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         name: "Rugged Cooling Stretch Short",
         categoryId: "site-shorts",
         description: "98% Cotton 2% Elastane Square Weave Cotton Ripstop 240 GSM. Superior durability for demanding sites.",
-        image: "/edge-city/placeholder.png",
+        image: "/edge-city/ZS607-hero",
+        images: ["/edge-city/ZS607-navy.png", "/edge-city/ZS607-khaki.png", "/edge-city/ZS607-black.png"],
         sizes: ["72", "77", "82", "87", "92", "97", "102", "107", "112", "117", "122", "127", "132"],
         colours: [
             { name: "Navy" },
@@ -515,7 +540,8 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         name: "Womens Essential Stretch Cargo Short",
         categoryId: "site-shorts",
         description: "Women's cut stretch cargo shorts with cooling vents. Reinforced seat, multiple cargo pockets. Waist in cm.",
-        image: "/edge-city/syzmik-hi-vis-zs735-khaki.png",
+        image: "/edge-city/syzmik-shorts-zs735-khaki.png",
+        images: ["/edge-city/syzmik-shorts-zs735-navy.png"],
         sizes: ["6", "8", "10", "12", "14", "16", "18", "20", "22", "24"],
         colours: [
             { name: "Khaki" },
@@ -533,7 +559,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
     slug: "site-pants",
     name: "Site Pants",
     description: "Durable work trousers with full pockets and reinforced wear points.",
-    image: "/edge-city/syzmik-hi-vis-zs235-navy.png",
+    image: "/edge-city/syzmik-shorts-zs235-navy.png",
     products: [
       {
         id: "zp604",
@@ -577,7 +603,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
     slug: "hoodies-midlayers",
     name: "Hoodies & Midlayers",
     description: "Weather protection and layering. Keep crews warm and visible on site.",
-    image: "/edge-city/syzmik-hi-vis-zt467.png",
+    image: "/edge-city/syzmik-hoodie-zt467-hero.png",
     products: [
       {
         id: "zt467",
@@ -586,7 +612,8 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         name: "Multi-Pocket Hoodie",
         categoryId: "hoodies-midlayers",
         description: "55% Cotton 45% Polyester 320 GSM. Hi-vis rated warm hoodie. Multiple pockets, drawstring hood, kangaroo pocket.",
-        image: "/edge-city/syzmik-hi-vis-zt467.png",
+        image: "/edge-city/syzmik-hoodie-zt467-hero.png",
+        images: ["/edge-city/syzmik-hoodie-zt467-back.png", "/edge-city/syzmik-hoodie-Charcoal-Black.png", "/edge-city/syzmik-hoodie-Slate-Charcoal.jpeg", "/edge-city/syzmik-hoodie-zt467-navy-charcoal.jpeg"],
         sizes: ["XXS", "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
         colours: [
             { name: "Charcoal/Black" },
@@ -604,6 +631,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         categoryId: "hoodies-midlayers",
         description: "100% Polyester Fleece 320 GSM. Segmented reflective tape. Lightweight water resistant shell with warm soft fleece lining.",
         image: "/edge-city/syzmik-hi-vis-zt867.png",
+        images: ["/edge-city/syzmik-hi-vis-zt867-front.png"],
         sizes: ["XXS", "XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
         colours: [
             { name: "Yellow" },
@@ -620,7 +648,8 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         name: "XT Performance Pullover Hoodie",
         categoryId: "hoodies-midlayers",
         description: "270 GSM 100% polyester performance fabric. Smart site hoodie for project managers and office-to-site transitions.",
-        image: "/edge-city/placeholder.png",
+        image: "/edge-city/cloke-hoodie-xth-back-aqua-front.png",
+        images: ["/edge-city/cloke-hoodie-xth-black-aqua-back.png", "/edge-city/cloke-hoodie-xth-navy-grey.png", "/edge-city/cloke-hoodie-xth-navy-white.png"],
         sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL"],
         colours: [
             { name: "Navy/Grey" },
@@ -646,7 +675,8 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         name: "Bondi Bucket Hat",
         categoryId: "headwear",
         description: "Premium cotton twill bucket hat with white trim and sweatband. Embroidered club branding.",
-        image: "/edge-city/placeholder.png",
+        image: "/edge-city/trends-bucket-115740-3.png",
+        images: ["/edge-city/trends-bucket-115740-4.png"],
         sizes: ["One Size"],
         colours: [
             { name: "White Sandwich Trim" },
@@ -664,7 +694,8 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         name: "Faded Trucker Cap",
         categoryId: "headwear",
         description: "Structured five panel trucker hat with stylish faded finish. Embroidered logo on front panel.",
-        image: "/edge-city/placeholder.png",
+        image: "/edge-city/trends-trucker-126398-2.png",
+        images: ["/edge-city/trends-trucker-126398-4.png"],
         sizes: ["One Size"],
         colours: [
             { name: "Navy" },
@@ -681,10 +712,13 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         name: "Nylon Bucket Hat",
         categoryId: "headwear",
         description: "Nylon wide brim bucket hat. Lightweight and packable. Ideal for sun protection on site.",
-        image: "/edge-city/as-colour-1174.png",
+        image: "/edge-city/as-colour-1174-hero.png",
+        images: ["/edge-city/as-colour-1174-black.png", "/edge-city/as-colour-1174-navy.png", "/edge-city/as-colour-1174-khaki.png"],
         sizes: ["One Size"],
         colours: [
             { name: "Navy" },
+            { name: "Black" },
+            { name: "Khaki" },
           ],
         decorationMethod: "Embroidery",
         leadWeeks: [2, 3],
