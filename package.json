@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "import:edge-city": "tsx scripts/import-edge-city-products.ts"
+    "import:edge-city": "tsx scripts/import-edge-city-products.ts",
+    "import:hirepool": "tsx scripts/import-hirepool-products.ts"
   },
   "dependencies": {
     "framer-motion": "^12.38.0",

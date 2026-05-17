@@ -34,6 +34,16 @@ export type PortalFeaturedCollection = {
   productIds: string[]
 }
 
+export type PortalOrderHistoryEntry = {
+  orderRef: string
+  date: string
+  client?: string
+  qty: number
+  unitPriceCents: number
+  totalCents: number
+  notes?: string
+}
+
 export type PortalProduct = {
   id: string
   name: string
@@ -51,6 +61,10 @@ export type PortalProduct = {
   sku?: string
   measureGuide?: string
   sizeChart?: PortalSizeChart
+  moq?: number
+  material?: string
+  tags?: string[]
+  orderHistory?: PortalOrderHistoryEntry[]
 }
 
 export type PortalCategory = {

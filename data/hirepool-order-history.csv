@@ -1,0 +1,12 @@
+order_ref,date,sku,client,qty,unit_price_nzd,total_nzd,notes
+HP-2024-001,2024-03-15,HP-POLO-01,Hirepool Ltd,48,52.00,2496.00,Branch rollout — Auckland North region. 12 branches x 4 polos.
+HP-2024-001,2024-03-15,HP-CAP-01,Hirepool Ltd,48,42.00,2016.00,Same branch rollout order — caps to match.
+HP-2024-001,2024-03-15,HP-HV-VEST-01,Hirepool Ltd,96,36.00,3456.00,Same branch rollout — 8 vests per branch.
+HP-2024-002,2024-06-20,HP-TEE-01,Hirepool Ltd,60,38.00,2280.00,Staff tee top-up for summer. Nationwide.
+HP-2024-003,2024-09-10,HP-HV-SHIRT-01,Hirepool Ltd,36,65.00,2340.00,Site operations refresh — yard and depot staff.
+HP-2024-004,2024-11-01,HP-PACK-TRADE-01,Hirepool Ltd,25,85.00,2125.00,Trade account welcome packs for key account drive Q4.
+HP-2025-001,2025-02-14,HP-HOODIE-01,Hirepool Ltd,40,89.00,3560.00,Winter layering programme — nationwide branch issue.
+HP-2025-001,2025-02-14,HP-HV-VEST-01,Hirepool Ltd,50,36.00,1800.00,Additional vests for new yard hires.
+HP-2025-002,2025-04-22,HP-EVENT-TEE-01,Hirepool Ltd,150,38.00,5700.00,Fieldays 2025 activation — campaign print front and back.
+HP-2025-003,2025-07-01,HP-POLO-01,Hirepool Ltd,24,52.00,1248.00,Mid-year top-up — replacement polos for wear.
+HP-2025-003,2025-07-01,HP-CAP-01,Hirepool Ltd,24,42.00,1008.00,Cap top-up to match polo order.
