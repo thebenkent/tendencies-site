@@ -13,7 +13,7 @@ export default async function CartPage({
   if (!config) notFound()
 
   return (
-    <div style={{ background: '#080808', minHeight: 'calc(100vh - 64px)', fontFamily: 'Helvetica, Arial, sans-serif' }}>
+    <div className="portal-root" style={{ background: '#080808', minHeight: '100vh' }}>
       <PortalHeader config={config} slug={slug} />
 
       {/* Breadcrumb */}

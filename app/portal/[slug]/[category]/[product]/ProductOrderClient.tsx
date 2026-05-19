@@ -83,7 +83,7 @@ export default function ProductOrderClient({
       <div
         style={{
           background: v.canvas,
-          minHeight: 'calc(100vh - 116px)',
+          minHeight: 'calc(100vh - 56px)',
           fontFamily: 'Helvetica, Arial, sans-serif',
         }}
       >
@@ -227,12 +227,6 @@ export default function ProductOrderClient({
                 gap: '10px',
               }}
             >
-              <span style={metaPill(v)}>
-                {fmt(product.priceCents)} <span style={{ fontWeight: 500, opacity: 0.85 }}>incl. GST</span>
-              </span>
-              <span style={metaPill(v)}>
-                Lead {product.leadWeeks[0]}–{product.leadWeeks[1]} weeks
-              </span>
               {product.decorationMethod && product.decorationMethod !== 'None' && (
                 <span style={metaPill(v)}>{product.decorationMethod}</span>
               )}
@@ -265,11 +259,34 @@ export default function ProductOrderClient({
                 letterSpacing: '-0.03em',
                 color: v.ink,
                 lineHeight: 1.05,
-                marginBottom: '16px',
+                marginBottom: '12px',
               }}
             >
               {product.name}
             </h1>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'baseline',
+                gap: '10px',
+                flexWrap: 'wrap',
+                marginBottom: '20px',
+              }}
+            >
+              <span
+                style={{
+                  fontSize: '26px',
+                  fontWeight: 800,
+                  letterSpacing: '-0.02em',
+                  color: v.ink,
+                }}
+              >
+                {fmt(product.priceCents)}
+              </span>
+              <span style={{ fontSize: '13px', color: v.inkMuted }}>
+                incl. GST · Lead {product.leadWeeks[0]}–{product.leadWeeks[1]} weeks
+              </span>
+            </div>
             <p
               style={{
                 fontSize: '15px',
@@ -665,19 +682,75 @@ export default function ProductOrderClient({
           </div>
         )}
       </div>
+
+      {/* Mobile sticky add bar — hidden on desktop via CSS */}
+      <div
+        className="portal-pdp-sticky-add"
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 50,
+          background: v.headerBg,
+          borderTop: `1px solid ${v.border}`,
+          padding: '10px 20px 14px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+        }}
+      >
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div
+            style={{
+              fontSize: '13px',
+              fontWeight: 600,
+              color: v.ink,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            {product.name}
+          </div>
+          <div style={{ fontSize: '12px', color: v.inkMuted }}>
+            {fmt(product.priceCents)}
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={handleAdd}
+          disabled={!canAdd}
+          style={{
+            minHeight: '44px',
+            padding: '0 20px',
+            background: added ? v.accentSecondary : canAdd ? v.accent : `${v.accent}44`,
+            color: '#fff',
+            border: 'none',
+            fontSize: '11px',
+            fontWeight: 700,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            cursor: canAdd ? 'pointer' : 'not-allowed',
+            borderRadius: '4px',
+            whiteSpace: 'nowrap',
+            flexShrink: 0,
+          }}
+        >
+          {added ? ui.addedToShortlist : canAdd ? ui.addToShortlist : 'Select options'}
+        </button>
+      </div>
     </>
   )
 }
 
 function labelStyle(v: PortalVisualTokens): CSSProperties {
   return {
-    fontSize: '10px',
-    fontWeight: 700,
-    letterSpacing: '0.18em',
-    textTransform: 'uppercase',
+    fontSize: '11px',
+    fontWeight: 600,
+    letterSpacing: '0.02em',
     color: v.inkFaint,
     marginBottom: '0',
-    fontFamily: 'Helvetica, Arial, sans-serif',
   }
 }
 

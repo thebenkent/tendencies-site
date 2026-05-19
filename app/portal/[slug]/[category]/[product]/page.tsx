@@ -23,7 +23,7 @@ export default async function ProductPage({
   const v = resolvePortalVisual(config)
 
   return (
-    <div style={{ background: v.canvas, minHeight: 'calc(100vh - 64px)', fontFamily: 'Helvetica, Arial, sans-serif' }}>
+    <div className="portal-root" style={{ background: v.canvas, minHeight: '100vh' }}>
       <PortalHeader config={config} slug={slug} />
       <ProductOrderClient
         config={config}

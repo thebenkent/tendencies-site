@@ -1,4 +1,5 @@
 import { CartProvider } from '@/components/portal/CartContext'
+import PortalStickyBar from '@/components/portal/PortalStickyBar'
 import { getPortalConfig } from '@/lib/portal/config'
 import { notFound } from 'next/navigation'
 import type { ReactNode } from 'react'
@@ -17,6 +18,7 @@ export default async function PortalLayout({
   return (
     <CartProvider slug={slug}>
       {children}
+      <PortalStickyBar config={config} slug={slug} />
     </CartProvider>
   )
 }

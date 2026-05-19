@@ -1,6 +1,13 @@
 import "./globals.css";
 import Header from "@/components/Header";
+import { Inter } from "next/font/google";
 import type { Metadata, Viewport } from "next";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.tendencies.co.nz"),
@@ -43,7 +50,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.variable}>
       <body>
         <Header />
         <main className="page">{children}</main>

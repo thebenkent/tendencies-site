@@ -22,9 +22,9 @@ export default async function CategoryPage({
     <div
       style={{
         background: v.canvas,
-        minHeight: 'calc(100vh - 64px)',
-        fontFamily: 'Helvetica, Arial, sans-serif',
+        minHeight: '100vh',
       }}
+      className="portal-root"
     >
       <PortalHeader config={config} slug={slug} />
 
@@ -164,7 +164,6 @@ export default async function CategoryPage({
                 category={category}
                 slug={slug}
                 visual={v}
-                config={config}
               />
             ))}
           </div>

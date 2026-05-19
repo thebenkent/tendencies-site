@@ -43,7 +43,7 @@ body {
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: var(--font-inter, system-ui, -apple-system, sans-serif);
 }
 
 /* Fix header overlap */
@@ -341,6 +341,27 @@ body {
 /* PORTAL                        */
 /* ============================= */
 
+/* Font cascade: Inter past inline fontFamily overrides */
+.portal-root { font-family: var(--font-inter, system-ui, -apple-system, sans-serif); }
+.portal-root * { font-family: inherit !important; }
+
+/* Remove main site nav offset on portal pages */
+.page:has(.portal-root) { padding-top: 0 !important; }
+
+/* Sticky shortlist bar — mobile only */
+.portal-sticky-bar { display: none; }
+@media (max-width: 900px) {
+  .portal-sticky-bar { display: flex; }
+}
+
+/* PDP sticky add bar — mobile only */
+.portal-pdp-sticky-add { display: none !important; }
+@media (max-width: 900px) {
+  .portal-pdp-sticky-add { display: flex !important; }
+  /* Pad the PDP content above the fixed bar */
+  .portal-pdp-grid { padding-bottom: 88px !important; }
+}
+
 .portal-cat-card { transition: border-color 0.25s ease, box-shadow 0.25s ease; }
 .portal-cat-card:hover { border-color: rgba(255,255,255,0.22) !important; box-shadow: 0 16px 48px rgba(0,0,0,0.2); }
 .portal-cat-card img { transition: transform 0.55s ease, filter 0.3s ease; }
@@ -408,10 +429,12 @@ body {
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 .portal-product-card:hover {
-  border-color: rgba(255, 255, 255, 0.16) !important;
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.18);
+  border-color: var(--portal-accent, rgba(100, 150, 200, 0.45)) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.14);
   transform: translateY(-2px);
 }
+.portal-product-card img { transition: transform 0.4s ease; }
+.portal-product-card:hover img { transform: scale(1.04) !important; }
 
 @media (max-width: 640px) {
   .portal-options-scroll {

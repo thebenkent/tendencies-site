@@ -35,6 +35,8 @@ export default function Header() {
 
   const closeDrawer = () => setOpen(false);
 
+  if (pathname?.startsWith('/portal/')) return null;
+
   const barBase: React.CSSProperties = {
     display: "block",
     width: "22px",

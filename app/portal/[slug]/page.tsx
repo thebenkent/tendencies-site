@@ -17,7 +17,7 @@ export default async function PortalHomePage({
   const ui = resolvePortalUiCopy(config)
 
   return (
-    <div style={{ background: v.canvas, minHeight: 'calc(100vh - 64px)', fontFamily: 'Helvetica, Arial, sans-serif' }}>
+    <div className="portal-root" style={{ background: v.canvas, minHeight: '100vh' }}>
       <PortalHeader config={config} slug={slug} />
 
       {/* Hero — proposal-style, light above-the-fold chrome */}
@@ -33,7 +33,7 @@ export default async function PortalHomePage({
           style={{
             fontSize: '11px',
             fontWeight: 600,
-            letterSpacing: '0.2em',
+            letterSpacing: '0.12em',
             textTransform: 'uppercase',
             color: v.inkMuted,
             margin: '0 0 28px',
@@ -86,7 +86,7 @@ export default async function PortalHomePage({
               color: '#fff',
               fontSize: '11px',
               fontWeight: 700,
-              letterSpacing: '0.14em',
+              letterSpacing: '0.09em',
               textTransform: 'uppercase',
               textDecoration: 'none',
               borderRadius: '3px',
@@ -107,7 +107,7 @@ export default async function PortalHomePage({
               border: `1px solid ${v.border}`,
               fontSize: '11px',
               fontWeight: 700,
-              letterSpacing: '0.12em',
+              letterSpacing: '0.08em',
               textTransform: 'uppercase',
               textDecoration: 'none',
               borderRadius: '3px',
@@ -116,6 +116,66 @@ export default async function PortalHomePage({
             {ui.heroSecondaryCta}
           </a>
         </div>
+
+        {/* Product teaser strip — pulls first 4 images from the first featured collection */}
+        {(() => {
+          const fc = config.featuredCollections?.[0]
+          if (!fc) return null
+          const cat = config.categories.find((c) => c.slug === fc.categorySlug)
+          if (!cat) return null
+          const thumbs = fc.productIds
+            .map((id) => cat.products.find((p) => p.id === id))
+            .filter((p): p is (typeof cat.products)[0] => Boolean(p))
+            .slice(0, 4)
+          if (thumbs.length === 0) return null
+          return (
+            <div
+              style={{
+                marginTop: '48px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              {thumbs.map((p, i) => (
+                <div
+                  key={i}
+                  style={{
+                    width: '64px',
+                    height: '64px',
+                    borderRadius: '6px',
+                    overflow: 'hidden',
+                    background: v.imageWell,
+                    flexShrink: 0,
+                    border: `1px solid ${v.border}`,
+                  }}
+                >
+                  <img
+                    src={p.image}
+                    alt=""
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'contain',
+                      padding: '6px',
+                      opacity: 0.88,
+                    }}
+                  />
+                </div>
+              ))}
+              <span
+                style={{
+                  fontSize: '11px',
+                  color: v.inkFaint,
+                  marginLeft: '6px',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {cat.products.length} pieces in this range
+              </span>
+            </div>
+          )
+        })()}
       </div>
 
       {/* Recommended kits — first content band (warm) */}
@@ -247,9 +307,10 @@ export default async function PortalHomePage({
                           src={product.image}
                           alt={product.name}
                           style={{
-                            width: '86%',
-                            height: '86%',
+                            width: '100%',
+                            height: '100%',
                             objectFit: 'contain',
+                            padding: '8% 12%',
                           }}
                         />
                       </div>
@@ -393,10 +454,9 @@ export default async function PortalHomePage({
                     <div>
                       <div
                         style={{
-                          fontSize: '11px',
+                          fontSize: '13px',
                           fontWeight: 700,
-                          letterSpacing: '0.16em',
-                          textTransform: 'uppercase',
+                          letterSpacing: '0.01em',
                           color: v.ink,
                           marginBottom: '8px',
                         }}
@@ -514,10 +574,9 @@ export default async function PortalHomePage({
                 >
                   <div
                     style={{
-                      fontSize: '10px',
-                      fontWeight: 700,
-                      letterSpacing: '0.18em',
-                      textTransform: 'uppercase',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      letterSpacing: '0.04em',
                       color: v.accent,
                       marginBottom: '10px',
                     }}
@@ -559,11 +618,11 @@ export default async function PortalHomePage({
           background: v.canvas,
           maxWidth: '1120px',
           margin: '0 auto',
-          padding: '48px 64px 64px',
+          padding: '72px 64px 80px',
           display: 'grid',
           gridTemplateColumns: '1fr auto',
           gap: '48px',
-          alignItems: 'center',
+          alignItems: 'start',
         }}
         id="contact"
         className="portal-contact-strip portal-px"
@@ -573,10 +632,10 @@ export default async function PortalHomePage({
             style={{
               fontSize: '10px',
               fontWeight: 700,
-              letterSpacing: '0.22em',
+              letterSpacing: '0.18em',
               textTransform: 'uppercase',
               color: v.inkFaint,
-              marginBottom: '8px',
+              marginBottom: '16px',
               display: 'flex',
               alignItems: 'center',
               gap: '10px',
@@ -584,34 +643,48 @@ export default async function PortalHomePage({
           >
             <span
               style={{
-                width: '6px',
-                height: '6px',
+                width: '5px',
+                height: '5px',
                 borderRadius: '50%',
                 background: v.accent,
                 flexShrink: 0,
               }}
               aria-hidden
             />
-            Account manager
+            Your account manager
           </div>
           <div
             style={{
-              fontSize: '20px',
+              fontSize: '28px',
               fontWeight: 800,
               color: v.ink,
-              letterSpacing: '-0.02em',
-              marginBottom: '6px',
+              letterSpacing: '-0.025em',
+              lineHeight: 1.1,
+              marginBottom: '8px',
             }}
           >
             {config.contact.manager}
           </div>
-          <div style={{ display: 'flex', gap: '22px', flexWrap: 'wrap', marginTop: '10px' }}>
+          <div
+            style={{
+              fontSize: '14px',
+              color: v.inkMuted,
+              marginBottom: '20px',
+              lineHeight: 1.5,
+            }}
+          >
+            Here for quotes, samples, and anything custom.
+          </div>
+          <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
             <a
               href={`mailto:${config.contact.email}`}
               style={{
-                fontSize: '14px',
-                color: v.inkMuted,
+                fontSize: '15px',
+                fontWeight: 500,
+                color: v.ink,
                 textDecoration: 'none',
+                borderBottom: `1px solid ${v.border}`,
+                paddingBottom: '2px',
               }}
             >
               {config.contact.email}
@@ -620,7 +693,8 @@ export default async function PortalHomePage({
               <a
                 href={`tel:${config.contact.phone}`}
                 style={{
-                  fontSize: '14px',
+                  fontSize: '15px',
+                  fontWeight: 500,
                   color: v.inkMuted,
                   textDecoration: 'none',
                 }}
@@ -635,10 +709,11 @@ export default async function PortalHomePage({
             style={{
               fontSize: '13px',
               color: v.inkFaint,
-              lineHeight: 1.65,
-              maxWidth: '400px',
+              lineHeight: 1.7,
+              maxWidth: '360px',
               margin: 0,
               textAlign: 'right',
+              paddingTop: '8px',
             }}
             className="portal-note-text"
           >

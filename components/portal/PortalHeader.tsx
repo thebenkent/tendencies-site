@@ -26,7 +26,7 @@ export default function PortalHeader({
         alignItems: 'center',
         justifyContent: 'space-between',
         position: 'sticky',
-        top: '64px',
+        top: '0',
         zIndex: 40,
       }}
     >
@@ -70,11 +70,10 @@ export default function PortalHeader({
         <span
           style={{
             fontSize: '10px',
-            fontWeight: 700,
-            letterSpacing: '0.16em',
+            fontWeight: 600,
+            letterSpacing: '0.08em',
             textTransform: 'uppercase',
             color: v.inkFaint,
-            fontFamily: 'Helvetica, Arial, sans-serif',
           }}
         >
           {config.portalTitle}
