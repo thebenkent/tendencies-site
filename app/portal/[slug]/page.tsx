@@ -20,15 +20,31 @@ export default async function PortalHomePage({
     <div className="portal-root" style={{ background: v.canvas, minHeight: '100vh' }}>
       <PortalHeader config={config} slug={slug} />
 
-      {/* Hero — proposal-style, light above-the-fold chrome */}
-      <div
-        className="portal-px portal-hero"
-        style={{
-          padding: '56px 64px 48px',
-          maxWidth: '1120px',
-          margin: '0 auto',
-        }}
-      >
+      {/* Hero — split layout with editorial image */}
+      <div style={{ position: 'relative', overflow: 'hidden' }}>
+        {config.hero.image && (
+          <div className="portal-hero-img-mobile">
+            <img src={config.hero.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 25%' }} />
+            <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, transparent 40%, ${v.canvas} 100%)` }} />
+          </div>
+        )}
+        {config.hero.image && (
+          <div className="portal-hero-img-desktop" style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: '42%', zIndex: 0 }}>
+            <img src={config.hero.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 20%' }} />
+            <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to right, ${v.canvas} 0%, ${v.canvas}cc 22%, transparent 58%)` }} />
+          </div>
+        )}
+        <div
+          className="portal-px portal-hero"
+          style={{
+            position: 'relative',
+            zIndex: 1,
+            padding: '72px 64px 64px',
+            maxWidth: '1120px',
+            margin: '0 auto',
+          }}
+        >
+        <div className={config.hero.image ? 'portal-hero-text-col' : undefined}>
         <p
           style={{
             fontSize: '11px',
@@ -176,6 +192,8 @@ export default async function PortalHomePage({
             </div>
           )
         })()}
+        </div>
+        </div>
       </div>
 
       {/* Recommended kits — first content band (warm) */}
@@ -404,80 +422,124 @@ export default async function PortalHomePage({
             }}
             className="portal-story-grid"
           >
-            <div>
-              <h2
-                style={{
-                  fontSize: 'clamp(26px, 3vw, 44px)',
-                  fontWeight: 800,
-                  letterSpacing: '-0.03em',
-                  color: v.ink,
-                  lineHeight: 1.05,
-                  marginBottom: '20px',
-                }}
+            {/* Left column: image when present, else headline + body */}
+            {config.brandStory.image ? (
+              <div
+                className="portal-story-image"
+                style={{ position: 'relative', overflow: 'hidden', borderRadius: '8px' }}
               >
-                {config.brandStory.headline}
-              </h2>
-              <p
-                style={{
-                  fontSize: '16px',
-                  color: v.inkMuted,
-                  lineHeight: 1.75,
-                }}
-              >
-                {config.brandStory.body}
-              </p>
-            </div>
-
-            {config.brandStory.pillars && config.brandStory.pillars.length > 0 && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
-                {config.brandStory.pillars.map((pillar, i) => (
-                  <div
-                    key={pillar.title}
-                    style={{
-                      display: 'flex',
-                      gap: '18px',
-                      alignItems: 'flex-start',
-                      paddingTop: i > 0 ? '28px' : undefined,
-                      borderTop: i > 0 ? `1px solid ${v.border}` : undefined,
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: '3px',
-                        height: '36px',
-                        background: `linear-gradient(180deg, ${v.accent} 0%, ${v.accentSecondary} 72%, ${v.limeSpot} 100%)`,
-                        flexShrink: 0,
-                        marginTop: '2px',
-                        borderRadius: '2px',
-                      }}
-                    />
-                    <div>
-                      <div
-                        style={{
-                          fontSize: '13px',
-                          fontWeight: 700,
-                          letterSpacing: '0.01em',
-                          color: v.ink,
-                          marginBottom: '8px',
-                        }}
-                      >
-                        {pillar.title}
-                      </div>
-                      <p
-                        style={{
-                          fontSize: '14px',
-                          color: v.inkMuted,
-                          lineHeight: 1.65,
-                          margin: 0,
-                        }}
-                      >
-                        {pillar.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                <img
+                  src={config.brandStory.image}
+                  alt=""
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    objectPosition: 'center 15%',
+                  }}
+                />
+              </div>
+            ) : (
+              <div>
+                <h2
+                  style={{
+                    fontSize: 'clamp(26px, 3vw, 44px)',
+                    fontWeight: 800,
+                    letterSpacing: '-0.03em',
+                    color: v.ink,
+                    lineHeight: 1.05,
+                    marginBottom: '20px',
+                  }}
+                >
+                  {config.brandStory.headline}
+                </h2>
+                <p style={{ fontSize: '16px', color: v.inkMuted, lineHeight: 1.75 }}>
+                  {config.brandStory.body}
+                </p>
               </div>
             )}
+
+            {/* Right column: always contains text; pillars follow when image is used */}
+            <div>
+              {config.brandStory.image && (
+                <>
+                  <h2
+                    style={{
+                      fontSize: 'clamp(26px, 3vw, 44px)',
+                      fontWeight: 800,
+                      letterSpacing: '-0.03em',
+                      color: v.ink,
+                      lineHeight: 1.05,
+                      marginBottom: '20px',
+                    }}
+                  >
+                    {config.brandStory.headline}
+                  </h2>
+                  <p
+                    style={{
+                      fontSize: '16px',
+                      color: v.inkMuted,
+                      lineHeight: 1.75,
+                      marginBottom: config.brandStory.pillars?.length ? '40px' : '0',
+                    }}
+                  >
+                    {config.brandStory.body}
+                  </p>
+                </>
+              )}
+              {config.brandStory.pillars && config.brandStory.pillars.length > 0 && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+                  {config.brandStory.pillars.map((pillar, i) => (
+                    <div
+                      key={pillar.title}
+                      style={{
+                        display: 'flex',
+                        gap: '18px',
+                        alignItems: 'flex-start',
+                        paddingTop: i > 0 ? '28px' : undefined,
+                        borderTop: i > 0 ? `1px solid ${v.border}` : undefined,
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: '3px',
+                          height: '36px',
+                          background: `linear-gradient(180deg, ${v.accent} 0%, ${v.accentSecondary} 72%, ${v.limeSpot} 100%)`,
+                          flexShrink: 0,
+                          marginTop: '2px',
+                          borderRadius: '2px',
+                        }}
+                      />
+                      <div>
+                        <div
+                          style={{
+                            fontSize: '13px',
+                            fontWeight: 700,
+                            letterSpacing: '0.01em',
+                            color: v.ink,
+                            marginBottom: '8px',
+                          }}
+                        >
+                          {pillar.title}
+                        </div>
+                        <p
+                          style={{
+                            fontSize: '14px',
+                            color: v.inkMuted,
+                            lineHeight: 1.65,
+                            margin: 0,
+                          }}
+                        >
+                          {pillar.description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

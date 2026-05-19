@@ -23,6 +23,7 @@ export type PortalBrandPillar = {
 export type PortalBrandStory = {
   headline: string
   body: string
+  image?: string
   pillars?: PortalBrandPillar[]
 }
 

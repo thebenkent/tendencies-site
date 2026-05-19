@@ -48,12 +48,14 @@ const EDGE_CITY: ClientPortalConfig = {
     cartNavLabel: 'Shortlist',
   },
   hero: {
+    image: '/edge-city/hero-lifestyle.jpg',
     tagline: 'One programme. Pre-agreed terms. Ready when you are.',
     subtitle:
       'Hi-vis and site kit curated like a Tendencies proposal — clear pricing, realistic lead times, and a shortlist flow instead of a retail checkout.',
   },
 
   brandStory: {
+    image: '/edge-city/hero-hoodie.jpg',
     headline: 'Built for the Site. Built to Last.',
     body: 'Start with the recommended kits below, then use the full catalogue when you need alternates or add-ons. Every piece is engineered for construction: durable fabrics, visibility where it counts, and fits that work on real jobs — from first site walk to handover.',
     pillars: [

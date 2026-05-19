@@ -348,6 +348,29 @@ body {
 /* Remove main site nav offset on portal pages */
 .page:has(.portal-root) { padding-top: 0 !important; }
 
+/* Hero image panels */
+.portal-hero-img-mobile {
+  display: none;
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+}
+.portal-hero-img-desktop { display: block; }
+.portal-hero-text-col { max-width: 58%; }
+
+@media (max-width: 900px) {
+  .portal-hero-img-mobile { display: block; }
+  .portal-hero-img-desktop { display: none !important; }
+  .portal-hero-text-col { max-width: 100% !important; }
+}
+
+/* Brand story image column */
+.portal-story-image { aspect-ratio: 4 / 5; }
+@media (max-width: 768px) {
+  .portal-story-image { aspect-ratio: 16 / 9; }
+}
+
 /* Sticky shortlist bar — mobile only */
 .portal-sticky-bar { display: none; }
 @media (max-width: 900px) {
