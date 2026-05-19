@@ -2,7 +2,7 @@
 // AUTO-GENERATED — do not edit by hand.
 // Run: npm run import:edge-city
 // Source: data/edge-city-products.csv (or .xlsx)
-// Generated: 2026-05-19T05:23:52.595Z
+// Generated: 2026-05-19T05:32:59.770Z
 // ─────────────────────────────────────────────────────────────────────────────
 
 import type { PortalCategory, PortalProduct, PortalFeaturedCollection } from '../types'
@@ -16,7 +16,7 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     categoryId: "tees-polos",
     description: "Lightweight cotton tee with modern slim fit and longer curved hem. Available in three colourways.",
     image: "/edge-city/syzmik-ZH135-hero.png",
-    images: ["/edge-city/syzmik-ZH135-charcoal.png", "/edge-city/syzmik-ZH135-navy.png", "/edge-city/syzmik-ZH135-petrol-blue"],
+    images: ["/edge-city/syzmik-ZH135-charcoal.png", "/edge-city/syzmik-ZH135-navy.png", "/edge-city/syzmik-ZH135-petrol-blue.png"],
     sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
     colours: [
         { name: "Navy" },
@@ -439,7 +439,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         categoryId: "tees-polos",
         description: "Lightweight cotton tee with modern slim fit and longer curved hem. Available in three colourways.",
         image: "/edge-city/syzmik-ZH135-hero.png",
-        images: ["/edge-city/syzmik-ZH135-charcoal.png", "/edge-city/syzmik-ZH135-navy.png", "/edge-city/syzmik-ZH135-petrol-blue"],
+        images: ["/edge-city/syzmik-ZH135-charcoal.png", "/edge-city/syzmik-ZH135-navy.png", "/edge-city/syzmik-ZH135-petrol-blue.png"],
         sizes: ["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
         colours: [
             { name: "Navy" },
