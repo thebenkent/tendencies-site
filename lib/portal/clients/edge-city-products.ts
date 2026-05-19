@@ -2,7 +2,7 @@
 // AUTO-GENERATED — do not edit by hand.
 // Run: npm run import:edge-city
 // Source: data/edge-city-products.csv (or .xlsx)
-// Generated: 2026-05-16T01:31:58.441Z
+// Generated: 2026-05-19T05:23:52.595Z
 // ─────────────────────────────────────────────────────────────────────────────
 
 import type { PortalCategory, PortalProduct, PortalFeaturedCollection } from '../types'
@@ -162,7 +162,7 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     name: "Rugged Cooling Stretch Short",
     categoryId: "site-shorts",
     description: "98% Cotton 2% Elastane Square Weave Cotton Ripstop 240 GSM. Superior durability for demanding sites.",
-    image: "/edge-city/ZS607-hero",
+    image: "/edge-city/ZS607-hero.png",
     images: ["/edge-city/ZS607-navy.png", "/edge-city/ZS607-khaki.png", "/edge-city/ZS607-black.png"],
     sizes: ["72", "77", "82", "87", "92", "97", "102", "107", "112", "117", "122", "127", "132"],
     colours: [
@@ -200,7 +200,8 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     name: "Rugged Cooling Stretch Pant",
     categoryId: "site-pants",
     description: "98% Cotton 2% Elastane Square Weave Cotton Ripstop 240 GSM. Reinforced knees, multiple pockets, durable seams for tough jobs.",
-    image: "/edge-city/placeholder.png",
+    image: "/edge-city/syzmik-pants-ZP604-hero.png",
+    images: ["/edge-city/syzmik-pants-ZP604-navy.png", "/edge-city/syzmik-pants-ZP604-khaki.png", "/edge-city/syzmik-pants-ZP604-navy-back.png", "/edge-city/syzmik-pants-ZP604-khaki-back.png"],
     sizes: ["72", "77", "82", "87", "92", "97", "102", "107", "112", "117", "122", "127", "132"],
     colours: [
         { name: "Navy" },
@@ -218,7 +219,8 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     name: "Streetworx Comfort Pant",
     categoryId: "site-pants",
     description: "67% Cotton 31% Polyester 2% Spandex 280 GSM. Contemporary stretch work trousers with room to move.",
-    image: "/edge-city/placeholder.png",
+    image: "/edge-city/syzmik-pants-ZP444-navy.png",
+    images: ["/edge-city/syzmik-pants-ZP444-navy-back.png"],
     sizes: ["72", "77", "82", "87", "92", "97", "102", "107", "112", "117", "122", "127", "132"],
     colours: [
         { name: "Navy" },
@@ -521,7 +523,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         name: "Rugged Cooling Stretch Short",
         categoryId: "site-shorts",
         description: "98% Cotton 2% Elastane Square Weave Cotton Ripstop 240 GSM. Superior durability for demanding sites.",
-        image: "/edge-city/ZS607-hero",
+        image: "/edge-city/ZS607-hero.png",
         images: ["/edge-city/ZS607-navy.png", "/edge-city/ZS607-khaki.png", "/edge-city/ZS607-black.png"],
         sizes: ["72", "77", "82", "87", "92", "97", "102", "107", "112", "117", "122", "127", "132"],
         colours: [
@@ -568,7 +570,8 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         name: "Rugged Cooling Stretch Pant",
         categoryId: "site-pants",
         description: "98% Cotton 2% Elastane Square Weave Cotton Ripstop 240 GSM. Reinforced knees, multiple pockets, durable seams for tough jobs.",
-        image: "/edge-city/placeholder.png",
+        image: "/edge-city/syzmik-pants-ZP604-hero.png",
+        images: ["/edge-city/syzmik-pants-ZP604-navy.png", "/edge-city/syzmik-pants-ZP604-khaki.png", "/edge-city/syzmik-pants-ZP604-navy-back.png", "/edge-city/syzmik-pants-ZP604-khaki-back.png"],
         sizes: ["72", "77", "82", "87", "92", "97", "102", "107", "112", "117", "122", "127", "132"],
         colours: [
             { name: "Navy" },
@@ -586,7 +589,8 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         name: "Streetworx Comfort Pant",
         categoryId: "site-pants",
         description: "67% Cotton 31% Polyester 2% Spandex 280 GSM. Contemporary stretch work trousers with room to move.",
-        image: "/edge-city/placeholder.png",
+        image: "/edge-city/syzmik-pants-ZP444-navy.png",
+        images: ["/edge-city/syzmik-pants-ZP444-navy-back.png"],
         sizes: ["72", "77", "82", "87", "92", "97", "102", "107", "112", "117", "122", "127", "132"],
         colours: [
             { name: "Navy" },
