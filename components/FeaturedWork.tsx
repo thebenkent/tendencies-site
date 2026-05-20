@@ -69,13 +69,12 @@ function Card({
           : isMobile
           ? "240px"
           : "274px",
-        background: "#0f0f0f",
-        border: "1px solid rgba(255,255,255,0.06)",
+        border: "1px solid transparent",
         transition:
   "border-color 0.4s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
         borderColor: hovered
           ? "rgba(184,244,0,0.25)"
-          : "rgba(255,255,255,0.06)",
+          : "transparent",
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-end",
@@ -112,8 +111,8 @@ transition:
   "transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), filter 0.35s ease",
 
 filter: hovered && !isMobile
-  ? "brightness(0.42) contrast(1.1) saturate(1.05)"
-  : "brightness(0.32) contrast(1.08) saturate(1.02)", }}
+  ? "brightness(0.48) contrast(1.08) saturate(1.04)"
+  : "brightness(0.65) contrast(1.04) saturate(1.0)", }}
       />
 
       <div
@@ -126,18 +125,6 @@ filter: hovered && !isMobile
           zIndex: 2,
         }}
       />
-<div
-  style={{
-    position: "absolute",
-    inset: 0,
-    backgroundImage:
-      "url('https://grainy-gradients.vercel.app/noise.svg')",
-    opacity: 0.06,
-    mixBlendMode: "overlay",
-    zIndex: 2,
-    pointerEvents: "none",
-  }}
-/>
       <div
         style={{
           position: "absolute",

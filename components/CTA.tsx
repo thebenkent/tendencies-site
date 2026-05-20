@@ -24,19 +24,6 @@ export default function CTA() {
         }}
       >
         <div>
-          <div
-            style={{
-              fontSize: "11px",
-              fontWeight: 700,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "rgba(8,8,8,0.58)",
-              marginBottom: "16px",
-            }}
-          >
-            Start a project
-          </div>
-
           <h2
             style={{
               fontSize: isMobile

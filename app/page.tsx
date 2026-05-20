@@ -6,12 +6,12 @@ import CTA from "../components/CTA";
 
 export default function Home() {
   return (
-    <main style={{ background: "#080808", paddingTop: "64px" }}>
+    <>
       <Hero />
       <Statement />
       <ClientMarquee />
       <FeaturedWork />
       <CTA />
-    </main>
+    </>
   );
 }

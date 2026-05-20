@@ -8,7 +8,6 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 const NAV_LINKS = [
   { href: "/work", label: "Work" },
   { href: "/what-we-do", label: "What We Do" },
-  { href: "/process", label: "How It Works" },
   { href: "/catalogue", label: "Catalogue" },
   { href: "/teamwear", label: "Teamwear" },
 ];

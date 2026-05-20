@@ -552,3 +552,45 @@ body {
   }
 
 }
+
+/* ============================= */
+/* LOGO WALL                     */
+/* ============================= */
+
+.logo-wall-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  margin-top: 28px;
+}
+
+.logo-wall-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 16px;
+  height: 88px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.logo-wall-item img {
+  height: 28px;
+  max-width: 100px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  opacity: 0.5;
+  filter: brightness(0) invert(1);
+}
+
+@media (max-width: 640px) {
+  .logo-wall-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .logo-wall-item {
+    height: 72px;
+  }
+}
