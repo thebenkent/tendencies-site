@@ -25,10 +25,11 @@ body {
   --line: rgba(255, 255, 255, 0.06);
   --lime: #b8f400;
 
-  --max: 1280px;
+  --max: 1440px;
 
-  --pad-x: 56px;
-  --pad-x-mobile: 24px;
+  --pad-x: 48px;
+  --pad-x-mobile: 20px;
+  --nav-h: 64px;
 
   --section-pad: 96px;
   --section-pad-mobile: 64px;
