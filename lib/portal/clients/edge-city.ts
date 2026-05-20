@@ -102,7 +102,7 @@ const EDGE_CITY: ClientPortalConfig = {
   contact: {
     manager: 'Ben',
     email: 'ben@tendencies.co.nz',
-    phone: '+64 21 XXX XXXX',
+    phone: '+64 21 455 953',
   },
 
   emails: {
