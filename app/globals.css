@@ -31,8 +31,8 @@ body {
   --pad-x-mobile: 20px;
   --nav-h: 64px;
 
-  --section-pad: 96px;
-  --section-pad-mobile: 64px;
+  --section-pad: 144px;
+  --section-pad-mobile: 80px;
 
   --radius-pill: 999px;
 }
@@ -569,8 +569,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 28px 16px;
-  height: 88px;
+  padding: 48px 16px;
+  height: 120px;
   border-right: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
@@ -591,6 +591,6 @@ body {
   }
 
   .logo-wall-item {
-    height: 72px;
+    height: 96px;
   }
 }
