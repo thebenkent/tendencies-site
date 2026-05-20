@@ -75,27 +75,26 @@ export default function AboutIntro() {
           }}
         >
           <Link
-            href="/about"
-            style={{
-              fontSize: "11px",
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "rgba(255,255,255,0.4)",
-              textDecoration: "none",
-              borderBottom: "1px solid rgba(255,255,255,0.14)",
-              paddingBottom: "2px",
-              whiteSpace: "nowrap",
-              transition: "color 0.2s ease",
-            }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.color = "rgba(255,255,255,0.8)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.color = "rgba(255,255,255,0.4)")
-            }
-          >
-            How we work →
-          </Link>
+
+  href="/about"
+
+  className="about-link"
+
+  style={{
+    fontFamily: "Helvetica, Arial, sans-serif",
+    fontSize: "11px",
+    letterSpacing: "0.18em",
+    textTransform: "uppercase",
+    color: "rgba(255,255,255,0.4)",
+    textDecoration: "none",
+    borderBottom: "1px solid rgba(255,255,255,0.14)",
+    paddingBottom: "2px",
+    whiteSpace: "nowrap",
+    transition: "color 0.2s ease",
+  }}
+>
+  How we work →
+</Link>
         </div>
       </div>
     </section>

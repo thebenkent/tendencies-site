@@ -77,83 +77,124 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Links */}
-        <div style={{ textAlign: "right" }}>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "8px",
-            }}
-          >
-            <Link
-              href="/work"
-              style={{
-                fontSize: "12px",
-                color: "rgba(255,255,255,0.6)",
-                textDecoration: "none",
-                transition: "color 0.2s ease",
-              }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.color = "rgba(255,255,255,0.9)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.color = "rgba(255,255,255,0.6)")
-              }
-            >
-              Work
-            </Link>
-            <Link
-              href="/catalogue"
-              style={{
-                fontSize: "12px",
-                color: "rgba(255,255,255,0.6)",
-                textDecoration: "none",
-                transition: "color 0.2s ease",
-              }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.color = "rgba(255,255,255,0.9)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.color = "rgba(255,255,255,0.6)")
-              }
-            >
-              Catalogue
-            </Link>
-            <Link
-              href="/about"
-              style={{
-                fontSize: "12px",
-                color: "rgba(255,255,255,0.6)",
-                textDecoration: "none",
-                transition: "color 0.2s ease",
-              }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.color = "rgba(255,255,255,0.9)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.color = "rgba(255,255,255,0.6)")
-              }
-            >
-              About
-            </Link>
-            <Link
-              href="/start-a-project"
-              style={{
-                fontSize: "12px",
-                color: "#b8f400",
-                textDecoration: "none",
-                transition: "opacity 0.2s ease",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
-              onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-            >
-              Start a Project
-            </Link>
-          </div>
-        </div>
-      </div>
+       {/* Links */}
 
+<div style={{ textAlign: "right" }}>
+
+  <div
+
+    style={{
+
+      display: "flex",
+
+      flexDirection: "column",
+
+      gap: "8px",
+
+    }}
+
+  >
+
+    <Link
+
+      href="/work"
+
+      className="link-lift"
+
+      style={{
+
+        fontSize: "12px",
+
+        color: "rgba(255,255,255,0.6)",
+
+        textDecoration: "none",
+
+        transition: "color 0.2s ease",
+
+      }}
+
+    >
+
+      Work
+
+    </Link>
+
+    <Link
+
+      href="/catalogue"
+
+      className="link-lift"
+
+      style={{
+
+        fontSize: "12px",
+
+        color: "rgba(255,255,255,0.6)",
+
+        textDecoration: "none",
+
+        transition: "color 0.2s ease",
+
+      }}
+
+    >
+
+      Catalogue
+
+    </Link>
+
+    <Link
+
+      href="/about"
+
+      className="link-lift"
+
+      style={{
+
+        fontSize: "12px",
+
+        color: "rgba(255,255,255,0.6)",
+
+        textDecoration: "none",
+
+        transition: "color 0.2s ease",
+
+      }}
+
+    >
+
+      About
+
+    </Link>
+
+    <Link
+
+      href="/start-a-project"
+
+      className="footer-link"
+
+      style={{
+
+        fontSize: "12px",
+
+        color: "#b8f400",
+
+        textDecoration: "none",
+
+        transition: "opacity 0.2s ease",
+
+      }}
+
+    >
+
+      Start a Project
+
+    </Link>
+
+  </div>
+
+</div>
+</div>
       {/* Footer bar */}
       <div
         style={{
