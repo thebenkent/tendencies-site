@@ -2,7 +2,7 @@
 // AUTO-GENERATED — do not edit by hand.
 // Run: npm run import:edge-city
 // Source: data/edge-city-products.csv (or .xlsx)
-// Generated: 2026-05-19T05:53:45.585Z
+// Generated: 2026-05-20T03:42:48.513Z
 // ─────────────────────────────────────────────────────────────────────────────
 
 import type { PortalCategory, PortalProduct, PortalFeaturedCollection } from '../types'
@@ -23,9 +23,9 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
         { name: "Petrol Blue" },
         { name: "Charcoal Marle" },
       ],
-    decorationMethod: "Screen Print",
+    decorationMethod: "TBC",
     leadWeeks: [2, 2],
-    priceCents: 2800,
+    priceCents: 1150,
     requiresStaffName: false,
   },
   {
@@ -41,9 +41,9 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     colours: [
         { name: "Yellow/Navy" },
       ],
-    decorationMethod: "None",
+    decorationMethod: "TBC",
     leadWeeks: [2, 2],
-    priceCents: 3500,
+    priceCents: 1350,
     requiresStaffName: false,
   },
   {
@@ -59,9 +59,9 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     colours: [
         { name: "Yellow/Navy" },
       ],
-    decorationMethod: "Embroidery",
+    decorationMethod: "TBC",
     leadWeeks: [2, 2],
-    priceCents: 6500,
+    priceCents: 2485,
     requiresStaffName: true,
   },
   {
@@ -77,9 +77,9 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     colours: [
         { name: "Yellow/Navy" },
       ],
-    decorationMethod: "Embroidery",
+    decorationMethod: "TBC",
     leadWeeks: [2, 2],
-    priceCents: 7500,
+    priceCents: 2990,
     requiresStaffName: true,
   },
   {
@@ -94,9 +94,9 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     colours: [
         { name: "Yellow/Navy" },
       ],
-    decorationMethod: "Embroidery",
+    decorationMethod: "TBC",
     leadWeeks: [2, 2],
-    priceCents: 6500,
+    priceCents: 2990,
     requiresStaffName: true,
   },
   {
@@ -113,9 +113,9 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
         { name: "Navy/Sky" },
         { name: "Navy/Red" },
       ],
-    decorationMethod: "Embroidery",
+    decorationMethod: "TBC",
     leadWeeks: [2, 2],
-    priceCents: 5500,
+    priceCents: 2650,
     requiresStaffName: false,
   },
   {
@@ -126,14 +126,16 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     categoryId: "tees-polos",
     description: "Cotton-back polyester polo. 80% polyester / 20% cotton. 180 GSM. Smart appearance for site or office.",
     image: "/edge-city/portsea-1321-front.png",
-    images: ["/edge-city/portsea-1321-back.png", "/edge-city/portsea-1321-slate-black.png"],
-    sizes: ["8", "10", "12", "14", "16", "18", "20", "22", "24"],
+    images: ["/edge-city/portsea-1321-back.png", "/edge-city/portsea-1321-slate-black.png", "/edge-city/portsea-1321-royal-white.png"],
+    sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
     colours: [
         { name: "Navy/White" },
+        { name: "Slate/Black" },
+        { name: "Royal/White" },
       ],
-    decorationMethod: "Embroidery",
+    decorationMethod: "TBC",
     leadWeeks: [2, 2],
-    priceCents: 5800,
+    priceCents: 2850,
     requiresStaffName: false,
   },
   {
@@ -152,7 +154,7 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
       ],
     decorationMethod: "None",
     leadWeeks: [2, 2],
-    priceCents: 8500,
+    priceCents: 4150,
     requiresStaffName: false,
   },
   {
@@ -171,7 +173,7 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
       ],
     decorationMethod: "None",
     leadWeeks: [2, 2],
-    priceCents: 9500,
+    priceCents: 4595,
     requiresStaffName: false,
   },
   {
@@ -182,7 +184,7 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     categoryId: "site-shorts",
     description: "Women's cut stretch cargo shorts with cooling vents. Reinforced seat, multiple cargo pockets. Waist in cm.",
     image: "/edge-city/syzmik-shorts-zs735-khaki.png",
-    images: ["/edge-city/syzmik-shorts-zs735-navy.png"],
+    images: ["/edge-city/syzmik-shorts-zs735-khaki-back.png", "/edge-city/syzmik-shorts-zs735-navy.png"],
     sizes: ["6", "8", "10", "12", "14", "16", "18", "20", "22", "24"],
     colours: [
         { name: "Khaki" },
@@ -190,7 +192,7 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
       ],
     decorationMethod: "None",
     leadWeeks: [2, 2],
-    priceCents: 8500,
+    priceCents: 2190,
     requiresStaffName: false,
   },
   {
@@ -209,7 +211,7 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
       ],
     decorationMethod: "None",
     leadWeeks: [2, 2],
-    priceCents: 12800,
+    priceCents: 6285,
     requiresStaffName: false,
   },
   {
@@ -227,7 +229,7 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
       ],
     decorationMethod: "None",
     leadWeeks: [2, 2],
-    priceCents: 11500,
+    priceCents: 6095,
     requiresStaffName: false,
   },
   {
@@ -243,9 +245,9 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     colours: [
         { name: "Charcoal/Black" },
       ],
-    decorationMethod: "Embroidery",
+    decorationMethod: "TBC",
     leadWeeks: [2, 2],
-    priceCents: 9500,
+    priceCents: 4995,
     requiresStaffName: true,
   },
   {
@@ -261,9 +263,9 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     colours: [
         { name: "Yellow" },
       ],
-    decorationMethod: "Embroidery",
+    decorationMethod: "TBC",
     leadWeeks: [2, 2],
-    priceCents: 9500,
+    priceCents: 4995,
     requiresStaffName: false,
   },
   {
@@ -279,9 +281,9 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     colours: [
         { name: "Navy/Grey" },
       ],
-    decorationMethod: "Embroidery",
+    decorationMethod: "TBC",
     leadWeeks: [2, 2],
-    priceCents: 8000,
+    priceCents: 3850,
     requiresStaffName: false,
   },
   {
@@ -298,9 +300,9 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
         { name: "White Sandwich Trim" },
         { name: "Navy" },
       ],
-    decorationMethod: "Embroidery",
+    decorationMethod: "TBC",
     leadWeeks: [2, 2],
-    priceCents: 2400,
+    priceCents: 550,
     requiresStaffName: false,
   },
   {
@@ -316,9 +318,9 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     colours: [
         { name: "Navy" },
       ],
-    decorationMethod: "Embroidery",
+    decorationMethod: "TBC",
     leadWeeks: [2, 2],
-    priceCents: 2200,
+    priceCents: 695,
     requiresStaffName: false,
   },
   {
@@ -336,9 +338,29 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
         { name: "Black" },
         { name: "Khaki" },
       ],
-    decorationMethod: "Embroidery",
+    decorationMethod: "TBC",
     leadWeeks: [2, 2],
-    priceCents: 4800,
+    priceCents: 2250,
+    requiresStaffName: false,
+  },
+  {
+    id: "125572",
+    slug: "125572",
+    sku: "125572",
+    name: "Legionnaire Wide Brim Hat",
+    categoryId: "headwear",
+    description: "Wide-brimmed hat made from 100% cotton twill, it offers UPF50 sun protection and a neck flap for additional coverage",
+    image: "/edge-city/125572-navy.png",
+    images: ["/edge-city/125572-royal.png", "/edge-city/125572-detail.png"],
+    sizes: ["One Size"],
+    colours: [
+        { name: "Navy" },
+        { name: "Black" },
+        { name: "Royal" },
+      ],
+    decorationMethod: "TBC",
+    leadWeeks: [2, 2],
+    priceCents: 1150,
     requiresStaffName: false,
   },
 ]
@@ -364,9 +386,9 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         colours: [
             { name: "Yellow/Navy" },
           ],
-        decorationMethod: "None",
+        decorationMethod: "TBC",
         leadWeeks: [2, 2],
-        priceCents: 3500,
+        priceCents: 1350,
         requiresStaffName: false,
       },
       {
@@ -382,9 +404,9 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         colours: [
             { name: "Yellow/Navy" },
           ],
-        decorationMethod: "Embroidery",
+        decorationMethod: "TBC",
         leadWeeks: [2, 2],
-        priceCents: 6500,
+        priceCents: 2485,
         requiresStaffName: true,
       },
       {
@@ -400,9 +422,9 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         colours: [
             { name: "Yellow/Navy" },
           ],
-        decorationMethod: "Embroidery",
+        decorationMethod: "TBC",
         leadWeeks: [2, 2],
-        priceCents: 7500,
+        priceCents: 2990,
         requiresStaffName: true,
       },
       {
@@ -417,9 +439,9 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         colours: [
             { name: "Yellow/Navy" },
           ],
-        decorationMethod: "Embroidery",
+        decorationMethod: "TBC",
         leadWeeks: [2, 2],
-        priceCents: 6500,
+        priceCents: 2990,
         requiresStaffName: true,
       },
     ],
@@ -446,9 +468,9 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
             { name: "Petrol Blue" },
             { name: "Charcoal Marle" },
           ],
-        decorationMethod: "Screen Print",
+        decorationMethod: "TBC",
         leadWeeks: [2, 2],
-        priceCents: 2800,
+        priceCents: 1150,
         requiresStaffName: false,
       },
       {
@@ -465,9 +487,9 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
             { name: "Navy/Sky" },
             { name: "Navy/Red" },
           ],
-        decorationMethod: "Embroidery",
+        decorationMethod: "TBC",
         leadWeeks: [2, 2],
-        priceCents: 5500,
+        priceCents: 2650,
         requiresStaffName: false,
       },
       {
@@ -478,14 +500,16 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         categoryId: "tees-polos",
         description: "Cotton-back polyester polo. 80% polyester / 20% cotton. 180 GSM. Smart appearance for site or office.",
         image: "/edge-city/portsea-1321-front.png",
-        images: ["/edge-city/portsea-1321-back.png", "/edge-city/portsea-1321-slate-black.png"],
-        sizes: ["8", "10", "12", "14", "16", "18", "20", "22", "24"],
+        images: ["/edge-city/portsea-1321-back.png", "/edge-city/portsea-1321-slate-black.png", "/edge-city/portsea-1321-royal-white.png"],
+        sizes: ["S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
         colours: [
             { name: "Navy/White" },
+            { name: "Slate/Black" },
+            { name: "Royal/White" },
           ],
-        decorationMethod: "Embroidery",
+        decorationMethod: "TBC",
         leadWeeks: [2, 2],
-        priceCents: 5800,
+        priceCents: 2850,
         requiresStaffName: false,
       },
     ],
@@ -513,7 +537,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
           ],
         decorationMethod: "None",
         leadWeeks: [2, 2],
-        priceCents: 8500,
+        priceCents: 4150,
         requiresStaffName: false,
       },
       {
@@ -532,7 +556,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
           ],
         decorationMethod: "None",
         leadWeeks: [2, 2],
-        priceCents: 9500,
+        priceCents: 4595,
         requiresStaffName: false,
       },
       {
@@ -543,7 +567,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         categoryId: "site-shorts",
         description: "Women's cut stretch cargo shorts with cooling vents. Reinforced seat, multiple cargo pockets. Waist in cm.",
         image: "/edge-city/syzmik-shorts-zs735-khaki.png",
-        images: ["/edge-city/syzmik-shorts-zs735-navy.png"],
+        images: ["/edge-city/syzmik-shorts-zs735-khaki-back.png", "/edge-city/syzmik-shorts-zs735-navy.png"],
         sizes: ["6", "8", "10", "12", "14", "16", "18", "20", "22", "24"],
         colours: [
             { name: "Khaki" },
@@ -551,7 +575,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
           ],
         decorationMethod: "None",
         leadWeeks: [2, 2],
-        priceCents: 8500,
+        priceCents: 2190,
         requiresStaffName: false,
       },
     ],
@@ -579,7 +603,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
           ],
         decorationMethod: "None",
         leadWeeks: [2, 2],
-        priceCents: 12800,
+        priceCents: 6285,
         requiresStaffName: false,
       },
       {
@@ -597,7 +621,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
           ],
         decorationMethod: "None",
         leadWeeks: [2, 2],
-        priceCents: 11500,
+        priceCents: 6095,
         requiresStaffName: false,
       },
     ],
@@ -622,9 +646,9 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         colours: [
             { name: "Charcoal/Black" },
           ],
-        decorationMethod: "Embroidery",
+        decorationMethod: "TBC",
         leadWeeks: [2, 2],
-        priceCents: 9500,
+        priceCents: 4995,
         requiresStaffName: true,
       },
       {
@@ -640,9 +664,9 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         colours: [
             { name: "Yellow" },
           ],
-        decorationMethod: "Embroidery",
+        decorationMethod: "TBC",
         leadWeeks: [2, 2],
-        priceCents: 9500,
+        priceCents: 4995,
         requiresStaffName: false,
       },
       {
@@ -658,9 +682,9 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         colours: [
             { name: "Navy/Grey" },
           ],
-        decorationMethod: "Embroidery",
+        decorationMethod: "TBC",
         leadWeeks: [2, 2],
-        priceCents: 8000,
+        priceCents: 3850,
         requiresStaffName: false,
       },
     ],
@@ -686,9 +710,9 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
             { name: "White Sandwich Trim" },
             { name: "Navy" },
           ],
-        decorationMethod: "Embroidery",
+        decorationMethod: "TBC",
         leadWeeks: [2, 2],
-        priceCents: 2400,
+        priceCents: 550,
         requiresStaffName: false,
       },
       {
@@ -704,9 +728,9 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         colours: [
             { name: "Navy" },
           ],
-        decorationMethod: "Embroidery",
+        decorationMethod: "TBC",
         leadWeeks: [2, 2],
-        priceCents: 2200,
+        priceCents: 695,
         requiresStaffName: false,
       },
       {
@@ -724,9 +748,29 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
             { name: "Black" },
             { name: "Khaki" },
           ],
-        decorationMethod: "Embroidery",
+        decorationMethod: "TBC",
         leadWeeks: [2, 2],
-        priceCents: 4800,
+        priceCents: 2250,
+        requiresStaffName: false,
+      },
+      {
+        id: "125572",
+        slug: "125572",
+        sku: "125572",
+        name: "Legionnaire Wide Brim Hat",
+        categoryId: "headwear",
+        description: "Wide-brimmed hat made from 100% cotton twill, it offers UPF50 sun protection and a neck flap for additional coverage",
+        image: "/edge-city/125572-navy.png",
+        images: ["/edge-city/125572-royal.png", "/edge-city/125572-detail.png"],
+        sizes: ["One Size"],
+        colours: [
+            { name: "Navy" },
+            { name: "Black" },
+            { name: "Royal" },
+          ],
+        decorationMethod: "TBC",
+        leadWeeks: [2, 2],
+        priceCents: 1150,
         requiresStaffName: false,
       },
     ],
@@ -739,27 +783,27 @@ export const EDGE_CITY_FEATURED_COLLECTIONS: PortalFeaturedCollection[] = [
     title: "Summer Site Essentials",
     subtitle: "Stay visible and cool in the warm months.",
     categorySlug: "hi-vis-essentials",
-    productIds: ["zh135","zh239","zh320","zs235","zs607"],
+    productIds: ["zh135","zh239","zh320","zs235","zs607","zs735","126398","1174","125572"],
   },
   {
     id: "project-team-uniform",
     title: "Project Team Uniform",
     subtitle: "Complete hi-vis programme for site-wide consistency.",
     categorySlug: "hi-vis-essentials",
-    productIds: ["zh320","zh415","zh731","p200ms"],
-  },
-  {
-    id: "winter-site-kit",
-    title: "Layer Up: Winter Ready",
-    subtitle: "Weather protection from hi-vis to warm fleece.",
-    categorySlug: "hoodies-midlayers",
-    productIds: ["zp604","zp444","zt467","zt867"],
+    productIds: ["zh320","zh415","zh731","p200ms","1321","126398","1174","125572"],
   },
   {
     id: "project-manager-kit",
     title: "Project Manager Kit",
     subtitle: "Smart workwear for the office-to-site transition.",
     categorySlug: "tees-polos",
-    productIds: ["xth"],
+    productIds: ["p200ms","1321","xth","115740"],
+  },
+  {
+    id: "winter-site-kit",
+    title: "Layer Up: Winter Ready",
+    subtitle: "Weather protection from hi-vis to warm fleece.",
+    categorySlug: "hoodies-midlayers",
+    productIds: ["zp604","zp444","zt467","zt867","xth","115740"],
   },
 ]
