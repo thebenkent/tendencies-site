@@ -147,7 +147,7 @@ function WorkCard({
         position: "relative",
         overflow: "hidden",
         display: "block",
-        minHeight: large ? "560px" : "320px",
+        minHeight: large ? "440px" : "320px",
         border: "1px solid rgba(255,255,255,0.08)",
         background: "#0f0f0f",
         textDecoration: "none",

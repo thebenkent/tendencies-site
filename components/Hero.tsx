@@ -58,7 +58,7 @@ export default function Hero() {
 
       <div
         style={{
-          maxWidth: "1440px",
+          maxWidth: "980px",
           margin: "0 auto",
           position: "relative",
           zIndex: 1,
@@ -66,10 +66,10 @@ export default function Hero() {
       >
         <h1
           style={{
-            fontSize: "clamp(72px, 10vw, 152px)",
+            fontSize: "clamp(64px, 8vw, 132px)",
             fontWeight: 900,
             letterSpacing: "-0.065em",
-            lineHeight: 0.84,
+            lineHeight: 0.92,
             textTransform: "uppercase",
             margin: "0 0 28px",
             color: "#f5f5f0",
@@ -86,10 +86,9 @@ export default function Hero() {
         <div
           style={{
             display: "flex",
-            flexDirection: isMobile ? "column" : "row",
-            alignItems: isMobile ? "flex-start" : "flex-end",
-            justifyContent: "space-between",
-            gap: isMobile ? "28px" : "48px",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            gap: "28px",
             ...fade("0.25s"),
           }}
         >
@@ -99,7 +98,7 @@ export default function Hero() {
               lineHeight: 1.65,
               color: "rgba(255,255,255,0.52)",
               margin: 0,
-              maxWidth: isMobile ? "100%" : "420px",
+              maxWidth: "420px",
             }}
           >
             We design and source branded product people actually keep.

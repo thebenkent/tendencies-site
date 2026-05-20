@@ -47,7 +47,7 @@ export default function WhatWeDo() {
         }
 
         .wwd-h1 {
-          font-size: clamp(72px, 11vw, 152px);
+          font-size: clamp(48px, 6.5vw, 96px);
           line-height: 0.86;
           letter-spacing: -0.045em;
           margin: 0;
@@ -76,7 +76,7 @@ export default function WhatWeDo() {
           margin: 0;
           font-size: 17px;
           line-height: 1.55;
-          color: #9a9a9a;
+          color: rgba(255,255,255,0.72);
         }
 
         .wwd-hero-lede strong {
@@ -173,7 +173,7 @@ export default function WhatWeDo() {
         .wwd-block-copy {
           font-size: 16px;
           line-height: 1.6;
-          color: #9a9a9a;
+          color: rgba(255,255,255,0.72);
           max-width: 460px;
           margin: 0 0 28px;
         }
