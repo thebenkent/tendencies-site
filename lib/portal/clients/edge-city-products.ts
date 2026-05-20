@@ -2,7 +2,7 @@
 // AUTO-GENERATED — do not edit by hand.
 // Run: npm run import:edge-city
 // Source: data/edge-city-products.csv (or .xlsx)
-// Generated: 2026-05-20T03:42:48.513Z
+// Generated: 2026-05-20T03:56:01.247Z
 // ─────────────────────────────────────────────────────────────────────────────
 
 import type { PortalCategory, PortalProduct, PortalFeaturedCollection } from '../types'
@@ -50,7 +50,7 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
     id: "zh320",
     slug: "zh320",
     sku: "ZH320",
-    name: "Syzmik Hi Vis Polo",
+    name: "Syzmik Hi Vis Komodo Polo",
     categoryId: "hi-vis-essentials",
     description: "Class D/N rated hi-vis polo. Moisture management fabric, taped seams, vented back. Staff name embroidered on chest.",
     image: "/edge-city/syzmik-hi-vis-zh320-hero.png",
@@ -79,7 +79,7 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
       ],
     decorationMethod: "TBC",
     leadWeeks: [2, 2],
-    priceCents: 2990,
+    priceCents: 2350,
     requiresStaffName: true,
   },
   {
@@ -96,7 +96,7 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
       ],
     decorationMethod: "TBC",
     leadWeeks: [2, 2],
-    priceCents: 2990,
+    priceCents: 1675,
     requiresStaffName: true,
   },
   {
@@ -173,7 +173,7 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
       ],
     decorationMethod: "None",
     leadWeeks: [2, 2],
-    priceCents: 4595,
+    priceCents: 4375,
     requiresStaffName: false,
   },
   {
@@ -192,7 +192,7 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
       ],
     decorationMethod: "None",
     leadWeeks: [2, 2],
-    priceCents: 2190,
+    priceCents: 3995,
     requiresStaffName: false,
   },
   {
@@ -229,7 +229,7 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
       ],
     decorationMethod: "None",
     leadWeeks: [2, 2],
-    priceCents: 6095,
+    priceCents: 5850,
     requiresStaffName: false,
   },
   {
@@ -340,7 +340,7 @@ export const EDGE_CITY_PRODUCTS: PortalProduct[] = [
       ],
     decorationMethod: "TBC",
     leadWeeks: [2, 2],
-    priceCents: 2250,
+    priceCents: 1950,
     requiresStaffName: false,
   },
   {
@@ -395,7 +395,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
         id: "zh320",
         slug: "zh320",
         sku: "ZH320",
-        name: "Syzmik Hi Vis Polo",
+        name: "Syzmik Hi Vis Komodo Polo",
         categoryId: "hi-vis-essentials",
         description: "Class D/N rated hi-vis polo. Moisture management fabric, taped seams, vented back. Staff name embroidered on chest.",
         image: "/edge-city/syzmik-hi-vis-zh320-hero.png",
@@ -424,7 +424,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
           ],
         decorationMethod: "TBC",
         leadWeeks: [2, 2],
-        priceCents: 2990,
+        priceCents: 2350,
         requiresStaffName: true,
       },
       {
@@ -441,7 +441,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
           ],
         decorationMethod: "TBC",
         leadWeeks: [2, 2],
-        priceCents: 2990,
+        priceCents: 1675,
         requiresStaffName: true,
       },
     ],
@@ -556,7 +556,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
           ],
         decorationMethod: "None",
         leadWeeks: [2, 2],
-        priceCents: 4595,
+        priceCents: 4375,
         requiresStaffName: false,
       },
       {
@@ -575,7 +575,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
           ],
         decorationMethod: "None",
         leadWeeks: [2, 2],
-        priceCents: 2190,
+        priceCents: 3995,
         requiresStaffName: false,
       },
     ],
@@ -621,7 +621,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
           ],
         decorationMethod: "None",
         leadWeeks: [2, 2],
-        priceCents: 6095,
+        priceCents: 5850,
         requiresStaffName: false,
       },
     ],
@@ -750,7 +750,7 @@ export const EDGE_CITY_CATEGORIES: PortalCategory[] = [
           ],
         decorationMethod: "TBC",
         leadWeeks: [2, 2],
-        priceCents: 2250,
+        priceCents: 1950,
         requiresStaffName: false,
       },
       {
