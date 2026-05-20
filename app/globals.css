@@ -559,7 +559,7 @@ body {
 
 .logo-wall-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   border-top: 1px solid var(--line);
   border-left: 1px solid var(--line);
   margin-top: 28px;
@@ -569,19 +569,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 48px 16px;
-  height: 120px;
+  padding: 32px 20px;
+  height: 152px;
   border-right: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
 
 .logo-wall-item img {
-  height: 28px;
-  max-width: 100px;
+  height: 48px;
+  max-width: 148px;
   width: auto;
   object-fit: contain;
   display: block;
-  opacity: 0.5;
+  opacity: 0.65;
   filter: brightness(0) invert(1);
 }
 
@@ -591,7 +591,13 @@ body {
   }
 
   .logo-wall-item {
-    height: 96px;
+    height: 120px;
+    padding: 24px 16px;
+  }
+
+  .logo-wall-item img {
+    height: 36px;
+    max-width: 110px;
   }
 }
 
