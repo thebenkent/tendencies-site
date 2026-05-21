@@ -79,7 +79,7 @@ export default function Header() {
             src="/tendencies-logo.svg"
             alt="Tendencies"
             style={{
-              height: isMobile ? "22px" : "24px",
+              height: isMobile ? "30px" : "40px",
               width: "auto",
               display: "block",
             }}
