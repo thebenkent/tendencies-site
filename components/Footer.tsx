@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -22,17 +23,14 @@ export default function Footer() {
       >
         {/* Brand */}
         <div>
-          <div
-            style={{
-              fontSize: "12px",
-              fontWeight: 700,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              color: "#f5f5f0",
-              marginBottom: "8px",
-            }}
-          >
-            Tendencies
+          <div style={{ marginBottom: "12px" }}>
+            <Image
+              src="/tendencies-logo.svg"
+              alt="Tendencies"
+              width={120}
+              height={24}
+              style={{ height: "24px", width: "auto" }}
+            />
           </div>
           <p
             style={{
