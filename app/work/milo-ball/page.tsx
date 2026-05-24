@@ -176,7 +176,7 @@ export default function MiloCaseStudy() {
           </div>
 
           <div className="case-image">
-            <img src="/work/milo-context.jpg" alt="Milo brand context" />
+            <img src="/milo-brand-context.jpg" alt="Milo brand context" />
           </div>
         </div>
       </section>
@@ -185,7 +185,7 @@ export default function MiloCaseStudy() {
       <section className="case-section case-block">
         <div className="case-inner case-grid">
           <div className="case-image">
-            <img src="/work/milo-design.jpg" alt="Milo ball design development" />
+            <img src="/milo-ball-design.jpg" alt="Milo ball design development" />
           </div>
 
           <div className="case-copy">
@@ -212,7 +212,7 @@ export default function MiloCaseStudy() {
           </div>
 
           <div className="case-image case-full">
-            <img src="/work/milo-ball.jpg" alt="Finished Milo promotional ball" />
+            <img src="/milo-ball-finished.jpg" alt="Finished Milo promotional ball" />
           </div>
         </div>
       </section>
@@ -229,7 +229,7 @@ export default function MiloCaseStudy() {
           </div>
 
           <div className="case-image">
-            <img src="/work/milo-usage.jpg" alt="Milo ball in use" />
+            <img src="/milo-ball-in-use.jpg" alt="Milo ball in use" />
           </div>
         </div>
       </section>
@@ -237,7 +237,7 @@ export default function MiloCaseStudy() {
       {/* CTA */}
       <section className="case-section case-cta">
         <h2>Got a brief?</h2>
-        <a href="/contact" className="case-button">
+        <a href="/start-a-project" className="case-button">
           Start a Project
         </a>
       </section>
