@@ -49,10 +49,10 @@ const PROJECTS = [
   },
   {
     client: "Colas",
-    title: "Civil Construction Teamwear",
-    tag: "Teamwear",
+    title: "Event Giveaways",
+    tag: "Merchandise",
     image: "/work-colas.jpg",
-    href: "/work",
+    href: "/work/colas-giveaways",
   },
 ];
 
