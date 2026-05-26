@@ -10,14 +10,13 @@ export default function KerastasePillowcaseCaseStudy() {
           font-family: Helvetica, Arial, sans-serif;
         }
 
-        /* ─── HERO — full-bleed retail image, left-side gradient ─── */
+        /* ─── HERO ─── */
         .ks-hero {
           position: relative;
           aspect-ratio: 16 / 8;
           overflow: hidden;
           background: #141210;
         }
-
         .ks-hero img {
           width: 100%;
           height: 100%;
@@ -25,20 +24,17 @@ export default function KerastasePillowcaseCaseStudy() {
           object-position: center 50%;
           display: block;
         }
-
-        /* Gradient only on left — preserves salon shelves on right */
         .ks-hero-overlay {
           position: absolute;
           inset: 0;
           background: linear-gradient(
             to right,
-            rgba(9,8,7,0.90) 0%,
-            rgba(9,8,7,0.54) 36%,
-            rgba(9,8,7,0.10) 58%,
+            rgba(9,8,7,0.92) 0%,
+            rgba(9,8,7,0.56) 36%,
+            rgba(9,8,7,0.12) 58%,
             transparent 100%
           );
         }
-
         .ks-hero-back {
           position: absolute;
           top: 32px;
@@ -52,7 +48,6 @@ export default function KerastasePillowcaseCaseStudy() {
           z-index: 2;
         }
         .ks-hero-back:hover { color: rgba(240,236,230,0.72); }
-
         .ks-hero-content {
           position: absolute;
           bottom: 0;
@@ -61,7 +56,6 @@ export default function KerastasePillowcaseCaseStudy() {
           z-index: 2;
           max-width: 660px;
         }
-
         .ks-hero-eyebrow {
           font-size: 10px;
           font-weight: 400;
@@ -70,7 +64,6 @@ export default function KerastasePillowcaseCaseStudy() {
           color: rgba(240,236,230,0.44);
           margin-bottom: 22px;
         }
-
         .ks-hero-title {
           font-size: clamp(44px, 6.5vw, 96px);
           font-weight: 900;
@@ -80,9 +73,7 @@ export default function KerastasePillowcaseCaseStudy() {
           color: #f0ece6;
           margin: 0 0 24px;
         }
-
         .ks-accent { color: #b8f400; }
-
         .ks-hero-subline {
           font-size: 11px;
           letter-spacing: 0.22em;
@@ -91,22 +82,10 @@ export default function KerastasePillowcaseCaseStudy() {
           font-weight: 400;
         }
 
-        .ks-hero-caption {
-          position: absolute;
-          bottom: 28px;
-          right: 40px;
-          font-size: 10px;
-          letter-spacing: 0.2em;
-          text-transform: uppercase;
-          color: rgba(10,9,8,0.38);
-          z-index: 2;
-        }
-
         /* ─── META BAND ─── */
         .ks-meta-band {
           border-bottom: 1px solid rgba(240,236,230,0.06);
         }
-
         .ks-meta-inner {
           max-width: 1440px;
           margin: 0 auto;
@@ -115,13 +94,7 @@ export default function KerastasePillowcaseCaseStudy() {
           gap: 56px;
           flex-wrap: wrap;
         }
-
-        .ks-meta-item {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-        }
-
+        .ks-meta-item { display: flex; flex-direction: column; gap: 6px; }
         .ks-meta-label {
           font-size: 10px;
           letter-spacing: 0.22em;
@@ -129,7 +102,6 @@ export default function KerastasePillowcaseCaseStudy() {
           color: rgba(240,236,230,0.22);
           font-weight: 400;
         }
-
         .ks-meta-value {
           font-size: 12px;
           letter-spacing: 0.07em;
@@ -138,201 +110,175 @@ export default function KerastasePillowcaseCaseStudy() {
           font-weight: 600;
         }
 
-        /* ─── CONTENT BLOCKS ─── */
+        /* ─── BRIEF ─── */
         .ks-block {
-          padding: 120px 64px;
+          padding: 160px 64px;
           border-bottom: 1px solid rgba(240,236,230,0.05);
         }
-
         .ks-block-inner {
           max-width: 1300px;
           margin: 0 auto;
         }
-
-        /* ─── TEXT SPLIT ─── */
         .ks-text-split {
           display: grid;
-          grid-template-columns: 280px 1fr;
-          gap: 80px;
+          grid-template-columns: 320px 1fr;
+          gap: 96px;
           align-items: start;
         }
-
         .ks-num {
           font-size: 10px;
           font-weight: 400;
           letter-spacing: 0.28em;
           text-transform: uppercase;
           color: rgba(240,236,230,0.18);
-          margin-bottom: 16px;
+          margin-bottom: 20px;
         }
-
         .ks-section-label {
-          font-size: clamp(24px, 2.6vw, 34px);
+          font-size: clamp(32px, 3.2vw, 48px);
           font-weight: 900;
-          letter-spacing: -0.03em;
+          letter-spacing: -0.04em;
           text-transform: uppercase;
           color: #f0ece6;
-          line-height: 0.96;
+          line-height: 0.9;
           margin: 0;
         }
-
         .ks-copy {
           font-size: 17px;
-          line-height: 1.84;
-          color: rgba(240,236,230,0.44);
+          line-height: 1.92;
+          color: rgba(240,236,230,0.42);
           font-weight: 400;
-          max-width: 580px;
+          max-width: 560px;
         }
 
-        /* ─── PRODUCT PANEL — cream, pillowcase centered ─── */
-        .ks-product-panel {
-          background: #f5f0eb;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 80px 64px;
-          border-top: 1px solid rgba(240,236,230,0.05);
-          border-bottom: 1px solid rgba(240,236,230,0.05);
-        }
-
-        .ks-product-panel img {
-          display: block;
-          max-width: 820px;
-          width: 100%;
-          height: auto;
-          object-fit: contain;
-        }
-
-        .ks-product-caption {
-          text-align: center;
-          font-size: 10px;
-          letter-spacing: 0.22em;
-          text-transform: uppercase;
-          color: rgba(9,8,7,0.32);
-          margin-top: 28px;
-          font-weight: 400;
-        }
-
-        /* ─── IMAGE + TEXT SPLIT (design section) ─── */
-        .ks-img-split {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 96px;
-          align-items: center;
-        }
-
-        .ks-img-wrap {
+        /* ─── RETAIL ACTIVATION — cinematic full-bleed feature ─── */
+        .ks-retail {
           position: relative;
+          aspect-ratio: 21 / 9;
           overflow: hidden;
-          background: #f5f0eb;
+          background: #0d0b0a;
         }
-
-        .ks-img-wrap img {
+        .ks-retail img {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          object-position: center 40%;
-          display: block;
-          transition: transform 1000ms ease;
-        }
-
-        .ks-img-wrap:hover img { transform: scale(1.025); }
-
-        .ks-img-portrait { aspect-ratio: 4 / 5; }
-
-        /* ─── CONTEXT — hero image, tighter crop on sign ─── */
-        .ks-context {
-          position: relative;
-          aspect-ratio: 16 / 6;
-          overflow: hidden;
-          background: #141210;
-        }
-
-        .ks-context img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          object-position: 62% 60%;
+          object-position: 55% 40%;
           display: block;
         }
-
-        .ks-context-overlay {
+        .ks-retail-overlay {
           position: absolute;
           inset: 0;
           background: linear-gradient(
-            to left,
-            rgba(9,8,7,0.82) 0%,
-            rgba(9,8,7,0.38) 42%,
-            transparent 68%
+            to top,
+            rgba(9,8,7,0.80) 0%,
+            rgba(9,8,7,0.10) 35%,
+            transparent 60%
           );
           display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          padding: 64px 80px;
+          align-items: flex-end;
+          padding: 48px 64px;
         }
-
-        .ks-context-copy {
-          max-width: 360px;
-          text-align: right;
-        }
-
-        .ks-context-copy h2 {
-          font-size: clamp(22px, 2.6vw, 36px);
-          font-weight: 900;
-          letter-spacing: -0.03em;
+        .ks-retail-label {
+          font-size: 10px;
+          letter-spacing: 0.32em;
           text-transform: uppercase;
-          color: #f0ece6;
-          line-height: 0.95;
-          margin: 0 0 16px;
-        }
-
-        .ks-context-copy p {
-          font-size: 14px;
-          line-height: 1.72;
-          color: rgba(240,236,230,0.46);
+          color: rgba(240,236,230,0.28);
           font-weight: 400;
         }
 
-        /* ─── EDITORIAL OUTCOME ─── */
-        .ks-editorial {
-          padding: 128px 64px;
-          border-bottom: 1px solid rgba(240,236,230,0.05);
+        /* ─── DESIGN — product on deep plum, editorial split ─── */
+        .ks-design {
+          border-top: 1px solid rgba(240,236,230,0.04);
+          border-bottom: 1px solid rgba(240,236,230,0.04);
+        }
+        .ks-design-inner {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          min-height: 640px;
+          align-items: stretch;
+        }
+        .ks-design-image {
+          position: relative;
+          overflow: hidden;
+          background: #07050d;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 72px 56px;
+        }
+        .ks-design-image img {
+          display: block;
+          width: 100%;
+          max-width: 440px;
+          height: auto;
+          object-fit: contain;
+          position: relative;
+          z-index: 1;
+        }
+        .ks-design-vignette {
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(ellipse at center, transparent 42%, rgba(7,5,13,0.82) 100%);
+          pointer-events: none;
+          z-index: 2;
+        }
+        .ks-design-text {
+          background: #0e0b14;
+          padding: 120px 80px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+        .ks-design-text .ks-section-label {
+          margin-bottom: 40px;
+        }
+        .ks-design-text .ks-copy {
+          max-width: 480px;
         }
 
-        .ks-editorial-inner {
+        /* ─── DETAIL — warm charcoal ─── */
+        .ks-detail {
+          background: #0f0d09;
+          padding: 160px 64px;
+          border-bottom: 1px solid rgba(240,236,230,0.04);
+        }
+        .ks-detail-inner {
           max-width: 1300px;
           margin: 0 auto;
         }
 
+        /* ─── EDITORIAL OUTCOME ─── */
+        .ks-editorial {
+          padding: 160px 64px;
+          border-bottom: 1px solid rgba(240,236,230,0.05);
+        }
+        .ks-editorial-inner {
+          max-width: 1300px;
+          margin: 0 auto;
+        }
         .ks-pull-quote {
-          font-size: clamp(22px, 3vw, 40px);
+          font-size: clamp(24px, 3.2vw, 46px);
           font-weight: 300;
-          letter-spacing: -0.01em;
-          line-height: 1.3;
-          color: #f0ece6;
-          max-width: 800px;
-          margin: 0 0 80px;
+          letter-spacing: -0.02em;
+          line-height: 1.28;
+          color: rgba(240,236,230,0.86);
+          max-width: 900px;
+          margin: 0 0 96px;
           font-style: italic;
         }
-
         .ks-outcome-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 80px;
-          padding-top: 48px;
+          padding-top: 56px;
           border-top: 1px solid rgba(240,236,230,0.06);
         }
-
-        .ks-outcome-col .ks-copy {
-          margin-top: 16px;
-        }
+        .ks-outcome-col .ks-copy { margin-top: 16px; }
 
         /* ─── CTA ─── */
         .ks-cta {
           background: #b8f400;
           padding: 120px 64px;
         }
-
         .ks-cta-inner {
           max-width: 1300px;
           margin: 0 auto;
@@ -341,7 +287,6 @@ export default function KerastasePillowcaseCaseStudy() {
           gap: 48px;
           align-items: end;
         }
-
         .ks-cta h2 {
           font-size: clamp(52px, 9vw, 120px);
           font-weight: 900;
@@ -351,9 +296,7 @@ export default function KerastasePillowcaseCaseStudy() {
           color: #080808;
           margin: 0;
         }
-
         .ks-cta-right { text-align: right; }
-
         .ks-cta-right p {
           font-size: 15px;
           color: rgba(8,8,8,0.55);
@@ -361,7 +304,6 @@ export default function KerastasePillowcaseCaseStudy() {
           max-width: 220px;
           margin: 0 0 24px auto;
         }
-
         .ks-cta-btn {
           display: inline-flex;
           align-items: center;
@@ -379,7 +321,6 @@ export default function KerastasePillowcaseCaseStudy() {
           background: transparent;
           transition: background 0.25s, border-color 0.25s;
         }
-
         .ks-cta-btn:hover {
           background: rgba(8,8,8,0.07);
           border-color: rgba(8,8,8,0.32);
@@ -390,40 +331,31 @@ export default function KerastasePillowcaseCaseStudy() {
           .ks-hero         { aspect-ratio: 4 / 3; }
           .ks-hero-content { padding: 36px 28px; max-width: 100%; }
           .ks-hero-back    { top: 20px; left: 20px; }
-          .ks-hero-caption { display: none; }
 
-          .ks-meta-inner   { padding: 28px; gap: 24px; }
+          .ks-meta-inner   { padding: 24px 28px; gap: 24px; }
 
-          .ks-block        { padding: 72px 28px; }
-          .ks-editorial    { padding: 80px 28px; }
-          .ks-cta          { padding: 80px 28px; }
+          .ks-block        { padding: 96px 28px; }
+          .ks-text-split   { grid-template-columns: 1fr; gap: 40px; }
 
-          .ks-text-split   { grid-template-columns: 1fr; gap: 36px; }
-          .ks-img-split    { grid-template-columns: 1fr; gap: 48px; }
+          .ks-retail       { aspect-ratio: 4 / 3; }
+          .ks-retail-overlay { padding: 28px; }
 
-          .ks-product-panel { padding: 48px 28px; }
+          .ks-design-inner { grid-template-columns: 1fr; min-height: auto; }
+          .ks-design-image { padding: 52px 36px; min-height: 300px; }
+          .ks-design-image img { max-width: 300px; }
+          .ks-design-text  { padding: 64px 28px; }
+          .ks-design-text .ks-copy { max-width: none; }
 
-          .ks-context      { aspect-ratio: 4 / 3; }
-          .ks-context-overlay {
-            padding: 32px 28px;
-            justify-content: flex-start;
-            background: linear-gradient(
-              to top,
-              rgba(9,8,7,0.88) 0%,
-              rgba(9,8,7,0.28) 60%,
-              transparent 100%
-            );
-            align-items: flex-end;
-          }
-          .ks-context-copy { text-align: left; max-width: 100%; }
+          .ks-detail       { padding: 96px 28px; }
 
+          .ks-editorial    { padding: 96px 28px; }
+          .ks-pull-quote   { margin-bottom: 64px; }
           .ks-outcome-grid { grid-template-columns: 1fr; gap: 40px; }
 
+          .ks-cta          { padding: 80px 28px; }
           .ks-cta-inner    { grid-template-columns: 1fr; }
           .ks-cta-right    { text-align: left; }
-          .ks-cta-right p  { margin: 0 0 24px; }
-
-          .ks-meta-inner   { gap: 24px; }
+          .ks-cta-right p  { margin: 0 0 24px; max-width: none; }
         }
       `}</style>
 
@@ -438,9 +370,7 @@ export default function KerastasePillowcaseCaseStudy() {
             decoding="async"
           />
           <div className="ks-hero-overlay" />
-
           <a href="/work" className="ks-hero-back">← Work</a>
-
           <div className="ks-hero-content">
             <p className="ks-hero-eyebrow">Case Study</p>
             <h1 className="ks-hero-title">
@@ -452,8 +382,6 @@ export default function KerastasePillowcaseCaseStudy() {
               Luxury salon gifting &nbsp;·&nbsp; Retail activation &nbsp;·&nbsp; Premium GWP
             </p>
           </div>
-
-          <span className="ks-hero-caption">Kérastase · In-Salon GWP Activation</span>
         </div>
 
         {/* ─── META BAND ─── */}
@@ -503,71 +431,53 @@ export default function KerastasePillowcaseCaseStudy() {
           </div>
         </div>
 
-        {/* ─── PRODUCT PANEL — pillowcase render, generous cream space ─── */}
-        <div className="ks-product-panel">
-          <div style={{ width: "100%", maxWidth: "860px" }}>
-            <img
-              src="/work-kerastase.jpg"
-              alt="Kérastase silk pillowcase — lavender with tonal embossed branding"
-              loading="lazy"
-              decoding="async"
-            />
-            <p className="ks-product-caption">
-              Kérastase Paris · Silk Pillowcase · Tonal Embossed Branding
-            </p>
-          </div>
-        </div>
-
-        {/* ─── DESIGN ─── */}
-        <div className="ks-block">
-          <div className="ks-block-inner">
-            <div className="ks-text-split">
-              <div>
-                <p className="ks-num">02 — Design</p>
-                <h2 className="ks-section-label">
-                  Restraint<br />
-                  as luxury.
-                </h2>
-              </div>
-              <div>
-                <p className="ks-copy">
-                  The approach focused on restraint and material quality. Tonal
-                  branding, soft lavender colour selection, and clean finishing
-                  allowed the product to feel considered rather than overtly
-                  promotional — a piece you keep because it is genuinely
-                  beautiful, not because it is branded.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ─── CONTEXT — hero image, tighter crop on the GWP sign ─── */}
-        <div className="ks-context">
+        {/* ─── RETAIL ACTIVATION — cinematic full-bleed feature ─── */}
+        <div className="ks-retail">
           <img
             src="/kerastase-hero.jpg"
-            alt="Kérastase GWP display sign at salon counter"
+            alt="Kérastase GWP silk pillowcase activation at premium salon retail counter"
             loading="lazy"
             decoding="async"
           />
-          <div className="ks-context-overlay">
-            <div className="ks-context-copy">
-              <h2>
-                The gift<br />
-                at point<br />
-                of purchase.
+          <div className="ks-retail-overlay">
+            <span className="ks-retail-label">
+              In-Salon Retail Activation &nbsp;·&nbsp; Gift With Purchase Display
+            </span>
+          </div>
+        </div>
+
+        {/* ─── DESIGN — pillowcase on deep plum, editorial split ─── */}
+        <div className="ks-design">
+          <div className="ks-design-inner">
+            <div className="ks-design-image">
+              <img
+                src="/work-kerastase.jpg"
+                alt="Kérastase silk pillowcase — lavender with tonal embossed branding"
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="ks-design-vignette" />
+            </div>
+            <div className="ks-design-text">
+              <p className="ks-num">02 — Design</p>
+              <h2 className="ks-section-label">
+                Restraint<br />
+                as luxury.
               </h2>
-              <p>
-                Presented in-salon at the counter — a product beautiful enough
-                to communicate value before a word was read.
+              <p className="ks-copy">
+                The approach focused on restraint and material quality. Tonal
+                branding, soft lavender colour selection, and clean finishing
+                allowed the product to feel considered rather than overtly
+                promotional — a piece you keep because it is genuinely
+                beautiful, not because it is branded.
               </p>
             </div>
           </div>
         </div>
 
-        {/* ─── PRODUCT DETAILS ─── */}
-        <div className="ks-block">
-          <div className="ks-block-inner">
+        {/* ─── PRODUCT DETAIL — warm charcoal ─── */}
+        <div className="ks-detail">
+          <div className="ks-detail-inner">
             <div className="ks-text-split">
               <div>
                 <p className="ks-num">03 — Product</p>
@@ -595,10 +505,10 @@ export default function KerastasePillowcaseCaseStudy() {
         <div className="ks-editorial">
           <div className="ks-editorial-inner">
             <p className="ks-pull-quote">
-              "A refined gifting piece that extended the salon experience
-              beyond purchase — premium, brand-aligned, and highly giftable."
+              A refined gifting piece that extended the salon experience
+              beyond purchase — premium, brand-aligned,
+              and highly giftable.
             </p>
-
             <div className="ks-outcome-grid">
               <div className="ks-outcome-col">
                 <p className="ks-num">04 — Outcome</p>
