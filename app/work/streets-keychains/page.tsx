@@ -92,30 +92,33 @@ export default function StreetsCaseStudy() {
           font-weight: 600;
         }
 
-        /* ─── HERO IMAGE — finished product on neutral ─── */
+        /* ─── HERO IMAGE — retail activation ─── */
         .sk-hero-image {
           position: relative;
-          aspect-ratio: 16 / 7;
+          aspect-ratio: 16 / 9;
           overflow: hidden;
-          background: #f0ece6;
+          background: #f5f2ee;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .sk-hero-image img {
           width: 100%;
           height: 100%;
-          object-fit: cover;
+          object-fit: contain;
           object-position: center center;
           display: block;
         }
 
         .sk-hero-caption {
           position: absolute;
-          bottom: 24px;
-          right: 32px;
+          bottom: 20px;
+          right: 28px;
           font-size: 10px;
           letter-spacing: 0.22em;
           text-transform: uppercase;
-          color: rgba(8,9,11,0.32);
+          color: rgba(8,9,11,0.28);
         }
 
         /* ─── SECTION BLOCKS ─── */
@@ -381,7 +384,7 @@ export default function StreetsCaseStudy() {
           .sk-editorial     { padding: 64px 28px; }
           .sk-cta           { padding: 80px 28px; }
 
-          .sk-hero-image    { aspect-ratio: 4 / 3; }
+          .sk-hero-image    { aspect-ratio: 3 / 2; }
           .sk-market-image  { aspect-ratio: 4 / 3; }
 
           .sk-text-split    { grid-template-columns: 1fr; gap: 36px; }
@@ -439,15 +442,15 @@ export default function StreetsCaseStudy() {
           </div>
         </div>
 
-        {/* ─── HERO IMAGE — finished product ─── */}
+        {/* ─── HERO IMAGE — retail activation ─── */}
         <div className="sk-hero-image">
           <img
-            src="/work-streets-finished.jpg"
-            alt="Streets Ice Cream — finished resin keychains"
+            src="/streets-keychain-freezer.jpg"
+            alt="Streets Ice Cream — Free Collectable Keyring retail activation at freezer"
             loading="eager"
             decoding="async"
           />
-          <span className="sk-hero-caption">Streets Ice Cream · Finished Product</span>
+          <span className="sk-hero-caption">Streets Ice Cream · Retail Activation</span>
         </div>
 
         {/* ─── THE CHALLENGE ─── */}
