@@ -42,10 +42,10 @@ const PROJECTS = [
   },
   {
     client: "Kérastase",
-    title: "Satin Pillowcase GWP",
-    tag: "GWP",
+    title: "Silk Pillowcase GWP",
+    tag: "Beauty GWP",
     image: "/work-kerastase.jpg",
-    href: "/work",
+    href: "/work/kerastase-silk-pillowcase",
   },
   {
     client: "Colas",
