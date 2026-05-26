@@ -31,7 +31,7 @@ const PROJECTS = [
     title: "Promotional Vest",
     tag: "Apparel",
     image: "/work-lynx.jpg",
-    href: "/work",
+    href: "/work/unilever-vest",
   },
   {
     client: "Swire",
