@@ -10,9 +10,9 @@ export default function SwireKnitwearCaseStudy() {
           font-family: Helvetica, Arial, sans-serif;
         }
 
-        /* ─── HERO ─── */
+        /* ─── HERO TEXT ─── */
         .sw-hero {
-          padding: 136px 72px 120px;
+          padding: 136px 72px 96px;
           max-width: 1440px;
           margin: 0 auto;
         }
@@ -47,7 +47,7 @@ export default function SwireKnitwearCaseStudy() {
           line-height: 0.91;
           text-transform: uppercase;
           color: #ece9e3;
-          margin: 0 0 44px;
+          margin: 0 0 40px;
         }
 
         .sw-accent { color: #b8f400; }
@@ -103,8 +103,18 @@ export default function SwireKnitwearCaseStudy() {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          object-position: center 35%;
+          object-position: center 30%;
           display: block;
+        }
+
+        .sw-hero-image-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            to top,
+            rgba(8,9,11,0.38) 0%,
+            transparent 45%
+          );
         }
 
         .sw-hero-caption {
@@ -124,7 +134,7 @@ export default function SwireKnitwearCaseStudy() {
           margin: 0;
         }
 
-        /* ─── CONTENT BLOCKS ─── */
+        /* ─── BRIEF — text split ─── */
         .sw-block {
           padding: 128px 72px;
           border-bottom: 1px solid rgba(236,233,227,0.05);
@@ -135,7 +145,6 @@ export default function SwireKnitwearCaseStudy() {
           margin: 0 auto;
         }
 
-        /* ─── TEXT SPLIT (label | copy) ─── */
         .sw-text-split {
           display: grid;
           grid-template-columns: 280px 1fr;
@@ -174,54 +183,102 @@ export default function SwireKnitwearCaseStudy() {
           max-width: 600px;
         }
 
-        /* ─── IMAGE + TEXT SPLIT ─── */
-        .sw-img-split {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 96px;
-          align-items: center;
-        }
-
-        .sw-img-wrap {
-          position: relative;
-          overflow: hidden;
-          background: #0d0e10;
-        }
-
-        .sw-img-portrait { aspect-ratio: 3 / 4; }
-
-        .sw-img-wrap img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          object-position: center 20%;
-          display: block;
-          transition: transform 1000ms ease;
-        }
-
-        .sw-img-wrap:hover img { transform: scale(1.025); }
-
-        .sw-img-text {
-          padding-left: 16px;
-        }
-
-        /* ─── PRODUCT BAND (full-width text) ─── */
-        .sw-product {
-          padding: 112px 72px;
+        /* ─── PRODUCT — render on white card ─── */
+        .sw-product-band {
           border-bottom: 1px solid rgba(236,233,227,0.05);
-          background: #060708;
         }
 
         .sw-product-inner {
           max-width: 1300px;
           margin: 0 auto;
           display: grid;
-          grid-template-columns: 280px 1fr;
-          gap: 80px;
-          align-items: start;
+          grid-template-columns: 1fr 1fr;
+          align-items: center;
+          padding: 0 72px;
         }
 
-        /* ─── EDITORIAL / OUTCOME ─── */
+        .sw-product-card {
+          background: #ffffff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 80px 72px;
+          min-height: 540px;
+        }
+
+        .sw-product-card img {
+          display: block;
+          width: 100%;
+          max-width: 420px;
+          height: auto;
+          object-fit: contain;
+        }
+
+        .sw-product-text {
+          padding: 80px 80px 80px 96px;
+          background: #08090b;
+        }
+
+        /* ─── DETAIL — close-up full bleed ─── */
+        .sw-detail-band {
+          position: relative;
+          aspect-ratio: 16 / 7;
+          overflow: hidden;
+          background: #0d0e10;
+          border-bottom: 1px solid rgba(236,233,227,0.05);
+        }
+
+        .sw-detail-band img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center center;
+          display: block;
+          transition: transform 1200ms ease;
+        }
+
+        .sw-detail-band:hover img { transform: scale(1.02); }
+
+        .sw-detail-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            to right,
+            rgba(8,9,11,0.82) 0%,
+            rgba(8,9,11,0.32) 50%,
+            transparent 100%
+          );
+          display: flex;
+          align-items: flex-end;
+          padding: 72px 80px;
+        }
+
+        .sw-detail-copy {
+          max-width: 420px;
+        }
+
+        .sw-detail-copy p.sw-num {
+          margin-bottom: 14px;
+        }
+
+        .sw-detail-copy h2 {
+          font-size: clamp(26px, 3vw, 44px);
+          font-weight: 900;
+          letter-spacing: -0.03em;
+          text-transform: uppercase;
+          color: #ece9e3;
+          margin: 0 0 20px;
+          line-height: 0.93;
+        }
+
+        .sw-detail-copy p.sw-copy {
+          font-size: 15px;
+          line-height: 1.72;
+          color: rgba(236,233,227,0.52);
+          max-width: 360px;
+        }
+
+        /* ─── OUTCOME editorial ─── */
         .sw-editorial {
           padding: 136px 72px;
           border-bottom: 1px solid rgba(236,233,227,0.05);
@@ -234,13 +291,13 @@ export default function SwireKnitwearCaseStudy() {
 
         .sw-pull-quote {
           font-size: clamp(22px, 2.8vw, 38px);
-          font-weight: 800;
-          letter-spacing: -0.025em;
-          line-height: 1.18;
-          color: #ece9e3;
-          max-width: 760px;
+          font-weight: 300;
+          font-style: italic;
+          letter-spacing: -0.015em;
+          line-height: 1.24;
+          color: rgba(236,233,227,0.72);
+          max-width: 800px;
           margin: 0 0 88px;
-          text-transform: uppercase;
         }
 
         .sw-outcome-grid {
@@ -319,16 +376,18 @@ export default function SwireKnitwearCaseStudy() {
         @media (max-width: 980px) {
           .sw-hero      { padding: 96px 28px 72px; }
           .sw-block     { padding: 80px 28px; }
-          .sw-product   { padding: 80px 28px; }
           .sw-editorial { padding: 80px 28px; }
           .sw-cta       { padding: 80px 28px; }
 
-          .sw-hero-image { aspect-ratio: 4 / 3; }
+          .sw-hero-image  { aspect-ratio: 4 / 3; }
+          .sw-detail-band { aspect-ratio: 4 / 3; }
+          .sw-detail-overlay { padding: 36px; }
 
-          .sw-text-split    { grid-template-columns: 1fr; gap: 36px; }
-          .sw-img-split     { grid-template-columns: 1fr; gap: 48px; }
-          .sw-img-text      { padding-left: 0; }
-          .sw-product-inner { grid-template-columns: 1fr; gap: 36px; }
+          .sw-text-split { grid-template-columns: 1fr; gap: 36px; }
+
+          .sw-product-inner { grid-template-columns: 1fr; padding: 0; }
+          .sw-product-card  { padding: 56px 40px; min-height: 340px; }
+          .sw-product-text  { padding: 56px 28px; }
 
           .sw-outcome-grid { grid-template-columns: 1fr; gap: 40px; }
 
@@ -342,7 +401,7 @@ export default function SwireKnitwearCaseStudy() {
 
       <div className="sw-page">
 
-        {/* ─── HERO ─── */}
+        {/* ─── HERO TEXT ─── */}
         <div className="sw-hero">
           <a href="/work" className="sw-back">← Work</a>
 
@@ -381,11 +440,12 @@ export default function SwireKnitwearCaseStudy() {
         {/* ─── HERO IMAGE ─── */}
         <div className="sw-hero-image">
           <img
-            src="/work-knitwear.jpg"
-            alt="Swire embroidered merino knitwear — navy V-neck"
+            src="/swire-merino-hero.jpg"
+            alt="Swire corporate knitwear — lifestyle"
             loading="eager"
             decoding="async"
           />
+          <div className="sw-hero-image-overlay" />
           <span className="sw-hero-caption">Swire Shipping · Corporate Knitwear</span>
         </div>
 
@@ -404,63 +464,66 @@ export default function SwireKnitwearCaseStudy() {
               <div>
                 <p className="sw-copy">
                   Develop a premium knitwear garment suitable for corporate and
-                  client-facing environments while maintaining comfort, durability,
-                  and understated brand presentation. The product needed to sit
-                  naturally within a heritage shipping brand — quality that spoke
-                  for itself without announcing itself.
+                  client-facing environments. The brief called for something
+                  that sat naturally within a heritage shipping brand —
+                  quality that communicated without announcing itself. Comfort,
+                  durability, and understated presentation across repeated wear.
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ─── DESIGN ─── */}
-        <div className="sw-block">
-          <div className="sw-block-inner">
-            <div className="sw-img-split">
-              <div className="sw-img-wrap sw-img-portrait">
-                <img
-                  src="/work-knitwear.jpg"
-                  alt="Swire knitwear — embroidery detail"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <div className="sw-img-text">
-                <p className="sw-num">02 — Design</p>
-                <h2 className="sw-section-label" style={{ marginBottom: "28px" }}>
-                  Restraint<br />
-                  over statement.
-                </h2>
-                <p className="sw-copy">
-                  The garment was intentionally restrained. Small-scale
-                  embroidery, deep navy merino, and clean construction allowed
-                  the product to feel premium without relying on oversized
-                  branding. The kind of piece you notice because of what it
-                  doesn't do.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ─── PRODUCT ─── */}
-        <div className="sw-product">
+        {/* ─── PRODUCT — render on white ─── */}
+        <div className="sw-product-band">
           <div className="sw-product-inner">
-            <div className="sw-label-col">
-              <p className="sw-num">03 — Product</p>
-              <h2 className="sw-section-label">
-                Quality<br />
-                that wears.
-              </h2>
+            <div className="sw-product-card">
+              <img
+                src="/swire-merino01.jpg"
+                alt="Swire embroidered merino knitwear — product render"
+                loading="lazy"
+                decoding="async"
+              />
             </div>
-            <div>
+            <div className="sw-product-text">
+              <p className="sw-num">02 — Product</p>
+              <h2 className="sw-section-label" style={{ marginBottom: "28px" }}>
+                Merino.<br />
+                Constructed<br />
+                to last.
+              </h2>
               <p className="sw-copy">
-                The knitwear focused on material quality and wearability —
-                balancing warmth, softness, and long-term presentation across
-                repeated use. Merino construction selected for its durability,
-                breathability, and resistance to pilling. A garment built to
-                represent the brand across years, not seasons.
+                Merino construction selected for its durability, breathability,
+                and resistance to pilling — qualities that matter across years
+                of daily wear, not just the first impression. Softness and
+                warmth without bulk. A garment built to represent the brand
+                season after season.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ─── DETAIL — close-up full bleed ─── */}
+        <div className="sw-detail-band">
+          <img
+            src="/swire-merino-close-up.jpg"
+            alt="Swire knitwear — embroidery and merino texture detail"
+            loading="lazy"
+            decoding="async"
+          />
+          <div className="sw-detail-overlay">
+            <div className="sw-detail-copy">
+              <p className="sw-num">03 — Detail</p>
+              <h2>
+                Embroidery<br />
+                at the right<br />
+                scale.
+              </h2>
+              <p className="sw-copy">
+                Small-scale embroidery placed with intention. The branding
+                reads clearly at close range without dominating the garment
+                — the kind of detail that earns respect rather than demanding
+                attention.
               </p>
             </div>
           </div>
@@ -470,18 +533,19 @@ export default function SwireKnitwearCaseStudy() {
         <div className="sw-editorial">
           <div className="sw-editorial-inner">
             <p className="sw-pull-quote">
-              Quiet branding. Premium fabrication.<br />
-              A garment people genuinely wanted to keep wearing.
+              A garment that felt genuinely earned —
+              not issued. The kind of piece people chose
+              to keep wearing.
             </p>
 
             <div className="sw-outcome-grid">
               <div className="sw-outcome-col">
                 <p className="sw-num">04 — Outcome</p>
                 <p className="sw-copy">
-                  A refined apparel piece that aligned naturally with the Swire
-                  brand. The combination of quiet branding, premium fabrication,
-                  and practical everyday wear created a garment that felt
-                  genuinely earned — not issued.
+                  Quiet branding, premium fabrication, and practical daily
+                  wearability combined to produce a corporate apparel piece
+                  that aligned naturally with the Swire brand identity.
+                  Understated in the best way.
                 </p>
               </div>
               <div className="sw-outcome-col">
@@ -489,8 +553,8 @@ export default function SwireKnitwearCaseStudy() {
                 <p className="sw-copy">
                   Produced to specification and delivered on schedule.
                   Embroidery placement, colour matching, and garment
-                  construction were all aligned to Swire's corporate
-                  presentation standards throughout.
+                  construction were held to Swire's corporate presentation
+                  standards throughout.
                 </p>
               </div>
             </div>
