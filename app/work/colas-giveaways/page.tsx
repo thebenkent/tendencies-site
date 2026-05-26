@@ -177,13 +177,13 @@ export default function ColasGiveawaysCaseStudy() {
           overflow: hidden;
         }
 
-        /* Product image panel — cream tearsheet */
+        /* Product image panel — white card on black */
         .cl-product-panel {
-          background: #f2ede4;
+          background: #ffffff;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 48px 40px;
+          padding: 56px 48px;
           min-height: 480px;
         }
 
@@ -256,7 +256,7 @@ export default function ColasGiveawaysCaseStudy() {
         }
 
         .cl-pen-panel {
-          background: #f2ede4;
+          background: #ffffff;
           display: flex;
           align-items: center;
           justify-content: center;
