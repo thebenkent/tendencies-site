@@ -41,13 +41,14 @@ export default function StreetsCaseStudy() {
         }
 
         .sk-title {
-          font-size: clamp(48px, 7.5vw, 108px);
+          font-size: clamp(40px, 6vw, 88px);
           font-weight: 900;
           letter-spacing: -0.04em;
-          line-height: 0.91;
+          line-height: 0.93;
           text-transform: uppercase;
           color: #f0ece6;
           margin: 0 0 40px;
+          max-width: 820px;
         }
 
         .sk-accent { color: #b8f400; }
@@ -91,45 +92,35 @@ export default function StreetsCaseStudy() {
           font-weight: 600;
         }
 
-        /* ─── HERO IMAGE ─── */
+        /* ─── HERO IMAGE — finished product on neutral ─── */
         .sk-hero-image {
           position: relative;
           aspect-ratio: 16 / 7;
           overflow: hidden;
-          background: #0d0e10;
+          background: #f0ece6;
         }
 
         .sk-hero-image img {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          object-position: center 40%;
+          object-position: center center;
           display: block;
-        }
-
-        .sk-hero-image-overlay {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(
-            to top,
-            rgba(8,9,11,0.42) 0%,
-            transparent 50%
-          );
         }
 
         .sk-hero-caption {
           position: absolute;
-          bottom: 28px;
-          right: 40px;
+          bottom: 24px;
+          right: 32px;
           font-size: 10px;
           letter-spacing: 0.22em;
           text-transform: uppercase;
-          color: rgba(240,236,230,0.22);
+          color: rgba(8,9,11,0.32);
         }
 
-        /* ─── CONTENT BLOCKS ─── */
+        /* ─── SECTION BLOCKS ─── */
         .sk-block {
-          padding: 128px 72px;
+          padding: 96px 72px;
           border-bottom: 1px solid rgba(240,236,230,0.05);
         }
 
@@ -145,9 +136,7 @@ export default function StreetsCaseStudy() {
           align-items: start;
         }
 
-        .sk-label-col {
-          padding-top: 2px;
-        }
+        .sk-label-col { padding-top: 2px; }
 
         .sk-num {
           font-size: 10px;
@@ -159,7 +148,7 @@ export default function StreetsCaseStudy() {
         }
 
         .sk-section-label {
-          font-size: clamp(22px, 2.4vw, 32px);
+          font-size: clamp(20px, 2.2vw, 30px);
           font-weight: 900;
           letter-spacing: -0.025em;
           text-transform: uppercase;
@@ -169,99 +158,132 @@ export default function StreetsCaseStudy() {
         }
 
         .sk-copy {
-          font-size: 17px;
-          line-height: 1.88;
+          font-size: 16px;
+          line-height: 1.82;
           color: rgba(240,236,230,0.44);
           font-weight: 400;
           max-width: 600px;
         }
 
-        /* ─── PROCESS — image + text split ─── */
-        .sk-img-split {
-          display: grid;
-          grid-template-columns: 1fr 1.1fr;
-          gap: 96px;
-          align-items: center;
+        /* ─── PROCESS STRIP ─── */
+        .sk-process-block {
+          padding: 96px 72px;
+          border-bottom: 1px solid rgba(240,236,230,0.05);
+          background: #060708;
         }
 
-        .sk-img-wrap {
+        .sk-process-inner {
+          max-width: 1300px;
+          margin: 0 auto;
+        }
+
+        .sk-process-header {
+          display: grid;
+          grid-template-columns: 280px 1fr;
+          gap: 80px;
+          align-items: start;
+          margin-bottom: 64px;
+        }
+
+        /* Three-step process row */
+        .sk-process-steps {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          gap: 3px;
+        }
+
+        .sk-step {
           position: relative;
           overflow: hidden;
           background: #0d0e10;
         }
 
-        .sk-img-portrait { aspect-ratio: 4 / 5; }
+        .sk-step-img {
+          aspect-ratio: 4 / 5;
+          overflow: hidden;
+          background: #1a1a1a;
+          position: relative;
+        }
 
-        .sk-img-wrap img {
+        .sk-step-img img {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          object-position: center 30%;
+          object-position: center center;
           display: block;
-          transition: transform 1000ms ease;
+          transition: transform 900ms ease;
         }
 
-        .sk-img-wrap:hover img { transform: scale(1.025); }
+        .sk-step:hover .sk-step-img img { transform: scale(1.03); }
 
-        .sk-img-text {
-          padding-left: 8px;
-        }
-
-        /* ─── FINISH — full bleed with overlay ─── */
-        .sk-finish-band {
-          position: relative;
-          aspect-ratio: 16 / 7;
-          overflow: hidden;
+        .sk-step-label {
+          padding: 20px 24px 24px;
           background: #0d0e10;
+          border-top: 1px solid rgba(240,236,230,0.06);
+        }
+
+        .sk-step-tag {
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          color: rgba(240,236,230,0.3);
+          margin-bottom: 6px;
+        }
+
+        .sk-step-title {
+          font-size: 14px;
+          font-weight: 700;
+          letter-spacing: -0.01em;
+          text-transform: uppercase;
+          color: rgba(240,236,230,0.72);
+          line-height: 1.2;
+        }
+
+        /* ─── IN MARKET — freezer full width ─── */
+        .sk-market-block {
           border-bottom: 1px solid rgba(240,236,230,0.05);
         }
 
-        .sk-finish-band img {
+        .sk-market-image {
+          position: relative;
+          aspect-ratio: 16 / 8;
+          overflow: hidden;
+          background: #0d0e10;
+        }
+
+        .sk-market-image img {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          object-position: center 55%;
+          object-position: center center;
           display: block;
         }
 
-        .sk-finish-overlay {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(
-            to right,
-            rgba(8,9,11,0.86) 0%,
-            rgba(8,9,11,0.36) 52%,
-            transparent 100%
-          );
-          display: flex;
-          align-items: flex-end;
-          padding: 72px 80px;
+        .sk-market-caption-bar {
+          display: grid;
+          grid-template-columns: 280px 1fr;
+          gap: 80px;
+          align-items: start;
+          padding: 32px 72px 48px;
+          max-width: 1300px;
+          margin: 0 auto;
         }
 
-        .sk-finish-copy {
-          max-width: 440px;
+        .sk-market-caption-bar .sk-num {
+          padding-top: 2px;
         }
 
-        .sk-finish-copy h2 {
-          font-size: clamp(26px, 3vw, 44px);
-          font-weight: 900;
-          letter-spacing: -0.03em;
-          text-transform: uppercase;
-          color: #f0ece6;
-          margin: 0 0 18px;
-          line-height: 0.93;
-        }
-
-        .sk-finish-copy p {
+        .sk-market-caption-bar p {
           font-size: 15px;
           line-height: 1.72;
-          color: rgba(240,236,230,0.52);
-          max-width: 340px;
+          color: rgba(240,236,230,0.44);
+          max-width: 520px;
         }
 
-        /* ─── EDITORIAL / OUTCOME ─── */
+        /* ─── OUTCOME ─── */
         .sk-editorial {
-          padding: 136px 72px;
+          padding: 96px 72px;
           border-bottom: 1px solid rgba(240,236,230,0.05);
         }
 
@@ -271,13 +293,13 @@ export default function StreetsCaseStudy() {
         }
 
         .sk-pull-quote {
-          font-size: clamp(22px, 2.8vw, 38px);
+          font-size: clamp(20px, 2.4vw, 32px);
           font-weight: 800;
-          letter-spacing: -0.025em;
-          line-height: 1.18;
+          letter-spacing: -0.02em;
+          line-height: 1.22;
           color: #f0ece6;
-          max-width: 760px;
-          margin: 0 0 88px;
+          max-width: 700px;
+          margin: 0 0 72px;
           text-transform: uppercase;
         }
 
@@ -318,9 +340,7 @@ export default function StreetsCaseStudy() {
           margin: 0;
         }
 
-        .sk-cta-right {
-          text-align: right;
-        }
+        .sk-cta-right { text-align: right; }
 
         .sk-cta-right p {
           font-size: 15px;
@@ -355,24 +375,27 @@ export default function StreetsCaseStudy() {
 
         /* ─── RESPONSIVE ─── */
         @media (max-width: 980px) {
-          .sk-hero      { padding: 96px 28px 72px; }
-          .sk-block     { padding: 80px 28px; }
-          .sk-editorial { padding: 80px 28px; }
-          .sk-cta       { padding: 80px 28px; }
+          .sk-hero          { padding: 96px 28px 72px; }
+          .sk-block         { padding: 64px 28px; }
+          .sk-process-block { padding: 64px 28px; }
+          .sk-editorial     { padding: 64px 28px; }
+          .sk-cta           { padding: 80px 28px; }
 
-          .sk-hero-image  { aspect-ratio: 4 / 3; }
-          .sk-finish-band { aspect-ratio: 4 / 3; }
-          .sk-finish-overlay { padding: 36px; }
+          .sk-hero-image    { aspect-ratio: 4 / 3; }
+          .sk-market-image  { aspect-ratio: 4 / 3; }
 
-          .sk-text-split { grid-template-columns: 1fr; gap: 36px; }
-          .sk-img-split  { grid-template-columns: 1fr; gap: 48px; }
-          .sk-img-text   { padding-left: 0; }
+          .sk-text-split    { grid-template-columns: 1fr; gap: 36px; }
+          .sk-process-header { grid-template-columns: 1fr; gap: 36px; margin-bottom: 40px; }
+          .sk-process-steps  { grid-template-columns: 1fr; gap: 3px; }
+          .sk-step-img       { aspect-ratio: 3 / 2; }
 
-          .sk-outcome-grid { grid-template-columns: 1fr; gap: 40px; }
+          .sk-market-caption-bar { grid-template-columns: 1fr; gap: 16px; padding: 24px 28px 40px; }
 
-          .sk-cta-inner { grid-template-columns: 1fr; }
-          .sk-cta-right { text-align: left; }
-          .sk-cta-right p { margin: 0 0 24px; }
+          .sk-outcome-grid  { grid-template-columns: 1fr; gap: 40px; }
+
+          .sk-cta-inner     { grid-template-columns: 1fr; }
+          .sk-cta-right     { text-align: left; }
+          .sk-cta-right p   { margin: 0 0 24px; }
 
           .sk-meta-row { gap: 28px; }
         }
@@ -387,13 +410,13 @@ export default function StreetsCaseStudy() {
           <p className="sk-eyebrow">Case Study</p>
 
           <h1 className="sk-title">
-            From<br />
-            Mould<br />
-            to Hand<span className="sk-accent">.</span>
+            Collectible FMCG<br />
+            merchandise designed<br />
+            for real-world retail<span className="sk-accent">.</span>
           </h1>
 
           <p className="sk-subline">
-            Custom resin product &nbsp;·&nbsp; Streets Ice Cream &nbsp;·&nbsp; Mould to delivered
+            Custom resin product &nbsp;·&nbsp; Streets Ice Cream &nbsp;·&nbsp; Retail activation
           </p>
 
           <div className="sk-meta-row">
@@ -416,7 +439,7 @@ export default function StreetsCaseStudy() {
           </div>
         </div>
 
-        {/* ─── HERO IMAGE ─── */}
+        {/* ─── HERO IMAGE — finished product ─── */}
         <div className="sk-hero-image">
           <img
             src="/work-streets-finished.jpg"
@@ -424,89 +447,133 @@ export default function StreetsCaseStudy() {
             loading="eager"
             decoding="async"
           />
-          <div className="sk-hero-image-overlay" />
-          <span className="sk-hero-caption">Streets Ice Cream · Resin Keychains</span>
+          <span className="sk-hero-caption">Streets Ice Cream · Finished Product</span>
         </div>
 
-        {/* ─── BRIEF ─── */}
+        {/* ─── THE CHALLENGE ─── */}
         <div className="sk-block">
           <div className="sk-block-inner">
             <div className="sk-text-split">
               <div className="sk-label-col">
-                <p className="sk-num">01 — Brief</p>
+                <p className="sk-num">01 — Challenge</p>
                 <h2 className="sk-section-label">
-                  Small format.<br />
-                  Big brand.<br />
-                  Actually kept.
+                  Instantly<br />
+                  recognisable<br />
+                  at any scale.
                 </h2>
               </div>
               <div>
                 <p className="sk-copy">
-                  Streets needed a custom resin keychain range that translated
-                  their ice cream brands into small-format branded product
-                  people would genuinely hold onto. The challenge was getting
-                  forms, colours, and finish precise enough that the final
-                  pieces still felt recognisable and clean at keychain scale
-                  — not lost in translation.
+                  Streets needed a collectible giveaway that turned their
+                  most iconic ice cream products into small-format branded
+                  merchandise — instantly recognisable, manufacturable at
+                  scale, and suited to supermarket and convenience retail
+                  rollout. The constraint was demanding: translate a
+                  full-size product into keychain form without losing the
+                  details that made it recognisable in the first place.
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ─── PROCESS ─── */}
-        <div className="sk-block">
-          <div className="sk-block-inner">
-            <div className="sk-img-split">
-              <div className="sk-img-wrap sk-img-portrait">
-                <img
-                  src="/work-streets-prototype.jpg"
-                  alt="Streets Ice Cream — resin keychain prototypes, uncoloured cast"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <div className="sk-img-text">
-                <p className="sk-num">02 — Process</p>
-                <h2 className="sk-section-label" style={{ marginBottom: "28px" }}>
+        {/* ─── DEVELOPMENT PROCESS ─── */}
+        <div className="sk-process-block">
+          <div className="sk-process-inner">
+            <div className="sk-process-header">
+              <div className="sk-label-col">
+                <p className="sk-num">02 — Development</p>
+                <h2 className="sk-section-label">
                   Prototype.<br />
                   Refine.<br />
-                  Commit.
+                  Produce.
                 </h2>
+              </div>
+              <div>
                 <p className="sk-copy">
-                  Development started with uncoloured cast prototypes to
-                  validate form and scale before committing to colour and
-                  finish. Getting the silhouette right at this stage was
-                  everything — small adjustments at prototype had large
-                  consequences on the finished piece.
+                  Development moved through three distinct stages: uncoloured
+                  cast prototypes to validate form and proportion; mould
+                  refinement to tighten the detail; and final coloured
+                  production to confirm the brand livery held at scale.
+                  Small adjustments at prototype stage had large consequences
+                  on the finished piece — getting it right early was critical.
                 </p>
+              </div>
+            </div>
+
+            <div className="sk-process-steps">
+              <div className="sk-step">
+                <div className="sk-step-img">
+                  <img
+                    src="/work-streets-prototype.jpg"
+                    alt="Streets keychains — prototype cast"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <div className="sk-step-label">
+                  <p className="sk-step-tag">Stage 01</p>
+                  <p className="sk-step-title">Prototype Cast</p>
+                </div>
+              </div>
+
+              <div className="sk-step">
+                <div className="sk-step-img">
+                  <img
+                    src="/work-streets-mold.jpg"
+                    alt="Streets keychains — mould development"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <div className="sk-step-label">
+                  <p className="sk-step-tag">Stage 02</p>
+                  <p className="sk-step-title">Mould Refinement</p>
+                </div>
+              </div>
+
+              <div className="sk-step">
+                <div className="sk-step-img">
+                  <img
+                    src="/work-streets-finished.jpg"
+                    alt="Streets keychains — finished production"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <div className="sk-step-label">
+                  <p className="sk-step-tag">Stage 03</p>
+                  <p className="sk-step-title">Final Production</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ─── FINISH — full bleed ─── */}
-        <div className="sk-finish-band">
-          <img
-            src="/work-streets-finished.jpg"
-            alt="Streets Ice Cream — finished resin keychains, brand livery"
-            loading="lazy"
-            decoding="async"
-          />
-          <div className="sk-finish-overlay">
-            <div className="sk-finish-copy">
-              <p className="sk-num">03 — Finish</p>
-              <h2>
-                Colour.<br />
-                Clarity.<br />
-                Brand livery.
+        {/* ─── IN MARKET ─── */}
+        <div className="sk-market-block">
+          <div className="sk-market-image">
+            <img
+              src="/streets-keychain-freezer.jpg"
+              alt="Streets Ice Cream keychain display — retail freezer activation"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div className="sk-market-caption-bar">
+            <div className="sk-label-col">
+              <p className="sk-num">03 — In Market</p>
+              <h2 className="sk-section-label" style={{ marginTop: "4px" }}>
+                Retail.<br />
+                Activated.
               </h2>
-              <p>
-                Final production locked in the colours, resin clarity, and
-                branded detailing that made each keychain immediately
-                recognisable as Streets. Simple product — executed with care.
-              </p>
             </div>
+            <p>
+              The finished keychains deployed at point of sale alongside
+              the Streets freezer — collectible product attached directly
+              to the retail moment. Immediate brand recognition, clear
+              product tie-in, and a reason to engage beyond the purchase.
+            </p>
           </div>
         </div>
 
@@ -514,27 +581,27 @@ export default function StreetsCaseStudy() {
         <div className="sk-editorial">
           <div className="sk-editorial-inner">
             <p className="sk-pull-quote">
-              A simple piece, executed properly.<br />
-              The kind of product people actually keep.
+              A simple piece of branded merchandise,
+              treated with the same rigour as a product launch.
             </p>
 
             <div className="sk-outcome-grid">
               <div className="sk-outcome-col">
                 <p className="sk-num">04 — Outcome</p>
                 <p className="sk-copy">
-                  From early mould samples through to finished product,
-                  the project showed what happens when small-format branded
-                  merchandise is treated with the same rigour as any other
-                  product category. Recognised. Kept. Used.
+                  Collectible, recognisable, and ready for retail. The
+                  project demonstrated what happens when FMCG giveaway
+                  merchandise is approached as a genuine product design
+                  challenge — from mould to shelf without compromise.
                 </p>
               </div>
               <div className="sk-outcome-col">
                 <p className="sk-num">Delivery</p>
                 <p className="sk-copy">
-                  Sampling, refinement, and full production run completed
-                  to brief. Colour matching and form accuracy were held
-                  throughout, with final product delivered to specification
-                  and on schedule.
+                  Prototype development, mould refinement, colour sampling,
+                  and full production run delivered to specification.
+                  Suitable for supermarket and convenience retail rollout
+                  at scale, on time, and on brief.
                 </p>
               </div>
             </div>
@@ -549,7 +616,7 @@ export default function StreetsCaseStudy() {
               a brief?
             </h2>
             <div className="sk-cta-right">
-              <p>Custom branded product, made to be kept.</p>
+              <p>Custom branded product built for real-world activation.</p>
               <a href="/start-a-project" className="sk-cta-btn">
                 Start a Project
               </a>
