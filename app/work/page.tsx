@@ -36,9 +36,9 @@ const PROJECTS = [
   {
     client: "Swire",
     title: "Embroidered Knitwear",
-    tag: "Apparel",
+    tag: "Corporate Apparel",
     image: "/work-knitwear.jpg",
-    href: "/work",
+    href: "/work/swire-knitwear",
   },
   {
     client: "Kérastase",
