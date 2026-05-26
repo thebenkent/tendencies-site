@@ -403,69 +403,93 @@ export default function AboutPage() {
 
         /* ─── FEATURED WORK ─── */
         .ab-work {
-          padding: 128px 64px;
+          padding-top: 128px;
           border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .ab-work-inner {
+        .ab-work-header {
           max-width: 1300px;
           margin: 0 auto;
+          padding: 0 64px 56px;
         }
         .ab-work-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          gap: 20px;
-          margin-top: 56px;
+          gap: 2px;
         }
         .ab-work-card {
           display: block;
           text-decoration: none;
           color: inherit;
-        }
-        .ab-work-img {
-          aspect-ratio: 4 / 3;
+          position: relative;
           overflow: hidden;
-          background: #111;
-          margin-bottom: 20px;
+          aspect-ratio: 3 / 4;
+          background: #0d0c0b;
         }
-        .ab-work-img img {
+        .ab-work-card-img {
+          position: absolute;
+          inset: 0;
+        }
+        .ab-work-card-img img {
           width: 100%;
           height: 100%;
           object-fit: cover;
           object-position: center;
           display: block;
-          filter: brightness(0.82);
-          transition: transform 900ms ease, filter 900ms ease;
+          filter: brightness(0.82) saturate(0.90);
+          transition: transform 1100ms ease, filter 800ms ease;
         }
-        .ab-work-card:hover .ab-work-img img {
-          transform: scale(1.04);
-          filter: brightness(0.96);
+        .ab-work-card:hover .ab-work-card-img img {
+          transform: scale(1.06);
+          filter: brightness(0.96) saturate(1.0);
         }
-        .ab-work-eyebrow {
+        .ab-work-card-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            to top,
+            rgba(8,8,8,0.90) 0%,
+            rgba(8,8,8,0.28) 44%,
+            transparent 72%
+          );
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          padding: 40px 36px;
+        }
+        .ab-work-card-eyebrow {
           font-size: 10px;
-          letter-spacing: 0.22em;
+          letter-spacing: 0.24em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.22);
-          margin-bottom: 8px;
+          color: rgba(255,255,255,0.38);
+          margin-bottom: 10px;
+          transition: color 0.3s;
         }
-        .ab-work-title {
-          font-size: 17px;
+        .ab-work-card:hover .ab-work-card-eyebrow { color: rgba(255,255,255,0.60); }
+        .ab-work-card-title {
+          font-size: clamp(18px, 2vw, 26px);
           font-weight: 900;
-          letter-spacing: -0.03em;
+          letter-spacing: -0.04em;
           text-transform: uppercase;
           color: #f5f5f0;
-          margin: 0 0 10px;
-          line-height: 1.0;
-          transition: color 0.25s;
+          line-height: 0.95;
+          margin: 0 0 18px;
+          transition: color 0.3s;
         }
-        .ab-work-card:hover .ab-work-title { color: #b8f400; }
-        .ab-work-link {
-          font-size: 11px;
-          letter-spacing: 0.14em;
+        .ab-work-card:hover .ab-work-card-title { color: #b8f400; }
+        .ab-work-card-link {
+          font-size: 10px;
+          letter-spacing: 0.20em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.22);
-          transition: color 0.25s;
+          color: rgba(255,255,255,0.28);
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          transition: color 0.3s, gap 0.3s;
         }
-        .ab-work-card:hover .ab-work-link { color: rgba(255,255,255,0.50); }
+        .ab-work-card:hover .ab-work-card-link {
+          color: rgba(255,255,255,0.62);
+          gap: 14px;
+        }
 
         /* ─── CTA ─── */
         .ab-cta {
@@ -561,8 +585,11 @@ export default function AboutPage() {
           .ab-why-point:last-child { border-bottom: none; padding-left: 0; padding-bottom: 0; }
           .ab-why-point:nth-child(2) { padding-left: 0; }
 
-          .ab-work               { padding: 80px 28px; }
-          .ab-work-grid          { grid-template-columns: 1fr; gap: 44px; }
+          .ab-work               { padding-top: 80px; }
+          .ab-work-header        { padding: 0 28px 40px; }
+          .ab-work-grid          { grid-template-columns: 1fr; gap: 2px; }
+          .ab-work-card          { aspect-ratio: 3 / 2; }
+          .ab-work-card-overlay  { padding: 28px 24px; }
 
           .ab-cta                { padding: 96px 28px; }
           .ab-cta-inner          { grid-template-columns: 1fr; gap: 40px; }
@@ -787,49 +814,56 @@ export default function AboutPage() {
 
         {/* ─── FEATURED WORK ─── */}
         <div className="ab-work">
-          <div className="ab-work-inner">
+          <div className="ab-work-header">
             <p className="ab-section-eyebrow">Featured Work</p>
-            <div className="ab-work-grid">
-              <a href="/work/streets-keychains" className="ab-work-card">
-                <div className="ab-work-img">
-                  <img
-                    src="/work-streets-finished.jpg"
-                    alt="Streets Ice Cream resin keychains — Magnum GWP"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <p className="ab-work-eyebrow">Streets / Magnum</p>
-                <h3 className="ab-work-title">Resin Keychains</h3>
-                <span className="ab-work-link">View case study →</span>
-              </a>
-              <a href="/work/unilever-vest" className="ab-work-card">
-                <div className="ab-work-img">
-                  <img
-                    src="/work-lynx.jpg"
-                    alt="Unilever Lynx promotional vests"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <p className="ab-work-eyebrow">Unilever / Lynx</p>
-                <h3 className="ab-work-title">Promotional Vests</h3>
-                <span className="ab-work-link">View case study →</span>
-              </a>
-              <a href="/work/milo-ball" className="ab-work-card">
-                <div className="ab-work-img">
-                  <img
-                    src="/work-milo.jpg"
-                    alt="Nestlé Milo branded promotional soccer ball"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <p className="ab-work-eyebrow">Nestlé / Milo</p>
-                <h3 className="ab-work-title">Branded Soccer Ball</h3>
-                <span className="ab-work-link">View case study →</span>
-              </a>
-            </div>
+          </div>
+          <div className="ab-work-grid">
+            <a href="/work/streets-keychains" className="ab-work-card">
+              <div className="ab-work-card-img">
+                <img
+                  src="/work-streets-finished.jpg"
+                  alt="Streets Ice Cream resin keychains — Magnum GWP"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div className="ab-work-card-overlay">
+                <p className="ab-work-card-eyebrow">Streets / Magnum</p>
+                <h3 className="ab-work-card-title">Resin<br />Keychains</h3>
+                <span className="ab-work-card-link">View case study →</span>
+              </div>
+            </a>
+            <a href="/work/unilever-vest" className="ab-work-card">
+              <div className="ab-work-card-img">
+                <img
+                  src="/work-lynx.jpg"
+                  alt="Unilever Lynx promotional vests"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div className="ab-work-card-overlay">
+                <p className="ab-work-card-eyebrow">Unilever / Lynx</p>
+                <h3 className="ab-work-card-title">Promotional<br />Vests</h3>
+                <span className="ab-work-card-link">View case study →</span>
+              </div>
+            </a>
+            <a href="/work/milo-ball" className="ab-work-card">
+              <div className="ab-work-card-img">
+                <img
+                  src="/milo-soccer-ball.png"
+                  alt="Nestlé Milo branded promotional soccer ball"
+                  loading="lazy"
+                  decoding="async"
+                  style={{ objectPosition: "center 35%" }}
+                />
+              </div>
+              <div className="ab-work-card-overlay">
+                <p className="ab-work-card-eyebrow">Nestlé / Milo</p>
+                <h3 className="ab-work-card-title">Branded<br />Soccer Ball</h3>
+                <span className="ab-work-card-link">View case study →</span>
+              </div>
+            </a>
           </div>
         </div>
 
