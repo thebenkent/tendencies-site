@@ -380,6 +380,8 @@ export default function UnileverVestCaseStudy() {
           <img
             src="/unilever-in-use01.png"
             alt="Unilever field team wearing branded vest"
+            loading="eager"
+            decoding="async"
           />
           <span className="uv-hero-caption">Field Operations · Branded Vest</span>
         </div>
@@ -404,6 +406,8 @@ export default function UnileverVestCaseStudy() {
                 <img
                   src="/unilever-in-use02.png"
                   alt="Unilever field team vest in use"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
             </div>
@@ -418,6 +422,8 @@ export default function UnileverVestCaseStudy() {
                 <img
                   src="/unilever-close-up.png"
                   alt="Unilever vest branding close-up"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div>
@@ -443,6 +449,8 @@ export default function UnileverVestCaseStudy() {
           <img
             src="/unilever-in-use03.png"
             alt="Unilever vest — operational field use"
+            loading="lazy"
+            decoding="async"
           />
           <div className="uv-product-overlay">
             <div className="uv-product-copy">
