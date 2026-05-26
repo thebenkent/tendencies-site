@@ -24,7 +24,7 @@ const PROJECTS = [
     title: "Promotional Soccer Ball",
     tag: "Promotional",
     image: "/work-milo.jpg",
-    href: "/work",
+    href: "/work/milo-ball",
   },
   {
     client: "Unilever / Lynx",
