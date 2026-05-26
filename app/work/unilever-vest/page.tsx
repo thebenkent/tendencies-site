@@ -218,6 +218,37 @@ export default function UnileverVestCaseStudy() {
         </div>
       </section>
 
+      {/* GALLERY */}
+      <section className="case-section case-block">
+        <div className="case-inner">
+          <div className="case-copy">
+            <h3>Gallery</h3>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: "20px",
+              marginTop: "28px",
+            }}
+          >
+            <div className="case-image">
+              <img src="/unilever-close-up.png" alt="Unilever vest close-up" />
+            </div>
+            <div className="case-image">
+              <img src="/unilever-in-use01.png" alt="Unilever vest in use" />
+            </div>
+            <div className="case-image">
+              <img src="/unilever-in-use02.png" alt="Unilever vest in use" />
+            </div>
+            <div className="case-image">
+              <img src="/unilever-in-use03.png" alt="Unilever vest in use" />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* OUTCOME */}
       <section className="case-section case-block">
         <div className="case-inner case-grid">
