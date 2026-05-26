@@ -10,6 +10,7 @@ const CASES = [
     tag: "Branded Apparel",
     title: "Promotional Vest",
     img: "/work-lynx.jpg",
+    imgPosition: "center 20%",
     href: "/work/unilever-vest",
   },
   {
@@ -17,6 +18,7 @@ const CASES = [
     tag: "Corporate",
     title: "Embroidered Knitwear",
     img: "/work-knitwear.jpg",
+    imgPosition: "center 30%",
     href: "/work",
   },
 ];
@@ -25,7 +27,7 @@ function CaseCard({
   project,
   isMobile,
 }: {
-  project: (typeof CASES)[0];
+  project: (typeof CASES)[0] & { imgPosition?: string };
   isMobile: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
@@ -50,9 +52,9 @@ function CaseCard({
             inset: 0,
             backgroundImage: `url(${project.img})`,
             backgroundSize: "cover",
-            backgroundPosition: "center",
-            transform: hovered ? "scale(1.04)" : "scale(1)",
-            transition: "transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)",
+            backgroundPosition: project.imgPosition ?? "center",
+            transform: hovered ? "scale(1.05)" : "scale(1)",
+            transition: "transform 1000ms cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         />
       </div>

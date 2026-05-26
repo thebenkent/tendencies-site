@@ -41,12 +41,11 @@ export default function FeaturedWork() {
               style={{
                 position: "absolute",
                 inset: 0,
-                backgroundImage: "url(/work-milo.jpg)",
+                backgroundImage: "url(/milo-soccer-ball.png)",
                 backgroundSize: "cover",
-                backgroundPosition: "center",
-                transform: hovered ? "scale(1.04)" : "scale(1)",
-                transition:
-                  "transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)",
+                backgroundPosition: "center 38%",
+                transform: hovered ? "scale(1.05)" : "scale(1)",
+                transition: "transform 1000ms cubic-bezier(0.22, 1, 0.36, 1)",
               }}
             />
           </div>
