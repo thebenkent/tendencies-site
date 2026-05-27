@@ -42,8 +42,10 @@ export default function FeaturedWork() {
                 position: "absolute",
                 inset: 0,
                 backgroundImage: "url(/milo-soccer-ball.png)",
-                backgroundSize: "cover",
-                backgroundPosition: "center 38%",
+                backgroundColor: "#0e0d0b",
+                backgroundSize: "contain",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center center",
                 transform: hovered ? "scale(1.05)" : "scale(1)",
                 transition: "transform 1000ms cubic-bezier(0.22, 1, 0.36, 1)",
               }}

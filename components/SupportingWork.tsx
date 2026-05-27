@@ -51,8 +51,10 @@ function CaseCard({
             position: "absolute",
             inset: 0,
             backgroundImage: `url(${project.img})`,
-            backgroundSize: "cover",
-            backgroundPosition: project.imgPosition ?? "center",
+            backgroundColor: "#f3f3f0",
+            backgroundSize: "contain",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center center",
             transform: hovered ? "scale(1.05)" : "scale(1)",
             transition: "transform 1000ms cubic-bezier(0.22, 1, 0.36, 1)",
           }}
