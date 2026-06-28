@@ -10,7 +10,7 @@ export default async function ReservePage({
   searchParams,
 }: {
   params: Promise<{ slug: string; campaign: string; product: string }>
-  searchParams: Promise<{ variant_id?: string; qty?: string }>
+  searchParams: Promise<{ variant_id?: string; qty?: string; player_name?: string }>
 }) {
   const { slug, campaign: campaignSlug, product: productSlug } = await params
   const sp = await searchParams
@@ -47,7 +47,8 @@ export default async function ReservePage({
   const navy = tenant.primary_color
   const red  = tenant.secondary_color
 
-  const initialVariantId = sp.variant_id ?? null
+  const initialVariantId  = sp.variant_id ?? null
+  const initialPlayerName = sp.player_name ? decodeURIComponent(sp.player_name) : undefined
   const initialQty = sp.qty
     ? Math.max(1, Math.min(20, parseInt(sp.qty, 10) || 1))
     : 1
@@ -89,6 +90,7 @@ export default async function ReservePage({
             slug={slug}
             initialVariantId={initialVariantId}
             initialQty={initialQty}
+            initialPlayerName={initialPlayerName}
           />
         </div>
       </div>

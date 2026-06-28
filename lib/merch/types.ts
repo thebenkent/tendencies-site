@@ -157,12 +157,14 @@ export type MerchCampaignProduct = {
   sort_order: number
   active: boolean
   created_at: string
+  product_options: ProductOptions
 }
 
 export type MerchProductVariant = {
   id: string
   campaign_product_id: string
   sku: string | null
+  fit: string       // '' = no fit dimension; 'Mens' | 'Womens' | 'Youth' | ...
   size: string
   colour: string
   barcode: string | null
@@ -172,6 +174,33 @@ export type MerchProductVariant = {
   weight_grams: number | null
   stock_qty: number | null
   created_at: string
+}
+
+// ── Product Options ───────────────────────────────────────────
+// Stored as JSONB in merch_campaign_products.product_options.
+
+export type PersonalisationOption = {
+  enabled: boolean
+  required: boolean
+  max_chars: number
+  uppercase_only: boolean
+  additional_price_cents: number
+  label: string
+  placeholder: string
+}
+
+export type SizeChart = {
+  note: string | null
+  headers: string[]
+  rows: string[][]
+}
+
+export type ProductOptions = {
+  personalisation?: {
+    player_name?: PersonalisationOption
+    [key: string]: PersonalisationOption | undefined
+  }
+  size_charts?: Record<string, SizeChart>
 }
 
 export type MerchAsset = {
@@ -213,6 +242,8 @@ export type MerchProduct = {
   features: string[] | null
   // flattened assets → image URLs
   images: string[]
+  // product-level configuration (personalisation, size charts)
+  product_options: ProductOptions
 }
 
 export type MerchProductWithVariants = MerchProduct & {

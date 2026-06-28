@@ -14,7 +14,7 @@ const PRODUCT_SELECT = `
     description, material, weight_grams, base_sku, features
   ),
   merch_product_variants (
-    id, campaign_product_id, sku, size, colour, barcode,
+    id, campaign_product_id, sku, fit, size, colour, barcode,
     additional_cost_cents, available, sort_order, weight_grams, stock_qty, created_at
   ),
   merch_assets (
@@ -34,6 +34,7 @@ function buildProductView(raw: any): MerchProductWithVariants {
     id:                    v.id,
     campaign_product_id:   v.campaign_product_id,
     sku:                   v.sku ?? null,
+    fit:                   v.fit ?? '',
     size:                  v.size,
     colour:                v.colour ?? '',
     barcode:               v.barcode ?? null,
@@ -67,6 +68,7 @@ function buildProductView(raw: any): MerchProductWithVariants {
     base_sku:             mp.base_sku     ?? null,
     features:             mp.features     ?? null,
     images,
+    product_options:      raw.product_options ?? {},
   }
 
   return { ...product, merch_product_variants: variants }
