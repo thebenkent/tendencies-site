@@ -1,6 +1,17 @@
 import { getTenant, getCampaign, getReservationsForTenant } from '@/lib/merch/db'
 import { getAdminContext } from '@/lib/merch/auth'
 
+const STATUS_LABELS: Record<string, string> = {
+  reserved:          'Pre-Ordered',
+  confirmed:         'MOQ Confirmed',
+  payment_requested: 'Payment Requested',
+  paid:              'Paid',
+  production:        'In Production',
+  completed:         'Completed',
+  cancelled:         'Cancelled',
+  refunded:          'Refunded',
+}
+
 function esc(val: string | number | null | undefined): string {
   const s = val == null ? '' : String(val)
   return s.includes(',') || s.includes('"') || s.includes('\n')
@@ -58,7 +69,7 @@ export async function GET(
         line.qty,
         `$${((line.unit_price_cents) / 100).toFixed(2)}`,
         order.delivery_method,
-        order.status,
+        STATUS_LABELS[order.status] ?? order.status,
       ].map(esc).join(','))
     }
   }

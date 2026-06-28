@@ -47,7 +47,24 @@ const STATUS_STYLE: Record<string, { bg: string; text: string }> = {
 }
 
 const STATUS_DISPLAY: Partial<Record<string, string>> = {
-  reserved: 'Pre-Ordered',
+  reserved:          'Pre-Ordered',
+  confirmed:         'MOQ Confirmed',
+  payment_requested: 'Payment Requested',
+  paid:              'Paid',
+  production:        'In Production',
+  completed:         'Completed',
+  cancelled:         'Cancelled',
+  refunded:          'Refunded',
+}
+
+const CAMPAIGN_TYPE_DISPLAY: Record<string, string> = {
+  reservation: 'Pre-Order',
+  pre_order:   'Pre-Order',
+}
+
+function campaignTypeLabel(type: string | null | undefined): string {
+  if (!type) return 'Workflow'
+  return CAMPAIGN_TYPE_DISPLAY[type] ?? type.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
 function StateLabel({ state }: { state: string }) {
@@ -223,7 +240,7 @@ export default function AdminDashboardClient({
           <div className="mb-6 rounded-lg border border-green-300 bg-green-50 p-4">
             {closeResult.moqResults.map((r) => (
               <p key={r.productName} className={`text-sm font-semibold mb-1 ${r.moqMet ? 'text-green-700' : 'text-red-700'}`}>
-                {r.moqMet ? '✓' : '✗'} {r.productName}: {r.orderedQty} orders — {r.moqMet ? 'MOQ met, confirmed' : 'MOQ not met, cancelled'}
+                {r.moqMet ? '✓' : '✗'} {r.productName}: {r.orderedQty} pre-orders — {r.moqMet ? 'MOQ met, confirmed' : 'MOQ not met, cancelled'}
               </p>
             ))}
             <button onClick={() => setCloseResult(null)} className="mt-2 text-xs text-gray-500 underline cursor-pointer">Dismiss</button>
@@ -284,7 +301,7 @@ export default function AdminDashboardClient({
             {Object.keys(workflowTransitions).length > 0 && (
               <Card className="mb-8">
                 <CardHeader>
-                  <CardTitle>Workflow: {activeCampaign?.campaign_type?.replace(/_/g, ' ')}</CardTitle>
+                  <CardTitle>{campaignTypeLabel(activeCampaign?.campaign_type)} Workflow</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex flex-wrap gap-2">
@@ -313,7 +330,7 @@ export default function AdminDashboardClient({
                   <div>
                     <h2 className="text-lg font-bold" style={{ color: navy }}>{activeCampaign.name}</h2>
                     <p className="text-sm text-gray-500 mt-0.5">
-                      {activeCampaign.campaign_type?.replace(/_/g, ' ')} ·{' '}
+                      {campaignTypeLabel(activeCampaign.campaign_type)} ·{' '}
                       <StateLabel state={activeCampaign.status} />
                       {activeCampaign.closes_at && (
                         <> · Closes {new Date(activeCampaign.closes_at).toLocaleDateString('en-NZ')}</>
@@ -684,7 +701,7 @@ export default function AdminDashboardClient({
                     </CardContent>
                   </Card>
                   <Card>
-                    <CardHeader className="pb-2"><CardTitle className="text-xs">Total Orders</CardTitle></CardHeader>
+                    <CardHeader className="pb-2"><CardTitle className="text-xs">Total Pre-Orders</CardTitle></CardHeader>
                     <CardContent>
                       <p className="text-2xl font-extrabold tracking-tight" style={{ color: navy }}>
                         {analytics.totalOrders}
