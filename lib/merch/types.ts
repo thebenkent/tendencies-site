@@ -368,6 +368,52 @@ export type MerchPayment = {
   updated_at: string
 }
 
+// ── Bundles ───────────────────────────────────────────────────
+
+export type MerchBundle = {
+  id:           string
+  campaign_id:  string
+  tenant_id:    string
+  name:         string
+  slug:         string
+  description:  string | null
+  image_url:    string | null
+  price_cents:  number | null   // null = auto-calculated from components
+  discount_pct: number          // 0-100
+  active:       boolean
+  sort_order:   number
+  created_at:   string
+  items?:       MerchBundleItem[]
+}
+
+export type MerchBundleItem = {
+  id:                  string
+  bundle_id:           string
+  campaign_product_id: string
+  required_qty:        number
+  sort_order:          number
+  created_at:          string
+}
+
+// ── Checkout Questions ────────────────────────────────────────
+
+export type CheckoutQuestionType = 'text' | 'dropdown' | 'checkbox' | 'radio' | 'date'
+
+export type MerchCheckoutQuestion = {
+  id:          string
+  campaign_id: string
+  tenant_id:   string
+  type:        CheckoutQuestionType
+  label:       string
+  placeholder: string | null
+  options:     string[] | null   // for dropdown/radio
+  required:    boolean
+  applies_to:  'order' | 'line'
+  sort_order:  number
+  active:      boolean
+  created_at:  string
+}
+
 // ── Computed ─────────────────────────────────────────────────
 
 export type ProductProgress = {

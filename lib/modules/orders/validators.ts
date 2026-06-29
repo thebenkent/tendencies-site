@@ -34,6 +34,43 @@ export const placeOrderSchema = z.object({
 
 export type PlaceOrderRequest = z.infer<typeof placeOrderSchema>
 
+// ── Cart checkout (multi-product) ─────────────────────────────
+
+const cartItemSchema = z.object({
+  product_slug: slugSchema,
+  variant_id:   uuidSchema,
+  qty:          z.number().int().min(1).max(20),
+  player_name:  z.string().optional(),
+})
+
+export const checkoutSchema = z.object({
+  campaign_slug:    slugSchema,
+  items:            z.array(cartItemSchema).min(1, 'Cart is empty'),
+  first_name:       z.string().min(1, 'First name is required'),
+  last_name:        z.string().min(1, 'Last name is required'),
+  email:            emailSchema,
+  phone:            z.string().min(6, 'Phone number is required'),
+  team:             z.string().optional(),
+  grade:            z.string().optional(),
+  delivery_method:  z.enum(['collect', 'courier']),
+  delivery_address: z.string().optional(),
+  question_answers: z.record(z.string(), z.string()).optional(),
+  understood_moq:   z.boolean().refine((v) => v === true, {
+    message: 'You must acknowledge the MOQ condition',
+  }),
+  notes: z.string().optional(),
+}).check((ctx) => {
+  if (ctx.value.delivery_method === 'courier' && !ctx.value.delivery_address?.trim()) {
+    ctx.issues.push({
+      code: 'custom', input: ctx.value.delivery_address,
+      path: ['delivery_address'],
+      message: 'Delivery address is required for courier orders',
+    })
+  }
+})
+
+export type CheckoutRequest = z.infer<typeof checkoutSchema>
+
 export const orderListParamsSchema = z.object({
   campaign: z.string().optional(),
   status:   z.string().optional(),

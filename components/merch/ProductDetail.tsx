@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import MerchProgressBar from '@/components/merch/MerchProgressBar'
 import MerchCountdown  from '@/components/merch/MerchCountdown'
 import OrderSummary    from '@/components/merch/OrderSummary'
+import { useCart }     from '@/components/merch/CartContext'
 import type {
   MerchProductWithVariants, MerchTenant, MerchCampaign, ProductProgress,
 } from '@/lib/merch/types'
@@ -60,7 +61,15 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
   const [qty,            setQty]            = useState(1)
   const [personValues,   setPersonValues]   = useState<Record<string, string>>({})
   const [showSizeChart,  setShowSizeChart]  = useState(false)
+  const [addedToCart,    setAddedToCart]    = useState(false)
   const touchStartX = useRef<number | null>(null)
+  const cart = useCart()
+
+  useEffect(() => {
+    if (!addedToCart) return
+    const t = setTimeout(() => setAddedToCart(false), 3000)
+    return () => clearTimeout(t)
+  }, [addedToCart])
 
   // All sizes for current fit/colour — from ALL variants (shows disabled state)
   const allSizesForSelection = [...new Set(
@@ -94,17 +103,7 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
 
   const displayTotal = (product.price_cents + surcharge) * qty + personTotal
 
-  const canReserve = isOpen && !!selectedVariant
-
-  const reserveUrl = (() => {
-    if (!canReserve) return null
-    const params = new URLSearchParams({ variant_id: selectedVariant!.id, qty: String(qty) })
-    for (const p of personalisation) {
-      const val = (personValues[p.id] ?? '').trim()
-      if (val) params.set(p.id, val)
-    }
-    return `/merch/${slug}/${campaign.slug}/${product.slug}/reserve?${params.toString()}`
-  })()
+  const canAdd = isOpen && !!selectedVariant
 
   const ctaLabel = !isOpen
     ? 'Campaign closed'
@@ -112,7 +111,32 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
       ? hasFits && !selectedFit ? 'Select a fit'
         : multiColour && !selectedColour ? 'Select a colour'
         : 'Select a size'
-      : `Pre-Order Now — $${(displayTotal / 100).toFixed(2)}`
+      : `Add to Cart — $${(displayTotal / 100).toFixed(2)}`
+
+  function handleAddToCart() {
+    if (!canAdd || !selectedVariant) return
+    cart.add({
+      productId:   product.id,
+      productSlug: product.slug,
+      productName: product.name,
+      imageUrl:    product.images[0] ?? null,
+      variantId:   selectedVariant.id,
+      fit:         selectedFit,
+      colour:      selectedVariant.colour,
+      size:        selectedVariant.size,
+      qty,
+      priceCents:  product.price_cents + selectedVariant.additional_cost_cents,
+      personalisation: personalisation
+        .filter((p) => (personValues[p.id] ?? '').trim())
+        .map((p) => ({
+          id:         p.id,
+          label:      p.label,
+          value:      (personValues[p.id] ?? '').trim(),
+          priceCents: p.additional_price_cents,
+        })),
+    })
+    setAddedToCart(true)
+  }
 
   const images = product.images
 
@@ -388,12 +412,23 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
               accentColor={accent}
             />
 
+            {/* ── Cart confirmation toast ───────────────────── */}
+            {addedToCart && (
+              <div style={{ marginBottom: '12px', padding: '14px 16px', background: '#DCFCE7', border: '1px solid #86EFAC', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
+                <span style={{ fontSize: '14px', fontWeight: 600, color: '#15803D' }}>✓ Added to cart!</span>
+                <a href={`/merch/${slug}/${campaign.slug}/cart`}
+                  style={{ fontSize: '13px', fontWeight: 700, color: '#15803D', textDecoration: 'underline', textUnderlineOffset: '2px', whiteSpace: 'nowrap' }}>
+                  View Cart →
+                </a>
+              </div>
+            )}
+
             {/* ── CTA ───────────────────────────────────────── */}
             {isOpen ? (
-              <a href={canReserve ? reserveUrl! : undefined}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', padding: '18px 24px', boxSizing: 'border-box', background: canReserve ? accent : '#94A3B8', color: '#fff', textDecoration: 'none', fontSize: '16px', fontWeight: 700, letterSpacing: '0.02em', borderRadius: '10px', cursor: canReserve ? 'pointer' : 'default', pointerEvents: canReserve ? 'auto' : 'none', transition: 'opacity 0.15s' }}>
+              <button onClick={handleAddToCart} disabled={!canAdd}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', padding: '18px 24px', boxSizing: 'border-box', background: canAdd ? accent : '#94A3B8', color: '#fff', border: 'none', fontSize: '16px', fontWeight: 700, letterSpacing: '0.02em', borderRadius: '10px', cursor: canAdd ? 'pointer' : 'default', fontFamily: 'inherit', transition: 'opacity 0.15s' }}>
                 {ctaLabel}
-              </a>
+              </button>
             ) : (
               <div style={{ width: '100%', padding: '18px', background: '#F1F5F9', borderRadius: '10px', textAlign: 'center', fontSize: '15px', fontWeight: 600, color: '#64748B', boxSizing: 'border-box' }}>
                 Campaign closed

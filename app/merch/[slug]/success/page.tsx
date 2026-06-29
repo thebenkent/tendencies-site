@@ -22,13 +22,13 @@ export default async function SuccessPage({
     ? await findOrderById(orderId, tenant.id).catch(() => null)
     : null
 
-  // First line carries the product/variant details for single-product orders
-  const line    = order?.merch_order_lines?.[0] ?? null
-  const product = line?.merch_products         ?? null
-  const variant = line?.merch_product_variants ?? null
+  const lines = order?.merch_order_lines ?? []
 
   const navy = tenant.primary_color
   const red  = tenant.secondary_color
+
+  const fmt = (cents: number) => `$${(cents / 100).toFixed(2)}`
+  const orderTotal = lines.reduce((s, l) => s + l.unit_price_cents * l.qty, 0)
 
   return (
     <div>
@@ -57,17 +57,15 @@ export default async function SuccessPage({
           </div>
         )}
 
-        {order && line && product && variant && (
+        {order && lines.length > 0 && (
           <div style={{ background: '#fff', borderRadius: '12px', border: '1px solid #E2E8EF', padding: '24px', textAlign: 'left', marginBottom: '32px', boxShadow: '0 2px 8px rgba(11,31,77,0.06)' }}>
             <div style={{ fontSize: '13px', fontWeight: 700, color: navy, marginBottom: '16px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Your Pre-Order</div>
-            <dl style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 24px', fontSize: '14px' }}>
+
+            {/* Customer */}
+            <dl style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 24px', fontSize: '14px', marginBottom: lines.length > 0 ? '20px' : 0 }}>
               {[
                 { label: 'Name',     value: `${order.merch_customers.first_name} ${order.merch_customers.last_name}` },
                 { label: 'Email',    value: order.merch_customers.email },
-                { label: 'Product',  value: product.name },
-                { label: 'Size',     value: variant.size },
-                ...(variant.colour ? [{ label: 'Colour', value: variant.colour }] : []),
-                { label: 'Quantity', value: String(line.qty) },
                 { label: 'Delivery', value: order.delivery_method === 'collect' ? 'Collect from club' : 'Courier' },
                 { label: 'Status',   value: 'Pre-Ordered' },
               ].map(({ label, value }) => (
@@ -77,6 +75,38 @@ export default async function SuccessPage({
                 </div>
               ))}
             </dl>
+
+            {/* Line items */}
+            {lines.length > 0 && (
+              <div style={{ borderTop: '1px solid #E2E8EF', paddingTop: '16px' }}>
+                <div style={{ fontSize: '12px', fontWeight: 700, color: '#5A6B7E', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '12px' }}>
+                  Items ({lines.length})
+                </div>
+                {lines.map((line) => {
+                  const product = (line as any).merch_products ?? null
+                  const variant = (line as any).merch_product_variants ?? null
+                  const dims = [variant?.size, variant?.colour].filter(Boolean).join(' / ')
+                  return (
+                    <div key={line.id} style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', marginBottom: '8px', padding: '8px 0', borderBottom: '1px solid #F1F5F9' }}>
+                      <div>
+                        <div style={{ fontSize: '14px', fontWeight: 600, color: navy, marginBottom: '2px' }}>{product?.name ?? 'Item'}</div>
+                        {dims && <div style={{ fontSize: '12px', color: '#5A6B7E' }}>{dims}{line.qty > 1 ? ` × ${line.qty}` : ''}</div>}
+                        {line.player_name && <div style={{ fontSize: '12px', color: '#5A6B7E' }}>Player: {line.player_name}</div>}
+                      </div>
+                      <div style={{ fontWeight: 700, color: navy, fontSize: '14px', flexShrink: 0 }}>
+                        {fmt(line.unit_price_cents * line.qty)}
+                      </div>
+                    </div>
+                  )
+                })}
+                {lines.length > 1 && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '10px', borderTop: '1px solid #E2E8EF', marginTop: '4px' }}>
+                    <span style={{ fontSize: '14px', fontWeight: 700, color: navy }}>Order Total</span>
+                    <span style={{ fontSize: '16px', fontWeight: 800, color: navy }}>{fmt(orderTotal)}</span>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 
@@ -84,7 +114,7 @@ export default async function SuccessPage({
           <div style={{ fontSize: '13px', fontWeight: 700, color: navy, marginBottom: '14px', letterSpacing: '0.04em', textTransform: 'uppercase' }}>What Happens Next</div>
           {[
             'More members place their pre-orders.',
-            'Once the minimum quantity is reached, you\'ll receive an email with payment instructions.',
+            "Once the minimum quantity is reached, you'll receive an email with payment instructions.",
             'Once payment is received, production begins.',
             'Your order is delivered or ready for collection.',
           ].map((text, i) => (

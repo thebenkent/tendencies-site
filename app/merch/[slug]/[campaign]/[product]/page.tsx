@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { getTenant, getCampaign, getProduct, getProductProgress } from '@/lib/merch/db'
 import ProductDetail from '@/components/merch/ProductDetail'
+import { CartBadge } from '@/components/merch/CartContext'
 
 export const dynamic = 'force-dynamic'
 
@@ -39,7 +40,7 @@ export default async function ProductPage({
             </div>
           )
           : <span style={{ color: '#fff', fontWeight: 800, fontSize: '16px' }}>{tenant.name}</span>}
-        <div style={{ width: '60px' }} />
+        <CartBadge slug={slug} campaignSlug={campaignSlug} primaryColor={navy} accentColor={red} />
       </header>
 
       <ProductDetail

@@ -25,13 +25,14 @@ function normalizeExpanded(raw: any): MerchOrderExpanded {
 // ── Create ────────────────────────────────────────────────────
 
 export type CreateOrderInput = {
-  tenantId:        string
-  campaignId:      string
-  customerId:      string
-  deliveryMethod:  string
+  tenantId:         string
+  campaignId:       string
+  customerId:       string
+  deliveryMethod:   string
   deliveryAddress?: string
-  notes?:          string
-  initialStatus?:  string
+  notes?:           string
+  initialStatus?:   string
+  questionAnswers?: Record<string, string>
 }
 
 function generateOrderNumber(): string {
@@ -44,7 +45,7 @@ function generateOrderNumber(): string {
 }
 
 export async function createOrder(input: CreateOrderInput): Promise<MerchOrder> {
-  const { tenantId, campaignId, customerId, deliveryMethod, deliveryAddress, notes, initialStatus } = input
+  const { tenantId, campaignId, customerId, deliveryMethod, deliveryAddress, notes, initialStatus, questionAnswers } = input
 
   const { data, error } = await getSupabase()
     .from('merch_orders')
@@ -53,10 +54,11 @@ export async function createOrder(input: CreateOrderInput): Promise<MerchOrder> 
       campaign_id:      campaignId,
       customer_id:      customerId,
       delivery_method:  deliveryMethod,
-      delivery_address: deliveryAddress ?? null,
-      notes:            notes           ?? null,
-      status:           initialStatus   ?? 'reserved',
+      delivery_address: deliveryAddress    ?? null,
+      notes:            notes              ?? null,
+      status:           initialStatus      ?? 'reserved',
       order_number:     generateOrderNumber(),
+      question_answers: questionAnswers    ?? {},
     })
     .select()
     .single()
