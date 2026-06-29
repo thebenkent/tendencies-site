@@ -54,7 +54,7 @@ export const checkoutSchema = z.object({
   grade:            z.string().optional(),
   delivery_method:  z.enum(['collect', 'courier']),
   delivery_address: z.string().optional(),
-  question_answers: z.record(z.string(), z.string()).optional(),
+  attribute_answers: z.record(z.string(), z.string()).optional(),
   understood_moq:   z.boolean().refine((v) => v === true, {
     message: 'You must acknowledge the MOQ condition',
   }),

@@ -2,6 +2,7 @@ import { getSupabase } from '@/lib/core/database'
 import type {
   MerchProductWithVariants, MerchProduct, MerchProductVariant,
   MerchProductPersonalisation, MerchSizeChart, MerchProductImage,
+  MerchProductBadge, MerchProductContent,
   ProductProgress, MerchCampaign,
 } from '@/lib/merch/types'
 
@@ -31,6 +32,14 @@ const PRODUCT_SELECT = `
   ),
   merch_product_images (
     id, campaign_product_id, url, image_type, alt_text, display_order
+  ),
+  merch_product_badges (
+    id, campaign_product_id, tenant_id, label, badge_type, icon,
+    active, sort_order, starts_at, ends_at, created_at
+  ),
+  merch_product_content (
+    id, campaign_product_id, section, title, content_type, content,
+    sort_order, active, created_at
   )
 `
 
@@ -114,11 +123,47 @@ function buildProductView(raw: any): MerchProductWithVariants {
       created_at:          c.created_at,
     }))
 
+  // Badges — active only, time-bounded filter applied in JS (simpler than PostgREST filter)
+  const now = new Date().toISOString()
+  const badges: MerchProductBadge[] = (raw.merch_product_badges ?? [])
+    .filter((b: any) => b.active && (!b.starts_at || b.starts_at <= now) && (!b.ends_at || b.ends_at > now))
+    .sort((a: any, b: any) => a.sort_order - b.sort_order)
+    .map((b: any) => ({
+      id:                  b.id,
+      campaign_product_id: b.campaign_product_id,
+      tenant_id:           b.tenant_id,
+      label:               b.label,
+      badge_type:          b.badge_type ?? 'default',
+      icon:                b.icon ?? null,
+      active:              b.active,
+      sort_order:          b.sort_order ?? 0,
+      starts_at:           b.starts_at ?? null,
+      ends_at:             b.ends_at ?? null,
+      created_at:          b.created_at,
+    }))
+
+  // Rich content sections — active only, sorted
+  const content: MerchProductContent[] = (raw.merch_product_content ?? [])
+    .filter((c: any) => c.active)
+    .sort((a: any, b: any) => a.sort_order - b.sort_order)
+    .map((c: any) => ({
+      id:                  c.id,
+      campaign_product_id: c.campaign_product_id,
+      section:             c.section,
+      title:               c.title ?? null,
+      content_type:        c.content_type ?? 'text',
+      content:             c.content ?? {},
+      sort_order:          c.sort_order ?? 0,
+      active:              c.active,
+      created_at:          c.created_at,
+    }))
+
   const product: MerchProduct = {
     id:                   raw.id,
     campaign_id:          raw.campaign_id,
     master_product_id:    raw.master_product_id,
     tenant_id:            raw.tenant_id,
+    collection_id:        raw.collection_id ?? null,
     slug:                 raw.slug,
     name:                 raw.name,
     description:          raw.description ?? mp.description ?? null,
@@ -139,6 +184,8 @@ function buildProductView(raw: any): MerchProductWithVariants {
     product_images:       productImages,
     personalisation,
     size_charts,
+    badges,
+    content,
   }
 
   return { ...product, merch_product_variants: variants }

@@ -135,14 +135,14 @@ export type PlaceCartOrderInput = {
   deliveryMethod:   string
   deliveryAddress?: string
   notes?:           string
-  questionAnswers?: Record<string, string>
+  attributeValues?: Record<string, string>   // campaign attribute answers
   customer:         UpsertCustomerInput
 }
 
 export async function placeCartOrder(input: PlaceCartOrderInput): Promise<PlaceOrderResult> {
   const {
     tenantId, campaignId, items, deliveryMethod, deliveryAddress,
-    notes, questionAnswers, customer,
+    notes, attributeValues, customer,
   } = input
 
   if (items.length === 0) throw new Error('Cart is empty')
@@ -168,7 +168,7 @@ export async function placeCartOrder(input: PlaceCartOrderInput): Promise<PlaceO
     deliveryAddress,
     notes,
     initialStatus,
-    questionAnswers,
+    attributeValues,
   })
 
   const lineIds: string[] = []

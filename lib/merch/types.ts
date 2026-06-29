@@ -145,6 +145,7 @@ export type MerchCampaignProduct = {
   campaign_id: string
   master_product_id: string
   tenant_id: string
+  collection_id: string | null
   slug: string
   name: string
   description: string | null
@@ -233,6 +234,51 @@ export type MerchAsset = {
   created_at: string
 }
 
+// ── Product content & badges ─────────────────────────────────
+
+export type MerchProductBadge = {
+  id:                  string
+  campaign_product_id: string
+  tenant_id:           string
+  label:               string
+  badge_type:          'default' | 'success' | 'warning' | 'danger' | 'info' | 'dark'
+  icon:                string | null
+  active:              boolean
+  sort_order:          number
+  starts_at:           string | null
+  ends_at:             string | null
+  created_at:          string
+}
+
+export type ProductContentType = 'text' | 'list' | 'table' | 'html'
+export type ProductContentSection =
+  | 'highlights' | 'features' | 'fabric' | 'materials'
+  | 'sizing_notes' | 'care_instructions' | 'branding_details'
+  | 'delivery' | 'returns' | 'custom'
+
+export type MerchProductContent = {
+  id:                  string
+  campaign_product_id: string
+  section:             ProductContentSection
+  title:               string | null
+  content_type:        ProductContentType
+  content:             Record<string, unknown>  // shape depends on content_type
+  sort_order:          number
+  active:              boolean
+  created_at:          string
+}
+
+export type ProductRelationType = 'related' | 'frequently_bought' | 'complete_look' | 'also_purchased' | 'upsell'
+
+export type MerchProductRelated = {
+  id:                  string
+  source_product_id:   string
+  related_product_id:  string
+  relation_type:       ProductRelationType
+  sort_order:          number
+  created_at:          string
+}
+
 // Flat merged view consumed by pages.
 // Combines campaign_product + master_product + assets.
 export type MerchProduct = {
@@ -240,6 +286,7 @@ export type MerchProduct = {
   campaign_id: string
   master_product_id: string
   tenant_id: string
+  collection_id: string | null
   slug: string
   name: string
   description: string | null
@@ -263,6 +310,8 @@ export type MerchProduct = {
   // relational product configuration
   personalisation: MerchProductPersonalisation[]
   size_charts:     MerchSizeChart[]
+  badges:          MerchProductBadge[]
+  content:         MerchProductContent[]
 }
 
 export type MerchProductWithVariants = MerchProduct & {
@@ -272,14 +321,17 @@ export type MerchProductWithVariants = MerchProduct & {
 // ── Collections ──────────────────────────────────────────────
 
 export type MerchCollection = {
-  id: string
+  id:          string
   campaign_id: string
-  tenant_id: string
-  name: string
-  slug: string
+  tenant_id:   string
+  name:        string
+  slug:        string
   description: string | null
-  sort_order: number
-  created_at: string
+  image_url:   string | null
+  visible:     boolean
+  sort_order:  number
+  created_at:  string
+  updated_at:  string
 }
 
 // ── Customers ────────────────────────────────────────────────
@@ -300,18 +352,19 @@ export type MerchCustomer = {
 // ── Orders ───────────────────────────────────────────────────
 
 export type MerchOrder = {
-  id: string
-  campaign_id: string
-  tenant_id: string
-  customer_id: string
-  location_id: string | null
-  order_number: string | null
-  status: OrderStatus
-  delivery_method: DeliveryMethod
+  id:               string
+  campaign_id:      string
+  tenant_id:        string
+  customer_id:      string
+  location_id:      string | null
+  order_number:     string | null
+  status:           OrderStatus
+  delivery_method:  DeliveryMethod
   delivery_address: string | null
-  notes: string | null
-  created_at: string
-  updated_at: string
+  notes:            string | null
+  attribute_values: Record<string, string>   // campaign attribute answers (formerly question_answers)
+  created_at:       string
+  updated_at:       string
 }
 
 export type MerchOrderLine = {
@@ -370,20 +423,24 @@ export type MerchPayment = {
 
 // ── Bundles ───────────────────────────────────────────────────
 
+export type BundleDiscountType = 'none' | 'percentage' | 'fixed'
+
 export type MerchBundle = {
-  id:           string
-  campaign_id:  string
-  tenant_id:    string
-  name:         string
-  slug:         string
-  description:  string | null
-  image_url:    string | null
-  price_cents:  number | null   // null = auto-calculated from components
-  discount_pct: number          // 0-100
-  active:       boolean
-  sort_order:   number
-  created_at:   string
-  items?:       MerchBundleItem[]
+  id:             string
+  campaign_id:    string
+  tenant_id:      string
+  collection_id:  string | null   // optional collection grouping
+  name:           string
+  slug:           string
+  description:    string | null
+  image_url:      string | null
+  price_cents:    number | null   // null = auto-calculated from components
+  discount_type:  BundleDiscountType
+  discount_value: number          // cents (fixed) or basis points (percentage)
+  active:         boolean
+  sort_order:     number
+  created_at:     string
+  items?:         MerchBundleItem[]
 }
 
 export type MerchBundleItem = {
@@ -391,26 +448,52 @@ export type MerchBundleItem = {
   bundle_id:           string
   campaign_product_id: string
   required_qty:        number
+  required:            boolean    // true = must be included; false = optional add-on
   sort_order:          number
   created_at:          string
 }
 
-// ── Checkout Questions ────────────────────────────────────────
+// ── Campaign Attributes ───────────────────────────────────────
+// Configurable per-order fields: Team, Grade, Cost Centre, etc.
+// Replaces the previous "Checkout Questions" naming.
 
-export type CheckoutQuestionType = 'text' | 'dropdown' | 'checkbox' | 'radio' | 'date'
+export type CampaignAttributeType = 'text' | 'textarea' | 'dropdown' | 'radio' | 'checkbox' | 'date' | 'number'
 
-export type MerchCheckoutQuestion = {
+export type MerchCampaignAttribute = {
   id:          string
   campaign_id: string
   tenant_id:   string
-  type:        CheckoutQuestionType
+  type:        CampaignAttributeType
   label:       string
   placeholder: string | null
-  options:     string[] | null   // for dropdown/radio
+  options:     string[] | null   // for dropdown/radio types
   required:    boolean
   applies_to:  'order' | 'line'
   sort_order:  number
   active:      boolean
+  created_at:  string
+}
+
+// Deprecated alias — remove after all admin code migrates to MerchCampaignAttribute
+export type MerchCheckoutQuestion = MerchCampaignAttribute
+
+// ── Campaign Banners ──────────────────────────────────────────
+
+export type BannerType = 'info' | 'success' | 'warning' | 'urgent' | 'neutral'
+
+export type MerchCampaignBanner = {
+  id:          string
+  campaign_id: string
+  tenant_id:   string
+  message:     string
+  link_url:    string | null
+  link_label:  string | null
+  banner_type: BannerType
+  icon:        string | null
+  active:      boolean
+  starts_at:   string | null
+  ends_at:     string | null
+  sort_order:  number
   created_at:  string
 }
 

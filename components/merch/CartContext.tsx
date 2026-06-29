@@ -1,11 +1,8 @@
 'use client'
 
 import { createContext, useContext, useState, useCallback, useEffect } from 'react'
-import {
-  type CartItem,
-  cartKey, getCart, addToCart, updateItemQty, removeItem, clearCart,
-  cartTotal, cartItemCount,
-} from '@/lib/merch/cart'
+import { type CartItem, cartKey, cartTotal, cartItemCount } from '@/lib/merch/cart'
+import { defaultCartRepository as cart } from '@/lib/merch/cart-repository'
 
 type CartContextValue = {
   items:     CartItem[]
@@ -32,29 +29,29 @@ export function CartProvider({
   const key = cartKey(tenantSlug, campaignSlug)
   const [items, setItems] = useState<CartItem[]>([])
 
-  // Hydrate from localStorage on mount (avoids SSR mismatch)
+  // Hydrate on mount (avoids SSR mismatch)
   useEffect(() => {
-    setItems(getCart(key))
+    setItems(cart.getItems(key))
   }, [key])
 
   const add = useCallback((incoming: Omit<CartItem, 'id'>): CartItem => {
-    const newItem = addToCart(key, incoming)
-    setItems(getCart(key))
+    const newItem = cart.addItem(key, incoming)
+    setItems(cart.getItems(key))
     return newItem
   }, [key])
 
   const setQty = useCallback((id: string, qty: number) => {
-    updateItemQty(key, id, qty)
-    setItems(getCart(key))
+    cart.updateQty(key, id, qty)
+    setItems(cart.getItems(key))
   }, [key])
 
   const remove = useCallback((id: string) => {
-    removeItem(key, id)
-    setItems(getCart(key))
+    cart.removeItem(key, id)
+    setItems(cart.getItems(key))
   }, [key])
 
   const clear = useCallback(() => {
-    clearCart(key)
+    cart.clear(key)
     setItems([])
   }, [key])
 

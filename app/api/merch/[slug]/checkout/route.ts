@@ -57,7 +57,7 @@ export async function POST(
       deliveryMethod:   d.delivery_method,
       deliveryAddress:  d.delivery_address,
       notes:            d.notes,
-      questionAnswers:  d.question_answers,
+      attributeValues:  d.attribute_answers,
       customer: {
         tenantId:  tenant.id,
         email:     d.email,
