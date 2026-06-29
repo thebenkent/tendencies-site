@@ -7,7 +7,7 @@ const ORDER_EXPAND_SELECT = `
   merch_order_lines (
     *,
     merch_campaign_products ( name, slug, price_cents ),
-    merch_product_variants  ( size, colour, additional_cost_cents )
+    merch_product_variants  ( size, colour, fit, additional_cost_cents )
   )
 `
 
@@ -17,7 +17,7 @@ function normalizeExpanded(raw: any): MerchOrderExpanded {
     merch_order_lines: (raw.merch_order_lines ?? []).map((line: any) => ({
       ...line,
       merch_products:         line.merch_campaign_products ?? { name: '', slug: '', price_cents: 0 },
-      merch_product_variants: line.merch_product_variants  ?? { size: '', colour: '', additional_cost_cents: 0 },
+      merch_product_variants: line.merch_product_variants  ?? { size: '', colour: '', fit: '', additional_cost_cents: 0 },
     })),
   } as MerchOrderExpanded
 }

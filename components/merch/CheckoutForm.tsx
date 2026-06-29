@@ -26,6 +26,8 @@ function SectionHeader({ number, title }: { number: number; title: string }) {
   )
 }
 
+const COURIER_FEE_CENTS = 1000
+
 export default function CheckoutForm({ tenant, campaign, slug, campaignSlug }: Props) {
   const { items, total, count, clear } = useCart()
   const primary = tenant.primary_color
@@ -38,6 +40,8 @@ export default function CheckoutForm({ tenant, campaign, slug, campaignSlug }: P
   const [team,          setTeam]          = useState('')
   const [grade,         setGrade]         = useState('')
   const [delivery,      setDelivery]      = useState<'collect' | 'courier'>('collect')
+  const courierFee  = delivery === 'courier' ? COURIER_FEE_CENTS : 0
+  const grandTotal  = total + courierFee
   const [address,       setAddress]       = useState('')
   const [notes,         setNotes]         = useState('')
   const [understoodMoq, setUnderstoodMoq] = useState(false)
@@ -68,6 +72,19 @@ export default function CheckoutForm({ tenant, campaign, slug, campaignSlug }: P
     if (delivery === 'courier' && !address.trim()) e.address = 'Delivery address is required for courier orders'
     if (!understoodMoq) e.moq = 'You must acknowledge the pre-order condition'
     if (items.length === 0) e.items = 'Your cart is empty'
+
+    // Per-item validation
+    for (const item of items) {
+      if (!item.size.trim()) {
+        e[`item_size_${item.id}`] = `${item.productName}: please select a size before checking out`
+      }
+      for (const p of item.personalisation) {
+        if (p.maxLength && p.value.length > p.maxLength) {
+          e[`item_person_${item.id}_${p.id}`] = `${item.productName} — ${p.label} must be ${p.maxLength} characters or fewer (currently ${p.value.length})`
+        }
+      }
+    }
+
     return e
   }
 
@@ -145,21 +162,39 @@ export default function CheckoutForm({ tenant, campaign, slug, campaignSlug }: P
         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
           {items.map((item) => {
             const dims = [item.fit, item.colour, item.size].filter(Boolean).join(' / ')
+            const itemErrors = Object.entries(errors)
+              .filter(([k]) => k.startsWith(`item_size_${item.id}`) || k.startsWith(`item_person_${item.id}_`))
+              .map(([, v]) => v)
             return (
-              <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', fontSize: '14px', padding: '6px 0', borderBottom: '1px solid #F5F7FA' }}>
-                <span style={{ color: '#374151', flex: 1, minWidth: 0 }}>
-                  <span style={{ fontWeight: 600 }}>{item.productName}</span>
-                  {dims && <span style={{ color: '#94A3B8', marginLeft: '5px' }}>({dims})</span>}
-                  {item.qty > 1 && <span style={{ color: '#94A3B8', marginLeft: '4px' }}>× {item.qty}</span>}
-                </span>
-                <span style={{ fontWeight: 700, color: primary, flexShrink: 0 }}>{fmt(cartLineTotal(item))}</span>
+              <div key={item.id} style={{ padding: '6px 0', borderBottom: '1px solid #F5F7FA' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', fontSize: '14px' }}>
+                  <span style={{ color: '#374151', flex: 1, minWidth: 0 }}>
+                    <span style={{ fontWeight: 600 }}>{item.productName}</span>
+                    {dims && <span style={{ color: '#94A3B8', marginLeft: '5px' }}>({dims})</span>}
+                    {item.qty > 1 && <span style={{ color: '#94A3B8', marginLeft: '4px' }}>× {item.qty}</span>}
+                  </span>
+                  <span style={{ fontWeight: 700, color: primary, flexShrink: 0 }}>{fmt(cartLineTotal(item))}</span>
+                </div>
+                {itemErrors.map((msg) => (
+                  <div key={msg} style={{ fontSize: '12px', color: '#EF4444', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <span>⚠</span> {msg}
+                  </div>
+                ))}
               </div>
             )
           })}
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '14px', marginTop: '8px', borderTop: '2px solid #F1F4FA' }}>
-          <span style={{ fontSize: '15px', fontWeight: 700, color: primary }}>Total</span>
-          <span style={{ fontSize: '22px', fontWeight: 800, color: primary, letterSpacing: '-0.025em' }}>{fmt(total)}</span>
+        <div style={{ paddingTop: '14px', marginTop: '8px', borderTop: '2px solid #F1F4FA' }}>
+          {courierFee > 0 && (
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <span style={{ fontSize: '13px', color: '#5A6B7E' }}>Courier delivery</span>
+              <span style={{ fontSize: '13px', fontWeight: 600, color: '#5A6B7E' }}>{fmt(courierFee)}</span>
+            </div>
+          )}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '15px', fontWeight: 700, color: primary }}>Total</span>
+            <span style={{ fontSize: '22px', fontWeight: 800, color: primary, letterSpacing: '-0.025em' }}>{fmt(grandTotal)}</span>
+          </div>
         </div>
       </div>
 
@@ -222,8 +257,15 @@ export default function CheckoutForm({ tenant, campaign, slug, campaignSlug }: P
               }}>
                 <input type="radio" name="delivery" value={method} checked={selected} onChange={() => setDelivery(method)} style={{ accentColor: accent }} />
                 <div>
-                  <div style={{ fontSize: '14px', fontWeight: 700, color: selected ? primary : '#374151' }}>
-                    {method === 'collect' ? 'Collect' : 'Courier'}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '14px', fontWeight: 700, color: selected ? primary : '#374151' }}>
+                      {method === 'collect' ? 'Collect' : 'Courier'}
+                    </span>
+                    {method === 'courier' && (
+                      <span style={{ fontSize: '12px', fontWeight: 700, color: selected ? primary : '#64748B', background: selected ? `${primary}12` : '#F1F5F9', padding: '1px 7px', borderRadius: '999px' }}>
+                        +$10.00
+                      </span>
+                    )}
                   </div>
                   <div style={{ fontSize: '12px', color: '#94A3B8', marginTop: '1px' }}>
                     {method === 'collect' ? 'Pick up from club' : 'Delivered to you'}
@@ -294,7 +336,7 @@ export default function CheckoutForm({ tenant, campaign, slug, campaignSlug }: P
           boxShadow: submitting ? 'none' : `0 4px 20px ${accent}44`,
           transition: 'background 0.15s, box-shadow 0.15s',
         }}>
-        {submitting ? 'Placing Pre-Order…' : `Place Pre-Order — ${fmt(total)}`}
+        {submitting ? 'Placing Pre-Order…' : `Place Pre-Order — ${fmt(grandTotal)}`}
       </button>
 
       <p style={{ textAlign: 'center', fontSize: '12px', color: '#94A3B8', margin: '4px 0 0', lineHeight: 1.5 }}>

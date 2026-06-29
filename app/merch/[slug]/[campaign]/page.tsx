@@ -120,8 +120,8 @@ export default async function CampaignPage({
       }}>
         <a href={`/merch/${slug}`} style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
           {tenant.logo_url
-            ? <div style={{ position: 'relative', height: '36px', width: '140px' }}>
-                <Image src={tenant.logo_url} alt={tenant.name} fill style={{ objectFit: 'contain', objectPosition: 'left center' }} />
+            ? <div style={{ position: 'relative', height: '44px', width: '44px' }} className="merch-header-logo">
+                <Image src={tenant.logo_url} alt={tenant.name} fill style={{ objectFit: 'contain' }} />
               </div>
             : <span style={{ color: '#fff', fontWeight: 800, fontSize: '18px', letterSpacing: '-0.02em' }}>{tenant.name}</span>}
         </a>
@@ -136,7 +136,8 @@ export default async function CampaignPage({
         <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(ellipse at 70% 50%, ${accent}1A 0%, transparent 60%)` }} />
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '100px', background: `linear-gradient(to bottom, transparent, ${primary}88)` }} />
 
-        <div style={{ position: 'relative', width: '100%', maxWidth: '1100px', margin: '0 auto', padding: '72px 32px 80px' }}>
+        <div style={{ position: 'relative', width: '100%', maxWidth: '1100px', margin: '0 auto', padding: '72px 32px 80px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '40px' }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '7px', background: `${accent}20`, border: `1px solid ${accent}50`, color: accent, padding: '5px 14px', borderRadius: '999px', fontSize: '10px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '20px' }}>
             <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: accent, display: 'inline-block' }} />
             {tenant.name}
@@ -166,7 +167,7 @@ export default async function CampaignPage({
             {campaign.closes_at && isOpen && (
               <div style={{ background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px', padding: '12px 20px', minWidth: '160px' }}>
                 <div style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.45)', marginBottom: '3px' }}>Closes In</div>
-                <MerchCountdown closingDate={campaign.closes_at} primaryColor={primary} secondaryColor={accent} />
+                <MerchCountdown closingDate={campaign.closes_at} primaryColor={primary} secondaryColor={accent} textColor="#fff" labelColor="rgba(255,255,255,0.55)" />
               </div>
             )}
 
@@ -176,6 +177,13 @@ export default async function CampaignPage({
               </div>
             )}
           </div>
+          </div>
+
+          {tenant.logo_url && (
+            <div style={{ flexShrink: 0, width: '200px', height: '200px', position: 'relative', opacity: 0.92, filter: 'brightness(0) invert(1)', display: 'none' }} className="hero-logo">
+              <Image src={tenant.logo_url} alt={tenant.name} fill style={{ objectFit: 'contain' }} sizes="200px" />
+            </div>
+          )}
         </div>
       </section>
 
@@ -246,6 +254,32 @@ export default async function CampaignPage({
           </div>
         </section>
       </div>
+
+      {/* ── Campaign info: delivery / pickup / contact ───────── */}
+      {(campaign.delivery_info || campaign.pickup_info || campaign.club_contact) && (
+        <div style={{ background: '#F8FAFC', borderTop: '1px solid #E8ECF2', padding: '48px 32px' }}>
+          <div style={{ maxWidth: '900px', margin: '0 auto', display: 'grid', gap: '28px', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))' }}>
+            {campaign.delivery_info && (
+              <div>
+                <div style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#94A3B8', marginBottom: '8px' }}>Delivery</div>
+                <p style={{ fontSize: '14px', color: '#374151', lineHeight: 1.7, margin: 0, whiteSpace: 'pre-line' }}>{campaign.delivery_info}</p>
+              </div>
+            )}
+            {campaign.pickup_info && (
+              <div>
+                <div style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#94A3B8', marginBottom: '8px' }}>Pick-up</div>
+                <p style={{ fontSize: '14px', color: '#374151', lineHeight: 1.7, margin: 0, whiteSpace: 'pre-line' }}>{campaign.pickup_info}</p>
+              </div>
+            )}
+            {campaign.club_contact && (
+              <div>
+                <div style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#94A3B8', marginBottom: '8px' }}>Contact</div>
+                <p style={{ fontSize: '14px', color: '#374151', lineHeight: 1.7, margin: 0, whiteSpace: 'pre-line' }}>{campaign.club_contact}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* ── Footer ─────────────────────────────────────────── */}
       <footer style={{ background: primary, padding: '40px 32px', textAlign: 'center' }}>

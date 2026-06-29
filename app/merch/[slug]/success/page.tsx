@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import { findTenantBySlug } from '@/lib/merch/repositories/tenants'
 import { findOrderById } from '@/lib/merch/repositories/orders'
+import { findCampaignById } from '@/lib/modules/campaigns/repository'
 import { notFound } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
@@ -20,6 +21,10 @@ export default async function SuccessPage({
 
   const order = orderId
     ? await findOrderById(orderId, tenant.id).catch(() => null)
+    : null
+
+  const campaign = order?.campaign_id
+    ? await findCampaignById(order.campaign_id).catch(() => null)
     : null
 
   const lines = order?.merch_order_lines ?? []
@@ -45,7 +50,7 @@ export default async function SuccessPage({
           Thanks{order ? `, ${order.merch_customers.first_name}` : ''}!
         </h1>
         <p style={{ fontSize: '17px', color: '#374151', lineHeight: 1.7, marginBottom: order?.order_number ? '20px' : '32px' }}>
-          Your pre-order has been placed. You&apos;ll receive an email once the minimum quantity is reached and your order is confirmed.
+          {campaign?.success_message ?? "Your pre-order has been placed. You'll receive an email once the minimum quantity is reached and your order is confirmed."}
         </p>
 
         {order?.order_number && (
@@ -85,7 +90,7 @@ export default async function SuccessPage({
                 {lines.map((line) => {
                   const product = (line as any).merch_products ?? null
                   const variant = (line as any).merch_product_variants ?? null
-                  const dims = [variant?.size, variant?.colour].filter(Boolean).join(' / ')
+                  const dims = [variant?.fit, variant?.size, variant?.colour].filter(Boolean).join(' / ')
                   return (
                     <div key={line.id} style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', marginBottom: '8px', padding: '8px 0', borderBottom: '1px solid #F1F5F9' }}>
                       <div>

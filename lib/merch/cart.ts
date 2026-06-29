@@ -2,10 +2,12 @@
 // Cart state is localStorage-only (no server persistence until customer accounts exist).
 
 export type CartPersonalisationItem = {
-  id:         string   // merch_product_personalisation.id
-  label:      string
-  value:      string
-  priceCents: number   // additional_price_cents
+  id:           string   // merch_product_personalisation.id
+  label:        string
+  value:        string
+  priceCents:   number   // additional_price_cents
+  maxLength?:   number | null
+  uppercaseOnly?: boolean
 }
 
 export type CartItem = {
@@ -89,6 +91,14 @@ export function cartTotal(items: CartItem[]): number {
 
 export function cartItemCount(items: CartItem[]): number {
   return items.reduce((sum, item) => sum + item.qty, 0)
+}
+
+export function updateItem(key: string, id: string, changes: Partial<Omit<CartItem, 'id'>>): CartItem[] {
+  const items = getCart(key)
+  const idx = items.findIndex((i) => i.id === id)
+  if (idx !== -1) items[idx] = { ...items[idx], ...changes }
+  saveCart(key, items)
+  return items
 }
 
 export function cartLineTotal(item: CartItem): number {

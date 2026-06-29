@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useState, useCallback, useEffect } from 'react'
-import { type CartItem, cartKey, cartTotal, cartItemCount } from '@/lib/merch/cart'
+import { type CartItem, cartKey, cartTotal, cartItemCount, updateItem } from '@/lib/merch/cart'
 import { defaultCartRepository as cart } from '@/lib/merch/cart-repository'
 
 type CartContextValue = {
@@ -11,6 +11,7 @@ type CartContextValue = {
   key:       string
   add:       (item: Omit<CartItem, 'id'>) => CartItem
   setQty:    (id: string, qty: number) => void
+  update:    (id: string, changes: Partial<Omit<CartItem, 'id'>>) => void
   remove:    (id: string) => void
   clear:     () => void
 }
@@ -45,6 +46,10 @@ export function CartProvider({
     setItems(cart.getItems(key))
   }, [key])
 
+  const update = useCallback((id: string, changes: Partial<Omit<CartItem, 'id'>>) => {
+    setItems(updateItem(key, id, changes))
+  }, [key])
+
   const remove = useCallback((id: string) => {
     cart.removeItem(key, id)
     setItems(cart.getItems(key))
@@ -61,7 +66,7 @@ export function CartProvider({
       count: cartItemCount(items),
       total: cartTotal(items),
       key,
-      add, setQty, remove, clear,
+      add, setQty, update, remove, clear,
     }}>
       {children}
     </CartContext.Provider>

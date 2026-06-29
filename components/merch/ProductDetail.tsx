@@ -25,6 +25,7 @@ const COLOUR_CSS: Record<string, string> = {
   'pink':         '#db2777', 'hot pink':     '#ec4899', 'grey':      '#6b7280',
   'gray':         '#6b7280', 'light grey':   '#d1d5db', 'charcoal':  '#374151',
   'silver':       '#94a3b8',
+  'blue/yellow':  '#1A56DB',
 }
 
 const RELATION_LABELS: Record<ProductRelationType, string> = {
@@ -222,10 +223,12 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
       personalisation: personalisation
         .filter((p) => (personValues[p.id] ?? '').trim())
         .map((p) => ({
-          id:         p.id,
-          label:      p.label,
-          value:      (personValues[p.id] ?? '').trim(),
-          priceCents: p.additional_price_cents,
+          id:           p.id,
+          label:        p.label,
+          value:        (personValues[p.id] ?? '').trim(),
+          priceCents:   p.additional_price_cents,
+          maxLength:    p.max_length,
+          uppercaseOnly: p.uppercase_only,
         })),
     })
     setAddedToCart(true)
@@ -237,6 +240,8 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
     size_charts.find((c) => c.fit === selectedFit) ??
     size_charts.find((c) => c.fit === '') ??
     (size_charts.length > 0 ? size_charts[0] : null)
+
+  const hasMinimum = progress.minimumQty > 1
   const hasSizeChart = size_charts.length > 0
 
   function updatePersonValue(
@@ -292,11 +297,11 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
               display: 'inline-flex', alignItems: 'center', gap: '7px',
               padding: '5px 12px', borderRadius: '999px', marginBottom: '20px',
               fontSize: '11px', fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase',
-              background: !isOpen ? '#F1F5F9' : progress.isMet ? '#DCFCE7' : '#FFF7ED',
-              color:      !isOpen ? '#64748B' : progress.isMet ? '#15803D' : '#92400E',
+              background: !isOpen ? '#F1F5F9' : (!hasMinimum || progress.isMet) ? '#DCFCE7' : '#FFF7ED',
+              color:      !isOpen ? '#64748B' : (!hasMinimum || progress.isMet) ? '#15803D' : '#92400E',
             }}>
               <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'currentColor', flexShrink: 0 }} />
-              {!isOpen ? 'Campaign closed' : progress.isMet ? 'Minimum reached — proceeding' : 'Building to minimum'}
+              {!isOpen ? 'Campaign closed' : !hasMinimum ? '✓ Ready to Order' : progress.isMet ? '✓ Production Guaranteed' : 'Building to minimum'}
             </div>
 
             {/* ── Product badges ──────────────────────────────── */}
@@ -423,8 +428,8 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
             {hasSizeChart && (
               <div style={{ marginBottom: '24px' }}>
                 <button onClick={() => setShowSizeChart(true)}
-                  style={{ background: 'none', border: 'none', padding: 0, fontSize: '13px', fontWeight: 600, color: accent, cursor: 'pointer', textDecoration: 'underline', fontFamily: 'inherit', textUnderlineOffset: '3px' }}>
-                  View Size Guide →
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 14px', borderRadius: '8px', background: 'transparent', border: `1.5px solid ${accent}`, fontSize: '13px', fontWeight: 600, color: accent, cursor: 'pointer', fontFamily: 'inherit' }}>
+                  📐 View Size Guide
                 </button>
               </div>
             )}
@@ -509,7 +514,7 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
               </div>
             )}
 
-            {isOpen && (
+            {isOpen && hasMinimum && (
               <p style={{ fontSize: '12px', color: '#94A3B8', marginTop: '10px', textAlign: 'center', lineHeight: 1.5 }}>
                 No payment required now — only charged if minimum quantity is reached.
               </p>
@@ -517,23 +522,25 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
 
             <div style={{ borderTop: '1px solid #E2E8EF', margin: '28px 0' }} />
 
-            {/* ── Progress ──────────────────────────────────── */}
-            <div style={{ marginBottom: '24px' }}>
-              <div style={{ fontSize: '12px', fontWeight: 700, color: '#5A6B7E', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '12px' }}>Order Progress</div>
-              <MerchProgressBar current={progress.orderedQty} minimum={progress.minimumQty} primaryColor={primary} secondaryColor={accent} />
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginTop: '12px' }}>
-                {[
-                  { label: 'Minimum',      value: progress.minimumQty },
-                  { label: 'Pre-Ordered',  value: progress.orderedQty },
-                  { label: 'Still needed', value: Math.max(0, progress.minimumQty - progress.orderedQty) },
-                ].map(({ label, value }) => (
-                  <div key={label} style={{ background: '#F8FAFC', borderRadius: '8px', padding: '12px 8px', textAlign: 'center', border: '1px solid #E2E8EF' }}>
-                    <div style={{ fontSize: '22px', fontWeight: 800, color: primary, lineHeight: 1 }}>{value}</div>
-                    <div style={{ fontSize: '11px', color: '#5A6B7E', marginTop: '4px', fontWeight: 500 }}>{label}</div>
-                  </div>
-                ))}
+            {/* ── Progress (only shown when product has a real MOQ) ── */}
+            {hasMinimum && (
+              <div style={{ marginBottom: '24px' }}>
+                <div style={{ fontSize: '12px', fontWeight: 700, color: '#5A6B7E', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '12px' }}>Order Progress</div>
+                <MerchProgressBar current={progress.orderedQty} minimum={progress.minimumQty} primaryColor={primary} secondaryColor={accent} />
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginTop: '12px' }}>
+                  {[
+                    { label: 'Minimum',      value: progress.minimumQty },
+                    { label: 'Pre-Ordered',  value: progress.orderedQty },
+                    { label: 'Still needed', value: Math.max(0, progress.minimumQty - progress.orderedQty) },
+                  ].map(({ label, value }) => (
+                    <div key={label} style={{ background: '#F8FAFC', borderRadius: '8px', padding: '12px 8px', textAlign: 'center', border: '1px solid #E2E8EF' }}>
+                      <div style={{ fontSize: '22px', fontWeight: 800, color: primary, lineHeight: 1 }}>{value}</div>
+                      <div style={{ fontSize: '11px', color: '#5A6B7E', marginTop: '4px', fontWeight: 500 }}>{label}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {campaign.closes_at && isOpen && (
               <div style={{ marginBottom: '24px' }}>
@@ -693,30 +700,42 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
                 {activeSizeChart.chart_json.note && (
                   <p style={{ fontSize: '13px', color: '#5A6B7E', marginBottom: '16px', lineHeight: 1.6 }}>{activeSizeChart.chart_json.note}</p>
                 )}
-                <div style={{ overflowX: 'auto' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
-                    <thead>
-                      <tr>
-                        {activeSizeChart.chart_json.headers.map((h) => (
-                          <th key={h} style={{ padding: '10px 14px', background: primary, color: '#fff', textAlign: 'left', fontWeight: 700, fontSize: '12px', letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>{h}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {activeSizeChart.chart_json.rows.map((row, i) => (
-                        <tr key={i} style={{ background: i % 2 === 0 ? '#F8FAFC' : '#fff' }}>
-                          {row.map((cell, j) => (
-                            <td key={j} style={{ padding: '10px 14px', color: '#374151', fontWeight: j === 0 ? 700 : 400, borderBottom: '1px solid #F1F5F9' }}>{cell}</td>
+                {/* Inline size chart image */}
+                {activeSizeChart.image_url && (
+                  <div style={{ marginBottom: '16px' }}>
+                    <img
+                      src={activeSizeChart.image_url}
+                      alt={activeSizeChart.title}
+                      style={{ width: '100%', height: 'auto', borderRadius: '8px', display: 'block' }}
+                    />
+                  </div>
+                )}
+                {/* Table — only render if headers exist */}
+                {(activeSizeChart.chart_json.headers ?? []).length > 0 && (
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
+                      <thead>
+                        <tr>
+                          {activeSizeChart.chart_json.headers!.map((h) => (
+                            <th key={h} style={{ padding: '10px 14px', background: primary, color: '#fff', textAlign: 'left', fontWeight: 700, fontSize: '12px', letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>{h}</th>
                           ))}
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                {(activeSizeChart.image_url || activeSizeChart.pdf_url) && (
-                  <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
-                    {activeSizeChart.image_url && <a href={activeSizeChart.image_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '13px', color: accent, fontWeight: 600 }}>View chart image →</a>}
-                    {activeSizeChart.pdf_url   && <a href={activeSizeChart.pdf_url}   target="_blank" rel="noopener noreferrer" style={{ fontSize: '13px', color: accent, fontWeight: 600 }}>Download PDF →</a>}
+                      </thead>
+                      <tbody>
+                        {(activeSizeChart.chart_json.rows ?? []).map((row, i) => (
+                          <tr key={i} style={{ background: i % 2 === 0 ? '#F8FAFC' : '#fff' }}>
+                            {row.map((cell, j) => (
+                              <td key={j} style={{ padding: '10px 14px', color: '#374151', fontWeight: j === 0 ? 700 : 400, borderBottom: '1px solid #F1F5F9' }}>{cell}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+                {activeSizeChart.pdf_url && (
+                  <div style={{ marginTop: '12px' }}>
+                    <a href={activeSizeChart.pdf_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '13px', color: accent, fontWeight: 600 }}>Download PDF →</a>
                   </div>
                 )}
               </>

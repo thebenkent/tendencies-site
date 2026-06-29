@@ -625,3 +625,20 @@ body {
 .footer-link:hover {
   color: rgba(255, 255, 255, 0.9) !important;
 }
+
+/* ============================= */
+/* MERCH HERO LOGO               */
+/* ============================= */
+@media (min-width: 720px) {
+  .hero-logo { display: block !important; }
+}
+
+/* Merch header logo white filter */
+.merch-header-logo {
+  filter: brightness(0) invert(1);
+}
+
+/* Checkout grid */
+@media (max-width: 640px) {
+  .checkout-grid-2 { grid-template-columns: 1fr !important; }
+}

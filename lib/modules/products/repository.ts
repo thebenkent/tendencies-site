@@ -215,6 +215,26 @@ export async function findProductBySlug(
   return buildProductView(data)
 }
 
+export async function findProductById(id: string): Promise<MerchProductWithVariants | null> {
+  const { data, error } = await getSupabase()
+    .from('merch_campaign_products')
+    .select(PRODUCT_SELECT)
+    .eq('id', id)
+    .single()
+  if (error || !data) return null
+  return buildProductView(data)
+}
+
+export async function findProductsByCampaignAll(campaignId: string): Promise<MerchProductWithVariants[]> {
+  // Returns all products including inactive — for admin use
+  const { data } = await getSupabase()
+    .from('merch_campaign_products')
+    .select(PRODUCT_SELECT)
+    .eq('campaign_id', campaignId)
+    .order('sort_order', { ascending: true })
+  return (data ?? []).map(buildProductView)
+}
+
 export async function findVariantById(variantId: string): Promise<MerchProductVariant | null> {
   const { data, error } = await getSupabase()
     .from('merch_product_variants')
@@ -281,4 +301,504 @@ export async function getProductProgress(
     : null
 
   return { orderedQty, minimumQty, percentage, isMet, isExpired, daysLeft, status: campaign.status }
+}
+
+// ── CMS admin queries ─────────────────────────────────────────────────────
+//
+// These functions are used by the Products CMS admin service only.
+// The storefront uses the functions above (findProductsByCampaign, etc.).
+
+export type ProductAdminListRow = {
+  id:                   string
+  tenant_id:            string
+  campaign_id:          string
+  campaign_name:        string | null
+  name:                 string
+  slug:                 string
+  sku:                  string | null
+  price_cents:          number
+  cost_cents:           number | null
+  currency:             string
+  minimum_qty:          number
+  lead_time_days:       number | null
+  supplier_sku:         string | null
+  lifecycle_status:     string
+  active:               boolean
+  sort_order:           number
+  featured:             boolean
+  collection_id:        string | null
+  thumbnail_url:        string | null
+  embroidery_available: boolean
+  embroidery_notes:     string | null
+  sizing_notes:         string | null
+  seo_title:            string | null
+  seo_description:      string | null
+  tags:                 string[]
+  publish_at:           string | null
+  archive_at:           string | null
+  published_at:         string | null
+  archived_at:          string | null
+  created_at:           string
+  updated_at:           string | null
+  variant_count:        number
+  image_count:          number
+}
+
+export async function findProductsByTenant(tenantId: string): Promise<ProductAdminListRow[]> {
+  const { data, error } = await getSupabase()
+    .from('merch_campaign_products')
+    .select(`
+      id, tenant_id, campaign_id, name, slug, sku, price_cents, cost_cents, currency,
+      minimum_qty, lead_time_days, supplier_sku, lifecycle_status, active, sort_order,
+      featured, collection_id, embroidery_available, embroidery_notes, sizing_notes,
+      seo_title, seo_description, tags, publish_at, archive_at, published_at, archived_at,
+      created_at, updated_at,
+      merch_campaigns ( name ),
+      merch_product_images ( id ),
+      merch_product_variants ( id )
+    `)
+    .eq('tenant_id', tenantId)
+    .order('updated_at', { ascending: false, nullsFirst: false })
+
+  if (error) throw error
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (data ?? []).map((p: any) => ({
+    id:                   p.id,
+    tenant_id:            p.tenant_id,
+    campaign_id:          p.campaign_id,
+    campaign_name:        p.merch_campaigns?.name ?? null,
+    name:                 p.name,
+    slug:                 p.slug,
+    sku:                  p.sku ?? null,
+    price_cents:          p.price_cents,
+    cost_cents:           p.cost_cents ?? null,
+    currency:             p.currency ?? 'NZD',
+    minimum_qty:          p.minimum_qty,
+    lead_time_days:       p.lead_time_days ?? null,
+    supplier_sku:         p.supplier_sku ?? null,
+    lifecycle_status:     p.lifecycle_status ?? 'draft',
+    active:               p.active ?? true,
+    sort_order:           p.sort_order ?? 0,
+    featured:             p.featured ?? false,
+    collection_id:        p.collection_id ?? null,
+    thumbnail_url:        null,  // resolved separately for performance
+    embroidery_available: p.embroidery_available ?? false,
+    embroidery_notes:     p.embroidery_notes ?? null,
+    sizing_notes:         p.sizing_notes ?? null,
+    seo_title:            p.seo_title ?? null,
+    seo_description:      p.seo_description ?? null,
+    tags:                 p.tags ?? [],
+    publish_at:           p.publish_at ?? null,
+    archive_at:           p.archive_at ?? null,
+    published_at:         p.published_at ?? null,
+    archived_at:          p.archived_at ?? null,
+    created_at:           p.created_at,
+    updated_at:           p.updated_at ?? null,
+    variant_count:        (p.merch_product_variants ?? []).length,
+    image_count:          (p.merch_product_images ?? []).length,
+  }))
+}
+
+export async function findProductByIdAdmin(
+  id: string,
+  tenantId: string,
+): Promise<ProductAdminListRow | null> {
+  const { data, error } = await getSupabase()
+    .from('merch_campaign_products')
+    .select(`
+      id, tenant_id, campaign_id, name, slug, sku, price_cents, cost_cents, currency,
+      minimum_qty, lead_time_days, supplier_sku, lifecycle_status, active, sort_order,
+      featured, collection_id, embroidery_available, embroidery_notes, sizing_notes,
+      seo_title, seo_description, tags, publish_at, archive_at, published_at, archived_at,
+      created_at, updated_at,
+      merch_campaigns ( name ),
+      merch_product_images ( id ),
+      merch_product_variants ( id )
+    `)
+    .eq('id', id)
+    .eq('tenant_id', tenantId)
+    .single()
+
+  if (error || !data) return null
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const p = data as any
+  return {
+    id:                   p.id,
+    tenant_id:            p.tenant_id,
+    campaign_id:          p.campaign_id,
+    campaign_name:        p.merch_campaigns?.name ?? null,
+    name:                 p.name,
+    slug:                 p.slug,
+    sku:                  p.sku ?? null,
+    price_cents:          p.price_cents,
+    cost_cents:           p.cost_cents ?? null,
+    currency:             p.currency ?? 'NZD',
+    minimum_qty:          p.minimum_qty,
+    lead_time_days:       p.lead_time_days ?? null,
+    supplier_sku:         p.supplier_sku ?? null,
+    lifecycle_status:     p.lifecycle_status ?? 'draft',
+    active:               p.active ?? true,
+    sort_order:           p.sort_order ?? 0,
+    featured:             p.featured ?? false,
+    collection_id:        p.collection_id ?? null,
+    thumbnail_url:        null,
+    embroidery_available: p.embroidery_available ?? false,
+    embroidery_notes:     p.embroidery_notes ?? null,
+    sizing_notes:         p.sizing_notes ?? null,
+    seo_title:            p.seo_title ?? null,
+    seo_description:      p.seo_description ?? null,
+    tags:                 p.tags ?? [],
+    publish_at:           p.publish_at ?? null,
+    archive_at:           p.archive_at ?? null,
+    published_at:         p.published_at ?? null,
+    archived_at:          p.archived_at ?? null,
+    created_at:           p.created_at,
+    updated_at:           p.updated_at ?? null,
+    variant_count:        (p.merch_product_variants ?? []).length,
+    image_count:          (p.merch_product_images ?? []).length,
+  }
+}
+
+export async function findProductStatusCounts(tenantId: string): Promise<{
+  total: number; draft: number; published: number; archived: number
+}> {
+  const { data } = await getSupabase()
+    .from('merch_campaign_products')
+    .select('lifecycle_status')
+    .eq('tenant_id', tenantId)
+  const rows = (data ?? []) as Array<{ lifecycle_status: string }>
+  return {
+    total:     rows.length,
+    draft:     rows.filter((r) => r.lifecycle_status === 'draft').length,
+    published: rows.filter((r) => r.lifecycle_status === 'published').length,
+    archived:  rows.filter((r) => r.lifecycle_status === 'archived').length,
+  }
+}
+
+export async function searchProductsByTenant(
+  tenantId: string,
+  query:    string,
+  limit:    number = 8,
+): Promise<Array<{ id: string; name: string; slug: string; sku: string | null; lifecycle_status: string; campaign_name: string | null }>> {
+  const q = query.trim()
+  if (!q) return []
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data } = await getSupabase()
+    .from('merch_campaign_products')
+    .select('id, name, slug, sku, lifecycle_status, merch_campaigns ( name )')
+    .eq('tenant_id', tenantId)
+    .or(`name.ilike.%${q}%,slug.ilike.%${q}%,sku.ilike.%${q}%,supplier_sku.ilike.%${q}%`)
+    .limit(limit)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return (data ?? []).map((p: any) => ({
+    id:               p.id,
+    name:             p.name,
+    slug:             p.slug,
+    sku:              p.sku ?? null,
+    lifecycle_status: p.lifecycle_status ?? 'draft',
+    campaign_name:    p.merch_campaigns?.name ?? null,
+  }))
+}
+
+export async function isProductSlugTaken(
+  campaignId: string,
+  slug:       string,
+  excludeId?: string,
+): Promise<boolean> {
+  let query = getSupabase()
+    .from('merch_campaign_products')
+    .select('id')
+    .eq('campaign_id', campaignId)
+    .eq('slug', slug)
+  if (excludeId) query = query.neq('id', excludeId)
+  const { data } = await query.limit(1)
+  return (data ?? []).length > 0
+}
+
+export type ProductInput = {
+  campaign_id:          string
+  name:                 string
+  slug:                 string
+  sku?:                 string | null
+  description?:         string | null
+  price_cents:          number
+  cost_cents?:          number | null
+  currency?:            string
+  minimum_qty?:         number
+  lead_time_days?:      number | null
+  supplier_sku?:        string | null
+  lifecycle_status?:    string
+  active?:              boolean
+  sort_order?:          number
+  featured?:            boolean
+  collection_id?:       string | null
+  embroidery_available?: boolean
+  embroidery_notes?:    string | null
+  sizing_notes?:        string | null
+  seo_title?:           string | null
+  seo_description?:     string | null
+  tags?:                string[]
+  publish_at?:          string | null
+  archive_at?:          string | null
+}
+
+export async function createAdminProduct(
+  tenantId: string,
+  input:    ProductInput,
+): Promise<ProductAdminListRow> {
+  const { data, error } = await getSupabase()
+    .from('merch_campaign_products')
+    .insert({
+      tenant_id:             tenantId,
+      campaign_id:           input.campaign_id,
+      name:                  input.name,
+      slug:                  input.slug,
+      sku:                   input.sku ?? null,
+      description:           input.description ?? null,
+      price_cents:           input.price_cents,
+      cost_cents:            input.cost_cents ?? null,
+      currency:              input.currency ?? 'NZD',
+      minimum_qty:           input.minimum_qty ?? 1,
+      lead_time_days:        input.lead_time_days ?? null,
+      supplier_sku:          input.supplier_sku ?? null,
+      lifecycle_status:      input.lifecycle_status ?? 'draft',
+      active:                input.active ?? true,
+      sort_order:            input.sort_order ?? 0,
+      featured:              input.featured ?? false,
+      collection_id:         input.collection_id ?? null,
+      embroidery_available:  input.embroidery_available ?? false,
+      embroidery_notes:      input.embroidery_notes ?? null,
+      sizing_notes:          input.sizing_notes ?? null,
+      seo_title:             input.seo_title ?? null,
+      seo_description:       input.seo_description ?? null,
+      tags:                  input.tags ?? [],
+      publish_at:            input.publish_at ?? null,
+      archive_at:            input.archive_at ?? null,
+    })
+    .select('id, tenant_id')
+    .single()
+  if (error) throw error
+  const row = await findProductByIdAdmin((data as { id: string }).id, tenantId)
+  if (!row) throw new Error('Product not found after create')
+  return row
+}
+
+export async function updateAdminProduct(
+  id:       string,
+  tenantId: string,
+  input:    Partial<ProductInput>,
+): Promise<ProductAdminListRow> {
+  const patch: Record<string, unknown> = {}
+  const fields: (keyof ProductInput)[] = [
+    'name','slug','sku','description','price_cents','cost_cents','currency',
+    'minimum_qty','lead_time_days','supplier_sku','lifecycle_status','active',
+    'sort_order','featured','collection_id','embroidery_available',
+    'embroidery_notes','sizing_notes','seo_title','seo_description','tags',
+    'publish_at','archive_at',
+  ]
+  for (const f of fields) {
+    if (f in input) patch[f] = input[f] ?? null
+  }
+  const { error } = await getSupabase()
+    .from('merch_campaign_products')
+    .update(patch)
+    .eq('id', id)
+    .eq('tenant_id', tenantId)
+  if (error) throw error
+  const row = await findProductByIdAdmin(id, tenantId)
+  if (!row) throw new Error('Product not found after update')
+  return row
+}
+
+export async function deleteAdminProduct(id: string, tenantId: string): Promise<void> {
+  const { error } = await getSupabase()
+    .from('merch_campaign_products')
+    .delete()
+    .eq('id', id)
+    .eq('tenant_id', tenantId)
+  if (error) throw error
+}
+
+export async function duplicateAdminProduct(
+  id:       string,
+  tenantId: string,
+): Promise<ProductAdminListRow> {
+  const source = await findProductByIdAdmin(id, tenantId)
+  if (!source) throw new Error('Product not found')
+
+  const base = source.slug.replace(/-copy(-\d+)?$/, '')
+  const newSlug = `${base}-copy`
+
+  const created = await createAdminProduct(tenantId, {
+    campaign_id:          source.campaign_id,
+    name:                 `${source.name} (Copy)`,
+    slug:                 newSlug,
+    sku:                  null,
+    description:          null,
+    price_cents:          source.price_cents,
+    cost_cents:           source.cost_cents,
+    currency:             source.currency,
+    minimum_qty:          source.minimum_qty,
+    lead_time_days:       source.lead_time_days,
+    supplier_sku:         source.supplier_sku,
+    lifecycle_status:     'draft',
+    active:               false,
+    sort_order:           source.sort_order,
+    featured:             false,
+    collection_id:        source.collection_id,
+    embroidery_available: source.embroidery_available,
+    embroidery_notes:     source.embroidery_notes,
+    sizing_notes:         source.sizing_notes,
+    seo_title:            null,
+    seo_description:      null,
+    tags:                 source.tags,
+    publish_at:           null,
+    archive_at:           null,
+  })
+
+  // Copy variants
+  const { data: variants } = await getSupabase()
+    .from('merch_product_variants')
+    .select('sku, fit, size, colour, barcode, additional_cost_cents, available, sort_order, weight_grams')
+    .eq('campaign_product_id', id)
+  if (variants && variants.length > 0) {
+    await getSupabase()
+      .from('merch_product_variants')
+      .insert(variants.map((v: Record<string, unknown>) => ({ ...v, campaign_product_id: created.id, id: undefined })))
+  }
+
+  return created
+}
+
+// ── Variant admin queries ─────────────────────────────────────────────────
+
+export type ProductVariantAdminRow = {
+  id:                    string
+  campaign_product_id:   string
+  sku:                   string | null
+  fit:                   string
+  size:                  string
+  colour:                string
+  barcode:               string | null
+  additional_cost_cents: number
+  available:             boolean
+  sort_order:            number
+  stock_qty:             number | null
+}
+
+export async function findVariantsByProduct(productId: string): Promise<ProductVariantAdminRow[]> {
+  const { data, error } = await getSupabase()
+    .from('merch_product_variants')
+    .select('id, campaign_product_id, sku, fit, size, colour, barcode, additional_cost_cents, available, sort_order, stock_qty')
+    .eq('campaign_product_id', productId)
+    .order('sort_order', { ascending: true })
+  if (error) throw error
+  return (data ?? []) as ProductVariantAdminRow[]
+}
+
+export async function createVariantAdmin(
+  productId: string,
+  input: Omit<ProductVariantAdminRow, 'id' | 'campaign_product_id'>,
+): Promise<ProductVariantAdminRow> {
+  const { data, error } = await getSupabase()
+    .from('merch_product_variants')
+    .insert({ campaign_product_id: productId, ...input })
+    .select()
+    .single()
+  if (error) throw error
+  return data as ProductVariantAdminRow
+}
+
+export async function updateVariantAdmin(
+  id:    string,
+  input: Partial<Omit<ProductVariantAdminRow, 'id' | 'campaign_product_id'>>,
+): Promise<ProductVariantAdminRow> {
+  const { data, error } = await getSupabase()
+    .from('merch_product_variants')
+    .update(input)
+    .eq('id', id)
+    .select()
+    .single()
+  if (error) throw error
+  return data as ProductVariantAdminRow
+}
+
+export async function deleteVariantAdmin(id: string): Promise<void> {
+  const { error } = await getSupabase().from('merch_product_variants').delete().eq('id', id)
+  if (error) throw error
+}
+
+export async function reorderVariantsAdmin(orderedIds: string[]): Promise<void> {
+  await Promise.all(
+    orderedIds.map((id, i) =>
+      getSupabase().from('merch_product_variants').update({ sort_order: i }).eq('id', id),
+    ),
+  )
+}
+
+// ── Branding admin queries ────────────────────────────────────────────────
+
+export type ProductBrandingAdminRow = {
+  id:                    string
+  campaign_product_id:   string
+  method:                string
+  position:              string | null
+  max_colours:           number | null
+  artwork_notes:         string | null
+  additional_cost_cents: number
+  sort_order:            number
+  active:                boolean
+}
+
+export async function findBrandingByProduct(productId: string): Promise<ProductBrandingAdminRow[]> {
+  const { data, error } = await getSupabase()
+    .from('merch_product_branding')
+    .select('id, campaign_product_id, method, position, max_colours, artwork_notes, additional_cost_cents, sort_order, active')
+    .eq('campaign_product_id', productId)
+    .eq('active', true)
+    .order('sort_order', { ascending: true })
+  if (error) throw error
+  return (data ?? []) as ProductBrandingAdminRow[]
+}
+
+export async function createBrandingAdmin(
+  productId: string,
+  input: Omit<ProductBrandingAdminRow, 'id' | 'campaign_product_id'>,
+): Promise<ProductBrandingAdminRow> {
+  const { data, error } = await getSupabase()
+    .from('merch_product_branding')
+    .insert({ campaign_product_id: productId, ...input })
+    .select()
+    .single()
+  if (error) throw error
+  return data as ProductBrandingAdminRow
+}
+
+export async function updateBrandingAdmin(
+  id:    string,
+  input: Partial<Omit<ProductBrandingAdminRow, 'id' | 'campaign_product_id'>>,
+): Promise<ProductBrandingAdminRow> {
+  const { data, error } = await getSupabase()
+    .from('merch_product_branding')
+    .update(input)
+    .eq('id', id)
+    .select()
+    .single()
+  if (error) throw error
+  return data as ProductBrandingAdminRow
+}
+
+export async function deleteBrandingAdmin(id: string): Promise<void> {
+  const { error } = await getSupabase().from('merch_product_branding').delete().eq('id', id)
+  if (error) throw error
+}
+
+export async function reorderBrandingAdmin(orderedIds: string[]): Promise<void> {
+  await Promise.all(
+    orderedIds.map((id, i) =>
+      getSupabase().from('merch_product_branding').update({ sort_order: i }).eq('id', id),
+    ),
+  )
 }

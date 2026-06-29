@@ -36,12 +36,16 @@ type Props = {
   closingDate: string
   primaryColor?: string
   secondaryColor?: string
+  textColor?: string
+  labelColor?: string
 }
 
 export default function MerchCountdown({
   closingDate,
   primaryColor = '#0B1F4D',
   secondaryColor = '#D71920',
+  textColor,
+  labelColor,
 }: Props) {
   const [time, setTime] = useState<TimeLeft | null>(null)
 
@@ -118,7 +122,7 @@ export default function MerchCountdown({
                 fontSize: 'clamp(28px, 4vw, 42px)',
                 fontWeight: 800,
                 letterSpacing: '-0.04em',
-                color: primaryColor,
+                color: textColor ?? primaryColor,
                 lineHeight: 1,
                 minWidth: '2ch',
                 textAlign: 'center',
@@ -133,7 +137,7 @@ export default function MerchCountdown({
                 fontWeight: 700,
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                color: '#5A6B7E',
+                color: labelColor ?? '#5A6B7E',
                 marginTop: '4px',
               }}
             >

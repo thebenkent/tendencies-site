@@ -27,6 +27,7 @@ const COLOUR_CSS: Record<string, string> = {
   'teal':           '#0d9488',
   'yellow':         '#ca8a04',
   'gold':           '#b45309',
+  'blue/yellow':    '#1A56DB',
   'orange':         '#ea580c',
   'purple':         '#7c3aed',
   'pink':           '#db2777',
@@ -85,10 +86,11 @@ function ProductCard({
   primary:      string
   accent:       string
 }) {
-  const closed   = !isOpen || prog.isExpired
-  const badges   = product.badges.filter((b) => b.active)
-  const variants = product.merch_product_variants.filter((v) => v.available)
-  const colours  = [...new Set(variants.map((v) => v.colour).filter(Boolean))] as string[]
+  const closed         = !isOpen || prog.isExpired
+  const badges         = product.badges.filter((b) => b.active)
+  const variants       = product.merch_product_variants.filter((v) => v.available)
+  const colours        = [...new Set(variants.map((v) => v.colour).filter(Boolean))] as string[]
+  const hasPersonalise = product.personalisation?.some((p) => p.active) ?? false
 
   return (
     <div style={{ position: 'relative' }}>
@@ -178,6 +180,14 @@ function ProductCard({
               <span style={{ fontWeight: 600, color: prog.isMet ? '#16a34a' : '#94A3B8' }}>{prog.percentage}%</span>
             </div>
           </div>
+
+          {/* Personalise badge */}
+          {hasPersonalise && (
+            <div style={{ fontSize: '10px', color: '#5A6B7E', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <span style={{ fontSize: '11px' }}>✏️</span>
+              Personalise with your name
+            </div>
+          )}
 
           {/* Price row */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto', paddingTop: '4px' }}>

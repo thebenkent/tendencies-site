@@ -82,9 +82,27 @@ export type MerchCampaign = {
   workflow_id: string | null
   opens_at: string | null
   closes_at: string | null
+  is_public: boolean
   status: CampaignStatus
+  success_message: string | null
+  failure_message: string | null
+  delivery_info:   string | null
+  pickup_info:     string | null
+  club_contact:    string | null
   created_at: string
   updated_at: string
+}
+
+// Per-campaign branding overrides (overrides tenant-level merch_branding)
+export type MerchCampaignBranding = {
+  campaign_id:     string
+  logo_url:        string | null
+  primary_color:   string | null
+  secondary_color: string | null
+  hero_image:      string | null
+  hero_title:      string | null
+  hero_subtitle:   string | null
+  updated_at:      string
 }
 
 // ── Workflow Engine ───────────────────────────────────────────
@@ -158,6 +176,38 @@ export type MerchCampaignProduct = {
   sort_order: number
   active: boolean
   created_at: string
+  // Phase 9: CMS fields
+  lifecycle_status:  string          // 'draft' | 'review' | 'published' | 'archived' | 'hidden' | 'scheduled'
+  sku:               string | null
+  cost_cents:        number | null
+  currency:          string
+  supplier_sku:      string | null
+  seo_title:         string | null
+  seo_description:   string | null
+  tags:              string[]
+  featured:          boolean
+  publish_at:        string | null
+  archive_at:        string | null
+  published_at:      string | null
+  archived_at:       string | null
+  updated_at:        string | null
+}
+
+export type MerchProductBrandingMethod =
+  | 'screen_print' | 'embroidery' | 'pad_print' | 'laser'
+  | 'uv' | 'digital_transfer' | 'sublimation' | 'custom'
+
+export type MerchProductBranding = {
+  id:                    string
+  campaign_product_id:   string
+  method:                MerchProductBrandingMethod
+  position:              string | null
+  max_colours:           number | null
+  artwork_notes:         string | null
+  additional_cost_cents: number
+  sort_order:            number
+  active:                boolean
+  created_at:            string
 }
 
 export type MerchProductVariant = {
@@ -321,17 +371,40 @@ export type MerchProductWithVariants = MerchProduct & {
 // ── Collections ──────────────────────────────────────────────
 
 export type MerchCollection = {
-  id:          string
-  campaign_id: string
-  tenant_id:   string
-  name:        string
-  slug:        string
-  description: string | null
-  image_url:   string | null
-  visible:     boolean
-  sort_order:  number
-  created_at:  string
-  updated_at:  string
+  id:               string
+  campaign_id:      string
+  tenant_id:        string
+  name:             string
+  slug:             string
+  description:      string | null
+  // Media
+  image_url:        string | null   // hero image (migration 010)
+  thumbnail_url:    string | null   // card thumbnail (migration 013)
+  // Lifecycle
+  lifecycle_status: string          // LifecycleStatus (migration 013)
+  publish_at:       string | null
+  archive_at:       string | null
+  published_at:     string | null
+  archived_at:      string | null
+  // SEO
+  seo_title:        string | null
+  seo_description:  string | null
+  // Categorisation
+  tags:             string[]
+  // Display
+  visible:          boolean
+  featured:         boolean         // migration 013
+  sort_order:       number
+  created_at:       string
+  updated_at:       string
+}
+
+/** Junction row: collection → campaign_product, with metadata */
+export type MerchCollectionProduct = {
+  collection_id:       string
+  campaign_product_id: string
+  sort_order:          number
+  featured:            boolean
 }
 
 // ── Customers ────────────────────────────────────────────────
@@ -394,7 +467,7 @@ export type MerchOrderExpanded = MerchOrder & {
   merch_order_lines: Array<
     MerchOrderLine & {
       merch_products: { name: string; slug: string; price_cents: number }
-      merch_product_variants: Pick<MerchProductVariant, 'size' | 'colour' | 'additional_cost_cents'>
+      merch_product_variants: Pick<MerchProductVariant, 'size' | 'colour' | 'fit' | 'additional_cost_cents'>
     }
   >
 }
@@ -466,6 +539,7 @@ export type MerchCampaignAttribute = {
   type:        CampaignAttributeType
   label:       string
   placeholder: string | null
+  help_text:   string | null
   options:     string[] | null   // for dropdown/radio types
   required:    boolean
   applies_to:  'order' | 'line'

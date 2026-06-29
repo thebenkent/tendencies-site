@@ -33,13 +33,13 @@ export default async function ProductPage({
   return (
     <div>
       <header style={{ background: navy, padding: '0 32px', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: '64px', zIndex: 40, borderBottom: `3px solid ${red}` }}>
-        <a href={`/merch/${slug}/${campaignSlug}`} style={{ color: 'rgba(255,255,255,0.7)', textDecoration: 'none', fontSize: '13px', fontWeight: 600 }}>
+        <a href={`/merch/${slug}/${campaignSlug}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '7px 14px', borderRadius: '8px', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', color: '#fff', textDecoration: 'none', fontSize: '13px', fontWeight: 600 }}>
           ← Back
         </a>
         {tenant.logo_url
           ? (
-            <div style={{ position: 'relative', height: '36px', width: '140px' }}>
-              <Image src={tenant.logo_url} alt={tenant.name} fill style={{ objectFit: 'contain', objectPosition: 'center' }} />
+            <div style={{ position: 'relative', height: '44px', width: '44px' }} className="merch-header-logo">
+              <Image src={tenant.logo_url} alt={tenant.name} fill style={{ objectFit: 'contain' }} />
             </div>
           )
           : <span style={{ color: '#fff', fontWeight: 800, fontSize: '16px' }}>{tenant.name}</span>}

@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Image from 'next/image'
 import { useCart } from '@/components/merch/CartContext'
 import { cartLineTotal } from '@/lib/merch/cart'
@@ -16,24 +17,45 @@ type Props = {
 
 const fmt = (cents: number) => `$${(cents / 100).toFixed(2)}`
 
+const FIT_LABELS: Record<string, string> = {
+  Mens: "Men's", Womens: "Women's", Youth: 'Youth', Unisex: 'Unisex', Kids: 'Kids',
+}
+
 function CartLineRow({
-  item, primaryColor, accentColor, slug, campaignSlug, onRemove, onSetQty,
+  item, primaryColor, accentColor, slug, campaignSlug, onRemove, onSetQty, onUpdatePersonalisation,
 }: {
-  item:         CartItem
-  primaryColor: string
-  accentColor:  string
-  slug:         string
-  campaignSlug: string
-  onRemove:     () => void
-  onSetQty:     (qty: number) => void
+  item:                    CartItem
+  primaryColor:            string
+  accentColor:             string
+  slug:                    string
+  campaignSlug:            string
+  onRemove:                () => void
+  onSetQty:                (qty: number) => void
+  onUpdatePersonalisation: (id: string, value: string) => void
 }) {
+  const [editingPersonId, setEditingPersonId] = useState<string | null>(null)
+  const [editValue,       setEditValue]       = useState('')
+
   const lineTotal = cartLineTotal(item)
-  const dims = [item.fit, item.colour, item.size].filter(Boolean)
+
+  function startEdit(personId: string, currentValue: string) {
+    setEditingPersonId(personId)
+    setEditValue(currentValue)
+  }
+
+  function saveEdit(person: CartItem['personalisation'][number]) {
+    let val = editValue.trim()
+    if (person.uppercaseOnly) val = val.toUpperCase()
+    if (person.maxLength && val.length > person.maxLength) val = val.slice(0, person.maxLength)
+    onUpdatePersonalisation(person.id, val)
+    setEditingPersonId(null)
+  }
 
   return (
     <div style={{ display: 'flex', gap: '18px', padding: '24px 0', borderBottom: '1px solid #E8ECF2', alignItems: 'flex-start' }}>
       {/* Thumbnail */}
-      <a href={`/merch/${slug}/${campaignSlug}/${item.productSlug}`} style={{ flexShrink: 0, width: '96px', height: '96px', borderRadius: '12px', background: '#F1F4FA', overflow: 'hidden', position: 'relative', display: 'block', border: '1px solid #E8ECF2' }}>
+      <a href={`/merch/${slug}/${campaignSlug}/${item.productSlug}`}
+        style={{ flexShrink: 0, width: '96px', height: '96px', borderRadius: '12px', background: '#F1F4FA', overflow: 'hidden', position: 'relative', display: 'block', border: '1px solid #E8ECF2' }}>
         {item.imageUrl
           ? <Image src={item.imageUrl} alt={item.productName} fill style={{ objectFit: 'contain', padding: '10px' }} sizes="96px" />
           : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px', opacity: 0.18 }}>👕</div>}
@@ -42,34 +64,104 @@ function CartLineRow({
       {/* Info */}
       <div style={{ flex: 1, minWidth: 0 }}>
         <a href={`/merch/${slug}/${campaignSlug}/${item.productSlug}`}
-          style={{ fontSize: '16px', fontWeight: 700, color: primaryColor, textDecoration: 'none', display: 'block', marginBottom: '6px', lineHeight: 1.25 }}>
+          style={{ fontSize: '16px', fontWeight: 700, color: primaryColor, textDecoration: 'none', display: 'block', marginBottom: '10px', lineHeight: 1.25 }}>
           {item.productName}
         </a>
 
-        {dims.length > 0 && (
-          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '8px' }}>
-            {dims.map((d, i) => (
-              <span key={i} style={{ fontSize: '11px', fontWeight: 600, color: '#5A6B7E', background: '#F1F4FA', border: '1px solid #E2E8EF', borderRadius: '4px', padding: '2px 7px', letterSpacing: '0.04em' }}>
-                {d}
-              </span>
-            ))}
-          </div>
-        )}
+        {/* Selection detail — explicit labelled rows */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '10px' }}>
+          {item.fit && (
+            <div style={{ display: 'flex', gap: '6px', alignItems: 'center', fontSize: '13px' }}>
+              <span style={{ fontWeight: 600, color: '#5A6B7E', minWidth: '44px' }}>Fit</span>
+              <span style={{ color: '#374151', fontWeight: 500 }}>{FIT_LABELS[item.fit] ?? item.fit}</span>
+              <a href={`/merch/${slug}/${campaignSlug}/${item.productSlug}`}
+                style={{ fontSize: '11px', color: accentColor, textDecoration: 'underline', textUnderlineOffset: '2px', marginLeft: '4px' }}>
+                Change
+              </a>
+            </div>
+          )}
+          {item.size && (
+            <div style={{ display: 'flex', gap: '6px', alignItems: 'center', fontSize: '13px' }}>
+              <span style={{ fontWeight: 600, color: '#5A6B7E', minWidth: '44px' }}>Size</span>
+              <span style={{ color: '#374151', fontWeight: 500 }}>{item.size}</span>
+              <a href={`/merch/${slug}/${campaignSlug}/${item.productSlug}`}
+                style={{ fontSize: '11px', color: accentColor, textDecoration: 'underline', textUnderlineOffset: '2px', marginLeft: '4px' }}>
+                Change
+              </a>
+            </div>
+          )}
+          {item.colour && (
+            <div style={{ display: 'flex', gap: '6px', alignItems: 'center', fontSize: '13px' }}>
+              <span style={{ fontWeight: 600, color: '#5A6B7E', minWidth: '44px' }}>Colour</span>
+              <span style={{ color: '#374151', fontWeight: 500 }}>{item.colour}</span>
+            </div>
+          )}
+        </div>
 
+        {/* Personalisation — inline editable */}
         {item.personalisation.length > 0 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', marginBottom: '8px' }}>
-            {item.personalisation.map((p) => (
-              <div key={p.id} style={{ fontSize: '12px', color: '#5A6B7E', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontWeight: 600, color: '#374151' }}>{p.label}:</span>
-                <span style={{ color: '#5A6B7E' }}>{p.value}</span>
-                {p.priceCents > 0 && <span style={{ color: accentColor, fontWeight: 600 }}>+{fmt(p.priceCents)}</span>}
-              </div>
-            ))}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '8px' }}>
+            {item.personalisation.map((p) => {
+              const isEditing = editingPersonId === p.id
+              return (
+                <div key={p.id}>
+                  <div style={{ display: 'flex', gap: '6px', alignItems: 'center', fontSize: '13px' }}>
+                    <span style={{ fontWeight: 600, color: '#5A6B7E', minWidth: '44px' }}>{p.label}</span>
+                    {isEditing ? null : (
+                      <>
+                        <span style={{ color: '#374151', fontWeight: 500 }}>
+                          {p.value || <span style={{ color: '#CBD5E1', fontStyle: 'italic' }}>not set</span>}
+                        </span>
+                        {p.priceCents > 0 && <span style={{ color: accentColor, fontWeight: 600, fontSize: '11px' }}>+{fmt(p.priceCents)}</span>}
+                        <button
+                          onClick={() => startEdit(p.id, p.value)}
+                          style={{ fontSize: '11px', color: accentColor, background: 'none', border: 'none', padding: 0, cursor: 'pointer', textDecoration: 'underline', textUnderlineOffset: '2px', fontFamily: 'inherit', marginLeft: '4px' }}>
+                          Edit
+                        </button>
+                      </>
+                    )}
+                  </div>
+                  {isEditing && (
+                    <div style={{ marginTop: '6px', display: 'flex', gap: '6px', alignItems: 'center' }}>
+                      <div style={{ position: 'relative', flex: 1 }}>
+                        <input
+                          autoFocus
+                          value={editValue}
+                          onChange={(e) => {
+                            let v = e.target.value
+                            if (p.uppercaseOnly) v = v.toUpperCase()
+                            if (p.maxLength && v.length > p.maxLength) return
+                            setEditValue(v)
+                          }}
+                          onKeyDown={(e) => { if (e.key === 'Enter') saveEdit(p); if (e.key === 'Escape') setEditingPersonId(null) }}
+                          maxLength={p.maxLength ?? undefined}
+                          placeholder={p.uppercaseOnly ? 'UPPERCASE' : ''}
+                          style={{ width: '100%', padding: '8px 10px', fontSize: '13px', border: `1.5px solid ${accentColor}`, borderRadius: '6px', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box', color: '#1E293B', background: '#fff' }}
+                        />
+                        {p.maxLength && (
+                          <span style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', fontSize: '10px', color: '#94A3B8', pointerEvents: 'none' }}>
+                            {editValue.length}/{p.maxLength}
+                          </span>
+                        )}
+                      </div>
+                      <button onClick={() => saveEdit(p)}
+                        style={{ padding: '7px 12px', background: accentColor, color: '#fff', border: 'none', borderRadius: '6px', fontSize: '12px', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }}>
+                        Save
+                      </button>
+                      <button onClick={() => setEditingPersonId(null)}
+                        style={{ padding: '7px 10px', background: 'none', color: '#94A3B8', border: '1.5px solid #E2E8EF', borderRadius: '6px', fontSize: '12px', cursor: 'pointer', fontFamily: 'inherit' }}>
+                        ✕
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )
+            })}
           </div>
         )}
 
         <div style={{ fontSize: '13px', color: '#94A3B8' }}>
-          {fmt(item.priceCents)}{item.personalisation.length > 0 && ` + ${fmt(item.personalisation.reduce((s, p) => s + p.priceCents, 0))}`} each
+          {fmt(item.priceCents)}{item.personalisation.some(p => p.priceCents > 0) && ` + ${fmt(item.personalisation.reduce((s, p) => s + p.priceCents, 0))}`} each
         </div>
       </div>
 
@@ -99,7 +191,7 @@ function CartLineRow({
 export default function CartPageClient({
   slug, campaignSlug, primaryColor, accentColor, campaignName,
 }: Props) {
-  const { items, total, count, remove, setQty, clear } = useCart()
+  const { items, total, count, remove, setQty, update, clear } = useCart()
   const checkoutUrl = `/merch/${slug}/${campaignSlug}/checkout`
 
   if (items.length === 0) {
@@ -118,6 +210,13 @@ export default function CartPageClient({
         </a>
       </div>
     )
+  }
+
+  function handleUpdatePersonalisation(itemId: string, personId: string, value: string) {
+    const item = items.find(i => i.id === itemId)
+    if (!item) return
+    const updated = item.personalisation.map(p => p.id === personId ? { ...p, value } : p)
+    update(itemId, { personalisation: updated })
   }
 
   return (
@@ -154,29 +253,28 @@ export default function CartPageClient({
             campaignSlug={campaignSlug}
             onRemove={() => remove(item.id)}
             onSetQty={(q) => setQty(item.id, q)}
+            onUpdatePersonalisation={(personId, value) => handleUpdatePersonalisation(item.id, personId, value)}
           />
         ))}
-        {/* Final row empty padding */}
         <div style={{ height: '8px' }} />
       </div>
 
       {/* Order summary */}
       <div style={{ marginTop: '20px', padding: '22px 24px', background: '#fff', borderRadius: '14px', border: '1px solid #E8ECF2', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
         <div style={{ fontSize: '11px', fontWeight: 700, color: '#94A3B8', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '14px' }}>Order Summary</div>
-        {items.map((item) => (
-          <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', marginBottom: '7px', fontSize: '14px' }}>
-            <span style={{ color: '#374151', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              {item.productName}
-              {[item.fit, item.colour, item.size].filter(Boolean).length > 0 && (
-                <span style={{ color: '#94A3B8', marginLeft: '5px' }}>
-                  ({[item.fit, item.colour, item.size].filter(Boolean).join('/')})
-                </span>
-              )}
-              {item.qty > 1 && <span style={{ color: '#94A3B8', marginLeft: '4px' }}>× {item.qty}</span>}
-            </span>
-            <span style={{ fontWeight: 600, color: primaryColor, flexShrink: 0 }}>{fmt(cartLineTotal(item))}</span>
-          </div>
-        ))}
+        {items.map((item) => {
+          const dims = [item.fit ? (FIT_LABELS[item.fit] ?? item.fit) : '', item.size].filter(Boolean).join(' · ')
+          return (
+            <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', marginBottom: '7px', fontSize: '14px' }}>
+              <span style={{ color: '#374151', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {item.productName}
+                {dims && <span style={{ color: '#94A3B8', marginLeft: '5px' }}>({dims})</span>}
+                {item.qty > 1 && <span style={{ color: '#94A3B8', marginLeft: '4px' }}>× {item.qty}</span>}
+              </span>
+              <span style={{ fontWeight: 600, color: primaryColor, flexShrink: 0 }}>{fmt(cartLineTotal(item))}</span>
+            </div>
+          )
+        })}
         <div style={{ borderTop: '2px solid #F1F4FA', paddingTop: '14px', marginTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span style={{ fontSize: '16px', fontWeight: 700, color: primaryColor }}>Order Total</span>
           <span style={{ fontSize: '26px', fontWeight: 800, color: primaryColor, letterSpacing: '-0.025em' }}>{fmt(total)}</span>

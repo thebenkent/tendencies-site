@@ -139,7 +139,8 @@ async function sendCartConfirmationEmail(opts: {
     return { name, variant, qty: item.qty, unitCents, lineCents: unitCents * item.qty }
   }))
 
-  const grandTotal = lineDetails.reduce((s, l) => s + l.lineCents, 0)
+  const courierFeeCents = opts.deliveryMethod === 'courier' ? 1000 : 0
+  const grandTotal = lineDetails.reduce((s, l) => s + l.lineCents, 0) + courierFeeCents
 
   const closesLabel = opts.closesAt
     ? new Date(opts.closesAt).toLocaleDateString('en-NZ', { day: 'numeric', month: 'long', year: 'numeric' })
@@ -191,6 +192,11 @@ async function sendCartConfirmationEmail(opts: {
               <th style="padding:10px 16px;font-size:11px;font-weight:700;color:#5A6B7E;letter-spacing:0.08em;text-transform:uppercase;text-align:right;">Total</th>
             </tr>
             ${lineRows}
+            ${courierFeeCents > 0 ? `
+            <tr style="border-top:1px solid #E2E8EF;">
+              <td colspan="3" style="padding:10px 16px;font-size:13px;color:#5A6B7E;">Courier delivery</td>
+              <td style="padding:10px 16px;font-size:13px;color:#5A6B7E;text-align:right;">${fmt(courierFeeCents)}</td>
+            </tr>` : ''}
             <tr style="border-top:2px solid #E2E8EF;background:#F0F3FA;">
               <td colspan="3" style="padding:12px 16px;font-size:14px;font-weight:700;color:#0B1F4D;">Order Total</td>
               <td style="padding:12px 16px;font-size:16px;font-weight:800;color:#0B1F4D;text-align:right;">${fmt(grandTotal)}</td>
@@ -224,7 +230,7 @@ Pre-Order Reference: ${opts.orderNumber}
 Items:
 ${textLines}
 
-Order Total: ${fmt(grandTotal)}
+${courierFeeCents > 0 ? `Courier delivery: ${fmt(courierFeeCents)}\n` : ''}Order Total: ${fmt(grandTotal)}
 Delivery: ${deliveryLabel}
 Campaign closes: ${closesLabel}
 
