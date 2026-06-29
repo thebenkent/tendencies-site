@@ -45,6 +45,20 @@ export async function findCampaignById(
   return data as MerchCampaign
 }
 
+export async function findCollectionBySlug(
+  campaignId: string,
+  slug: string,
+): Promise<MerchCollection | null> {
+  const { data } = await getSupabase()
+    .from('merch_collections')
+    .select('*')
+    .eq('campaign_id', campaignId)
+    .eq('slug', slug)
+    .eq('visible', true)
+    .maybeSingle()
+  return data ? (data as MerchCollection) : null
+}
+
 export async function findCollectionsByCampaign(
   campaignId: string
 ): Promise<MerchCollection[]> {

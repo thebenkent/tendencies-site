@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { getTenant, getCampaign, getProduct, getProductProgress } from '@/lib/merch/db'
+import { getTenant, getCampaign, getProduct, getProductProgress, getRelatedProducts } from '@/lib/merch/db'
 import ProductDetail from '@/components/merch/ProductDetail'
 import { CartBadge } from '@/components/merch/CartContext'
 
@@ -22,7 +22,10 @@ export default async function ProductPage({
   const product = await getProduct(campaign.id, productSlug).catch(() => null)
   if (!product) notFound()
 
-  const progress = await getProductProgress(product, campaign)
+  const [progress, related] = await Promise.all([
+    getProductProgress(product, campaign),
+    getRelatedProducts(product.id).catch(() => []),
+  ])
 
   const navy = tenant.primary_color
   const red  = tenant.secondary_color
@@ -49,6 +52,7 @@ export default async function ProductPage({
         product={product}
         progress={progress}
         slug={slug}
+        related={related}
       />
 
       <footer style={{ background: navy, padding: '32px', textAlign: 'center', color: 'rgba(255,255,255,0.4)', fontSize: '13px' }}>

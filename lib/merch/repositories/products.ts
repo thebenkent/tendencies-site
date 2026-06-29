@@ -3,4 +3,5 @@ export {
   findProductBySlug,
   findVariantById,
   getProductProgress,
+  findRelatedProducts,
 } from '@/lib/modules/products/repository'

@@ -2,7 +2,7 @@ import { getSupabase } from '@/lib/core/database'
 import type {
   MerchProductWithVariants, MerchProduct, MerchProductVariant,
   MerchProductPersonalisation, MerchSizeChart, MerchProductImage,
-  MerchProductBadge, MerchProductContent,
+  MerchProductBadge, MerchProductContent, ProductRelationType,
   ProductProgress, MerchCampaign,
 } from '@/lib/merch/types'
 
@@ -223,6 +223,40 @@ export async function findVariantById(variantId: string): Promise<MerchProductVa
     .single()
   if (error || !data) return null
   return data as MerchProductVariant
+}
+
+export async function findRelatedProducts(
+  campaignProductId: string,
+): Promise<Array<{ product: MerchProductWithVariants; relationType: ProductRelationType }>> {
+  const { data: links } = await getSupabase()
+    .from('merch_product_related')
+    .select('related_product_id, relation_type')
+    .eq('source_product_id', campaignProductId)
+    .order('sort_order', { ascending: true })
+    .limit(8)
+
+  if (!links || links.length === 0) return []
+
+  const ids = (links as Array<{ related_product_id: string; relation_type: string }>)
+    .map((l) => l.related_product_id)
+
+  const { data } = await getSupabase()
+    .from('merch_campaign_products')
+    .select(PRODUCT_SELECT)
+    .in('id', ids)
+    .eq('active', true)
+
+  if (!data || data.length === 0) return []
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const productMap = new Map<string, MerchProductWithVariants>(data.map((p: unknown) => [(p as { id: string }).id, buildProductView(p as any)]))
+
+  return (links as Array<{ related_product_id: string; relation_type: string }>)
+    .filter((l) => productMap.has(l.related_product_id))
+    .map((l) => ({
+      product:      productMap.get(l.related_product_id)!,
+      relationType: l.relation_type as ProductRelationType,
+    }))
 }
 
 export async function getProductProgress(

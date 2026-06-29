@@ -7,6 +7,7 @@ export {
   findCampaignsByTenant      as getCampaigns,
   updateCampaignStatus,
   findCollectionsByCampaign  as getCollections,
+  findCollectionBySlug       as getCollection,
   findBannersByCampaign      as getCampaignBanners,
 } from './repositories/tenants'
 
@@ -15,6 +16,7 @@ export {
   findProductBySlug      as getProduct,
   findVariantById        as getVariant,
   getProductProgress,
+  findRelatedProducts    as getRelatedProducts,
 } from './repositories/products'
 
 export {

@@ -2,13 +2,38 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
-import MerchProgressBar from '@/components/merch/MerchProgressBar'
-import MerchCountdown  from '@/components/merch/MerchCountdown'
-import OrderSummary    from '@/components/merch/OrderSummary'
-import { useCart }     from '@/components/merch/CartContext'
+import MerchProgressBar  from '@/components/merch/MerchProgressBar'
+import MerchCountdown    from '@/components/merch/MerchCountdown'
+import OrderSummary      from '@/components/merch/OrderSummary'
+import ProductGallery    from '@/components/merch/ProductGallery'
+import WishlistButton    from '@/components/merch/WishlistButton'
+import { useCart }       from '@/components/merch/CartContext'
 import type {
   MerchProductWithVariants, MerchTenant, MerchCampaign, ProductProgress,
+  ProductRelationType,
 } from '@/lib/merch/types'
+
+// Colour name → CSS value for visual swatches
+const COLOUR_CSS: Record<string, string> = {
+  'black':        '#1a1a1a', 'white':        '#f4f4f4', 'off white': '#f0ede8',
+  'navy':         '#0B1F4D', 'navy blue':    '#0B1F4D', 'royal blue': '#1e40af',
+  'blue':         '#1D4ED8', 'sky blue':     '#0ea5e9', 'light blue': '#bae6fd',
+  'red':          '#DC2626', 'crimson':      '#dc143c', 'maroon':    '#7f1d1d',
+  'burgundy':     '#7f1d1d', 'green':        '#16a34a', 'forest green': '#166534',
+  'olive':        '#4d7c0f', 'teal':         '#0d9488', 'yellow':    '#ca8a04',
+  'gold':         '#b45309', 'orange':       '#ea580c', 'purple':    '#7c3aed',
+  'pink':         '#db2777', 'hot pink':     '#ec4899', 'grey':      '#6b7280',
+  'gray':         '#6b7280', 'light grey':   '#d1d5db', 'charcoal':  '#374151',
+  'silver':       '#94a3b8',
+}
+
+const RELATION_LABELS: Record<ProductRelationType, string> = {
+  related:             'You May Also Like',
+  frequently_bought:   'Frequently Bought Together',
+  complete_look:       'Complete the Look',
+  also_purchased:      'Others Also Bought',
+  upsell:              'Upgrade Your Order',
+}
 
 const BADGE_COLORS: Record<string, { bg: string; text: string }> = {
   default: { bg: '#F1F5F9', text: '#374151' },
@@ -80,19 +105,16 @@ const FIT_LABELS: Record<string, string> = {
 }
 const fitLabel = (fit: string) => FIT_LABELS[fit] ?? fit
 
-const IMAGE_TYPE_LABELS: Record<string, string> = {
-  front: 'Front', back: 'Back', side: 'Side', detail: 'Detail', lifestyle: 'Lifestyle',
-}
-
 type Props = {
   tenant:   MerchTenant
   campaign: MerchCampaign
   product:  MerchProductWithVariants
   progress: ProductProgress
   slug:     string
+  related?: Array<{ product: MerchProductWithVariants; relationType: ProductRelationType }>
 }
 
-export default function ProductDetail({ tenant, campaign, product, progress, slug }: Props) {
+export default function ProductDetail({ tenant, campaign, product, progress, slug, related = [] }: Props) {
   const primary = tenant.primary_color
   const accent  = tenant.secondary_color
 
@@ -113,9 +135,6 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
   const size_charts     = product.size_charts
 
   // ── State ──────────────────────────────────────────────────
-  const [activeImage,    setActiveImage]    = useState(0)
-  const [zoomed,         setZoomed]         = useState(false)
-  const [brokenImages,   setBrokenImages]   = useState<Set<number>>(new Set())
   const [selectedFit,    setSelectedFit]    = useState<string>(fits.length === 1 ? fits[0] : '')
   const [selectedColour, setSelectedColour] = useState<string>(multiColour ? '' : (colours[0] ?? ''))
   const [selectedSize,   setSelectedSize]   = useState('')
@@ -123,8 +142,21 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
   const [personValues,   setPersonValues]   = useState<Record<string, string>>({})
   const [showSizeChart,  setShowSizeChart]  = useState(false)
   const [addedToCart,    setAddedToCart]    = useState(false)
-  const touchStartX = useRef<number | null>(null)
-  const cart = useCart()
+  const [stickyVisible,  setStickyVisible]  = useState(false)
+  const ctaRef = useRef<HTMLButtonElement | HTMLDivElement | null>(null)
+  const cart   = useCart()
+
+  // Show sticky CTA on mobile when primary CTA scrolls out of view
+  useEffect(() => {
+    const el = ctaRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => setStickyVisible(!entry.isIntersecting),
+      { threshold: 0 },
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
 
   useEffect(() => {
     if (!addedToCart) return
@@ -207,20 +239,6 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
     (size_charts.length > 0 ? size_charts[0] : null)
   const hasSizeChart = size_charts.length > 0
 
-  // ── Touch swipe ───────────────────────────────────────────
-  function handleTouchStart(e: React.TouchEvent) {
-    touchStartX.current = e.touches[0].clientX
-  }
-  function handleTouchEnd(e: React.TouchEvent) {
-    if (touchStartX.current === null) return
-    const diff = touchStartX.current - e.changedTouches[0].clientX
-    if (Math.abs(diff) > 48) {
-      if (diff > 0) setActiveImage((i) => Math.min(images.length - 1, i + 1))
-      else          setActiveImage((i) => Math.max(0, i - 1))
-    }
-    touchStartX.current = null
-  }
-
   function updatePersonValue(
     id: string, raw: string,
     opt: { uppercase_only: boolean; max_length: number | null },
@@ -249,72 +267,22 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
         <div className="product-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 440px', gap: '72px', alignItems: 'start' }}>
 
           {/* ── Gallery ───────────────────────────────────────── */}
-          <div>
-            <div
-              onTouchStart={handleTouchStart}
-              onTouchEnd={handleTouchEnd}
-              onClick={() => images.length > 0 && setZoomed(true)}
-              style={{
-                position: 'relative', background: '#F3F6FA', borderRadius: '16px',
-                overflow: 'hidden', aspectRatio: '1 / 1', marginBottom: '12px',
-                cursor: images.length > 0 ? 'zoom-in' : 'default',
-              }}
-            >
-              {images.length > 0 ? (
-                <Image
-                  key={activeImage}
-                  src={images[activeImage]}
-                  alt={product.product_images[activeImage]?.alt_text ?? product.name}
-                  fill priority
-                  style={{ objectFit: 'contain', padding: '40px' }}
-                  sizes="(max-width: 820px) 100vw, 600px"
-                />
-              ) : (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: '96px', opacity: 0.1 }}>
-                  👕
-                </div>
-              )}
-
-              {images.length > 0 && (
-                <div style={{ position: 'absolute', bottom: '14px', right: '14px', background: 'rgba(0,0,0,0.35)', color: '#fff', fontSize: '11px', fontWeight: 600, padding: '4px 8px', borderRadius: '6px', pointerEvents: 'none' }}>
-                  Click to zoom
-                </div>
-              )}
-
-              {images.length > 1 && (
-                <div style={{ position: 'absolute', bottom: '14px', left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: '6px' }}>
-                  {images.map((_, i) => (
-                    <button key={i} onClick={(e) => { e.stopPropagation(); setActiveImage(i) }} aria-label={`Image ${i + 1}`}
-                      style={{ width: activeImage === i ? '20px' : '8px', height: '8px', borderRadius: '999px', border: 'none', padding: 0, background: activeImage === i ? primary : 'rgba(11,31,77,0.25)', cursor: 'pointer', transition: 'all 0.2s' }} />
-                  ))}
-                </div>
-              )}
+          <div style={{ position: 'relative' }}>
+            <div style={{ position: 'absolute', top: '12px', right: '12px', zIndex: 10 }}>
+              <WishlistButton
+                productId={product.id}
+                tenantSlug={slug}
+                campaignSlug={campaign.slug}
+                accentColor={accent}
+              />
             </div>
-
-            {/* Thumbnails */}
-            {images.length > 1 && (
-              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                {images.map((img, i) => {
-                  if (brokenImages.has(i)) return null
-                  const imgObj = product.product_images[i]
-                  const label  = imgObj ? IMAGE_TYPE_LABELS[imgObj.image_type] : undefined
-                  return (
-                    <button key={i} onClick={() => setActiveImage(i)} aria-label={label ?? `Image ${i + 1}`} title={label}
-                      style={{ width: '80px', padding: 0, border: `2px solid ${activeImage === i ? accent : '#E2E8EF'}`, borderRadius: '10px', overflow: 'hidden', background: '#F3F6FA', cursor: 'pointer', flexShrink: 0, transition: 'border-color 0.15s' }}>
-                      <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1' }}>
-                        <Image src={img} alt={label ?? ''} fill style={{ objectFit: 'contain', padding: '6px' }} sizes="80px"
-                          onError={() => setBrokenImages((prev) => new Set([...prev, i]))} />
-                      </div>
-                      {label && (
-                        <div style={{ fontSize: '9px', fontWeight: 700, color: activeImage === i ? accent : '#94A3B8', textAlign: 'center', padding: '3px 0 4px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                          {label}
-                        </div>
-                      )}
-                    </button>
-                  )
-                })}
-              </div>
-            )}
+            <ProductGallery
+              images={images}
+              productImages={product.product_images}
+              productName={product.name}
+              primaryColor={primary}
+              accentColor={accent}
+            />
           </div>
 
           {/* ── Details panel ─────────────────────────────────── */}
@@ -387,19 +355,38 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
               </div>
             )}
 
-            {/* ── Colour selector ───────────────────────────── */}
+            {/* ── Colour selector — visual swatches ─────────── */}
             {multiColour && (
               <div style={{ marginBottom: '24px' }}>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: '#5A6B7E', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
+                <div style={{ fontSize: '12px', fontWeight: 700, color: '#5A6B7E', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '12px' }}>
                   Colour {selectedColour && <span style={{ color: primary, textTransform: 'none', letterSpacing: 0, fontWeight: 600 }}>— {selectedColour}</span>}
                 </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                  {colours.map((c) => (
-                    <button key={c} onClick={() => { setSelectedColour(c); setSelectedSize('') }}
-                      style={{ padding: '9px 18px', fontSize: '14px', fontWeight: 600, border: `2px solid ${selectedColour === c ? accent : '#CBD5E1'}`, background: selectedColour === c ? primary : '#fff', color: selectedColour === c ? '#fff' : '#374151', borderRadius: '8px', cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.12s' }}>
-                      {c}
-                    </button>
-                  ))}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
+                  {colours.map((c) => {
+                    const css     = COLOUR_CSS[c.toLowerCase()] ?? '#CBD5E1'
+                    const isLight = ['#f4f4f4', '#f0ede8', '#d1d5db', '#bae6fd'].includes(css)
+                    const sel     = selectedColour === c
+                    return (
+                      <button
+                        key={c}
+                        onClick={() => { setSelectedColour(c); setSelectedSize('') }}
+                        title={c}
+                        aria-label={`Colour: ${c}${sel ? ' (selected)' : ''}`}
+                        aria-pressed={sel}
+                        style={{
+                          width: '36px', height: '36px', borderRadius: '50%',
+                          background: css, padding: 0, border: 'none', cursor: 'pointer',
+                          boxShadow: sel
+                            ? `0 0 0 2px #fff, 0 0 0 4px ${accent}`
+                            : isLight
+                              ? `inset 0 0 0 1.5px #CBD5E1, 0 1px 3px rgba(0,0,0,0.06)`
+                              : `0 1px 4px rgba(0,0,0,0.18)`,
+                          transform: sel ? 'scale(1.1)' : 'scale(1)',
+                          transition: 'transform 0.15s, box-shadow 0.15s',
+                        }}
+                      />
+                    )
+                  })}
                 </div>
               </div>
             )}
@@ -508,12 +495,16 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
 
             {/* ── CTA ───────────────────────────────────────── */}
             {isOpen ? (
-              <button onClick={handleAddToCart} disabled={!canAdd}
+              <button
+                ref={ctaRef as React.RefObject<HTMLButtonElement>}
+                onClick={handleAddToCart} disabled={!canAdd}
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', padding: '18px 24px', boxSizing: 'border-box', background: canAdd ? accent : '#94A3B8', color: '#fff', border: 'none', fontSize: '16px', fontWeight: 700, letterSpacing: '0.02em', borderRadius: '10px', cursor: canAdd ? 'pointer' : 'default', fontFamily: 'inherit', transition: 'opacity 0.15s' }}>
                 {ctaLabel}
               </button>
             ) : (
-              <div style={{ width: '100%', padding: '18px', background: '#F1F5F9', borderRadius: '10px', textAlign: 'center', fontSize: '15px', fontWeight: 600, color: '#64748B', boxSizing: 'border-box' }}>
+              <div
+                ref={ctaRef as React.RefObject<HTMLDivElement>}
+                style={{ width: '100%', padding: '18px', background: '#F1F5F9', borderRadius: '10px', textAlign: 'center', fontSize: '15px', fontWeight: 600, color: '#64748B', boxSizing: 'border-box' }}>
                 Campaign closed
               </div>
             )}
@@ -610,19 +601,65 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
         )}
       </div>
 
-      {/* ── Zoom overlay ────────────────────────────────────────── */}
-      {zoomed && images.length > 0 && (
-        <div onClick={() => setZoomed(false)} style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.92)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out' }}>
-          <div style={{ position: 'relative', width: '90vmin', height: '90vmin' }}>
-            <Image src={images[activeImage]} alt={product.product_images[activeImage]?.alt_text ?? product.name} fill style={{ objectFit: 'contain' }} sizes="90vmin" />
+      {/* ── Related products ────────────────────────────────────── */}
+      {related.length > 0 && (
+        <div style={{ maxWidth: '1120px', margin: '0 auto', padding: '0 32px 80px' }}>
+          <div style={{ borderTop: '1px solid #E2E8EF', paddingTop: '56px' }}>
+            {Object.entries(
+              related.reduce<Record<string, typeof related>>((acc, item) => {
+                acc[item.relationType] = acc[item.relationType] ?? []
+                acc[item.relationType].push(item)
+                return acc
+              }, {}),
+            ).map(([relType, items]) => (
+              <div key={relType} style={{ marginBottom: '48px' }}>
+                <h2 style={{ fontSize: 'clamp(18px, 2vw, 24px)', fontWeight: 800, color: primary, letterSpacing: '-0.025em', margin: '0 0 24px' }}>
+                  {RELATION_LABELS[relType as ProductRelationType] ?? 'Related Products'}
+                </h2>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px' }}>
+                  {items.map(({ product: rel }) => (
+                    <a key={rel.id} href={`/merch/${slug}/${campaign.slug}/${rel.slug}`}
+                      style={{ textDecoration: 'none', color: 'inherit', display: 'block', background: '#fff', border: '1px solid #E8ECF2', borderRadius: '12px', overflow: 'hidden' }}>
+                      <div style={{ position: 'relative', aspectRatio: '4 / 5', background: '#F3F6FA' }}>
+                        {rel.images[0] ? (
+                          <Image src={rel.images[0]} alt={rel.name} fill style={{ objectFit: 'contain', padding: '16px' }} sizes="220px" />
+                        ) : (
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', fontSize: '40px', opacity: 0.08 }}>👕</div>
+                        )}
+                      </div>
+                      <div style={{ padding: '12px 14px' }}>
+                        <div style={{ fontSize: '13px', fontWeight: 700, color: primary, lineHeight: 1.3, marginBottom: '4px' }}>{rel.name}</div>
+                        <div style={{ fontSize: '13px', color: accent, fontWeight: 700 }}>
+                          {rel.price_cents != null ? `from $${(rel.price_cents / 100).toFixed(2)}` : 'View product'}
+                        </div>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
-          <button onClick={() => setZoomed(false)} aria-label="Close" style={{ position: 'absolute', top: '20px', right: '20px', width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255,255,255,0.15)', border: 'none', color: '#fff', fontSize: '18px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
-          {images.length > 1 && (
-            <>
-              <button onClick={(e) => { e.stopPropagation(); setActiveImage((i) => Math.max(0, i - 1)) }} aria-label="Previous image" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', width: '44px', height: '44px', borderRadius: '50%', background: 'rgba(255,255,255,0.15)', border: 'none', color: '#fff', fontSize: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: activeImage === 0 ? 0.3 : 1 }}>‹</button>
-              <button onClick={(e) => { e.stopPropagation(); setActiveImage((i) => Math.min(images.length - 1, i + 1)) }} aria-label="Next image" style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', width: '44px', height: '44px', borderRadius: '50%', background: 'rgba(255,255,255,0.15)', border: 'none', color: '#fff', fontSize: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: activeImage === images.length - 1 ? 0.3 : 1 }}>›</button>
-            </>
-          )}
+        </div>
+      )}
+
+      {/* ── Sticky mobile CTA ───────────────────────────────────── */}
+      {isOpen && stickyVisible && (
+        <div className="sticky-cta" style={{
+          position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 500,
+          padding: '12px 16px', background: 'rgba(255,255,255,0.96)',
+          backdropFilter: 'blur(8px)', borderTop: '1px solid #E2E8EF',
+          boxShadow: '0 -4px 24px rgba(0,0,0,0.12)',
+        }}>
+          <button onClick={handleAddToCart} disabled={!canAdd} style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            width: '100%', padding: '16px 24px',
+            background: canAdd ? accent : '#94A3B8', color: '#fff',
+            border: 'none', fontSize: '15px', fontWeight: 700,
+            letterSpacing: '0.02em', borderRadius: '10px',
+            cursor: canAdd ? 'pointer' : 'default', fontFamily: 'inherit',
+          }}>
+            {ctaLabel}
+          </button>
         </div>
       )}
 
@@ -699,6 +736,14 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
           }
           .product-layout > div:nth-child(2) {
             position: static !important;
+          }
+          .sticky-cta {
+            display: block !important;
+          }
+        }
+        @media (min-width: 861px) {
+          .sticky-cta {
+            display: none !important;
           }
         }
       `}</style>
