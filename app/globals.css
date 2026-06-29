@@ -633,11 +633,6 @@ body {
   .hero-logo { display: block !important; }
 }
 
-/* Merch header logo white filter */
-.merch-header-logo {
-  filter: brightness(0) invert(1);
-}
-
 /* Checkout grid */
 @media (max-width: 640px) {
   .checkout-grid-2 { grid-template-columns: 1fr !important; }

@@ -120,7 +120,7 @@ export default async function CampaignPage({
       }}>
         <a href={`/merch/${slug}`} style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
           {tenant.logo_url
-            ? <div style={{ position: 'relative', height: '44px', width: '44px' }} className="merch-header-logo">
+            ? <div style={{ position: 'relative', height: '44px', width: '44px' }}>
                 <Image src={tenant.logo_url} alt={tenant.name} fill style={{ objectFit: 'contain' }} />
               </div>
             : <span style={{ color: '#fff', fontWeight: 800, fontSize: '18px', letterSpacing: '-0.02em' }}>{tenant.name}</span>}
@@ -180,7 +180,7 @@ export default async function CampaignPage({
           </div>
 
           {tenant.logo_url && (
-            <div style={{ flexShrink: 0, width: '200px', height: '200px', position: 'relative', opacity: 0.92, filter: 'brightness(0) invert(1)', display: 'none' }} className="hero-logo">
+            <div style={{ flexShrink: 0, width: '200px', height: '200px', position: 'relative', opacity: 0.92, display: 'none' }} className="hero-logo">
               <Image src={tenant.logo_url} alt={tenant.name} fill style={{ objectFit: 'contain' }} sizes="200px" />
             </div>
           )}

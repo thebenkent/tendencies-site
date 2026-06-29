@@ -38,7 +38,7 @@ export default async function ProductPage({
         </a>
         {tenant.logo_url
           ? (
-            <div style={{ position: 'relative', height: '44px', width: '44px' }} className="merch-header-logo">
+            <div style={{ position: 'relative', height: '44px', width: '44px' }}>
               <Image src={tenant.logo_url} alt={tenant.name} fill style={{ objectFit: 'contain' }} />
             </div>
           )
