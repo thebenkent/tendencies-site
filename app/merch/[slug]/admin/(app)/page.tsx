@@ -9,7 +9,7 @@ import { getCampaignAnalytics, queryOutstandingPayments } from '@/lib/modules/an
 import { findPaymentsByOrderIds }          from '@/lib/modules/payments/repository'
 import { getInventoryByCampaignProduct }   from '@/lib/modules/inventory/service'
 import type { VariantInventoryPosition }   from '@/lib/modules/inventory/types'
-import AdminDashboardClient from './AdminDashboardClient'
+import AdminDashboardClient from '../AdminDashboardClient'
 
 export const dynamic = 'force-dynamic'
 
@@ -56,15 +56,11 @@ export default async function AdminPage({
     queryOutstandingPayments(tenant.id, activeCampaign?.id),
   ])
 
-  // Build a map of order_id → payment_link for quick lookup in the client
-  const payments      = await findPaymentsByOrderIds(orders.map((o) => o.id))
-  const paymentLinks  = Object.fromEntries(
-    payments
-      .filter((p) => p.payment_link)
-      .map((p) => [p.order_id, p.payment_link!])
+  const payments     = await findPaymentsByOrderIds(orders.map((o) => o.id))
+  const paymentLinks = Object.fromEntries(
+    payments.filter((p) => p.payment_link).map((p) => [p.order_id, p.payment_link!])
   )
 
-  // Inventory positions for all products in this campaign
   const inventory: Record<string, VariantInventoryPosition[]> = {}
   if (activeCampaign) {
     await Promise.all(
