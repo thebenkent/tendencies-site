@@ -5,4 +5,6 @@ export {
   findCampaignBySlug,
   findCampaignById,
   updateCampaignStatus,
+  findCollectionsByCampaign,
+  findBannersByCampaign,
 } from '@/lib/modules/campaigns/repository'

@@ -40,7 +40,6 @@ export default async function CartPage({
         primaryColor={navy}
         accentColor={red}
         tenantName={tenant.name}
-        contactEmail={tenant.contact_email ?? undefined}
         campaignName={campaign.name}
       />
 

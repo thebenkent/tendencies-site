@@ -10,6 +10,67 @@ import type {
   MerchProductWithVariants, MerchTenant, MerchCampaign, ProductProgress,
 } from '@/lib/merch/types'
 
+const BADGE_COLORS: Record<string, { bg: string; text: string }> = {
+  default: { bg: '#F1F5F9', text: '#374151' },
+  success: { bg: '#DCFCE7', text: '#15803D' },
+  warning: { bg: '#FEF3C7', text: '#92400E' },
+  danger:  { bg: '#FEE2E2', text: '#B91C1C' },
+  info:    { bg: '#DBEAFE', text: '#1D4ED8' },
+  dark:    { bg: 'rgba(0,0,0,0.75)', text: '#fff' },
+}
+
+const CONTENT_SECTION_ICONS: Record<string, string> = {
+  highlights:        '✦',
+  features:          '✓',
+  fabric:            '🧵',
+  materials:         '🧵',
+  care_instructions: '♻',
+  branding_details:  '🏷',
+  delivery:          '🚚',
+  returns:           '↩',
+}
+
+function renderContent(contentType: string, content: unknown): React.ReactNode {
+  if (contentType === 'list' && Array.isArray(content)) {
+    return (
+      <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+        {(content as string[]).map((item, i) => (
+          <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '7px 0', borderBottom: '1px solid #F1F5F9' }}>
+            <span style={{ color: '#94A3B8', fontSize: '14px', flexShrink: 0, marginTop: '2px' }}>·</span>
+            <span style={{ fontSize: '14px', color: '#374151', lineHeight: 1.6 }}>{item}</span>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+  if (contentType === 'table' && content && typeof content === 'object' && !Array.isArray(content)) {
+    const tbl = content as { headers?: string[]; rows?: string[][] }
+    if (!tbl.headers || !tbl.rows) return null
+    return (
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+          <thead>
+            <tr>{tbl.headers.map((h, i) => <th key={i} style={{ padding: '8px 12px', background: '#F1F5F9', fontWeight: 700, textAlign: 'left', color: '#374151', whiteSpace: 'nowrap' }}>{h}</th>)}</tr>
+          </thead>
+          <tbody>
+            {tbl.rows.map((row, i) => (
+              <tr key={i} style={{ background: i % 2 === 0 ? '#fff' : '#FAFBFC' }}>
+                {row.map((cell, j) => <td key={j} style={{ padding: '8px 12px', color: '#374151', borderBottom: '1px solid #F1F5F9' }}>{cell}</td>)}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+  if (contentType === 'html' && typeof content === 'string') {
+    return <div style={{ fontSize: '14px', color: '#374151', lineHeight: 1.7 }} dangerouslySetInnerHTML={{ __html: content }} />
+  }
+  // Default: text
+  const text = typeof content === 'string' ? content : typeof content === 'object' ? JSON.stringify(content) : String(content)
+  return <p style={{ fontSize: '14px', color: '#374151', lineHeight: 1.75, margin: 0 }}>{text}</p>
+}
+
 const FIT_LABELS: Record<string, string> = {
   Mens:   "Men's",
   Womens: "Women's",
@@ -270,6 +331,28 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
               {!isOpen ? 'Campaign closed' : progress.isMet ? 'Minimum reached — proceeding' : 'Building to minimum'}
             </div>
 
+            {/* ── Product badges ──────────────────────────────── */}
+            {product.badges.length > 0 && (
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '16px' }}>
+                {product.badges.map((b) => {
+                  const colors = b.badge_type === 'dark'
+                    ? { bg: primary, text: '#fff' }
+                    : (BADGE_COLORS[b.badge_type] ?? BADGE_COLORS.default)
+                  return (
+                    <span key={b.id} style={{
+                      display: 'inline-flex', alignItems: 'center', gap: '5px',
+                      padding: '4px 10px', borderRadius: '5px',
+                      fontSize: '10px', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase',
+                      background: colors.bg, color: colors.text,
+                    }}>
+                      {b.icon && <span>{b.icon}</span>}
+                      {b.label}
+                    </span>
+                  )
+                })}
+              </div>
+            )}
+
             <h1 style={{ fontSize: 'clamp(26px, 2.5vw, 36px)', fontWeight: 800, color: primary, letterSpacing: '-0.03em', lineHeight: 1.1, margin: '0 0 10px' }}>
               {product.name}
             </h1>
@@ -481,21 +564,48 @@ export default function ProductDetail({ tenant, campaign, product, progress, slu
         </div>
 
         {/* ── Product details section ─────────────────────────── */}
-        {(product.features?.length || product.material || product.sizing_notes) && (
+        {(product.features?.length || product.material || product.sizing_notes || product.content.length > 0) && (
           <div style={{ marginTop: '72px', paddingTop: '48px', borderTop: '1px solid #E2E8EF' }}>
-            <h2 style={{ fontSize: 'clamp(20px, 2vw, 26px)', fontWeight: 800, color: primary, letterSpacing: '-0.025em', margin: '0 0 28px' }}>Product Details</h2>
-            {product.features && product.features.length > 0 && (
-              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 0 }}>
-                {product.features.map((f, i) => (
-                  <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', padding: '14px 0', borderBottom: '1px solid #F1F5F9' }}>
-                    <span style={{ color: accent, fontWeight: 800, fontSize: '18px', lineHeight: 1.4, flexShrink: 0 }}>·</span>
-                    <span style={{ fontSize: '14px', color: '#374151', lineHeight: 1.65 }}>{f}</span>
-                  </li>
-                ))}
-              </ul>
+            <h2 style={{ fontSize: 'clamp(20px, 2vw, 28px)', fontWeight: 800, color: primary, letterSpacing: '-0.025em', margin: '0 0 32px' }}>Product Details</h2>
+
+            {/* Legacy features + material from master product */}
+            {(product.features?.length || product.material || product.sizing_notes) && (
+              <div style={{ marginBottom: product.content.length > 0 ? '40px' : '0' }}>
+                {product.features && product.features.length > 0 && (
+                  <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 20px', columns: 2, columnGap: '32px' }}>
+                    {product.features.map((f, i) => (
+                      <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', padding: '10px 0', borderBottom: '1px solid #F1F5F9', breakInside: 'avoid' }}>
+                        <span style={{ color: accent, fontWeight: 800, fontSize: '16px', lineHeight: 1.5, flexShrink: 0 }}>·</span>
+                        <span style={{ fontSize: '14px', color: '#374151', lineHeight: 1.65 }}>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {product.material && <p style={{ fontSize: '14px', color: '#5A6B7E', margin: '0 0 8px' }}><strong style={{ color: primary }}>Material:</strong> {product.material}</p>}
+                {product.sizing_notes && <p style={{ fontSize: '14px', color: '#5A6B7E', margin: '0 0 8px' }}><strong style={{ color: primary }}>Sizing notes:</strong> {product.sizing_notes}</p>}
+              </div>
             )}
-            {product.material && <p style={{ fontSize: '14px', color: '#5A6B7E', margin: '0 0 8px' }}><strong style={{ color: primary }}>Material:</strong> {product.material}</p>}
-            {product.sizing_notes && <p style={{ fontSize: '14px', color: '#5A6B7E', margin: '0 0 8px' }}><strong style={{ color: primary }}>Sizing notes:</strong> {product.sizing_notes}</p>}
+
+            {/* Rich content sections from DB */}
+            {product.content.length > 0 && (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
+                {product.content.map((section) => {
+                  const icon = CONTENT_SECTION_ICONS[section.section] ?? '·'
+                  const heading = section.title ?? section.section.replace(/_/g, ' ')
+                  return (
+                    <div key={section.id} style={{ background: '#FAFBFC', border: '1px solid #E8ECF2', borderRadius: '12px', padding: '20px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                        <span style={{ fontSize: '16px', lineHeight: 1 }}>{icon}</span>
+                        <h3 style={{ margin: 0, fontSize: '13px', fontWeight: 700, color: primary, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                          {heading}
+                        </h3>
+                      </div>
+                      {renderContent(section.content_type, section.content)}
+                    </div>
+                  )
+                })}
+              </div>
+            )}
           </div>
         )}
       </div>

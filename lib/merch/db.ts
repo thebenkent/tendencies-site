@@ -2,10 +2,12 @@
 // Prefer importing directly from '@/lib/merch' or the specific module.
 
 export {
-  findTenantBySlug      as getTenant,
-  findCampaignBySlug    as getCampaign,
-  findCampaignsByTenant as getCampaigns,
+  findTenantBySlug           as getTenant,
+  findCampaignBySlug         as getCampaign,
+  findCampaignsByTenant      as getCampaigns,
   updateCampaignStatus,
+  findCollectionsByCampaign  as getCollections,
+  findBannersByCampaign      as getCampaignBanners,
 } from './repositories/tenants'
 
 export {

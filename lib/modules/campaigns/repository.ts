@@ -1,5 +1,5 @@
 import { getSupabase } from '@/lib/core/database'
-import type { MerchCampaign } from '@/lib/merch/types'
+import type { MerchCampaign, MerchCollection, MerchCampaignBanner } from '@/lib/merch/types'
 
 export async function findCampaignsByTenant(
   tenantId: string
@@ -43,6 +43,34 @@ export async function findCampaignById(
   if (error || !data) return null
 
   return data as MerchCampaign
+}
+
+export async function findCollectionsByCampaign(
+  campaignId: string
+): Promise<MerchCollection[]> {
+  const { data } = await getSupabase()
+    .from('merch_collections')
+    .select('*')
+    .eq('campaign_id', campaignId)
+    .eq('visible', true)
+    .order('sort_order', { ascending: true })
+  return (data ?? []) as MerchCollection[]
+}
+
+export async function findBannersByCampaign(
+  campaignId: string
+): Promise<MerchCampaignBanner[]> {
+  const now = new Date().toISOString()
+  const { data } = await getSupabase()
+    .from('merch_campaign_banners')
+    .select('*')
+    .eq('campaign_id', campaignId)
+    .eq('active', true)
+    .order('sort_order', { ascending: true })
+  // Apply time bounds in JS — PostgREST filter on nullable timestamps is verbose
+  return ((data ?? []) as MerchCampaignBanner[]).filter(
+    (b) => (!b.starts_at || b.starts_at <= now) && (!b.ends_at || b.ends_at > now)
+  )
 }
 
 export async function updateCampaignStatus(
