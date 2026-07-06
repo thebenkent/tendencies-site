@@ -385,14 +385,14 @@ export default function AdminDashboardClient({
                       )}
                     </p>
                   </div>
-                  {activeCampaign.status === 'open' && (
+                  {(activeCampaign.status === 'open' || activeCampaign.status === 'closed') && (
                     <Button
                       onClick={handleClose}
                       disabled={closeLoading}
                       style={{ background: closeLoading ? '#94A3B8' : red }}
                       className="text-white border-0 hover:opacity-90"
                     >
-                      {closeLoading ? 'Processing…' : 'Close Campaign'}
+                      {closeLoading ? 'Processing…' : activeCampaign.status === 'closed' ? 'Process Orders' : 'Close Campaign'}
                     </Button>
                   )}
                 </div>

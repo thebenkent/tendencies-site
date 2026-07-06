@@ -160,13 +160,33 @@ export async function findOrdersByCampaignProduct(
   tenantId: string,
   status: string,
 ): Promise<Array<{ id: string; order_id: string }>> {
-  const { data } = await getSupabase()
+  // Two-step query — avoids relying on PostgREST embedded resource filtering,
+  // which silently returns nothing when the FK relationship name doesn't exactly
+  // match the table name in the schema cache.
+  const { data: lines, error: linesErr } = await getSupabase()
     .from('merch_order_lines')
-    .select('id, order_id, merch_orders!inner(status, tenant_id)')
+    .select('id, order_id')
     .eq('campaign_product_id', campaignProductId)
-    .eq('merch_orders.status', status)
-    .eq('merch_orders.tenant_id', tenantId)
-  return (data ?? []).map((row: any) => ({ id: row.id, order_id: row.order_id }))
+
+  if (linesErr) throw new Error(`findOrdersByCampaignProduct lines query failed: ${linesErr.message}`)
+  if (!lines || lines.length === 0) return []
+
+  const candidateOrderIds = [...new Set((lines as any[]).map((l: any) => l.order_id as string))]
+
+  const { data: orders, error: ordersErr } = await getSupabase()
+    .from('merch_orders')
+    .select('id')
+    .in('id', candidateOrderIds)
+    .eq('tenant_id', tenantId)
+    .eq('status', status)
+
+  if (ordersErr) throw new Error(`findOrdersByCampaignProduct orders query failed: ${ordersErr.message}`)
+  if (!orders || orders.length === 0) return []
+
+  const matchingIds = new Set((orders as any[]).map((o: any) => o.id as string))
+  return (lines as any[])
+    .filter((l: any) => matchingIds.has(l.order_id))
+    .map((l: any) => ({ id: l.id as string, order_id: l.order_id as string }))
 }
 
 // ── Update ────────────────────────────────────────────────────
@@ -195,11 +215,12 @@ export async function updateOrdersStatus(
   actor:    string = 'system',
 ): Promise<void> {
   if (!orderIds.length) return
-  await getSupabase()
+  const { error } = await getSupabase()
     .from('merch_orders')
     .update({ status })
     .in('id', orderIds)
     .eq('tenant_id', tenantId)
+  if (error) throw new Error(`updateOrdersStatus failed: ${error.message}`)
 }
 
 // ── Events ────────────────────────────────────────────────────

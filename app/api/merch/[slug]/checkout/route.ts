@@ -78,6 +78,20 @@ export async function POST(
     )
   }
 
+  // Fire-and-forget internal notification to the club admin
+  if (tenant.contact_email) {
+    sendAdminNewOrderEmail({
+      to:            tenant.contact_email,
+      tenantName:    tenant.name,
+      orderNumber:   result.order.order_number ?? result.order.id.slice(0, 8).toUpperCase(),
+      customerName:  `${d.first_name} ${d.last_name}`,
+      customerEmail: d.email,
+      campaignName:  campaign.name,
+      itemCount:     d.items.length,
+      deliveryMethod: d.delivery_method,
+    }).catch((err) => console.error('[Checkout] admin notification failed:', err))
+  }
+
   // Fire-and-forget confirmation email
   sendCartConfirmationEmail({
     email:          d.email,
@@ -241,6 +255,84 @@ ${opts.contactEmail ? `Questions? Contact us at ${opts.contactEmail}` : 'Questio
   await sendRawEmail({
     to:      opts.email,
     subject: `Pre-order confirmed — ${opts.orderNumber} · ${opts.tenantName}`,
+    html,
+    text,
+  })
+}
+
+async function sendAdminNewOrderEmail(opts: {
+  to:             string
+  tenantName:     string
+  orderNumber:    string
+  customerName:   string
+  customerEmail:  string
+  campaignName:   string
+  itemCount:      number
+  deliveryMethod: string
+}): Promise<void> {
+  const deliveryLabel = opts.deliveryMethod === 'collect' ? 'Collect from club' : 'Courier delivery'
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>New Pre-Order</title></head>
+<body style="margin:0;padding:0;background:#F4F6FA;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#F4F6FA;padding:32px 16px;">
+    <tr><td align="center">
+      <table width="540" cellpadding="0" cellspacing="0" style="max-width:540px;width:100%;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <tr><td style="background:#0B1F4D;padding:24px 32px;">
+          <p style="margin:0;color:rgba(255,255,255,0.7);font-size:12px;letter-spacing:0.05em;text-transform:uppercase;">${opts.tenantName}</p>
+          <h1 style="margin:6px 0 0;color:#fff;font-size:18px;font-weight:800;">New Pre-Order Received</h1>
+        </td></tr>
+        <tr><td style="padding:24px 32px;">
+          <table width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+              <td style="padding:6px 0;font-size:13px;color:#5A6B7E;width:140px;">Order</td>
+              <td style="padding:6px 0;font-size:13px;font-weight:700;color:#0B1F4D;">${opts.orderNumber}</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 0;font-size:13px;color:#5A6B7E;">Campaign</td>
+              <td style="padding:6px 0;font-size:13px;color:#374151;">${opts.campaignName}</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 0;font-size:13px;color:#5A6B7E;">Customer</td>
+              <td style="padding:6px 0;font-size:13px;color:#374151;">${opts.customerName}</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 0;font-size:13px;color:#5A6B7E;">Email</td>
+              <td style="padding:6px 0;font-size:13px;color:#374151;">${opts.customerEmail}</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 0;font-size:13px;color:#5A6B7E;">Items</td>
+              <td style="padding:6px 0;font-size:13px;color:#374151;">${opts.itemCount} item${opts.itemCount !== 1 ? 's' : ''}</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 0;font-size:13px;color:#5A6B7E;">Delivery</td>
+              <td style="padding:6px 0;font-size:13px;color:#374151;">${deliveryLabel}</td>
+            </tr>
+          </table>
+        </td></tr>
+        <tr><td style="background:#0B1F4D;padding:16px 32px;text-align:center;">
+          <p style="margin:0;font-size:11px;color:rgba(255,255,255,0.4);">
+            ${opts.tenantName} &middot; Merchandise powered by <a href="https://tendencies.co.nz" style="color:rgba(255,255,255,0.5);text-decoration:none;">Tendencies</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`
+
+  const text = `New pre-order received — ${opts.tenantName}
+
+Order: ${opts.orderNumber}
+Campaign: ${opts.campaignName}
+Customer: ${opts.customerName} (${opts.customerEmail})
+Items: ${opts.itemCount} item${opts.itemCount !== 1 ? 's' : ''}
+Delivery: ${deliveryLabel}`
+
+  await sendRawEmail({
+    to:      opts.to,
+    subject: `New pre-order — ${opts.orderNumber} · ${opts.tenantName}`,
     html,
     text,
   })

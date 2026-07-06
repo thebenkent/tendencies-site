@@ -44,6 +44,12 @@ export async function createPaymentLink(
 ): Promise<CreatePaymentLinkResult> {
   const { orderId, tenantId, returnSlug } = input
 
+  // Reuse an existing pending session so repeated requests don't create duplicate Stripe sessions
+  const existingPayment = await findPaymentByOrderId(orderId)
+  if (existingPayment && existingPayment.status === 'pending' && existingPayment.payment_link) {
+    return { paymentId: existingPayment.id, checkoutUrl: existingPayment.payment_link }
+  }
+
   const order = await findOrderById(orderId, tenantId)
   if (!order) throw new Error(`Order not found: ${orderId}`)
 
@@ -67,15 +73,23 @@ export async function createPaymentLink(
     quantity: line.qty,
   }))
 
+  const orderSummary = order.merch_order_lines
+    .map((l) => `${l.merch_products.name} ×${l.qty}`)
+    .join(', ')
+    .slice(0, 490) // Stripe metadata values have a 500-char limit
+
   const session = await getStripe().checkout.sessions.create({
     mode:           'payment',
     currency:       'nzd',
     line_items:     lineItems,
     customer_email: customer.email,
     metadata: {
-      order_id:    orderId,
-      tenant_id:   tenantId,
-      tenant_slug: returnSlug,
+      order_id:       orderId,
+      tenant_id:      tenantId,
+      tenant_slug:    returnSlug,
+      customer_name:  `${customer.first_name} ${customer.last_name}`,
+      item_count:     String(order.merch_order_lines.reduce((s, l) => s + l.qty, 0)),
+      order_summary:  orderSummary,
     },
     success_url: `${baseUrl}/merch/${returnSlug}/success?order=${orderId}&paid=1`,
     cancel_url:  `${baseUrl}/merch/${returnSlug}`,

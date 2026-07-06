@@ -2,31 +2,12 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getTenant, getCampaigns, getReservationsForTenant } from '@/lib/merch/db'
 import PageHeader from '@/components/admin/PageHeader'
-import StatusBadge, { statusVariant } from '@/components/admin/StatusBadge'
 import EmptyState from '@/components/admin/EmptyState'
+import OrdersTableClient from './OrdersTableClient'
 import { ShoppingBag } from 'lucide-react'
 import type { MerchCampaign, MerchOrderExpanded } from '@/lib/merch/types'
 
 export const dynamic = 'force-dynamic'
-
-const STATUS_DISPLAY: Record<string, string> = {
-  reserved:          'Pre-Ordered',
-  confirmed:         'MOQ Confirmed',
-  payment_requested: 'Payment Requested',
-  paid:              'Paid',
-  production:        'In Production',
-  completed:         'Completed',
-  cancelled:         'Cancelled',
-  refunded:          'Refunded',
-}
-
-function fmtDate(d: string) {
-  return new Date(d).toLocaleDateString('en-NZ', { day: 'numeric', month: 'short' })
-}
-
-function fmtAmount(cents: number) {
-  return `$${(cents / 100).toFixed(2)}`
-}
 
 export default async function OrdersPage({
   params,
@@ -129,64 +110,7 @@ export default async function OrdersPage({
             />
           </div>
         ) : (
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Order</th>
-                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Customer</th>
-                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Total</th>
-                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
-                  <th className="px-5 py-3.5" />
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {orders.map((order) => {
-                  const totalCents = (order.merch_order_lines ?? []).reduce((sum: number, item: { unit_price_cents: number; qty: number }) => sum + item.unit_price_cents * item.qty, 0)
-                  return (
-                    <tr key={order.id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-5 py-3.5">
-                        <div className="font-medium text-gray-900 font-mono text-xs">
-                          #{order.id.slice(-8).toUpperCase()}
-                        </div>
-                        <div className="text-xs text-gray-400 mt-0.5">
-                          {order.merch_order_lines.length} item{order.merch_order_lines.length !== 1 ? 's' : ''}
-                        </div>
-                      </td>
-                      <td className="px-5 py-3.5">
-                        <div className="font-medium text-gray-900">
-                          {order.merch_customers ? `${order.merch_customers.first_name} ${order.merch_customers.last_name}` : '—'}
-                        </div>
-                        <div className="text-xs text-gray-400">{order.merch_customers?.email ?? '—'}</div>
-                      </td>
-                      <td className="px-5 py-3.5">
-                        <StatusBadge
-                          label={STATUS_DISPLAY[order.status] ?? order.status}
-                          variant={statusVariant(order.status)}
-                          dot
-                        />
-                      </td>
-                      <td className="px-5 py-3.5 font-medium text-gray-900 tabular-nums">
-                        {fmtAmount(totalCents)}
-                      </td>
-                      <td className="px-5 py-3.5 text-gray-500 tabular-nums">
-                        {fmtDate(order.created_at)}
-                      </td>
-                      <td className="px-5 py-3.5 text-right">
-                        <Link
-                          href={`/merch/${slug}/admin/orders/${order.id}`}
-                          className="text-xs font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
-                        >
-                          View →
-                        </Link>
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
+          <OrdersTableClient orders={orders} slug={slug} />
         )}
       </div>
     </div>

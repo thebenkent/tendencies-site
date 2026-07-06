@@ -51,6 +51,58 @@ export async function POST(req: Request) {
     const session = event.data.object as Stripe.Checkout.Session;
 
     const metadata = session.metadata || {};
+
+    // If this is a merch platform order, transition it to paid.
+    // /api/merch/webhooks/stripe is not registered in Stripe — this legacy
+    // endpoint is the one actually receiving events, so merch orders are
+    // handled here.  We use a minimal DB query (status + campaign_id only)
+    // rather than findOrderById's four-table join, which silently returns null
+    // in some PostgREST environments when a FK relationship name doesn't match.
+    const mercOrderId  = metadata.order_id
+    const mercTenantId = metadata.tenant_id
+    if (mercOrderId && mercTenantId) {
+      try {
+        const { getSupabase } = await import('@/lib/core/database')
+        const db = getSupabase()
+
+        // 1. Fetch only what we need — avoid the expanded join entirely
+        const { data: orderRow, error: orderErr } = await db
+          .from('merch_orders')
+          .select('status, campaign_id')
+          .eq('id', mercOrderId)
+          .eq('tenant_id', mercTenantId)
+          .single()
+
+        if (orderErr || !orderRow) {
+          console.error('[MerchWebhook] order lookup failed', { mercOrderId, mercTenantId, err: orderErr?.message })
+        } else {
+          // 2. Resolve workflow (null = no workflow configured for this campaign)
+          const { data: campData } = await db
+            .from('merch_campaigns')
+            .select('workflow_id')
+            .eq('id', orderRow.campaign_id)
+            .single()
+          const wfId: string | null = campData?.workflow_id ?? null
+
+          console.log('[MerchWebhook] transitioning order', { mercOrderId, from: orderRow.status, wfId })
+
+          if (wfId) {
+            // 3a. Workflow-governed transition — enforces allowed states
+            const { executeTransition } = await import('@/lib/modules/workflows/service')
+            await executeTransition(mercOrderId, mercTenantId, wfId, orderRow.status, 'paid', 'stripe')
+          } else {
+            // 3b. No workflow — direct status update
+            const { updateOrderStatus } = await import('@/lib/modules/orders/repository')
+            await updateOrderStatus(mercOrderId, mercTenantId, 'paid', 'stripe')
+          }
+
+          console.log('[MerchWebhook] order marked paid', mercOrderId)
+        }
+      } catch (err) {
+        console.error('[MerchWebhook] order status update failed', err)
+      }
+    }
+
     const customerEmail = session.customer_email || metadata.email;
     const customerName = metadata.customer_name || "Customer";
     const phone = metadata.phone || "";
