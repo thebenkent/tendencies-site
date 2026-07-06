@@ -19,11 +19,14 @@ function getStripe(): Stripe {
 
 // ── Compute order total ────────────────────────────────────────
 
+const COURIER_FEE_CENTS = 1000
+
 export function computeOrderTotal(order: MerchOrderExpanded): number {
-  return order.merch_order_lines.reduce(
+  const lineTotal = order.merch_order_lines.reduce(
     (sum, line) => sum + line.qty * line.unit_price_cents,
     0,
   )
+  return lineTotal + (order.delivery_method === 'courier' ? COURIER_FEE_CENTS : 0)
 }
 
 // ── Create checkout session + payment record ───────────────────
@@ -72,6 +75,17 @@ export async function createPaymentLink(
     },
     quantity: line.qty,
   }))
+
+  if (order.delivery_method === 'courier') {
+    lineItems.push({
+      price_data: {
+        currency:     'nzd',
+        unit_amount:  COURIER_FEE_CENTS,
+        product_data: { name: 'Courier delivery' },
+      },
+      quantity: 1,
+    })
+  }
 
   const orderSummary = order.merch_order_lines
     .map((l) => `${l.merch_products.name} ×${l.qty}`)
