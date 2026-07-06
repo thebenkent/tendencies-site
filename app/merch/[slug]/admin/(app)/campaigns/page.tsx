@@ -1,28 +1,42 @@
+/**
+ * Campaign CMS page.
+ *
+ * Thin Server Component wrapper around CRUDPage<CampaignAdminData>.
+ * All display, search, filter, sort, selection, and editor logic lives
+ * in the CRUD runtime. This page only:
+ *   1. Resolves the tenant
+ *   2. Fetches campaigns for the tenant
+ *   3. Wires CRUD callbacks to the admin service
+ *   4. Passes the EntityDefinition
+ *
+ * Lifecycle:  list → editor drawer → save → CRUDPage refreshes
+ * Events:     every mutation dispatches to AdminEvents → auditSubscriber
+ * Permissions: EntityDefinition.permissions gates UI via <Can>
+ */
+
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
-import { Plus } from 'lucide-react'
-import { getTenant, getCampaigns } from '@/lib/merch/db'
+import { getTenant } from '@/lib/merch/db'
+import CRUDPage from '@/components/admin/crud/CRUDPage'
 import PageHeader from '@/components/admin/PageHeader'
-import StatusBadge, { statusVariant } from '@/components/admin/StatusBadge'
-import EmptyState from '@/components/admin/EmptyState'
-import type { MerchCampaign } from '@/lib/merch/types'
+import { campaignDefinition } from '@/lib/modules/campaigns/definition'
+import {
+  listCampaignsForAdmin,
+  createCampaign,
+  updateCampaign,
+  deleteCampaign,
+  duplicateCampaign,
+  archiveCampaign,
+  bulkPublishCampaigns,
+  bulkArchiveCampaigns,
+  bulkDeleteCampaigns,
+  bulkDuplicateCampaigns,
+  validateCampaignData,
+  CAMPAIGN_DEFAULTS,
+  type CampaignAdminData,
+} from '@/lib/modules/campaigns/admin-service'
+import type { BulkAction } from '@/components/admin/crud/types'
 
 export const dynamic = 'force-dynamic'
-
-const TYPE_LABEL: Record<string, string> = {
-  reservation:    'Reservation',
-  pre_order:      'Pre-Order',
-  retail:         'Retail',
-  uniform:        'Uniform',
-  corporate:      'Corporate',
-  event:          'Event',
-  gift_redemption:'Gift',
-}
-
-function fmt(date: string | null) {
-  if (!date) return '—'
-  return new Date(date).toLocaleDateString('en-NZ', { day: 'numeric', month: 'short', year: 'numeric' })
-}
 
 export default async function CampaignsPage({
   params,
@@ -33,89 +47,104 @@ export default async function CampaignsPage({
   const tenant   = await getTenant(slug).catch(() => null)
   if (!tenant) notFound()
 
-  const campaigns = await getCampaigns(tenant.id)
+  // Extract tenantId so TypeScript doesn't lose the narrowing inside async closures
+  const tenantId = tenant.id
+  const campaigns = await listCampaignsForAdmin(tenantId)
+
+  // Default values for the "new campaign" editor
+  const defaultValues: CampaignAdminData = { ...CAMPAIGN_DEFAULTS, tenantId }
+
+  // ── CRUD callbacks ──────────────────────────────────────────────────────
+  async function onCreate(data: CampaignAdminData): Promise<CampaignAdminData> {
+    'use server'
+    const errors = await validateCampaignData(data, tenantId)
+    if (Object.keys(errors).length) throw new Error(Object.values(errors)[0]!)
+    return createCampaign(tenantId, data)
+  }
+
+  async function onUpdate(id: string, data: CampaignAdminData): Promise<CampaignAdminData> {
+    'use server'
+    const errors = await validateCampaignData(data, tenantId, id)
+    if (Object.keys(errors).length) throw new Error(Object.values(errors)[0]!)
+    return updateCampaign(id, tenantId, data)
+  }
+
+  async function onDelete(id: string): Promise<void> {
+    'use server'
+    const row = campaigns.find((c) => c.id === id)
+    return deleteCampaign(id, tenantId, row?.name ?? id)
+  }
+
+  async function onDuplicate(id: string): Promise<CampaignAdminData> {
+    'use server'
+    return duplicateCampaign(id, tenantId)
+  }
+
+  async function onArchive(id: string): Promise<void> {
+    'use server'
+    const row = campaigns.find((c) => c.id === id)
+    return archiveCampaign(id, tenantId, row?.name ?? id)
+  }
+
+  // ── Bulk actions ───────────────────────────────────────────────────────
+  const bulkActions: BulkAction<CampaignAdminData>[] = [
+    {
+      key:   'publish',
+      label: 'Publish',
+      onClick: async (rows) => {
+        'use server'
+        await bulkPublishCampaigns(rows.map((r) => r.id), tenantId)
+      },
+    },
+    {
+      key:   'archive',
+      label: 'Archive',
+      onClick: async (rows) => {
+        'use server'
+        await bulkArchiveCampaigns(rows.map((r) => r.id), tenantId)
+      },
+    },
+    {
+      key:   'duplicate',
+      label: 'Duplicate',
+      onClick: async (rows) => {
+        'use server'
+        await bulkDuplicateCampaigns(rows.map((r) => r.id), tenantId)
+      },
+    },
+    {
+      key:     'delete',
+      label:   'Delete selected',
+      variant: 'danger',
+      onClick: async (rows) => {
+        'use server'
+        await bulkDeleteCampaigns(rows, tenantId)
+      },
+    },
+  ]
 
   return (
-    <div>
+    <div className="flex flex-col">
       <PageHeader
         title="Campaigns"
         description="Manage ordering windows, products, and campaign settings."
-        breadcrumbs={[{ label: 'Admin', href: `/merch/${slug}/admin` }, { label: 'Campaigns' }]}
-        actions={
-          <Link
-            href={`/merch/${slug}/admin/campaigns/new`}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition-colors"
-          >
-            <Plus className="w-4 h-4" />
-            New campaign
-          </Link>
-        }
+        breadcrumbs={[
+          { label: 'Admin', href: `/merch/${slug}/admin` },
+          { label: 'Campaigns' },
+        ]}
       />
-
-      <div className="p-6">
-        {campaigns.length === 0 ? (
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-            <EmptyState
-              title="No campaigns yet"
-              description="Create your first campaign to start taking orders."
-              action={
-                <Link
-                  href={`/merch/${slug}/admin/campaigns/new`}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition-colors"
-                >
-                  <Plus className="w-4 h-4" />
-                  New campaign
-                </Link>
-              }
-            />
-          </div>
-        ) : (
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Campaign</th>
-                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Type</th>
-                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Opens</th>
-                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Closes</th>
-                  <th className="px-5 py-3.5" />
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {campaigns.map((c: MerchCampaign) => (
-                  <tr key={c.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-5 py-3.5">
-                      <div className="font-medium text-gray-900">{c.name}</div>
-                      <div className="text-xs text-gray-400 mt-0.5">{c.slug}</div>
-                    </td>
-                    <td className="px-5 py-3.5 text-gray-600">
-                      {TYPE_LABEL[c.campaign_type] ?? c.campaign_type}
-                    </td>
-                    <td className="px-5 py-3.5">
-                      <StatusBadge
-                        label={c.status.replace(/_/g, ' ')}
-                        variant={statusVariant(c.status)}
-                        dot
-                      />
-                    </td>
-                    <td className="px-5 py-3.5 text-gray-600 tabular-nums">{fmt(c.opens_at)}</td>
-                    <td className="px-5 py-3.5 text-gray-600 tabular-nums">{fmt(c.closes_at)}</td>
-                    <td className="px-5 py-3.5 text-right">
-                      <Link
-                        href={`/merch/${slug}/admin/campaigns/${c.id}`}
-                        className="text-xs font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
-                      >
-                        Edit →
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+      <CRUDPage
+        data={campaigns}
+        definition={campaignDefinition}
+        defaultValues={defaultValues}
+        onCreate={onCreate}
+        onUpdate={onUpdate}
+        onDelete={onDelete}
+        onDuplicate={onDuplicate}
+        onArchive={onArchive}
+        bulkActions={bulkActions}
+        pageSize={25}
+      />
     </div>
   )
 }

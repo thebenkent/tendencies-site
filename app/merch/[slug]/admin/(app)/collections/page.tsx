@@ -1,107 +1,179 @@
+/**
+ * Collections CMS page — reference implementation.
+ *
+ * Thin Server Component wrapper around CRUDPage<CollectionAdminData>.
+ * Every capability — columns, filters, editor tabs, relationships, lifecycle
+ * toolbar actions, validation, search, commands — comes from the runtime.
+ *
+ * This page only:
+ *   1. Resolves the tenant
+ *   2. Fetches collections for the tenant
+ *   3. Fetches campaign options for the campaignId selector
+ *   4. Wires CRUD callbacks to the admin service
+ *   5. Passes the EntityDefinition (enriched with campaign options)
+ *
+ * Architecture: tenant → admin service → repository → Supabase
+ * No direct DB access in this file.
+ */
+
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
-import { Plus, Layers } from 'lucide-react'
-import { getTenant, getCampaigns, getCollections } from '@/lib/merch/db'
+import { getTenant } from '@/lib/merch/db'
+import { getCampaigns } from '@/lib/merch/db'
+import CRUDPage from '@/components/admin/crud/CRUDPage'
 import PageHeader from '@/components/admin/PageHeader'
-import StatusBadge from '@/components/admin/StatusBadge'
-import EmptyState from '@/components/admin/EmptyState'
-import type { MerchCampaign, MerchCollection } from '@/lib/merch/types'
+import { collectionDefinition } from '@/lib/modules/collections/definition'
+import {
+  listCollectionsForAdmin,
+  createCollectionForAdmin,
+  updateCollectionForAdmin,
+  deleteCollectionForAdmin,
+  duplicateCollection,
+  archiveCollection,
+  bulkPublishCollections,
+  bulkArchiveCollections,
+  bulkDeleteCollections,
+  bulkDuplicateCollections,
+  validateCollectionData,
+  COLLECTION_DEFAULTS,
+  type CollectionAdminData,
+} from '@/lib/modules/collections/admin-service'
+import type { BulkAction } from '@/components/admin/crud/types'
+import type { EntityDefinition } from '@/lib/admin/definitions'
 
 export const dynamic = 'force-dynamic'
 
 export default async function CollectionsPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ campaign?: string }>
 }) {
   const { slug } = await params
-  const sp = await searchParams
-
-  const tenant = await getTenant(slug).catch(() => null)
+  const tenant    = await getTenant(slug).catch(() => null)
   if (!tenant) notFound()
 
-  const campaigns      = await getCampaigns(tenant.id)
-  const activeCampaign = sp.campaign
-    ? (campaigns.find((c) => c.slug === sp.campaign) ?? campaigns[0])
-    : campaigns[0]
+  // Narrow tenantId so TypeScript doesn't lose it inside async server action closures
+  const tenantId = tenant.id
 
-  const collections = activeCampaign ? await getCollections(activeCampaign.id) : []
+  const [collections, campaigns] = await Promise.all([
+    listCollectionsForAdmin(tenantId),
+    getCampaigns(tenantId),
+  ])
+
+  // Default values for the "new collection" editor
+  const defaultValues: CollectionAdminData = { ...COLLECTION_DEFAULTS, tenantId }
+
+  // Enrich the definition with live campaign options for the campaignId selector.
+  // This page-level enrichment avoids a bespoke campaign-picker component.
+  const campaignOptions = campaigns.map((c) => ({ label: c.name, value: c.id }))
+  const enrichedDefinition: EntityDefinition<CollectionAdminData> = {
+    ...collectionDefinition,
+    editorTabs: collectionDefinition.editorTabs?.map((tab) =>
+      tab.key === 'general'
+        ? {
+            ...tab,
+            fields: tab.fields?.map((f) =>
+              f.key === 'campaignId'
+                ? { ...f, component: 'select' as const, options: campaignOptions }
+                : f,
+            ),
+          }
+        : tab,
+    ),
+  }
+
+  // ── CRUD callbacks ──────────────────────────────────────────────────────
+
+  async function onCreate(data: CollectionAdminData): Promise<CollectionAdminData> {
+    'use server'
+    const errors = await validateCollectionData(data, tenantId)
+    if (Object.keys(errors).length) throw new Error(Object.values(errors)[0]!)
+    return createCollectionForAdmin(tenantId, data)
+  }
+
+  async function onUpdate(id: string, data: CollectionAdminData): Promise<CollectionAdminData> {
+    'use server'
+    const errors = await validateCollectionData(data, tenantId, id)
+    if (Object.keys(errors).length) throw new Error(Object.values(errors)[0]!)
+    return updateCollectionForAdmin(id, tenantId, data)
+  }
+
+  async function onDelete(id: string): Promise<void> {
+    'use server'
+    const row = collections.find((c) => c.id === id)
+    return deleteCollectionForAdmin(id, tenantId, row?.name ?? id)
+  }
+
+  async function onDuplicate(id: string): Promise<CollectionAdminData> {
+    'use server'
+    return duplicateCollection(id, tenantId)
+  }
+
+  async function onArchive(id: string): Promise<void> {
+    'use server'
+    const row = collections.find((c) => c.id === id)
+    return archiveCollection(id, tenantId, row?.name ?? id)
+  }
+
+  // ── Bulk actions ───────────────────────────────────────────────────────
+
+  const bulkActions: BulkAction<CollectionAdminData>[] = [
+    {
+      key:   'publish',
+      label: 'Publish',
+      onClick: async (rows) => {
+        'use server'
+        await bulkPublishCollections(rows.map((r) => r.id), tenantId)
+      },
+    },
+    {
+      key:   'archive',
+      label: 'Archive',
+      onClick: async (rows) => {
+        'use server'
+        await bulkArchiveCollections(rows.map((r) => r.id), tenantId)
+      },
+    },
+    {
+      key:   'duplicate',
+      label: 'Duplicate',
+      onClick: async (rows) => {
+        'use server'
+        await bulkDuplicateCollections(rows.map((r) => r.id), tenantId)
+      },
+    },
+    {
+      key:     'delete',
+      label:   'Delete selected',
+      variant: 'danger',
+      onClick: async (rows) => {
+        'use server'
+        await bulkDeleteCollections(rows, tenantId)
+      },
+    },
+  ]
 
   return (
-    <div>
+    <div className="flex flex-col">
       <PageHeader
         title="Collections"
-        description="Organise products into themed collections with hero images and descriptions."
-        breadcrumbs={[{ label: 'Admin', href: `/merch/${slug}/admin` }, { label: 'Collections' }]}
-        actions={
-          <div className="flex items-center gap-2">
-            {campaigns.length > 0 && (
-              <select
-                defaultValue={activeCampaign?.slug ?? ''}
-                className="text-sm border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
-              >
-                {campaigns.map((c: MerchCampaign) => (
-                  <option key={c.id} value={c.slug}>{c.name}</option>
-                ))}
-              </select>
-            )}
-            <button className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-slate-900 text-white text-sm font-medium hover:bg-slate-800 transition-colors">
-              <Plus className="w-4 h-4" />
-              New collection
-            </button>
-          </div>
-        }
+        description="Organise products into themed collections with hero images, SEO, and lifecycle management."
+        breadcrumbs={[
+          { label: 'Admin', href: `/merch/${slug}/admin` },
+          { label: 'Collections' },
+        ]}
       />
-
-      <div className="p-6">
-        {collections.length === 0 ? (
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-            <EmptyState
-              icon={<Layers className="w-6 h-6" />}
-              title="No collections yet"
-              description="Create collections to organise your products and build themed landing pages."
-            />
-          </div>
-        ) : (
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Collection</th>
-                  <th className="px-5 py-3.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Visibility</th>
-                  <th className="px-5 py-3.5" />
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {collections.map((c: MerchCollection) => (
-                  <tr key={c.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-5 py-3.5">
-                      <div className="font-medium text-gray-900">{c.name}</div>
-                      {c.description && (
-                        <div className="text-xs text-gray-400 mt-0.5 truncate max-w-sm">{c.description}</div>
-                      )}
-                    </td>
-                    <td className="px-5 py-3.5">
-                      <StatusBadge
-                        label={c.visible ? 'Visible' : 'Hidden'}
-                        variant={c.visible ? 'success' : 'muted'}
-                        dot
-                      />
-                    </td>
-                    <td className="px-5 py-3.5 text-right">
-                      <button className="text-xs font-medium text-indigo-600 hover:text-indigo-800 transition-colors">
-                        Edit →
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+      <CRUDPage
+        data={collections}
+        definition={enrichedDefinition}
+        defaultValues={defaultValues}
+        onCreate={onCreate}
+        onUpdate={onUpdate}
+        onDelete={onDelete}
+        onDuplicate={onDuplicate}
+        onArchive={onArchive}
+        bulkActions={bulkActions}
+        pageSize={25}
+      />
     </div>
   )
 }

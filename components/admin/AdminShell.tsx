@@ -1,56 +1,27 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
-import {
-  LayoutDashboard, ShoppingBag, Factory,
-  Megaphone, Layers, Package, Boxes, FolderOpen,
-  BarChart3, Users, Settings, Truck, ChevronLeft, Menu,
-  ExternalLink,
-} from 'lucide-react'
+import { ChevronLeft, Menu, ExternalLink, Search } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { ToastProvider } from '@/components/admin/toast'
+import CommandPalette from '@/components/admin/CommandPalette'
 
-type NavItem = {
-  label:   string
-  href:    (slug: string) => string
-  icon:    React.ComponentType<{ className?: string }>
-  exact?:  boolean
-}
-type NavGroup = {
-  label?: string
-  items:  NavItem[]
-}
+// Side-effect: registers all platform modules into the entity registry
+import '@/lib/admin/registry/setup'
 
-const NAV: NavGroup[] = [
-  {
-    items: [
-      { label: 'Dashboard',   href: (s) => `/merch/${s}/admin`,          icon: LayoutDashboard, exact: true },
-      { label: 'Orders',      href: (s) => `/merch/${s}/admin/orders`,    icon: ShoppingBag },
-      { label: 'Production',  href: (s) => `/merch/${s}/admin/production`, icon: Factory },
-    ],
-  },
-  {
-    label: 'Content',
-    items: [
-      { label: 'Campaigns',   href: (s) => `/merch/${s}/admin/campaigns`,   icon: Megaphone },
-      { label: 'Collections', href: (s) => `/merch/${s}/admin/collections`, icon: Layers },
-      { label: 'Products',    href: (s) => `/merch/${s}/admin/products`,    icon: Package },
-      { label: 'Bundles',     href: (s) => `/merch/${s}/admin/bundles`,     icon: Boxes },
-      { label: 'Assets',      href: (s) => `/merch/${s}/admin/assets`,      icon: FolderOpen },
-    ],
-  },
-  {
-    label: 'Platform',
-    items: [
-      { label: 'Analytics',  href: (s) => `/merch/${s}/admin/analytics`,  icon: BarChart3 },
-      { label: 'Customers',  href: (s) => `/merch/${s}/admin/customers`,  icon: Users },
-      { label: 'Suppliers',  href: (s) => `/merch/${s}/admin/suppliers`,  icon: Truck },
-      { label: 'Settings',   href: (s) => `/merch/${s}/admin/settings`,   icon: Settings },
-    ],
-  },
-]
+import {
+  entityRegistry,
+  type NavRegistration,
+  type NavGroup,
+} from '@/lib/admin/registry/entity-registry'
+
+const NAV_GROUP_LABELS: Partial<Record<NavGroup, string>> = {
+  content:  'Content',
+  platform: 'Platform',
+}
 
 type Props = {
   slug:     string
@@ -61,28 +32,56 @@ type Props = {
 
 export default function AdminShell({ slug, name, logoUrl, children }: Props) {
   const pathname   = usePathname()
-  const [collapsed, setCollapsed] = useState(false)
-  const [mobile,    setMobile]    = useState(false)
+  const [collapsed,   setCollapsed]   = useState(false)
+  const [mobile,      setMobile]      = useState(false)
+  const [paletteOpen, setPaletteOpen] = useState(false)
+
+  // Cmd+K / Ctrl+K to open palette
+  const openPalette = useCallback(() => setPaletteOpen(true), [])
+  useEffect(() => {
+    function handle(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        openPalette()
+      }
+    }
+    document.addEventListener('keydown', handle)
+    return () => document.removeEventListener('keydown', handle)
+  }, [openPalette])
 
   // Persist sidebar state
   useEffect(() => {
     const stored = localStorage.getItem('admin_sidebar_collapsed')
     if (stored === 'true') setCollapsed(true)
   }, [])
-
   useEffect(() => {
     localStorage.setItem('admin_sidebar_collapsed', String(collapsed))
   }, [collapsed])
 
-  function isActive(item: NavItem): boolean {
-    const href = item.href(slug)
-    if (item.exact) return pathname === href
-    return pathname.startsWith(href)
+  function hrefForItem(item: NavRegistration): string {
+    const base = `/merch/${slug}/admin`
+    const path = item.basePath
+    return path ? `${base}/${path}` : base
   }
+
+  function isActive(item: NavRegistration): boolean {
+    const href  = hrefForItem(item)
+    const exact = item.kind === 'module' ? item.exact : false
+    return exact ? pathname === href : pathname.startsWith(href)
+  }
+
+  const navByGroup = entityRegistry.navByGroup()
+  const groups: [NavGroup, NavRegistration[]][] = [
+    ['operations', navByGroup.operations],
+    ['content',    navByGroup.content],
+    ['platform',   navByGroup.platform],
+  ]
 
   const sidebarW = collapsed ? 'w-16' : 'w-60'
 
   return (
+    <ToastProvider>
+    <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} slug={slug} />
     <div className="flex h-screen overflow-hidden bg-gray-50">
 
       {/* ── Mobile overlay ─────────────────────────────────────── */}
@@ -121,38 +120,43 @@ export default function AdminShell({ slug, name, logoUrl, children }: Props) {
 
         {/* Nav */}
         <nav className="flex-1 overflow-y-auto py-3 space-y-5">
-          {NAV.map((group, gi) => (
-            <div key={gi}>
-              {!collapsed && group.label && (
-                <p className="px-4 mb-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-                  {group.label}
-                </p>
-              )}
-              <div className="space-y-0.5 px-2">
-                {group.items.map((item) => {
-                  const active = isActive(item)
-                  const Icon   = item.icon
-                  return (
-                    <Link
-                      key={item.label}
-                      href={item.href(slug)}
-                      title={collapsed ? item.label : undefined}
-                      className={cn(
-                        'flex items-center gap-3 px-2 py-2 rounded-lg text-sm font-medium transition-colors',
-                        active
-                          ? 'bg-slate-800 text-white'
-                          : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-100',
-                        collapsed && 'justify-center px-0',
-                      )}
-                    >
-                      <Icon className="w-4 h-4 flex-shrink-0" />
-                      {!collapsed && <span>{item.label}</span>}
-                    </Link>
-                  )
-                })}
+          {groups.map(([group, items]) => {
+            if (!items.length) return null
+            const groupLabel = NAV_GROUP_LABELS[group]
+            return (
+              <div key={group}>
+                {!collapsed && groupLabel && (
+                  <p className="px-4 mb-1 text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+                    {groupLabel}
+                  </p>
+                )}
+                <div className="space-y-0.5 px-2">
+                  {items.map((item) => {
+                    const active = isActive(item)
+                    const Icon   = item.kind === 'module' ? item.icon : item.definition.icon
+                    const label  = item.kind === 'module' ? item.label : item.definition.namePlural
+                    return (
+                      <Link
+                        key={item.key}
+                        href={hrefForItem(item)}
+                        title={collapsed ? label : undefined}
+                        className={cn(
+                          'flex items-center gap-3 px-2 py-2 rounded-lg text-sm font-medium transition-colors',
+                          active
+                            ? 'bg-slate-800 text-white'
+                            : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-100',
+                          collapsed && 'justify-center px-0',
+                        )}
+                      >
+                        <Icon className="w-4 h-4 flex-shrink-0" />
+                        {!collapsed && <span>{label}</span>}
+                      </Link>
+                    )
+                  })}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </nav>
 
         {/* Bottom */}
@@ -205,6 +209,16 @@ export default function AdminShell({ slug, name, logoUrl, children }: Props) {
             <span className="text-sm font-semibold text-gray-900">{name}</span>
           </div>
 
+          {/* Command palette trigger */}
+          <button
+            onClick={openPalette}
+            className="hidden lg:flex items-center gap-2 px-3 py-1.5 text-sm text-gray-400 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+          >
+            <Search className="w-3.5 h-3.5" />
+            <span className="text-xs">Search…</span>
+            <kbd className="ml-2 text-[10px] text-gray-400 font-mono">⌘K</kbd>
+          </button>
+
           <div className="flex-1" />
 
           <Link
@@ -223,5 +237,6 @@ export default function AdminShell({ slug, name, logoUrl, children }: Props) {
         </main>
       </div>
     </div>
+    </ToastProvider>
   )
 }

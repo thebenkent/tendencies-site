@@ -259,7 +259,8 @@ export default function AdminDashboardClient({
 
           {/* ── Overview Tab ───────────────────────────── */}
           <TabsContent value="overview">
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 mb-8">
+            {/* Row 1: Orders */}
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 mb-4">
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-xs">Total Pre-Orders</CardTitle>
@@ -296,6 +297,53 @@ export default function AdminDashboardClient({
                 </CardContent>
               </Card>
             </div>
+
+            {/* Row 2: Revenue + MOQ */}
+            {(() => {
+              const moqMet     = progressList.filter((p) => p.isMet).length
+              const moqWaiting = progressList.filter((p) => !p.isMet).length
+              const avgOrder   = stats.totalOrders > 0 ? Math.round(stats.totalRevenue / stats.totalOrders) : 0
+              return (
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 mb-8">
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-xs">Total Revenue</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-2xl font-extrabold tracking-tight text-green-700">{fmt(stats.totalRevenue)}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">across all orders</p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-xs">Avg Order Value</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-2xl font-extrabold tracking-tight" style={{ color: navy }}>{fmt(avgOrder)}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">per pre-order</p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-xs">Products at MOQ</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-3xl font-extrabold tracking-tight text-green-700">{moqMet}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">production guaranteed</p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-xs">Products Waiting</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-3xl font-extrabold tracking-tight text-amber-600">{moqWaiting}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">still building to min</p>
+                    </CardContent>
+                  </Card>
+                </div>
+              )
+            })()}
 
             {/* Workflow legend */}
             {Object.keys(workflowTransitions).length > 0 && (
