@@ -42,14 +42,20 @@ export async function GET(
   const orders = await getReservationsForTenant(tenant.id, { campaignId })
 
   type ProductionRow = {
-    customer:   string
-    product:    string
-    fit:        string
-    size:       string
-    playerName: string
-    qty:        number
-    totalCents: number
-  }
+
+  orderNumber: string
+  customer: string
+  team: string
+  grade: string
+  product: string
+  fit: string
+  size: string
+  colour: string
+  playerName: string
+  qty: number
+  delivery: string
+  status: string
+}
 
   const rows: ProductionRow[] = []
 
@@ -59,15 +65,25 @@ export async function GET(
     const customer = `${c.first_name} ${c.last_name}`.trim()
 
     for (const line of order.merch_order_lines) {
-      rows.push({
-        customer,
-        product:    line.merch_products.name,
-        fit:        line.merch_product_variants.fit,
-        size:       line.merch_product_variants.size,
-        playerName: line.player_name ?? '',
-        qty:        line.qty,
-        totalCents: line.unit_price_cents * line.qty,
-      })
+     rows.push({
+
+  orderNumber: order.order_number ?? '',
+
+  customer,
+
+  team: c.team ?? '',
+
+  grade: c.grade ?? '',
+
+  product: line.merch_products.name,
+  fit: line.merch_product_variants.fit,
+  size: line.merch_product_variants.size,
+  colour: line.merch_product_variants.colour,
+  playerName: line.player_name ?? '',
+  qty: line.qty,
+  delivery: order.delivery_method,
+  status: order.status,
+})
     }
   }
 
@@ -79,22 +95,42 @@ export async function GET(
     return a.size.localeCompare(b.size, undefined, { numeric: true })
   })
 
-  const headers = ['Customer', 'Product', 'Fit', 'Size', 'Player Name', 'Quantity', 'Total']
+  const headers = [
+  'Order #',
+  'Customer',
+  'Team',
+  'Grade',
+  'Product',
+  'Fit',
+  'Size',
+  'Colour',
+  'Player Name',
+  'Qty',
+  'Delivery',
+  'Status',
+]
+const csvRows = rows.map((r) =>
 
-  const csvRows = rows.map((r) =>
-    [
-      r.customer,
-      r.product,
-      r.fit,
-      r.size,
-      r.playerName,
-      r.qty,
-      `$${(r.totalCents / 100).toFixed(2)}`,
-    ]
-      .map(esc)
-      .join(','),
-  )
+  [
+    r.orderNumber,
+    r.customer,
+    r.team,
+    r.grade,
+    r.product,
+    r.fit,
+    r.size,
+    r.colour,
+    r.playerName,
+    r.qty,
+    r.delivery,
+    r.status,
+  ]
 
+    .map(esc)
+    .join(','),
+
+)
+ 
   const csv      = [headers.map(esc).join(','), ...csvRows].join('\n')
   const filename = `${slug}-production-${new Date().toISOString().slice(0, 10)}.csv`
 

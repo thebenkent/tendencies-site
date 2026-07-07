@@ -1,6 +1,7 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getTenant, getCampaigns, getReservationsForTenant } from '@/lib/merch/db'
+import { getAdminContext } from '@/lib/merch/auth'
 import PageHeader from '@/components/admin/PageHeader'
 import EmptyState from '@/components/admin/EmptyState'
 import OrdersTableClient from './OrdersTableClient'
@@ -18,6 +19,9 @@ export default async function OrdersPage({
 }) {
   const { slug } = await params
   const sp = await searchParams
+
+  const adminCtx = await getAdminContext(slug)
+  if (!adminCtx) redirect(`/merch/${slug}/admin/login`)
 
   const tenant = await getTenant(slug).catch(() => null)
   if (!tenant) notFound()
