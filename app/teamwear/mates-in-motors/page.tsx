@@ -407,8 +407,7 @@ function ProductCard({
   label,
   price,
   detail,
-  frontSrc,
-  backSrc,
+  images,
   isMobile,
   onViewChart,
 }: {
@@ -416,12 +415,13 @@ function ProductCard({
   label: string;
   price: number;
   detail: string;
-  frontSrc: string;
-  backSrc: string;
+  images: Record<FitType, { front: string; back: string }>;
   isMobile: boolean;
   onViewChart: () => void;
 }) {
   const [hovered, setHovered] = useState(false);
+  const [style, setStyle] = useState<FitType>("Staple");
+  const current = images[style];
 
   return (
     <div
@@ -442,8 +442,56 @@ function ProductCard({
           overflow: "hidden",
         }}
       >
-        <ProductImage src={frontSrc} alt={`${label} front`} visible={!hovered} />
-        <ProductImage src={backSrc} alt={`${label} back`} visible={hovered} />
+        <ProductImage
+          key={`${style}-front`}
+          src={current.front}
+          alt={`${label} — ${style} front`}
+          visible={!hovered}
+        />
+        <ProductImage
+          key={`${style}-back`}
+          src={current.back}
+          alt={`${label} — ${style} back`}
+          visible={hovered}
+        />
+
+        {/* Style toggle */}
+        <div
+          style={{
+            position: "absolute",
+            top: "14px",
+            right: "14px",
+            display: "flex",
+            background: "rgba(8,8,8,0.78)",
+            border: "1px solid rgba(255,255,255,0.1)",
+            zIndex: 1,
+          }}
+        >
+          {(["Staple", "Maple"] as FitType[]).map((s) => (
+            <button
+              key={s}
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setStyle(s);
+              }}
+              style={{
+                background: style === s ? LIME : "transparent",
+                border: "none",
+                color: style === s ? BG : "rgba(255,255,255,0.55)",
+                fontFamily: FONT,
+                fontSize: "9px",
+                fontWeight: 700,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                padding: "6px 10px",
+                cursor: "pointer",
+              }}
+            >
+              {s}
+            </button>
+          ))}
+        </div>
 
         {/* Price badge */}
         <div
@@ -1249,8 +1297,16 @@ export default function MatesInMotorsStorePage() {
               label="Mates in Motors Tee"
               price={TEE_PRICE}
               detail="Staple (Mens) / Maple (Womens). Left chest + centre back print. Printed name."
-              frontSrc="/mim-tee-front.png"
-              backSrc="/mim-tee-back.png"
+              images={{
+                Staple: {
+                  front: "/mim-tee-front-staple.png",
+                  back: "/mim-tee-back-staple.png",
+                },
+                Maple: {
+                  front: "/mim-tee-front-maple.png",
+                  back: "/mim-tee-back-maple.png",
+                },
+              }}
               isMobile={isMobile}
               onViewChart={() => setOpenChart("Tee")}
             />
@@ -1259,8 +1315,16 @@ export default function MatesInMotorsStorePage() {
               label="Mates in Motors Tank"
               price={TANK_PRICE}
               detail="Staple (Mens) / Maple (Womens). Left chest + centre back print. Printed name."
-              frontSrc="/mim-tank-front.jpg"
-              backSrc="/mim-tank-back.jpg"
+              images={{
+                Staple: {
+                  front: "/mim-tank-front-staple.png",
+                  back: "/mim-tank-back-staple.png",
+                },
+                Maple: {
+                  front: "/mim-tank-front-maple.png",
+                  back: "/mim-tank-back-maple.png",
+                },
+              }}
               isMobile={isMobile}
               onViewChart={() => setOpenChart("Tank")}
             />
