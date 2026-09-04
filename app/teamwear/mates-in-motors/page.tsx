@@ -1249,8 +1249,8 @@ export default function MatesInMotorsStorePage() {
               label="Mates in Motors Tee"
               price={TEE_PRICE}
               detail="Staple (Mens) / Maple (Womens). Left chest + centre back print. Printed name."
-              frontSrc="/mim-tee-front.jpg"
-              backSrc="/mim-tee-back.jpg"
+              frontSrc="/mim-tee-front.png"
+              backSrc="/mim-tee-back.png"
               isMobile={isMobile}
               onViewChart={() => setOpenChart("Tee")}
             />
