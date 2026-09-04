@@ -11,6 +11,31 @@ const INTERNAL_EMAIL =
 
 const FROM_EMAIL = "Tendencies <orders@mail.tendencies.co.nz>";
 
+type TeamwearStoreMeta = {
+  emailEyebrow: string;
+  subjectPrefix: string;
+  collectionLine: string;
+};
+
+const TEAMWEAR_STORE_META: Record<string, TeamwearStoreMeta> = {
+  "Te Atatu": {
+    emailEyebrow: "Te Atatū Netball Club · Team Store",
+    subjectPrefix: "Te Atatū",
+    collectionLine:
+      "All orders will be delivered to the club on 1 June 2026.",
+  },
+  "Mates in Motors": {
+    emailEyebrow: "Mates in Motors 2026 · Merch Store",
+    subjectPrefix: "Mates in Motors",
+    collectionLine:
+      "All orders will be collected from Tendencies, Auckland on 28 October 2026.",
+  },
+};
+
+function getTeamwearStoreMeta(team: string): TeamwearStoreMeta {
+  return TEAMWEAR_STORE_META[team] || TEAMWEAR_STORE_META["Te Atatu"];
+}
+
 function formatCurrency(amount?: number | null) {
   if (!amount) return "$0.00 NZD";
   return new Intl.NumberFormat("en-NZ", {
@@ -110,6 +135,7 @@ export async function POST(req: Request) {
     const orderSummary = metadata.order_summary || "";
     const itemCount = metadata.item_count || "";
     const total = formatCurrency(session.amount_total);
+    const storeMeta = getTeamwearStoreMeta(metadata.team || "Te Atatu");
 const sheetsUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
 
 if (sheetsUrl) {
@@ -120,11 +146,12 @@ if (sheetsUrl) {
 
     const items = lineItems.data.map((item) => {
       const text = item.description || "";
-      const [, detail = ""] = text.split("—");
+      const [namePart = "", detail = ""] = text.split("—");
       const parts = detail.split("/").map((p) => p.trim());
+      const productWords = namePart.trim().split(" ");
 
       return {
-        product: text.includes("Hoodie") ? "Hoodie" : "Tee",
+        product: productWords[productWords.length - 1] || "",
         fit: parts[0] || "",
         size: parts[1] || "",
         garmentName: parts.slice(2).join(" / ") || "",
@@ -136,6 +163,7 @@ if (sheetsUrl) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         orderId: session.id,
+        team: metadata.team || "Te Atatu",
         customerName,
         email: customerEmail || "",
         phone,
@@ -149,13 +177,13 @@ if (sheetsUrl) {
     console.error("SHEETS LOGGING FAILED", err);
   }
 }
-    const subject = "Te Atatū Netball — Order Confirmed";
+    const subject = `${storeMeta.subjectPrefix} — Order Confirmed`;
 
     const customerHtml = `
       <div style="font-family: Helvetica, Arial, sans-serif; background:#080808; color:#f5f5f0; padding:32px;">
         <div style="max-width:640px; margin:0 auto;">
           <div style="font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:#b8f400; font-weight:700; margin-bottom:20px;">
-            Te Atatū Netball Club · Team Store
+            ${storeMeta.emailEyebrow}
           </div>
 
           <h1 style="font-size:42px; line-height:0.95; letter-spacing:-0.04em; text-transform:uppercase; margin:0 0 24px;">
@@ -179,7 +207,7 @@ if (sheetsUrl) {
 
           <div style="border:1px solid rgba(184,244,0,0.25); background:rgba(184,244,0,0.06); padding:18px; margin-bottom:28px;">
             <strong style="color:#b8f400;">Delivery:</strong>
-            <span style="color:rgba(255,255,255,0.72);"> All orders will be delivered to the club on 1 June 2026.</span>
+            <span style="color:rgba(255,255,255,0.72);"> ${storeMeta.collectionLine}</span>
           </div>
 
           <p style="font-size:13px; line-height:1.6; color:rgba(255,255,255,0.5); margin:0;">
@@ -191,7 +219,7 @@ if (sheetsUrl) {
 
     const internalHtml = `
       <div style="font-family: Helvetica, Arial, sans-serif; padding:24px;">
-        <h2>New Te Atatū Teamwear Order</h2>
+        <h2>New ${storeMeta.subjectPrefix} Teamwear Order</h2>
         <p><strong>Name:</strong> ${customerName}</p>
         <p><strong>Email:</strong> ${customerEmail}</p>
         <p><strong>Phone:</strong> ${phone}</p>
@@ -216,7 +244,7 @@ if (sheetsUrl) {
       await resend.emails.send({
         from: FROM_EMAIL,
         to: INTERNAL_EMAIL,
-        subject: `New Te Atatū order — ${customerName}`,
+        subject: `New ${storeMeta.subjectPrefix} order — ${customerName}`,
         html: internalHtml,
       });
 
