@@ -19,6 +19,25 @@ const TANK_PRICE = 39.39;
 
 const SIZES = ["XSM", "SML", "MED", "LRG", "XLG", "2XL", "3XL", "4XL", "5XL"];
 
+type GarmentOption = {
+  key: string;
+  product: "Tee" | "Tank";
+  fit: "Staple" | "Maple";
+  label: string;
+  price: number;
+};
+
+function garmentKey(product: string, fit: string) {
+  return `${fit}-${product}`;
+}
+
+const GARMENTS: GarmentOption[] = [
+  { key: garmentKey("Tee", "Staple"), product: "Tee", fit: "Staple", label: "Staple Tee", price: TEE_PRICE },
+  { key: garmentKey("Tee", "Maple"), product: "Tee", fit: "Maple", label: "Maple Tee", price: TEE_PRICE },
+  { key: garmentKey("Tank", "Staple"), product: "Tank", fit: "Staple", label: "Staple Tank", price: TANK_PRICE },
+  { key: garmentKey("Tank", "Maple"), product: "Tank", fit: "Maple", label: "Maple Tank", price: TANK_PRICE },
+];
+
 const TEE_CHART_SRC = "/mim-size-chart.png";
 const TANK_CHART_SRC = "/mim-size-chart.png";
 
@@ -407,7 +426,8 @@ function ProductCard({
   label,
   price,
   detail,
-  images,
+  frontSrc,
+  backSrc,
   isMobile,
   onViewChart,
 }: {
@@ -415,13 +435,12 @@ function ProductCard({
   label: string;
   price: number;
   detail: string;
-  images: Record<FitType, { front: string; back: string }>;
+  frontSrc: string;
+  backSrc: string;
   isMobile: boolean;
   onViewChart: () => void;
 }) {
   const [hovered, setHovered] = useState(false);
-  const [style, setStyle] = useState<FitType>("Staple");
-  const current = images[style];
 
   return (
     <div
@@ -442,56 +461,8 @@ function ProductCard({
           overflow: "hidden",
         }}
       >
-        <ProductImage
-          key={`${style}-front`}
-          src={current.front}
-          alt={`${label} — ${style} front`}
-          visible={!hovered}
-        />
-        <ProductImage
-          key={`${style}-back`}
-          src={current.back}
-          alt={`${label} — ${style} back`}
-          visible={hovered}
-        />
-
-        {/* Style toggle */}
-        <div
-          style={{
-            position: "absolute",
-            top: "14px",
-            right: "14px",
-            display: "flex",
-            background: "rgba(8,8,8,0.78)",
-            border: "1px solid rgba(255,255,255,0.1)",
-            zIndex: 1,
-          }}
-        >
-          {(["Staple", "Maple"] as FitType[]).map((s) => (
-            <button
-              key={s}
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setStyle(s);
-              }}
-              style={{
-                background: style === s ? LIME : "transparent",
-                border: "none",
-                color: style === s ? BG : "rgba(255,255,255,0.55)",
-                fontFamily: FONT,
-                fontSize: "9px",
-                fontWeight: 700,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                padding: "6px 10px",
-                cursor: "pointer",
-              }}
-            >
-              {s}
-            </button>
-          ))}
-        </div>
+        <ProductImage src={frontSrc} alt={`${label} front`} visible={!hovered} />
+        <ProductImage src={backSrc} alt={`${label} back`} visible={hovered} />
 
         {/* Price badge */}
         <div
@@ -861,17 +832,25 @@ function ItemRow({
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
-          {/* Product + chart */}
+          {/* Garment + chart */}
           <div>
-            <Label>Product</Label>
+            <Label>Garment</Label>
             <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
               <select
-                value={item.product}
-                onChange={(e) => onUpdate(item.id, "product", e.target.value)}
+                value={garmentKey(item.product, item.fit)}
+                onChange={(e) => {
+                  const g = GARMENTS.find((g) => g.key === e.target.value);
+                  if (!g) return;
+                  onUpdate(item.id, "product", g.product);
+                  onUpdate(item.id, "fit", g.fit);
+                }}
                 style={{ ...selectBase, flex: 1 }}
               >
-                <option value="Tee">Mates in Motors Tee — ${formatPrice(TEE_PRICE)}</option>
-                <option value="Tank">Mates in Motors Tank — ${formatPrice(TANK_PRICE)}</option>
+                {GARMENTS.map((g) => (
+                  <option key={g.key} value={g.key}>
+                    {g.label} — ${formatPrice(g.price)}
+                  </option>
+                ))}
               </select>
               <button
                 type="button"
@@ -897,36 +876,23 @@ function ItemRow({
             </div>
           </div>
 
-          {/* Fit + Size */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-            <div>
-              <Label>Style</Label>
-              <select
-                value={item.fit}
-                onChange={(e) => onUpdate(item.id, "fit", e.target.value)}
-                style={selectBase}
-              >
-                <option value="Staple">Staple (Mens)</option>
-                <option value="Maple">Maple (Womens)</option>
-              </select>
-            </div>
-            <div>
-              <Label>Size</Label>
-              <select
-                value={item.size}
-                onChange={(e) => onUpdate(item.id, "size", e.target.value)}
-                style={selectBase}
-              >
-                <option value="" disabled>
-                  Select
+          {/* Size */}
+          <div>
+            <Label>Size</Label>
+            <select
+              value={item.size}
+              onChange={(e) => onUpdate(item.id, "size", e.target.value)}
+              style={selectBase}
+            >
+              <option value="" disabled>
+                Select
+              </option>
+              {SIZES.map((s) => (
+                <option key={s} value={s}>
+                  {s}
                 </option>
-                {SIZES.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
-              </select>
-            </div>
+              ))}
+            </select>
           </div>
 
           {/* Name */}
@@ -959,12 +925,12 @@ function ItemRow({
   }
 
   // Desktop row
-  // Columns: index | product | fit | size | name | price | remove
+  // Columns: index | garment | size | name | price | remove
   return (
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "32px 220px 140px 100px 1fr 70px 44px",
+        gridTemplateColumns: "32px 240px 100px 1fr 70px 44px",
         gap: "8px",
         alignItems: "center",
         padding: "8px 0",
@@ -985,24 +951,22 @@ function ItemRow({
         {pad2(index + 1)}
       </div>
 
-      {/* Product */}
+      {/* Garment */}
       <select
-        value={item.product}
-        onChange={(e) => onUpdate(item.id, "product", e.target.value)}
+        value={garmentKey(item.product, item.fit)}
+        onChange={(e) => {
+          const g = GARMENTS.find((g) => g.key === e.target.value);
+          if (!g) return;
+          onUpdate(item.id, "product", g.product);
+          onUpdate(item.id, "fit", g.fit);
+        }}
         style={selectBase}
       >
-        <option value="Tee">Tee — ${formatPrice(TEE_PRICE)}</option>
-        <option value="Tank">Tank — ${formatPrice(TANK_PRICE)}</option>
-      </select>
-
-      {/* Fit */}
-      <select
-        value={item.fit}
-        onChange={(e) => onUpdate(item.id, "fit", e.target.value)}
-        style={selectBase}
-      >
-        <option value="Staple">Staple (Mens)</option>
-        <option value="Maple">Maple (Womens)</option>
+        {GARMENTS.map((g) => (
+          <option key={g.key} value={g.key}>
+            {g.label} — ${formatPrice(g.price)}
+          </option>
+        ))}
       </select>
 
       {/* Size */}
@@ -1294,37 +1258,41 @@ export default function MatesInMotorsStorePage() {
           >
             <ProductCard
               product="Tee"
-              label="Mates in Motors Tee"
+              label="Staple Tee"
               price={TEE_PRICE}
-              detail="Staple (Mens) / Maple (Womens). Left chest + centre back print. Printed name."
-              images={{
-                Staple: {
-                  front: "/mim-tee-front-staple.png",
-                  back: "/mim-tee-back-staple.png",
-                },
-                Maple: {
-                  front: "/mim-tee-front-maple.png",
-                  back: "/mim-tee-back-maple.png",
-                },
-              }}
+              detail="Mens fit. Left chest + centre back print. Printed name."
+              frontSrc="/mim-tee-front-staple.png"
+              backSrc="/mim-tee-back-staple.png"
+              isMobile={isMobile}
+              onViewChart={() => setOpenChart("Tee")}
+            />
+            <ProductCard
+              product="Tee"
+              label="Maple Tee"
+              price={TEE_PRICE}
+              detail="Womens fit. Left chest + centre back print. Printed name."
+              frontSrc="/mim-tee-front-maple.png"
+              backSrc="/mim-tee-back-maple.png"
               isMobile={isMobile}
               onViewChart={() => setOpenChart("Tee")}
             />
             <ProductCard
               product="Tank"
-              label="Mates in Motors Tank"
+              label="Staple Tank"
               price={TANK_PRICE}
-              detail="Staple (Mens) / Maple (Womens). Left chest + centre back print. Printed name."
-              images={{
-                Staple: {
-                  front: "/mim-tank-front-staple.png",
-                  back: "/mim-tank-back-staple.png",
-                },
-                Maple: {
-                  front: "/mim-tank-front-maple.png",
-                  back: "/mim-tank-back-maple.png",
-                },
-              }}
+              detail="Mens fit. Left chest + centre back print. Printed name."
+              frontSrc="/mim-tank-front-staple.png"
+              backSrc="/mim-tank-back-staple.png"
+              isMobile={isMobile}
+              onViewChart={() => setOpenChart("Tank")}
+            />
+            <ProductCard
+              product="Tank"
+              label="Maple Tank"
+              price={TANK_PRICE}
+              detail="Womens fit. Left chest + centre back print. Printed name."
+              frontSrc="/mim-tank-front-maple.png"
+              backSrc="/mim-tank-back-maple.png"
               isMobile={isMobile}
               onViewChart={() => setOpenChart("Tank")}
             />
@@ -1367,7 +1335,7 @@ export default function MatesInMotorsStorePage() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "32px 220px 140px 100px 1fr 70px 44px",
+                gridTemplateColumns: "32px 240px 100px 1fr 70px 44px",
                 gap: "8px",
                 padding: "0 0 10px",
                 borderBottom: `1px solid rgba(255,255,255,0.14)`,
@@ -1376,8 +1344,7 @@ export default function MatesInMotorsStorePage() {
             >
               {[
                 "",
-                "Product",
-                "Style",
+                "Garment",
                 "Size",
                 "Name (on garment)",
                 "Price",
@@ -1392,7 +1359,7 @@ export default function MatesInMotorsStorePage() {
                     letterSpacing: "0.22em",
                     textTransform: "uppercase",
                     color: "rgba(255,255,255,0.38)",
-                    textAlign: i === 5 ? "right" : "left",
+                    textAlign: i === 4 ? "right" : "left",
                   }}
                 >
                   {h}
@@ -1636,7 +1603,8 @@ export default function MatesInMotorsStorePage() {
                       marginBottom: "3px",
                     }}
                   >
-                    Mates in Motors {item.product}
+                    {GARMENTS.find((g) => g.key === garmentKey(item.product, item.fit))
+                      ?.label || item.product}
                   </div>
                   <div
                     style={{
@@ -1646,8 +1614,7 @@ export default function MatesInMotorsStorePage() {
                       lineHeight: 1.4,
                     }}
                   >
-                    {item.fit}
-                    {item.size ? ` · ${item.size}` : ""}
+                    {item.size}
                     {item.name ? ` · ${item.name}` : ""}
                   </div>
                 </div>
