@@ -79,7 +79,7 @@ export default function MatesInMotorsSuccessPage() {
               flexShrink: 0,
             }}
           />
-          Orders will be collected from Tendencies, Auckland on 28 October 2026.
+          Collection from Mates in Motors on 28 October 2026.
         </div>
 
         <div style={{ marginTop: "40px" }}>

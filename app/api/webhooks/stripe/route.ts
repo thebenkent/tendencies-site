@@ -28,7 +28,7 @@ const TEAMWEAR_STORE_META: Record<string, TeamwearStoreMeta> = {
     emailEyebrow: "Mates in Motors 2026 · Merch Store",
     subjectPrefix: "Mates in Motors",
     collectionLine:
-      "All orders will be collected from Tendencies, Auckland on 28 October 2026.",
+      "Collection from Mates in Motors on 28 October 2026.",
   },
 };
 

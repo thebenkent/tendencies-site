@@ -1226,7 +1226,7 @@ export default function MatesInMotorsStorePage() {
                   color: "rgba(255,255,255,0.7)",
                 }}
               >
-                Collected from Tendencies, Auckland · {COLLECTION_DATE}
+                Collection from Mates in Motors · {COLLECTION_DATE}
               </span>
             </div>
           </div>
@@ -1711,8 +1711,8 @@ export default function MatesInMotorsStorePage() {
                 lineHeight: 1.5,
               }}
             >
-              No freight — all orders collected as one group from Tendencies,
-              Auckland · {COLLECTION_DATE}
+              No freight — all orders collected as one group. Collection from
+              Mates in Motors · {COLLECTION_DATE}
             </span>
           </div>
 
