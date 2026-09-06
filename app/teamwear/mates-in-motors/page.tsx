@@ -1260,7 +1260,7 @@ export default function MatesInMotorsStorePage() {
               product="Tee"
               label="Staple Tee"
               price={TEE_PRICE}
-              detail="Mens fit. Left chest + centre back print. Printed name."
+              detail="Mens fit. Left chest + centre back + right sleeve print. Printed name."
               frontSrc="/mim-tee-front-staple.png"
               backSrc="/mim-tee-back-staple.png"
               isMobile={isMobile}
@@ -1270,7 +1270,7 @@ export default function MatesInMotorsStorePage() {
               product="Tee"
               label="Maple Tee"
               price={TEE_PRICE}
-              detail="Womens fit. Left chest + centre back print. Printed name."
+              detail="Womens fit. Left chest + centre back + right sleeve print. Printed name."
               frontSrc="/mim-tee-front-maple.png"
               backSrc="/mim-tee-back-maple.png"
               isMobile={isMobile}
@@ -1280,7 +1280,7 @@ export default function MatesInMotorsStorePage() {
               product="Tank"
               label="Staple Tank"
               price={TANK_PRICE}
-              detail="Mens fit. Left chest + centre back print. Printed name."
+              detail="Mens fit. Left chest + centre back + right sleeve print. Printed name."
               frontSrc="/mim-tank-front-staple.png"
               backSrc="/mim-tank-back-staple.png"
               isMobile={isMobile}
@@ -1290,7 +1290,7 @@ export default function MatesInMotorsStorePage() {
               product="Tank"
               label="Maple Tank"
               price={TANK_PRICE}
-              detail="Womens fit. Left chest + centre back print. Printed name."
+              detail="Womens fit. Left chest + centre back + right sleeve print. Printed name."
               frontSrc="/mim-tank-front-maple.png"
               backSrc="/mim-tank-back-maple.png"
               isMobile={isMobile}
