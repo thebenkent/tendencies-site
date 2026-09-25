@@ -1,4 +1,4 @@
-// AS Colour spec sheet measurements — garment dimensions, not body measurements
+// AS Colour spec sheet measurements — garment dimensions (not body)
 // Tolerance: ±2.5 cm (per AS Colour)
 
 export type SizeRow = {
@@ -13,7 +13,7 @@ export type ProductSizeGuide = {
   note: string;
 };
 
-export type ProductKey = "staple-tee" | "maple-tee" | "staple-tank" | "maple-tank";
+export type ProductKey = "staple-tee" | "maple-tee" | "classic-tank" | "martina-tank";
 
 const NOTE = "Measurements can vary within 2.5 cm. When between sizes, size up.";
 
@@ -35,7 +35,7 @@ const GUIDES: Record<ProductKey, ProductSizeGuide> = {
     note: NOTE,
   },
 
-  // AS Colour Wo's Maple Tee — XSM through 3XL (no 4XL/5XL)
+  // AS Colour Wo's Maple Tee — XSM through 3XL
   "maple-tee": {
     sizes: ["XSM", "S", "M", "L", "XL", "2XL", "3XL"],
     chart: [
@@ -50,30 +50,31 @@ const GUIDES: Record<ProductKey, ProductSizeGuide> = {
     note: NOTE,
   },
 
-  // AS Colour Mens Staple Tank 5090 — S through 3XL (no XSM)
-  "staple-tank": {
-    sizes: ["S", "M", "L", "XL", "2XL", "3XL"],
+  // AS Colour Classic Tank 5073 — ⚠️ update measurements from 5073_SIZE_GUIDE
+  "classic-tank": {
+    sizes: ["XSM", "S", "M", "L", "XL", "2XL", "3XL"],
     chart: [
-      { size: "S",   width: 47,   length: 71   },
-      { size: "M",   width: 52,   length: 75   },
-      { size: "L",   width: 56.5, length: 78.5 },
-      { size: "XL",  width: 61,   length: 82   },
-      { size: "2XL", width: 64,   length: 83.5 },
-      { size: "3XL", width: 68,   length: 85   },
+      { size: "XSM", width: 45,   length: 69 },
+      { size: "S",   width: 49,   length: 72 },
+      { size: "M",   width: 53,   length: 75 },
+      { size: "L",   width: 57,   length: 78 },
+      { size: "XL",  width: 61,   length: 81 },
+      { size: "2XL", width: 65,   length: 83 },
+      { size: "3XL", width: 69,   length: 85 },
     ],
     note: NOTE,
   },
 
-  // AS Colour Wo's Maple Tank 4017 — XSM through 2XL (no 3XL+)
-  "maple-tank": {
+  // AS Colour Martina Tank 4090 — ⚠️ update measurements from 4090_SIZE_GUIDE
+  "martina-tank": {
     sizes: ["XSM", "S", "M", "L", "XL", "2XL"],
     chart: [
-      { size: "XSM", width: 43.5, length: 64 },
-      { size: "S",   width: 46,   length: 65 },
-      { size: "M",   width: 48.5, length: 66 },
-      { size: "L",   width: 51,   length: 67 },
-      { size: "XL",  width: 53.5, length: 68 },
-      { size: "2XL", width: 56,   length: 69 },
+      { size: "XSM", width: 41, length: 57 },
+      { size: "S",   width: 44, length: 59 },
+      { size: "M",   width: 47, length: 61 },
+      { size: "L",   width: 50, length: 63 },
+      { size: "XL",  width: 53, length: 65 },
+      { size: "2XL", width: 56, length: 67 },
     ],
     note: NOTE,
   },

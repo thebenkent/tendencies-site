@@ -30,17 +30,17 @@ const PRODUCTS: Record<ProductKey, { label: string; price: number; front: string
     front: "/teamwear/mim-tee-front-maple.png",
     back: "/teamwear/mim-tee-back-maple.png",
   },
-  "staple-tank": {
-    label: "Staple Tank",
+  "classic-tank": {
+    label: "Classic Tank",
     price: TANK_PRICE,
-    front: "/teamwear/mim-tank-front-staple.png",
-    back: "/teamwear/mim-tank-back-staple.png",
+    front: "/teamwear/mim-tank-front-classic.png",
+    back: "/teamwear/mim-tank-back-classic.png",
   },
-  "maple-tank": {
-    label: "Maple Tank",
+  "martina-tank": {
+    label: "Martina Tank",
     price: TANK_PRICE,
-    front: "/teamwear/mim-tank-front-maple.png",
-    back: "/teamwear/mim-tank-back-maple.png",
+    front: "/teamwear/mim-tank-front-martina.png",
+    back: "/teamwear/mim-tank-back-martina.png",
   },
 };
 

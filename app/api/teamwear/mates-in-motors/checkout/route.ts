@@ -9,18 +9,18 @@ const ORDER_CUTOFF = new Date("2026-10-11T21:00:00+13:00");
 const PRICES_CENTS: Record<ProductKey, number> = {
   "staple-tee": 4500,
   "maple-tee": 4500,
-  "staple-tank": 3900,
-  "maple-tank": 3900,
+  "classic-tank": 3900,
+  "martina-tank": 3900,
 };
 
 const PRODUCT_LABELS: Record<ProductKey, string> = {
   "staple-tee": "Staple Tee",
   "maple-tee": "Maple Tee",
-  "staple-tank": "Staple Tank",
-  "maple-tank": "Maple Tank",
+  "classic-tank": "Classic Tank",
+  "martina-tank": "Martina Tank",
 };
 
-const VALID_PRODUCTS = new Set<ProductKey>(["staple-tee", "maple-tee", "staple-tank", "maple-tank"]);
+const VALID_PRODUCTS = new Set<ProductKey>(["staple-tee", "maple-tee", "classic-tank", "martina-tank"]);
 
 type OrderItem = { product: ProductKey; size: string; name: string };
 type Customer = { fullName: string; email: string; phone: string; notes: string };
