@@ -1,0 +1,96 @@
+import { NextResponse } from "next/server";
+import Stripe from "stripe";
+
+// ⚠️ PLACEHOLDER DEADLINE — must match app/teamwear/mates-in-motors/page.tsx
+const ORDER_CUTOFF = new Date("2026-10-12T23:59:00+13:00");
+
+// ⚠️ Confirm tee price before going live
+const PRICES_CENTS: Record<string, number> = {
+  "Staple Tee": 4200,
+  "Maple Tee": 4200,
+  "Staple Tank": 3900,
+  "Maple Tank": 3900,
+};
+
+const VALID_PRODUCTS = new Set(Object.keys(PRICES_CENTS));
+const VALID_SIZES = new Set(["XSM", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"]);
+
+type OrderItem = { product: string; size: string; name: string };
+type Customer = { fullName: string; email: string; phone: string; notes: string };
+
+const trunc = (s: string, max = 490) => (s.length > max ? s.slice(0, max) + "…" : s);
+
+export async function POST(req: Request) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+  try {
+    if (new Date() > ORDER_CUTOFF) {
+      return NextResponse.json({ error: "Orders for this store are now closed." }, { status: 410 });
+    }
+
+    const body = await req.json();
+    const { customer, items } = body as { customer: Customer; items: OrderItem[] };
+
+    if (!customer?.fullName?.trim() || !customer?.email?.trim() || !customer?.phone?.trim()) {
+      return NextResponse.json({ error: "Please fill in all required customer fields." }, { status: 400 });
+    }
+    if (!items || items.length === 0) {
+      return NextResponse.json({ error: "No items in order." }, { status: 400 });
+    }
+    for (const item of items) {
+      if (!VALID_PRODUCTS.has(item.product)) {
+        return NextResponse.json({ error: `Unknown product: ${item.product}` }, { status: 400 });
+      }
+      if (!VALID_SIZES.has(item.size)) {
+        return NextResponse.json({ error: `Invalid size: ${item.size}` }, { status: 400 });
+      }
+      if (!item.name?.trim()) {
+        return NextResponse.json({ error: "Each item must have a name to print." }, { status: 400 });
+      }
+    }
+
+    const lineItems = items.map((item) => ({
+      price_data: {
+        currency: "nzd",
+        product_data: {
+          name: `MIM ${item.product} — ${item.size} / ${item.name.trim()}`,
+        },
+        unit_amount: PRICES_CENTS[item.product],
+      },
+      quantity: 1 as const,
+    }));
+
+    const orderSummary = trunc(
+      items.map((i) => `${i.product}/${i.size}/${i.name.trim()}`).join(";")
+    );
+
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.tendencies.co.nz";
+
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      currency: "nzd",
+      line_items: lineItems,
+      customer_email: customer.email,
+      metadata: {
+        team: "Mates in Motors",
+        customer_name: customer.fullName,
+        email: customer.email,
+        phone: customer.phone,
+        notes: trunc(customer.notes || ""),
+        collection_date: "2026-10-28",
+        item_count: String(items.length),
+        order_summary: orderSummary,
+      },
+      success_url: `${baseUrl}/teamwear/mates-in-motors/success`,
+      cancel_url: `${baseUrl}/teamwear/mates-in-motors/cancel`,
+    });
+
+    return NextResponse.json({ url: session.url });
+  } catch (err) {
+    console.error("MIM checkout error:", err);
+    return NextResponse.json(
+      { error: "Failed to create checkout session. Please try again." },
+      { status: 500 }
+    );
+  }
+}
