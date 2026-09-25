@@ -1,26 +1,28 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { sizesFor, type ProductKey } from "@/lib/merch/mim-size-guides";
+import { sizesFor } from "@/lib/merch/mim-size-guides";
 
 // Sunday 11 October 2026, 9:00 pm NZDT — must match page.tsx
 const ORDER_CUTOFF = new Date("2026-10-11T21:00:00+13:00");
 
 // Prices are authoritative here — never trust values from the browser
+type ProductKey = "staple-tee" | "maple-tee" | "staple-tank" | "maple-tank";
+
 const PRICES_CENTS: Record<ProductKey, number> = {
-  "staple-tee": 4500,
-  "maple-tee": 4500,
-  "classic-tank": 3900,
-  "martina-tank": 3900,
+  "staple-tee":  4500,
+  "maple-tee":   4500,
+  "staple-tank": 3900,
+  "maple-tank":  3900,
 };
 
 const PRODUCT_LABELS: Record<ProductKey, string> = {
-  "staple-tee": "Staple Tee",
-  "maple-tee": "Maple Tee",
-  "classic-tank": "Classic Tank",
-  "martina-tank": "Martina Tank",
+  "staple-tee":  "Staple Tee",
+  "maple-tee":   "Maple Tee",
+  "staple-tank": "Staple Tank",
+  "maple-tank":  "Maple Tank",
 };
 
-const VALID_PRODUCTS = new Set<ProductKey>(["staple-tee", "maple-tee", "classic-tank", "martina-tank"]);
+const VALID_PRODUCTS = new Set<ProductKey>(["staple-tee", "maple-tee", "staple-tank", "maple-tank"]);
 
 type OrderItem = { product: ProductKey; size: string; name: string };
 type Customer = { fullName: string; email: string; phone: string; notes: string };
@@ -49,7 +51,7 @@ export async function POST(req: Request) {
       if (!VALID_PRODUCTS.has(item.product)) {
         return NextResponse.json({ error: `Unknown product: ${item.product}` }, { status: 400 });
       }
-      const allowed = sizesFor(item.product);
+      const allowed = sizesFor(item.product) as string[];
       if (!allowed.includes(item.size)) {
         return NextResponse.json(
           { error: `Size ${item.size} is not available for ${PRODUCT_LABELS[item.product]}.` },

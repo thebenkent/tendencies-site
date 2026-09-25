@@ -1,88 +1,44 @@
-// AS Colour spec sheet measurements — garment dimensions (not body)
-// Tolerance: ±2.5 cm (per AS Colour)
+// Mates in Motors 2026 — size guides (source: AS Colour spec sheets)
+// Measurements in cm, garment laid flat. AS Colour tolerance: ±2.5cm.
 
-export type SizeRow = {
-  size: string;
-  width: number;  // body width (cm)
-  length: number; // body length (cm)
-};
+export type SizeCode = 'XSM' | 'SML' | 'MED' | 'LRG' | 'XLG' | '2XL' | '3XL' | '4XL' | '5XL';
 
-export type ProductSizeGuide = {
-  sizes: string[];
-  chart: SizeRow[];
-  note: string;
-};
-
-export type ProductKey = "staple-tee" | "maple-tee" | "classic-tank" | "martina-tank";
-
-const NOTE = "Measurements can vary within 2.5 cm. When between sizes, size up.";
-
-const GUIDES: Record<ProductKey, ProductSizeGuide> = {
-  // AS Colour Staple Tee — XSM through 5XL
-  "staple-tee": {
-    sizes: ["XSM", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"],
-    chart: [
-      { size: "XSM", width: 43,   length: 68   },
-      { size: "S",   width: 47,   length: 71   },
-      { size: "M",   width: 52,   length: 75   },
-      { size: "L",   width: 56.5, length: 78.5 },
-      { size: "XL",  width: 61,   length: 82   },
-      { size: "2XL", width: 64,   length: 83.5 },
-      { size: "3XL", width: 68,   length: 85   },
-      { size: "4XL", width: 75,   length: 87   },
-      { size: "5XL", width: 80,   length: 89   },
-    ],
-    note: NOTE,
-  },
-
-  // AS Colour Wo's Maple Tee — XSM through 3XL
-  "maple-tee": {
-    sizes: ["XSM", "S", "M", "L", "XL", "2XL", "3XL"],
-    chart: [
-      { size: "XSM", width: 45.5, length: 63.5 },
-      { size: "S",   width: 48,   length: 64.5 },
-      { size: "M",   width: 50.5, length: 65.5 },
-      { size: "L",   width: 53,   length: 66.5 },
-      { size: "XL",  width: 55.5, length: 67.5 },
-      { size: "2XL", width: 58,   length: 68.5 },
-      { size: "3XL", width: 60.5, length: 69.5 },
-    ],
-    note: NOTE,
-  },
-
-  // AS Colour Mens Classic Tank 5073 — S through 3XL (no XSM)
-  "classic-tank": {
-    sizes: ["S", "M", "L", "XL", "2XL", "3XL"],
-    chart: [
-      { size: "S",   width: 47.5, length: 70   },
-      { size: "M",   width: 52,   length: 74   },
-      { size: "L",   width: 56.5, length: 77.5 },
-      { size: "XL",  width: 61,   length: 81   },
-      { size: "2XL", width: 65.5, length: 84   },
-      { size: "3XL", width: 70,   length: 87   },
-    ],
-    note: NOTE,
-  },
-
-  // AS Colour Wo's Martina Tank 4090 — XSM through 2XL
-  "martina-tank": {
-    sizes: ["XSM", "S", "M", "L", "XL", "2XL"],
-    chart: [
-      { size: "XSM", width: 43.5, length: 60 },
-      { size: "S",   width: 46,   length: 61 },
-      { size: "M",   width: 48.5, length: 62 },
-      { size: "L",   width: 51,   length: 63 },
-      { size: "XL",  width: 53.5, length: 64 },
-      { size: "2XL", width: 56,   length: 65 },
-    ],
-    note: NOTE,
-  },
-};
-
-export function sizesFor(product: ProductKey): string[] {
-  return GUIDES[product].sizes;
+export interface SizeGuide {
+  title: string;
+  sizes: SizeCode[];
+  bodyWidth: number[];  // armpit to armpit
+  bodyLength: number[]; // high point shoulder to hem
 }
 
-export function guideFor(product: ProductKey): ProductSizeGuide {
-  return GUIDES[product];
-}
+export const SIZE_GUIDES: Record<string, SizeGuide> = {
+  'staple-tee': {
+    title: 'Staple Tee',
+    sizes: ['XSM', 'SML', 'MED', 'LRG', 'XLG', '2XL', '3XL', '4XL', '5XL'],
+    bodyWidth:  [43,  47,  52,   56.5, 61,  64,   68,   75,   80 ],
+    bodyLength: [68,  71,  75,   78.5, 82,  83.5, 85,   87,   89 ],
+  },
+  'maple-tee': {
+    title: "Wo's Maple Tee",
+    sizes: ['XSM', 'SML', 'MED', 'LRG', 'XLG', '2XL', '3XL'], // no 4XL/5XL
+    bodyWidth:  [45.5, 48,  50.5, 53,   55.5, 58,   60.5],
+    bodyLength: [63.5, 64.5, 65.5, 66.5, 67.5, 68.5, 69.5],
+  },
+  'staple-tank': {
+    title: 'Mens Staple Tank (5090)',
+    sizes: ['SML', 'MED', 'LRG', 'XLG', '2XL', '3XL'], // no XSM, 4XL, 5XL
+    bodyWidth:  [47,  52,  56.5, 61,  64,   68 ],
+    bodyLength: [71,  75,  78.5, 82,  83.5, 85 ],
+  },
+  'maple-tank': {
+    title: "Wo's Maple Tank (4017)",
+    sizes: ['XSM', 'SML', 'MED', 'LRG', 'XLG', '2XL'], // no 3XL, 4XL, 5XL
+    bodyWidth:  [43.5, 46,  48.5, 51,  53.5, 56],
+    bodyLength: [64,   65,  66,   67,  68,   69],
+  },
+};
+
+export const SIZE_GUIDE_NOTE = 'Measurements can vary within 2.5cm.';
+
+// The size dropdown for each product only offers sizes from its guide.
+export const sizesFor = (productId: string): SizeCode[] =>
+  SIZE_GUIDES[productId]?.sizes ?? ['XSM', 'SML', 'MED', 'LRG', 'XLG', '2XL', '3XL', '4XL', '5XL'];

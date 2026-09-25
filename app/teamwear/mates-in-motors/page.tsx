@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import { sizesFor, guideFor, type ProductKey } from "@/lib/merch/mim-size-guides";
+import { sizesFor, SIZE_GUIDES, SIZE_GUIDE_NOTE, type SizeCode } from "@/lib/merch/mim-size-guides";
 
 const BG = "#080808";
 const FG = "#f5f5f0";
@@ -17,6 +17,8 @@ const COLLECTION_DATE = "Wednesday 28 October 2026";
 const TANK_PRICE = 39.0;
 const TEE_PRICE = 45.0;
 
+type ProductKey = "staple-tee" | "maple-tee" | "staple-tank" | "maple-tank";
+
 const PRODUCTS: Record<ProductKey, { label: string; price: number; front: string; back: string }> = {
   "staple-tee": {
     label: "Staple Tee",
@@ -30,17 +32,17 @@ const PRODUCTS: Record<ProductKey, { label: string; price: number; front: string
     front: "/teamwear/mim-tee-front-maple.png",
     back: "/teamwear/mim-tee-back-maple.png",
   },
-  "classic-tank": {
-    label: "Classic Tank",
+  "staple-tank": {
+    label: "Staple Tank",
     price: TANK_PRICE,
-    front: "/teamwear/mim-tank-front-classic.png",
-    back: "/teamwear/mim-tank-back-classic.png",
+    front: "/teamwear/mim-tank-front-staple.png",
+    back: "/teamwear/mim-tank-back-staple.png",
   },
-  "martina-tank": {
-    label: "Martina Tank",
+  "maple-tank": {
+    label: "Maple Tank",
     price: TANK_PRICE,
-    front: "/teamwear/mim-tank-front-martina.png",
-    back: "/teamwear/mim-tank-back-martina.png",
+    front: "/teamwear/mim-tank-front-maple.png",
+    back: "/teamwear/mim-tank-back-maple.png",
   },
 };
 
@@ -69,22 +71,22 @@ function formatDeadline(): string {
   }).format(ORDER_CUTOFF);
 }
 
-type OrderItem = { id: string; product: ProductKey; size: string; name: string };
-type Customer = { fullName: string; email: string; phone: string; notes: string };
-
 function pad(n: number) {
   return String(n).padStart(2, "0");
 }
 
+type OrderItem = { id: string; product: ProductKey; size: SizeCode; name: string };
+type Customer = { fullName: string; email: string; phone: string; notes: string };
+
 function SizeChartModal({ pkey, onClose }: { pkey: ProductKey; onClose: () => void }) {
-  const guide = guideFor(pkey);
-  const product = PRODUCTS[pkey];
+  const guide = SIZE_GUIDES[pkey];
+  if (!guide) return null;
 
   return (
     <div
       onClick={onClose}
       style={{
-        position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)",
+        position: "fixed", inset: 0, background: "rgba(0,0,0,0.88)",
         display: "flex", alignItems: "center", justifyContent: "center",
         zIndex: 9999, padding: "24px",
       }}
@@ -93,47 +95,57 @@ function SizeChartModal({ pkey, onClose }: { pkey: ProductKey; onClose: () => vo
         onClick={(e) => e.stopPropagation()}
         style={{
           background: "#111", border: `1px solid ${BORDER_MID}`,
-          maxWidth: "480px", width: "100%", padding: "28px",
+          maxWidth: "520px", width: "100%", padding: "28px",
           maxHeight: "90vh", overflowY: "auto",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
           <div style={{ fontSize: "13px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" }}>
-            Size guide — {product.label}
+            Size guide — {guide.title}
           </div>
           <button
             type="button"
             onClick={onClose}
-            style={{ background: "none", border: "none", color: FG, fontSize: "20px", cursor: "pointer", padding: "0 4px", fontFamily: FONT, lineHeight: 1 }}
+            style={{ background: "none", border: "none", color: FG, fontSize: "22px", cursor: "pointer", padding: "0 4px", fontFamily: FONT, lineHeight: 1 }}
           >
             ×
           </button>
         </div>
-        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.45)", margin: "0 0 18px" }}>
-          Garment measurements (cm)
+        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)", margin: "0 0 20px" }}>
+          Garment measurements (cm) — armpit to armpit / high point shoulder to hem
         </p>
-        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
-          <thead>
-            <tr style={{ borderBottom: `1px solid ${BORDER_MID}` }}>
-              {["Size", "Body Width (cm)", "Body Length (cm)"].map((h) => (
-                <th key={h} style={{ padding: "6px 8px", textAlign: "left", color: "rgba(255,255,255,0.45)", fontWeight: 600, fontSize: "10px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                  {h}
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
+            <thead>
+              <tr style={{ borderBottom: `1px solid ${BORDER_MID}` }}>
+                <th style={{ padding: "6px 10px", textAlign: "left", color: "rgba(255,255,255,0.4)", fontWeight: 600, fontSize: "10px", letterSpacing: "0.1em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+                  Measurement
                 </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {guide.chart.map(({ size, width, length }) => (
-              <tr key={size} style={{ borderBottom: `1px solid ${BORDER}` }}>
-                <td style={{ padding: "8px 8px", fontWeight: 700, color: LIME }}>{size}</td>
-                <td style={{ padding: "8px 8px", color: "rgba(255,255,255,0.7)" }}>{width}</td>
-                <td style={{ padding: "8px 8px", color: "rgba(255,255,255,0.7)" }}>{length}</td>
+                {guide.sizes.map((s) => (
+                  <th key={s} style={{ padding: "6px 10px", textAlign: "center", color: LIME, fontWeight: 700, fontSize: "11px", letterSpacing: "0.06em", whiteSpace: "nowrap" }}>
+                    {s}
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <div style={{ marginTop: "14px", fontSize: "11px", color: "rgba(255,255,255,0.4)", lineHeight: 1.6 }}>
-          {guide.note}
+            </thead>
+            <tbody>
+              <tr style={{ borderBottom: `1px solid ${BORDER}` }}>
+                <td style={{ padding: "10px 10px", color: "rgba(255,255,255,0.55)", whiteSpace: "nowrap", fontSize: "12px" }}>Body Width (cm)</td>
+                {guide.bodyWidth.map((v, i) => (
+                  <td key={i} style={{ padding: "10px 10px", textAlign: "center", color: FG }}>{v}</td>
+                ))}
+              </tr>
+              <tr>
+                <td style={{ padding: "10px 10px", color: "rgba(255,255,255,0.55)", whiteSpace: "nowrap", fontSize: "12px" }}>Body Length (cm)</td>
+                {guide.bodyLength.map((v, i) => (
+                  <td key={i} style={{ padding: "10px 10px", textAlign: "center", color: FG }}>{v}</td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style={{ marginTop: "16px", fontSize: "11px", color: "rgba(255,255,255,0.35)", lineHeight: 1.6 }}>
+          {SIZE_GUIDE_NOTE} When between sizes, size up.
         </div>
       </div>
     </div>
@@ -144,7 +156,7 @@ function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<Ord
   const p = PRODUCTS[pkey];
   const sizes = sizesFor(pkey);
   const [hovered, setHovered] = useState(false);
-  const [size, setSize] = useState("");
+  const [size, setSize] = useState<SizeCode | "">("");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [sizeChartOpen, setSizeChartOpen] = useState(false);
@@ -152,7 +164,7 @@ function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<Ord
   function handleAdd() {
     if (!size) { setError("Select a size"); return; }
     if (!name.trim()) { setError("Enter the name to print"); return; }
-    onAdd({ product: pkey, size, name: name.trim() });
+    onAdd({ product: pkey, size: size as SizeCode, name: name.trim() });
     setSize("");
     setName("");
     setError("");
@@ -160,14 +172,7 @@ function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<Ord
 
   return (
     <>
-      <div
-        style={{
-          background: CARD_BG,
-          border: `1px solid ${BORDER}`,
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+      <div style={{ background: CARD_BG, border: `1px solid ${BORDER}`, display: "flex", flexDirection: "column" }}>
         {/* Image */}
         <div
           style={{ position: "relative", aspectRatio: "1 / 1", overflow: "hidden", cursor: "pointer" }}
@@ -180,7 +185,7 @@ function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<Ord
             style={{
               position: "absolute", inset: 0, width: "100%", height: "100%",
               objectFit: "contain", transition: "opacity 0.35s",
-              opacity: hovered ? 0 : 1, background: "#111",
+              opacity: hovered ? 0 : 1, background: "#fff",
             }}
           />
           <img
@@ -189,14 +194,14 @@ function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<Ord
             style={{
               position: "absolute", inset: 0, width: "100%", height: "100%",
               objectFit: "contain", transition: "opacity 0.35s",
-              opacity: hovered ? 1 : 0, background: "#111",
+              opacity: hovered ? 1 : 0, background: "#fff",
             }}
           />
           <div
             style={{
               position: "absolute", bottom: "10px", right: "10px",
               fontSize: "10px", fontWeight: 700, letterSpacing: "0.14em",
-              textTransform: "uppercase", color: "rgba(255,255,255,0.4)",
+              textTransform: "uppercase", color: "rgba(0,0,0,0.3)",
               pointerEvents: "none",
             }}
           >
@@ -207,17 +212,13 @@ function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<Ord
         {/* Details */}
         <div style={{ padding: "20px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
-            <div style={{ fontSize: "16px", fontWeight: 700, letterSpacing: "-0.02em" }}>
-              {p.label}
-            </div>
-            <div style={{ fontSize: "18px", fontWeight: 700, color: LIME }}>
-              ${p.price.toFixed(2)}
-            </div>
+            <div style={{ fontSize: "16px", fontWeight: 700, letterSpacing: "-0.02em" }}>{p.label}</div>
+            <div style={{ fontSize: "18px", fontWeight: 700, color: LIME }}>${p.price.toFixed(2)}</div>
           </div>
 
-          {/* Size selector */}
+          {/* Size */}
           <div style={{ marginBottom: "12px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
               <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)" }}>
                 Size
               </div>
@@ -225,13 +226,13 @@ function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<Ord
                 type="button"
                 onClick={() => setSizeChartOpen(true)}
                 style={{
-                  background: "none", border: "none", color: "rgba(184,244,0,0.75)",
-                  fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em",
-                  textTransform: "uppercase", fontFamily: FONT, cursor: "pointer",
-                  padding: 0, textDecoration: "underline", textUnderlineOffset: "2px",
+                  background: "none", border: "none", color: "rgba(184,244,0,0.8)",
+                  fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
+                  fontFamily: FONT, cursor: "pointer", padding: 0,
+                  textDecoration: "underline", textUnderlineOffset: "2px",
                 }}
               >
-                Size guide
+                Size chart →
               </button>
             </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
@@ -241,12 +242,12 @@ function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<Ord
                   type="button"
                   onClick={() => { setSize(s); setError(""); }}
                   style={{
-                    padding: "5px 10px", fontSize: "12px", fontWeight: 600,
-                    fontFamily: FONT,
+                    padding: "5px 10px", fontSize: "11px", fontWeight: 600, fontFamily: FONT,
                     border: `1px solid ${size === s ? LIME : BORDER_MID}`,
                     background: size === s ? LIME : "transparent",
                     color: size === s ? "#000" : FG,
-                    cursor: "pointer", borderRadius: "4px", transition: "all 0.15s",
+                    cursor: "pointer", borderRadius: "4px", transition: "all 0.12s",
+                    letterSpacing: "0.04em",
                   }}
                 >
                   {s}
@@ -287,7 +288,6 @@ function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<Ord
               fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase",
               fontFamily: FONT, background: LIME, color: "#000",
               border: "none", cursor: "pointer", borderRadius: "4px",
-              transition: "opacity 0.15s",
             }}
           >
             Add to order
@@ -387,7 +387,7 @@ export default function MatesInMotorsPage() {
         <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: LIME, marginBottom: "20px" }}>
           Mates in Motors · Team Store
         </div>
-        <h1 style={{ fontSize: "clamp(48px,9vw,96px)", fontWeight: 900, letterSpacing: "-0.05em", lineHeight: 0.88, textTransform: "uppercase", margin: "0 0 32px" }}>
+        <h1 style={{ fontSize: "clamp(48px,9vw,96px)", fontWeight: 900, letterSpacing: "-0.05em", lineHeight: 0.88, textTransform: "uppercase", margin: "0 0 24px" }}>
           Team<br />Gear<span style={{ color: LIME }}>.</span>
         </h1>
         <p style={{ fontSize: "15px", lineHeight: 1.7, color: "rgba(255,255,255,0.65)", maxWidth: "520px", margin: "0 0 40px" }}>
@@ -395,7 +395,7 @@ export default function MatesInMotorsPage() {
         </p>
 
         {/* Countdown */}
-        <div style={{ background: CARD_BG, border: `1px solid ${BORDER}`, padding: "24px 28px", marginBottom: "48px", display: "inline-flex", flexDirection: "column", gap: "10px" }}>
+        <div style={{ background: CARD_BG, border: `1px solid ${BORDER}`, padding: "24px 28px", marginBottom: "52px", display: "inline-flex", flexDirection: "column", gap: "10px" }}>
           <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)" }}>
             Order deadline
           </div>
@@ -411,13 +411,13 @@ export default function MatesInMotorsPage() {
               </div>
             ))}
           </div>
-          <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.5)" }}>
+          <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.45)" }}>
             Closes {deadlineLabel}
           </div>
         </div>
       </div>
 
-      {/* Products grid */}
+      {/* Products */}
       <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px 60px" }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "1px", background: BORDER }}>
           {(Object.keys(PRODUCTS) as ProductKey[]).map((key) => (
@@ -432,39 +432,37 @@ export default function MatesInMotorsPage() {
       {items.length > 0 && (
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px 80px" }}>
           <div style={{ background: CARD_BG, border: `1px solid ${BORDER_MID}` }}>
-            <div style={{ padding: "24px 28px", borderBottom: `1px solid ${BORDER}` }}>
+            <div style={{ padding: "20px 28px", borderBottom: `1px solid ${BORDER}` }}>
               <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)" }}>
                 Your order ({items.length} {items.length === 1 ? "item" : "items"})
               </div>
             </div>
-            <div>
-              {items.map((item) => (
-                <div
-                  key={item.id}
-                  style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 28px", borderBottom: `1px solid ${BORDER}`, gap: "12px" }}
-                >
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <span style={{ fontSize: "14px", fontWeight: 600 }}>{PRODUCTS[item.product].label}</span>
-                    <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.55)", marginLeft: "10px" }}>
-                      {item.size} · {item.name}
-                    </span>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "16px", flexShrink: 0 }}>
-                    <span style={{ fontSize: "14px", fontWeight: 700 }}>${PRODUCTS[item.product].price.toFixed(2)}</span>
-                    <button
-                      type="button"
-                      onClick={() => removeItem(item.id)}
-                      style={{ background: "none", border: "none", color: "rgba(255,255,255,0.35)", cursor: "pointer", fontSize: "18px", lineHeight: 1, padding: 0, fontFamily: FONT }}
-                    >
-                      ×
-                    </button>
-                  </div>
+            {items.map((item) => (
+              <div
+                key={item.id}
+                style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "13px 28px", borderBottom: `1px solid ${BORDER}`, gap: "12px" }}
+              >
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <span style={{ fontSize: "14px", fontWeight: 600 }}>{PRODUCTS[item.product].label}</span>
+                  <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.5)", marginLeft: "10px" }}>
+                    {item.size} · {item.name}
+                  </span>
                 </div>
-              ))}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 28px", borderBottom: `1px solid ${BORDER_MID}` }}>
-                <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.55)" }}>Total incl. GST</span>
-                <span style={{ fontSize: "18px", fontWeight: 900, letterSpacing: "-0.02em" }}>${orderTotal.toFixed(2)} NZD</span>
+                <div style={{ display: "flex", alignItems: "center", gap: "16px", flexShrink: 0 }}>
+                  <span style={{ fontSize: "14px", fontWeight: 700 }}>${PRODUCTS[item.product].price.toFixed(2)}</span>
+                  <button
+                    type="button"
+                    onClick={() => removeItem(item.id)}
+                    style={{ background: "none", border: "none", color: "rgba(255,255,255,0.3)", cursor: "pointer", fontSize: "20px", lineHeight: 1, padding: 0, fontFamily: FONT }}
+                  >
+                    ×
+                  </button>
+                </div>
               </div>
+            ))}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "14px 28px", borderBottom: `1px solid ${BORDER_MID}` }}>
+              <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.5)" }}>Total incl. GST</span>
+              <span style={{ fontSize: "20px", fontWeight: 900, letterSpacing: "-0.03em" }}>${orderTotal.toFixed(2)} NZD</span>
             </div>
 
             {/* Customer details */}
@@ -474,9 +472,9 @@ export default function MatesInMotorsPage() {
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "12px", marginBottom: "12px" }}>
                 {([
-                  { key: "fullName", label: "Full name", type: "text", placeholder: "Jane Smith" },
-                  { key: "email", label: "Email", type: "email", placeholder: "jane@example.com" },
-                  { key: "phone", label: "Phone", type: "tel", placeholder: "+64 21 000 0000" },
+                  { key: "fullName", label: "Full name",  type: "text",  placeholder: "Jane Smith" },
+                  { key: "email",    label: "Email",       type: "email", placeholder: "jane@example.com" },
+                  { key: "phone",    label: "Phone",       type: "tel",   placeholder: "+64 21 000 0000" },
                 ] as const).map(({ key, label, type, placeholder }) => (
                   <div key={key}>
                     <label style={{ display: "block", fontSize: "10px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)", marginBottom: "6px" }}>
@@ -505,7 +503,7 @@ export default function MatesInMotorsPage() {
                   value={customer.notes}
                   onChange={(e) => setCustomer((c) => ({ ...c, notes: e.target.value }))}
                   rows={2}
-                  placeholder="Any special requests or questions"
+                  placeholder="Any questions or special requests"
                   style={{
                     width: "100%", boxSizing: "border-box",
                     padding: "10px 12px", fontSize: "14px",
@@ -516,7 +514,7 @@ export default function MatesInMotorsPage() {
               </div>
 
               {checkoutError && (
-                <div style={{ fontSize: "13px", color: "#ff5555", marginBottom: "14px", padding: "12px", background: "rgba(255,85,85,0.08)", border: "1px solid rgba(255,85,85,0.2)" }}>
+                <div style={{ fontSize: "13px", color: "#ff5555", marginBottom: "14px", padding: "12px", background: "rgba(255,85,85,0.07)", border: "1px solid rgba(255,85,85,0.18)" }}>
                   {checkoutError}
                 </div>
               )}
@@ -529,14 +527,15 @@ export default function MatesInMotorsPage() {
                   style={{
                     padding: "14px 32px", fontSize: "13px",
                     fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase",
-                    fontFamily: FONT, background: loading ? "rgba(184,244,0,0.5)" : LIME, color: "#000",
+                    fontFamily: FONT, background: loading ? "rgba(184,244,0,0.45)" : LIME, color: "#000",
                     border: "none", cursor: loading ? "not-allowed" : "pointer", borderRadius: "4px",
                   }}
                 >
                   {loading ? "Redirecting…" : `Pay $${orderTotal.toFixed(2)} NZD`}
                 </button>
-                <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)", lineHeight: 1.5 }}>
-                  Secure checkout via Stripe.<br />Collection {COLLECTION_DATE} — no freight.
+                <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.38)", lineHeight: 1.55 }}>
+                  Secure checkout via Stripe.<br />
+                  Collection {COLLECTION_DATE} — no freight.
                 </div>
               </div>
             </div>
