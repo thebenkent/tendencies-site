@@ -110,12 +110,12 @@ function SizeChartModal({ pkey, onClose }: { pkey: ProductKey; onClose: () => vo
           </button>
         </div>
         <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.45)", margin: "0 0 18px" }}>
-          Body measurements (cm) — not garment measurements
+          Garment measurements (cm)
         </p>
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
           <thead>
             <tr style={{ borderBottom: `1px solid ${BORDER_MID}` }}>
-              {["Size", "Chest (cm)", "Length (cm)"].map((h) => (
+              {["Size", "Body Width (cm)", "Body Length (cm)"].map((h) => (
                 <th key={h} style={{ padding: "6px 8px", textAlign: "left", color: "rgba(255,255,255,0.45)", fontWeight: 600, fontSize: "10px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
                   {h}
                 </th>
@@ -123,10 +123,10 @@ function SizeChartModal({ pkey, onClose }: { pkey: ProductKey; onClose: () => vo
             </tr>
           </thead>
           <tbody>
-            {guide.chart.map(({ size, chest, length }) => (
+            {guide.chart.map(({ size, width, length }) => (
               <tr key={size} style={{ borderBottom: `1px solid ${BORDER}` }}>
                 <td style={{ padding: "8px 8px", fontWeight: 700, color: LIME }}>{size}</td>
-                <td style={{ padding: "8px 8px", color: "rgba(255,255,255,0.7)" }}>{chest}</td>
+                <td style={{ padding: "8px 8px", color: "rgba(255,255,255,0.7)" }}>{width}</td>
                 <td style={{ padding: "8px 8px", color: "rgba(255,255,255,0.7)" }}>{length}</td>
               </tr>
             ))}
