@@ -50,31 +50,30 @@ const GUIDES: Record<ProductKey, ProductSizeGuide> = {
     note: NOTE,
   },
 
-  // AS Colour Classic Tank 5073 — ⚠️ update measurements from 5073_SIZE_GUIDE
+  // AS Colour Mens Classic Tank 5073 — S through 3XL (no XSM)
   "classic-tank": {
-    sizes: ["XSM", "S", "M", "L", "XL", "2XL", "3XL"],
+    sizes: ["S", "M", "L", "XL", "2XL", "3XL"],
     chart: [
-      { size: "XSM", width: 45,   length: 69 },
-      { size: "S",   width: 49,   length: 72 },
-      { size: "M",   width: 53,   length: 75 },
-      { size: "L",   width: 57,   length: 78 },
-      { size: "XL",  width: 61,   length: 81 },
-      { size: "2XL", width: 65,   length: 83 },
-      { size: "3XL", width: 69,   length: 85 },
+      { size: "S",   width: 47.5, length: 70   },
+      { size: "M",   width: 52,   length: 74   },
+      { size: "L",   width: 56.5, length: 77.5 },
+      { size: "XL",  width: 61,   length: 81   },
+      { size: "2XL", width: 65.5, length: 84   },
+      { size: "3XL", width: 70,   length: 87   },
     ],
     note: NOTE,
   },
 
-  // AS Colour Martina Tank 4090 — ⚠️ update measurements from 4090_SIZE_GUIDE
+  // AS Colour Wo's Martina Tank 4090 — XSM through 2XL
   "martina-tank": {
     sizes: ["XSM", "S", "M", "L", "XL", "2XL"],
     chart: [
-      { size: "XSM", width: 41, length: 57 },
-      { size: "S",   width: 44, length: 59 },
-      { size: "M",   width: 47, length: 61 },
-      { size: "L",   width: 50, length: 63 },
-      { size: "XL",  width: 53, length: 65 },
-      { size: "2XL", width: 56, length: 67 },
+      { size: "XSM", width: 43.5, length: 60 },
+      { size: "S",   width: 46,   length: 61 },
+      { size: "M",   width: 48.5, length: 62 },
+      { size: "L",   width: 51,   length: 63 },
+      { size: "XL",  width: 53.5, length: 64 },
+      { size: "2XL", width: 56,   length: 65 },
     ],
     note: NOTE,
   },
