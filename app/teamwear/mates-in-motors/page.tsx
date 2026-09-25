@@ -15,7 +15,7 @@ const ORDER_CUTOFF = new Date("2026-10-11T21:00:00+13:00");
 const COLLECTION_DATE = "Wednesday 28 October 2026";
 
 const TANK_PRICE = 39.0;
-const TEE_PRICE = 45.0;
+const TEE_PRICE = 49.0;
 
 type ProductKey = "staple-tee" | "maple-tee" | "staple-tank" | "maple-tank";
 
@@ -373,7 +373,7 @@ export default function MatesInMotorsPage() {
             Orders<br />Closed<span style={{ color: LIME }}>.</span>
           </h1>
           <p style={{ fontSize: "15px", lineHeight: 1.65, color: "rgba(255,255,255,0.65)", margin: 0 }}>
-            The order window has closed. Collection is on {COLLECTION_DATE}.
+            The order window has closed. Orders will be delivered to Mates in Motors for collection on {COLLECTION_DATE}.
           </p>
         </div>
       </main>
@@ -391,7 +391,7 @@ export default function MatesInMotorsPage() {
           Team<br />Gear<span style={{ color: LIME }}>.</span>
         </h1>
         <p style={{ fontSize: "15px", lineHeight: 1.7, color: "rgba(255,255,255,0.65)", maxWidth: "520px", margin: "0 0 40px" }}>
-          Choose your style, pick your size, and enter the name to be printed. Secure checkout via Stripe. Collection at Mates in Motors on {COLLECTION_DATE} — no freight.
+          Choose your style, pick your size, and enter the name to be printed. Secure checkout via Stripe. Free delivery — all orders delivered together to Mates in Motors for collection on 28 October 2026.
         </p>
 
         {/* Countdown */}
@@ -535,7 +535,7 @@ export default function MatesInMotorsPage() {
                 </button>
                 <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.38)", lineHeight: 1.55 }}>
                   Secure checkout via Stripe.<br />
-                  Collection {COLLECTION_DATE} — no freight.
+                  Free delivery — all orders delivered together<br />to Mates in Motors for collection on 28 October 2026.
                 </div>
               </div>
             </div>

@@ -79,7 +79,7 @@ export default function MIMSuccessPage() {
               flexShrink: 0,
             }}
           />
-          Collect at Mates in Motors on Wednesday 28 October 2026. No freight.
+          Free delivery — all orders delivered together to Mates in Motors for collection on Wednesday 28 October 2026.
         </div>
 
         <div style={{ marginTop: "40px" }}>

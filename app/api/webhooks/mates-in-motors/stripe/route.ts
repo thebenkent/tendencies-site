@@ -92,8 +92,8 @@ export async function POST(req: Request) {
             </p>
           </div>
           <div style="border:1px solid rgba(184,244,0,0.25); background:rgba(184,244,0,0.06); padding:18px; margin-bottom:28px;">
-            <strong style="color:#b8f400;">Collection:</strong>
-            <span style="color:rgba(255,255,255,0.72);"> Collect at Mates in Motors on Wednesday 28 October 2026. No freight.</span>
+            <strong style="color:#b8f400;">Delivery:</strong>
+            <span style="color:rgba(255,255,255,0.72);"> Free delivery — all orders delivered together to Mates in Motors for collection on Wednesday 28 October 2026.</span>
           </div>
           <p style="font-size:13px; line-height:1.6; color:rgba(255,255,255,0.5); margin:0;">
             If anything looks wrong, reply to this email and we'll sort it out.

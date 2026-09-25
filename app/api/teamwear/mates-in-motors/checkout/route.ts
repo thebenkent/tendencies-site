@@ -9,8 +9,8 @@ const ORDER_CUTOFF = new Date("2026-10-11T21:00:00+13:00");
 type ProductKey = "staple-tee" | "maple-tee" | "staple-tank" | "maple-tank";
 
 const PRICES_CENTS: Record<ProductKey, number> = {
-  "staple-tee":  4500,
-  "maple-tee":   4500,
+  "staple-tee":  4900,
+  "maple-tee":   4900,
   "staple-tank": 3900,
   "maple-tank":  3900,
 };
