@@ -29,6 +29,18 @@ type Customer = { fullName: string; email: string; phone: string; notes: string 
 
 const trunc = (s: string, max = 490) => (s.length > max ? s.slice(0, max) + "…" : s);
 
+function getBaseUrl(req: Request): string {
+  // Prefer the forwarded host so preview deploys redirect back to themselves
+  const forwarded = req.headers.get("x-forwarded-host");
+  if (forwarded) {
+    const proto = req.headers.get("x-forwarded-proto") || "https";
+    return `${proto}://${forwarded}`;
+  }
+  const origin = new URL(req.url).origin;
+  if (origin && origin !== "null") return origin;
+  return process.env.NEXT_PUBLIC_SITE_URL || "https://www.tendencies.co.nz";
+}
+
 export async function POST(req: Request) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -78,7 +90,7 @@ export async function POST(req: Request) {
       items.map((i) => `${PRODUCT_LABELS[i.product]}/${i.size}/${i.name.trim()}`).join(";")
     );
 
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.tendencies.co.nz";
+    const baseUrl = getBaseUrl(req);
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
