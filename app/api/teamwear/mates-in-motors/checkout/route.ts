@@ -1,21 +1,28 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
+import { sizesFor, type ProductKey } from "@/lib/merch/mim-size-guides";
 
-// ⚠️ PLACEHOLDER DEADLINE — must match app/teamwear/mates-in-motors/page.tsx
-const ORDER_CUTOFF = new Date("2026-10-12T23:59:00+13:00");
+// Sunday 11 October 2026, 9:00 pm NZDT — must match page.tsx
+const ORDER_CUTOFF = new Date("2026-10-11T21:00:00+13:00");
 
-// ⚠️ Confirm tee price before going live
-const PRICES_CENTS: Record<string, number> = {
-  "Staple Tee": 4200,
-  "Maple Tee": 4200,
-  "Staple Tank": 3900,
-  "Maple Tank": 3900,
+// Prices are authoritative here — never trust values from the browser
+const PRICES_CENTS: Record<ProductKey, number> = {
+  "staple-tee": 4500,
+  "maple-tee": 4500,
+  "staple-tank": 3900,
+  "maple-tank": 3900,
 };
 
-const VALID_PRODUCTS = new Set(Object.keys(PRICES_CENTS));
-const VALID_SIZES = new Set(["XSM", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"]);
+const PRODUCT_LABELS: Record<ProductKey, string> = {
+  "staple-tee": "Staple Tee",
+  "maple-tee": "Maple Tee",
+  "staple-tank": "Staple Tank",
+  "maple-tank": "Maple Tank",
+};
 
-type OrderItem = { product: string; size: string; name: string };
+const VALID_PRODUCTS = new Set<ProductKey>(["staple-tee", "maple-tee", "staple-tank", "maple-tank"]);
+
+type OrderItem = { product: ProductKey; size: string; name: string };
 type Customer = { fullName: string; email: string; phone: string; notes: string };
 
 const trunc = (s: string, max = 490) => (s.length > max ? s.slice(0, max) + "…" : s);
@@ -37,12 +44,17 @@ export async function POST(req: Request) {
     if (!items || items.length === 0) {
       return NextResponse.json({ error: "No items in order." }, { status: 400 });
     }
+
     for (const item of items) {
       if (!VALID_PRODUCTS.has(item.product)) {
         return NextResponse.json({ error: `Unknown product: ${item.product}` }, { status: 400 });
       }
-      if (!VALID_SIZES.has(item.size)) {
-        return NextResponse.json({ error: `Invalid size: ${item.size}` }, { status: 400 });
+      const allowed = sizesFor(item.product);
+      if (!allowed.includes(item.size)) {
+        return NextResponse.json(
+          { error: `Size ${item.size} is not available for ${PRODUCT_LABELS[item.product]}.` },
+          { status: 400 }
+        );
       }
       if (!item.name?.trim()) {
         return NextResponse.json({ error: "Each item must have a name to print." }, { status: 400 });
@@ -53,7 +65,7 @@ export async function POST(req: Request) {
       price_data: {
         currency: "nzd",
         product_data: {
-          name: `MIM ${item.product} — ${item.size} / ${item.name.trim()}`,
+          name: `MIM ${PRODUCT_LABELS[item.product]} — ${item.size} / ${item.name.trim()}`,
         },
         unit_amount: PRICES_CENTS[item.product],
       },
@@ -61,7 +73,7 @@ export async function POST(req: Request) {
     }));
 
     const orderSummary = trunc(
-      items.map((i) => `${i.product}/${i.size}/${i.name.trim()}`).join(";")
+      items.map((i) => `${PRODUCT_LABELS[i.product]}/${i.size}/${i.name.trim()}`).join(";")
     );
 
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.tendencies.co.nz";

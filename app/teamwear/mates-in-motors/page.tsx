@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
+import { sizesFor, guideFor, type ProductKey } from "@/lib/merch/mim-size-guides";
 
 const BG = "#080808";
 const FG = "#f5f5f0";
@@ -9,18 +10,12 @@ const BORDER = "rgba(255,255,255,0.08)";
 const BORDER_MID = "rgba(255,255,255,0.12)";
 const FONT = "Helvetica, Arial, sans-serif";
 
-// ⚠️ PLACEHOLDER DEADLINE — confirm and update before launch
-// Currently set to: Sunday 12 October 2026, 11:59 pm NZDT
-const ORDER_CUTOFF = new Date("2026-10-12T23:59:00+13:00");
+// Sunday 11 October 2026, 9:00 pm NZDT
+const ORDER_CUTOFF = new Date("2026-10-11T21:00:00+13:00");
 const COLLECTION_DATE = "Wednesday 28 October 2026";
 
-// ⚠️ Confirm tee price — not specified in brief (tanks confirmed $39)
-const TANK_PRICE = 39;
-const TEE_PRICE = 42;
-
-const SIZES = ["XSM", "S", "M", "L", "XL", "2XL", "3XL", "4XL", "5XL"];
-
-type ProductKey = "staple-tee" | "maple-tee" | "staple-tank" | "maple-tank";
+const TANK_PRICE = 39.0;
+const TEE_PRICE = 45.0;
 
 const PRODUCTS: Record<ProductKey, { label: string; price: number; front: string; back: string }> = {
   "staple-tee": {
@@ -75,174 +70,15 @@ function formatDeadline(): string {
 }
 
 type OrderItem = { id: string; product: ProductKey; size: string; name: string };
-
 type Customer = { fullName: string; email: string; phone: string; notes: string };
 
 function pad(n: number) {
   return String(n).padStart(2, "0");
 }
 
-function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<OrderItem, "id">) => void }) {
-  const p = PRODUCTS[pkey];
-  const [hovered, setHovered] = useState(false);
-  const [size, setSize] = useState("");
-  const [name, setName] = useState("");
-  const [error, setError] = useState("");
-
-  function handleAdd() {
-    if (!size) { setError("Select a size"); return; }
-    if (!name.trim()) { setError("Enter the name to print"); return; }
-    onAdd({ product: pkey, size, name: name.trim() });
-    setSize("");
-    setName("");
-    setError("");
-  }
-
-  return (
-    <div
-      style={{
-        background: CARD_BG,
-        border: `1px solid ${BORDER}`,
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      {/* Image */}
-      <div
-        style={{ position: "relative", aspectRatio: "1 / 1", overflow: "hidden", cursor: "pointer" }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-      >
-        <img
-          src={p.front}
-          alt={`${p.label} front`}
-          style={{
-            position: "absolute", inset: 0, width: "100%", height: "100%",
-            objectFit: "contain", transition: "opacity 0.35s",
-            opacity: hovered ? 0 : 1,
-            background: "#111",
-          }}
-        />
-        <img
-          src={p.back}
-          alt={`${p.label} back`}
-          style={{
-            position: "absolute", inset: 0, width: "100%", height: "100%",
-            objectFit: "contain", transition: "opacity 0.35s",
-            opacity: hovered ? 1 : 0,
-            background: "#111",
-          }}
-        />
-        <div
-          style={{
-            position: "absolute", bottom: "10px", right: "10px",
-            fontSize: "10px", fontWeight: 700, letterSpacing: "0.14em",
-            textTransform: "uppercase", color: "rgba(255,255,255,0.4)",
-            pointerEvents: "none",
-          }}
-        >
-          {hovered ? "back" : "front"}
-        </div>
-      </div>
-
-      {/* Details */}
-      <div style={{ padding: "20px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
-          <div>
-            <div style={{ fontSize: "16px", fontWeight: 700, letterSpacing: "-0.02em", marginBottom: "2px" }}>
-              {p.label}
-            </div>
-          </div>
-          <div style={{ fontSize: "18px", fontWeight: 700, color: LIME }}>
-            ${p.price.toFixed(2)}
-          </div>
-        </div>
-
-        {/* Size selector */}
-        <div style={{ marginBottom: "12px" }}>
-          <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)", marginBottom: "8px" }}>
-            Size
-          </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-            {SIZES.map((s) => (
-              <button
-                key={s}
-                type="button"
-                onClick={() => { setSize(s); setError(""); }}
-                style={{
-                  padding: "5px 10px",
-                  fontSize: "12px",
-                  fontWeight: 600,
-                  fontFamily: FONT,
-                  border: `1px solid ${size === s ? LIME : BORDER_MID}`,
-                  background: size === s ? LIME : "transparent",
-                  color: size === s ? "#000" : FG,
-                  cursor: "pointer",
-                  borderRadius: "4px",
-                  transition: "all 0.15s",
-                }}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Name to print */}
-        <div style={{ marginBottom: "14px" }}>
-          <label style={{ display: "block", fontSize: "10px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)", marginBottom: "6px" }}>
-            Name to print
-          </label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => { setName(e.target.value); setError(""); }}
-            placeholder="e.g. Johnson"
-            maxLength={40}
-            style={{
-              width: "100%", boxSizing: "border-box",
-              padding: "10px 12px", fontSize: "14px",
-              background: "#161616", border: `1px solid ${BORDER_MID}`,
-              color: FG, fontFamily: FONT, borderRadius: "4px",
-              outline: "none",
-            }}
-          />
-        </div>
-
-        {error && (
-          <div style={{ fontSize: "12px", color: "#ff5555", marginBottom: "10px" }}>{error}</div>
-        )}
-
-        <button
-          type="button"
-          onClick={handleAdd}
-          style={{
-            width: "100%", padding: "12px", fontSize: "12px",
-            fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase",
-            fontFamily: FONT, background: LIME, color: "#000",
-            border: "none", cursor: "pointer", borderRadius: "4px",
-            transition: "opacity 0.15s",
-          }}
-        >
-          Add to order
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function SizeChartModal({ onClose }: { onClose: () => void }) {
-  const rows = [
-    ["XSM", "6", "32–34\"", "24–26\""],
-    ["S", "8–10", "34–36\"", "26–28\""],
-    ["M", "12–14", "36–38\"", "28–30\""],
-    ["L", "16–18", "38–40\"", "30–32\""],
-    ["XL", "20", "40–42\"", "32–34\""],
-    ["2XL", "22", "42–44\"", "34–36\""],
-    ["3XL", "24", "44–46\"", "36–38\""],
-    ["4XL", "26", "46–48\"", "38–40\""],
-    ["5XL", "28", "48–50\"", "40–42\""],
-  ];
+function SizeChartModal({ pkey, onClose }: { pkey: ProductKey; onClose: () => void }) {
+  const guide = guideFor(pkey);
+  const product = PRODUCTS[pkey];
 
   return (
     <div
@@ -261,22 +97,25 @@ function SizeChartModal({ onClose }: { onClose: () => void }) {
           maxHeight: "90vh", overflowY: "auto",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
           <div style={{ fontSize: "13px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase" }}>
-            Size guide
+            Size guide — {product.label}
           </div>
           <button
             type="button"
             onClick={onClose}
-            style={{ background: "none", border: "none", color: FG, fontSize: "20px", cursor: "pointer", padding: "0 4px", fontFamily: FONT }}
+            style={{ background: "none", border: "none", color: FG, fontSize: "20px", cursor: "pointer", padding: "0 4px", fontFamily: FONT, lineHeight: 1 }}
           >
             ×
           </button>
         </div>
+        <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.45)", margin: "0 0 18px" }}>
+          Body measurements (cm) — not garment measurements
+        </p>
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>
           <thead>
             <tr style={{ borderBottom: `1px solid ${BORDER_MID}` }}>
-              {["Size", "AU/NZ", "Chest", "Waist"].map((h) => (
+              {["Size", "Chest (cm)", "Length (cm)"].map((h) => (
                 <th key={h} style={{ padding: "6px 8px", textAlign: "left", color: "rgba(255,255,255,0.45)", fontWeight: 600, fontSize: "10px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
                   {h}
                 </th>
@@ -284,35 +123,194 @@ function SizeChartModal({ onClose }: { onClose: () => void }) {
             </tr>
           </thead>
           <tbody>
-            {rows.map(([sz, au, chest, waist]) => (
-              <tr key={sz} style={{ borderBottom: `1px solid ${BORDER}` }}>
-                <td style={{ padding: "8px 8px", fontWeight: 700, color: LIME }}>{sz}</td>
-                <td style={{ padding: "8px 8px", color: "rgba(255,255,255,0.7)" }}>{au}</td>
+            {guide.chart.map(({ size, chest, length }) => (
+              <tr key={size} style={{ borderBottom: `1px solid ${BORDER}` }}>
+                <td style={{ padding: "8px 8px", fontWeight: 700, color: LIME }}>{size}</td>
                 <td style={{ padding: "8px 8px", color: "rgba(255,255,255,0.7)" }}>{chest}</td>
-                <td style={{ padding: "8px 8px", color: "rgba(255,255,255,0.7)" }}>{waist}</td>
+                <td style={{ padding: "8px 8px", color: "rgba(255,255,255,0.7)" }}>{length}</td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div style={{ marginTop: "16px", fontSize: "11px", color: "rgba(255,255,255,0.4)", lineHeight: 1.6 }}>
-          Measurements are approximate. When in doubt, size up.
+        <div style={{ marginTop: "14px", fontSize: "11px", color: "rgba(255,255,255,0.4)", lineHeight: 1.6 }}>
+          {guide.note}
         </div>
       </div>
     </div>
   );
 }
 
+function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<OrderItem, "id">) => void }) {
+  const p = PRODUCTS[pkey];
+  const sizes = sizesFor(pkey);
+  const [hovered, setHovered] = useState(false);
+  const [size, setSize] = useState("");
+  const [name, setName] = useState("");
+  const [error, setError] = useState("");
+  const [sizeChartOpen, setSizeChartOpen] = useState(false);
+
+  function handleAdd() {
+    if (!size) { setError("Select a size"); return; }
+    if (!name.trim()) { setError("Enter the name to print"); return; }
+    onAdd({ product: pkey, size, name: name.trim() });
+    setSize("");
+    setName("");
+    setError("");
+  }
+
+  return (
+    <>
+      <div
+        style={{
+          background: CARD_BG,
+          border: `1px solid ${BORDER}`,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        {/* Image */}
+        <div
+          style={{ position: "relative", aspectRatio: "1 / 1", overflow: "hidden", cursor: "pointer" }}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+        >
+          <img
+            src={p.front}
+            alt={`${p.label} front`}
+            style={{
+              position: "absolute", inset: 0, width: "100%", height: "100%",
+              objectFit: "contain", transition: "opacity 0.35s",
+              opacity: hovered ? 0 : 1, background: "#111",
+            }}
+          />
+          <img
+            src={p.back}
+            alt={`${p.label} back`}
+            style={{
+              position: "absolute", inset: 0, width: "100%", height: "100%",
+              objectFit: "contain", transition: "opacity 0.35s",
+              opacity: hovered ? 1 : 0, background: "#111",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute", bottom: "10px", right: "10px",
+              fontSize: "10px", fontWeight: 700, letterSpacing: "0.14em",
+              textTransform: "uppercase", color: "rgba(255,255,255,0.4)",
+              pointerEvents: "none",
+            }}
+          >
+            {hovered ? "back" : "front"}
+          </div>
+        </div>
+
+        {/* Details */}
+        <div style={{ padding: "20px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
+            <div style={{ fontSize: "16px", fontWeight: 700, letterSpacing: "-0.02em" }}>
+              {p.label}
+            </div>
+            <div style={{ fontSize: "18px", fontWeight: 700, color: LIME }}>
+              ${p.price.toFixed(2)}
+            </div>
+          </div>
+
+          {/* Size selector */}
+          <div style={{ marginBottom: "12px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "8px" }}>
+              <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)" }}>
+                Size
+              </div>
+              <button
+                type="button"
+                onClick={() => setSizeChartOpen(true)}
+                style={{
+                  background: "none", border: "none", color: "rgba(184,244,0,0.75)",
+                  fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em",
+                  textTransform: "uppercase", fontFamily: FONT, cursor: "pointer",
+                  padding: 0, textDecoration: "underline", textUnderlineOffset: "2px",
+                }}
+              >
+                Size guide
+              </button>
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+              {sizes.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => { setSize(s); setError(""); }}
+                  style={{
+                    padding: "5px 10px", fontSize: "12px", fontWeight: 600,
+                    fontFamily: FONT,
+                    border: `1px solid ${size === s ? LIME : BORDER_MID}`,
+                    background: size === s ? LIME : "transparent",
+                    color: size === s ? "#000" : FG,
+                    cursor: "pointer", borderRadius: "4px", transition: "all 0.15s",
+                  }}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Name to print */}
+          <div style={{ marginBottom: "14px" }}>
+            <label style={{ display: "block", fontSize: "10px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)", marginBottom: "6px" }}>
+              Name to print
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => { setName(e.target.value); setError(""); }}
+              placeholder="e.g. Johnson"
+              maxLength={40}
+              style={{
+                width: "100%", boxSizing: "border-box",
+                padding: "10px 12px", fontSize: "14px",
+                background: "#161616", border: `1px solid ${BORDER_MID}`,
+                color: FG, fontFamily: FONT, borderRadius: "4px", outline: "none",
+              }}
+            />
+          </div>
+
+          {error && (
+            <div style={{ fontSize: "12px", color: "#ff5555", marginBottom: "10px" }}>{error}</div>
+          )}
+
+          <button
+            type="button"
+            onClick={handleAdd}
+            style={{
+              width: "100%", padding: "12px", fontSize: "12px",
+              fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase",
+              fontFamily: FONT, background: LIME, color: "#000",
+              border: "none", cursor: "pointer", borderRadius: "4px",
+              transition: "opacity 0.15s",
+            }}
+          >
+            Add to order
+          </button>
+        </div>
+      </div>
+
+      {sizeChartOpen && <SizeChartModal pkey={pkey} onClose={() => setSizeChartOpen(false)} />}
+    </>
+  );
+}
+
 export default function MatesInMotorsPage() {
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>(calcTimeLeft());
-  const [orderClosed, setOrderClosed] = useState(Date.now() >= ORDER_CUTOFF.getTime());
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>(calcTimeLeft);
+  const [orderClosed, setOrderClosed] = useState(() => Date.now() >= ORDER_CUTOFF.getTime());
   const [items, setItems] = useState<OrderItem[]>([]);
   const [customer, setCustomer] = useState<Customer>({ fullName: "", email: "", phone: "", notes: "" });
-  const [sizeChartOpen, setSizeChartOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [checkoutError, setCheckoutError] = useState("");
-  const [deadlineLabel] = useState(() => formatDeadline());
+  const [deadlineLabel] = useState(formatDeadline);
 
   useEffect(() => {
+    if (orderClosed) return;
     const id = setInterval(() => {
       const t = calcTimeLeft();
       setTimeLeft(t);
@@ -322,7 +320,7 @@ export default function MatesInMotorsPage() {
       }
     }, 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [orderClosed]);
 
   const addItem = useCallback((item: Omit<OrderItem, "id">) => {
     setItems((prev) => [...prev, { ...item, id: crypto.randomUUID() }]);
@@ -348,7 +346,7 @@ export default function MatesInMotorsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           customer,
-          items: items.map((i) => ({ product: PRODUCTS[i.product].label, size: i.size, name: i.name })),
+          items: items.map((i) => ({ product: i.product, size: i.size, name: i.name })),
         }),
       });
       const data = await res.json();
@@ -366,9 +364,7 @@ export default function MatesInMotorsPage() {
 
   if (orderClosed) {
     return (
-      <main
-        style={{ background: BG, color: FG, minHeight: "100vh", display: "grid", placeItems: "center", padding: "80px 24px", fontFamily: FONT }}
-      >
+      <main style={{ background: BG, color: FG, minHeight: "100vh", display: "grid", placeItems: "center", padding: "80px 24px", fontFamily: FONT }}>
         <div style={{ maxWidth: "560px", width: "100%", textAlign: "center" }}>
           <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: LIME, marginBottom: "20px" }}>
             Mates in Motors · Team Store
@@ -395,17 +391,17 @@ export default function MatesInMotorsPage() {
           Team<br />Gear<span style={{ color: LIME }}>.</span>
         </h1>
         <p style={{ fontSize: "15px", lineHeight: 1.7, color: "rgba(255,255,255,0.65)", maxWidth: "520px", margin: "0 0 40px" }}>
-          Select your items, choose your size, and enter the name to be printed. Pay securely via Stripe. Collection at Mates in Motors on {COLLECTION_DATE} — no freight.
+          Choose your style, pick your size, and enter the name to be printed. Secure checkout via Stripe. Collection at Mates in Motors on {COLLECTION_DATE} — no freight.
         </p>
 
         {/* Countdown */}
-        <div style={{ background: CARD_BG, border: `1px solid ${BORDER}`, padding: "24px 28px", marginBottom: "8px", display: "inline-flex", flexDirection: "column", gap: "10px" }}>
+        <div style={{ background: CARD_BG, border: `1px solid ${BORDER}`, padding: "24px 28px", marginBottom: "48px", display: "inline-flex", flexDirection: "column", gap: "10px" }}>
           <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)" }}>
             Order deadline
           </div>
           <div style={{ display: "flex", gap: "20px", alignItems: "baseline" }}>
-            {[["days", timeLeft.days], ["hrs", timeLeft.hours], ["min", timeLeft.mins], ["sec", timeLeft.secs]].map(([label, val]) => (
-              <div key={String(label)} style={{ textAlign: "center" }}>
+            {([["days", timeLeft.days], ["hrs", timeLeft.hours], ["min", timeLeft.mins], ["sec", timeLeft.secs]] as const).map(([label, val]) => (
+              <div key={label} style={{ textAlign: "center" }}>
                 <div style={{ fontSize: "clamp(28px,5vw,42px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1, color: LIME }}>
                   {pad(Number(val))}
                 </div>
@@ -418,17 +414,6 @@ export default function MatesInMotorsPage() {
           <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.5)" }}>
             Closes {deadlineLabel}
           </div>
-        </div>
-
-        {/* Size chart link */}
-        <div style={{ marginBottom: "48px" }}>
-          <button
-            type="button"
-            onClick={() => setSizeChartOpen(true)}
-            style={{ background: "none", border: "none", color: LIME, fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: FONT, cursor: "pointer", padding: "8px 0", textDecoration: "underline", textUnderlineOffset: "3px" }}
-          >
-            Size guide
-          </button>
         </div>
       </div>
 
@@ -445,7 +430,7 @@ export default function MatesInMotorsPage() {
 
       {/* Order summary + checkout */}
       {items.length > 0 && (
-        <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px 60px" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px 80px" }}>
           <div style={{ background: CARD_BG, border: `1px solid ${BORDER_MID}` }}>
             <div style={{ padding: "24px 28px", borderBottom: `1px solid ${BORDER}` }}>
               <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)" }}>
@@ -456,27 +441,27 @@ export default function MatesInMotorsPage() {
               {items.map((item) => (
                 <div
                   key={item.id}
-                  style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 28px", borderBottom: `1px solid ${BORDER}` }}
+                  style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 28px", borderBottom: `1px solid ${BORDER}`, gap: "12px" }}
                 >
-                  <div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
                     <span style={{ fontSize: "14px", fontWeight: 600 }}>{PRODUCTS[item.product].label}</span>
                     <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.55)", marginLeft: "10px" }}>
                       {item.size} · {item.name}
                     </span>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "16px", flexShrink: 0 }}>
                     <span style={{ fontSize: "14px", fontWeight: 700 }}>${PRODUCTS[item.product].price.toFixed(2)}</span>
                     <button
                       type="button"
                       onClick={() => removeItem(item.id)}
-                      style={{ background: "none", border: "none", color: "rgba(255,255,255,0.35)", cursor: "pointer", fontSize: "18px", lineHeight: 1, padding: "0", fontFamily: FONT }}
+                      style={{ background: "none", border: "none", color: "rgba(255,255,255,0.35)", cursor: "pointer", fontSize: "18px", lineHeight: 1, padding: 0, fontFamily: FONT }}
                     >
                       ×
                     </button>
                   </div>
                 </div>
               ))}
-              <div style={{ display: "flex", justifyContent: "space-between", padding: "16px 28px", borderBottom: `1px solid ${BORDER_MID}` }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 28px", borderBottom: `1px solid ${BORDER_MID}` }}>
                 <span style={{ fontSize: "13px", color: "rgba(255,255,255,0.55)" }}>Total incl. GST</span>
                 <span style={{ fontSize: "18px", fontWeight: 900, letterSpacing: "-0.02em" }}>${orderTotal.toFixed(2)} NZD</span>
               </div>
@@ -546,7 +531,6 @@ export default function MatesInMotorsPage() {
                     fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase",
                     fontFamily: FONT, background: loading ? "rgba(184,244,0,0.5)" : LIME, color: "#000",
                     border: "none", cursor: loading ? "not-allowed" : "pointer", borderRadius: "4px",
-                    transition: "opacity 0.15s",
                   }}
                 >
                   {loading ? "Redirecting…" : `Pay $${orderTotal.toFixed(2)} NZD`}
@@ -559,8 +543,6 @@ export default function MatesInMotorsPage() {
           </div>
         </div>
       )}
-
-      {sizeChartOpen && <SizeChartModal onClose={() => setSizeChartOpen(false)} />}
     </main>
   );
 }

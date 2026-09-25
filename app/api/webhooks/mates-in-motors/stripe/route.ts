@@ -50,10 +50,10 @@ export async function POST(req: Request) {
     if (sheetsUrl) {
       try {
         const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 100 });
-        const items = lineItems.data.map((item) => {
+        const items = lineItems.data.map((item: Stripe.LineItem) => {
           const text = item.description || "";
           const [, detail = ""] = text.split("—");
-          const parts = detail.split("/").map((p) => p.trim());
+          const parts = detail.split("/").map((p: string) => p.trim());
           return {
             product: parts[0] || text,
             size: parts[1] || "",
