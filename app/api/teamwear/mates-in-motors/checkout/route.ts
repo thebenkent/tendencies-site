@@ -70,9 +70,6 @@ export async function POST(req: Request) {
           { status: 400 }
         );
       }
-      if (!item.name?.trim()) {
-        return NextResponse.json({ error: "Each item must have a name to print." }, { status: 400 });
-      }
     }
 
     const lineItems = items.map((item) => ({

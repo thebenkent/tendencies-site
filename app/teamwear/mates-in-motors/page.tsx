@@ -163,7 +163,6 @@ function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<Ord
 
   function handleAdd() {
     if (!size) { setError("Select a size"); return; }
-    if (!name.trim()) { setError("Enter the name to print"); return; }
     onAdd({ product: pkey, size: size as SizeCode, name: name.trim() });
     setSize("");
     setName("");
@@ -259,7 +258,7 @@ function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<Ord
           {/* Name to print */}
           <div style={{ marginBottom: "14px" }}>
             <label style={{ display: "block", fontSize: "10px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)", marginBottom: "6px" }}>
-              Name to print
+              Name to print <span style={{ fontWeight: 400, opacity: 0.5 }}>(optional)</span>
             </label>
             <input
               type="text"
