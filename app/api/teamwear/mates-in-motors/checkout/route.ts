@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import { sizesFor } from "@/lib/merch/mim-size-guides";
 
 // Sunday 11 October 2026, 9:00 pm NZDT — must match page.tsx
-const ORDER_CUTOFF = new Date("2026-10-11T21:00:00+13:00");
+const ORDER_CUTOFF = new Date("2026-10-18T21:00:00+13:00");
 
 // Prices are authoritative here — never trust values from the browser
 type ProductKey = "staple-tee" | "maple-tee" | "staple-tank" | "maple-tank";

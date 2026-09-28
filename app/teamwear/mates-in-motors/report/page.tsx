@@ -5,7 +5,7 @@ import { PrintButton } from "./PrintButton";
 
 export const dynamic = "force-dynamic";
 
-const ORDER_CUTOFF = new Date("2026-10-11T21:00:00+13:00");
+const ORDER_CUTOFF = new Date("2026-10-18T21:00:00+13:00");
 
 const BG = "#080808";
 const FG = "#f5f5f0";

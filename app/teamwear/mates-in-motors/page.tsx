@@ -11,7 +11,7 @@ const BORDER_MID = "rgba(255,255,255,0.12)";
 const FONT = "Helvetica, Arial, sans-serif";
 
 // Sunday 11 October 2026, 9:00 pm NZDT
-const ORDER_CUTOFF = new Date("2026-10-11T21:00:00+13:00");
+const ORDER_CUTOFF = new Date("2026-10-18T21:00:00+13:00");
 const COLLECTION_DATE = "Wednesday 28 October 2026";
 
 const TANK_PRICE = 39.0;
