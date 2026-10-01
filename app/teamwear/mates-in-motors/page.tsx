@@ -21,25 +21,25 @@ type ProductKey = "staple-tee" | "maple-tee" | "staple-tank" | "maple-tank";
 
 const PRODUCTS: Record<ProductKey, { label: string; price: number; front: string; back: string }> = {
   "staple-tee": {
-    label: "Staple Tee",
+    label: "Male - Staple Tee",
     price: TEE_PRICE,
     front: "/teamwear/mim-tee-front-staple.png",
     back: "/teamwear/mim-tee-back-staple.png",
   },
   "maple-tee": {
-    label: "Maple Tee",
+    label: "Female - Maple Tee",
     price: TEE_PRICE,
     front: "/teamwear/mim-tee-front-maple.png",
     back: "/teamwear/mim-tee-back-maple.png",
   },
   "staple-tank": {
-    label: "Staple Tank",
+    label: "Male - Staple Tank",
     price: TANK_PRICE,
     front: "/teamwear/mim-tank-front-staple.png",
     back: "/teamwear/mim-tank-back-staple.png",
   },
   "maple-tank": {
-    label: "Maple Tank",
+    label: "Female - Maple Tank",
     price: TANK_PRICE,
     front: "/teamwear/mim-tank-front-maple.png",
     back: "/teamwear/mim-tank-back-maple.png",
