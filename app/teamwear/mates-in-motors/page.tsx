@@ -159,7 +159,6 @@ function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<Ord
   const [side, setSide] = useState<"front" | "back">("front");
   // Cursor position over the image (as %), so the zoom follows the cursor.
   const [zoom, setZoom] = useState<{ x: number; y: number } | null>(null);
-  const [detailsOpen, setDetailsOpen] = useState(false);
   const [size, setSize] = useState<SizeCode | "">("");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
@@ -222,11 +221,19 @@ function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<Ord
         </div>
 
         {/* Details */}
-        <div style={{ padding: "20px" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "16px" }}>
-            <div style={{ fontSize: "16px", fontWeight: 700, letterSpacing: "-0.02em" }}>{p.label}</div>
-            <div style={{ fontSize: "18px", fontWeight: 700, color: LIME }}>${p.price.toFixed(2)}</div>
+        <div style={{ padding: "24px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "12px", marginBottom: "10px" }}>
+            <div style={{ fontSize: "28px", fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.1 }}>{p.label}</div>
+            <div style={{ fontSize: "22px", fontWeight: 700, color: LIME, whiteSpace: "nowrap" }}>${p.price.toFixed(2)}</div>
           </div>
+
+          {/* Garment details */}
+          {guide && (
+            <ul style={{ margin: "0 0 20px", paddingLeft: "18px", fontSize: "13px", lineHeight: 1.7, color: "rgba(255,255,255,0.6)" }}>
+              {guide.details.map((d) => <li key={d}>{d}</li>)}
+              <li>Machine wash cold, do not tumble dry, do not iron the print, line dry in shade</li>
+            </ul>
+          )}
 
           {/* Size */}
           <div style={{ marginBottom: "12px" }}>
@@ -305,29 +312,6 @@ function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<Ord
             Add to order
           </button>
 
-          {/* Garment details */}
-          <div style={{ marginTop: "16px", borderTop: `1px solid ${BORDER}` }}>
-            <button
-              type="button"
-              onClick={() => setDetailsOpen((o) => !o)}
-              aria-expanded={detailsOpen}
-              style={{
-                width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center",
-                padding: "12px 0 0", background: "none", border: "none", color: FG, fontFamily: FONT,
-                fontSize: "10px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase",
-                cursor: "pointer",
-              }}
-            >
-              Details
-              <span aria-hidden style={{ color: LIME, fontSize: "16px", lineHeight: 1, transform: detailsOpen ? "rotate(45deg)" : "none", transition: "transform 0.2s" }}>+</span>
-            </button>
-            {detailsOpen && guide && (
-              <ul style={{ margin: "10px 0 0", paddingLeft: "18px", fontSize: "12px", lineHeight: 1.7, color: "rgba(255,255,255,0.6)" }}>
-                {guide.details.map((d) => <li key={d}>{d}</li>)}
-                <li>Machine wash cold, do not tumble dry, do not iron the print, line dry in shade</li>
-              </ul>
-            )}
-          </div>
         </div>
       </div>
 
@@ -419,7 +403,7 @@ export default function MatesInMotorsPage() {
   return (
     <main style={{ background: BG, color: FG, minHeight: "100vh", fontFamily: FONT }}>
       {/* Header */}
-      <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "60px 24px 0" }}>
+      <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "60px 24px 0" }}>
         <div style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: LIME, marginBottom: "20px" }}>
           Mates in Motors · Team Store
         </div>
@@ -454,8 +438,8 @@ export default function MatesInMotorsPage() {
       </div>
 
       {/* Products */}
-      <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px 60px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "1px", background: BORDER }}>
+      <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "0 24px 60px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, max(340px, calc((100% - 1px) / 2))), 1fr))", gap: "1px", background: BORDER }}>
           {(Object.keys(PRODUCTS) as ProductKey[]).map((key) => (
             <div key={key} style={{ background: BG }}>
               <ProductCard pkey={key} onAdd={addItem} />
@@ -466,7 +450,7 @@ export default function MatesInMotorsPage() {
 
       {/* Order summary + checkout */}
       {items.length > 0 && (
-        <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 24px 80px" }}>
+        <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "0 24px 80px" }}>
           <div style={{ background: CARD_BG, border: `1px solid ${BORDER_MID}` }}>
             <div style={{ padding: "20px 28px", borderBottom: `1px solid ${BORDER}` }}>
               <div style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.45)" }}>
