@@ -155,7 +155,11 @@ function SizeChartModal({ pkey, onClose }: { pkey: ProductKey; onClose: () => vo
 function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<OrderItem, "id">) => void }) {
   const p = PRODUCTS[pkey];
   const sizes = sizesFor(pkey);
-  const [hovered, setHovered] = useState(false);
+  const guide = SIZE_GUIDES[pkey];
+  const [side, setSide] = useState<"front" | "back">("front");
+  // Cursor position over the image (as %), so the zoom follows the cursor.
+  const [zoom, setZoom] = useState<{ x: number; y: number } | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const [size, setSize] = useState<SizeCode | "">("");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
@@ -172,39 +176,48 @@ function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<Ord
   return (
     <>
       <div style={{ background: CARD_BG, border: `1px solid ${BORDER}`, display: "flex", flexDirection: "column" }}>
-        {/* Image */}
+        {/* Image — zooms toward the cursor on hover; front/back via toggle */}
         <div
-          style={{ position: "relative", aspectRatio: "1 / 1", overflow: "hidden", cursor: "pointer" }}
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
+          style={{ position: "relative", aspectRatio: "1 / 1", overflow: "hidden", cursor: "zoom-in", background: "#fff" }}
+          onMouseMove={(e) => {
+            const r = e.currentTarget.getBoundingClientRect();
+            setZoom({ x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 });
+          }}
+          onMouseLeave={() => setZoom(null)}
         >
-          <img
-            src={p.front}
-            alt={`${p.label} front`}
-            style={{
-              position: "absolute", inset: 0, width: "100%", height: "100%",
-              objectFit: "contain", transition: "opacity 0.35s",
-              opacity: hovered ? 0 : 1, background: "#fff",
-            }}
-          />
-          <img
-            src={p.back}
-            alt={`${p.label} back`}
-            style={{
-              position: "absolute", inset: 0, width: "100%", height: "100%",
-              objectFit: "contain", transition: "opacity 0.35s",
-              opacity: hovered ? 1 : 0, background: "#fff",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute", bottom: "10px", right: "10px",
-              fontSize: "10px", fontWeight: 700, letterSpacing: "0.14em",
-              textTransform: "uppercase", color: "rgba(0,0,0,0.3)",
-              pointerEvents: "none",
-            }}
-          >
-            {hovered ? "back" : "front"}
+          {(["front", "back"] as const).map((v) => (
+            <img
+              key={v}
+              src={v === "front" ? p.front : p.back}
+              alt={`${p.label} ${v}`}
+              style={{
+                position: "absolute", inset: 0, width: "100%", height: "100%",
+                objectFit: "contain", background: "#fff",
+                opacity: side === v ? 1 : 0,
+                transform: zoom && side === v ? "scale(2)" : "scale(1)",
+                transformOrigin: zoom ? `${zoom.x}% ${zoom.y}%` : "50% 50%",
+                transition: "opacity 0.35s, transform 0.25s ease",
+              }}
+            />
+          ))}
+          <div style={{ position: "absolute", bottom: "10px", right: "10px", display: "flex", gap: "4px" }}>
+            {(["front", "back"] as const).map((v) => (
+              <button
+                key={v}
+                type="button"
+                onClick={() => setSide(v)}
+                aria-pressed={side === v}
+                style={{
+                  padding: "5px 10px", fontSize: "10px", fontWeight: 700, fontFamily: FONT,
+                  letterSpacing: "0.14em", textTransform: "uppercase", borderRadius: "4px",
+                  border: "1px solid rgba(0,0,0,0.15)", cursor: "pointer",
+                  background: side === v ? "#000" : "rgba(255,255,255,0.85)",
+                  color: side === v ? "#fff" : "rgba(0,0,0,0.55)",
+                }}
+              >
+                {v}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -234,25 +247,25 @@ function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<Ord
                 Size chart →
               </button>
             </div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+            <select
+              value={size}
+              onChange={(e) => { setSize(e.target.value as SizeCode); setError(""); }}
+              aria-label={`${p.label} size`}
+              style={{
+                width: "100%", boxSizing: "border-box",
+                padding: "10px 32px 10px 12px", fontSize: "14px",
+                background: "#161616", border: `1px solid ${size ? LIME : BORDER_MID}`,
+                color: size ? FG : "rgba(255,255,255,0.45)", fontFamily: FONT, borderRadius: "4px",
+                outline: "none", cursor: "pointer", appearance: "none",
+                backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M1 1l4 4 4-4' stroke='%23b8f400' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>")`,
+                backgroundRepeat: "no-repeat", backgroundPosition: "right 12px center",
+              }}
+            >
+              <option value="" disabled>Select size</option>
               {sizes.map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => { setSize(s); setError(""); }}
-                  style={{
-                    padding: "5px 10px", fontSize: "11px", fontWeight: 600, fontFamily: FONT,
-                    border: `1px solid ${size === s ? LIME : BORDER_MID}`,
-                    background: size === s ? LIME : "transparent",
-                    color: size === s ? "#000" : FG,
-                    cursor: "pointer", borderRadius: "4px", transition: "all 0.12s",
-                    letterSpacing: "0.04em",
-                  }}
-                >
-                  {s}
-                </button>
+                <option key={s} value={s}>{s}</option>
               ))}
-            </div>
+            </select>
           </div>
 
           {/* Name to print */}
@@ -291,6 +304,30 @@ function ProductCard({ pkey, onAdd }: { pkey: ProductKey; onAdd: (item: Omit<Ord
           >
             Add to order
           </button>
+
+          {/* Garment details */}
+          <div style={{ marginTop: "16px", borderTop: `1px solid ${BORDER}` }}>
+            <button
+              type="button"
+              onClick={() => setDetailsOpen((o) => !o)}
+              aria-expanded={detailsOpen}
+              style={{
+                width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center",
+                padding: "12px 0 0", background: "none", border: "none", color: FG, fontFamily: FONT,
+                fontSize: "10px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase",
+                cursor: "pointer",
+              }}
+            >
+              Details
+              <span aria-hidden style={{ color: LIME, fontSize: "16px", lineHeight: 1, transform: detailsOpen ? "rotate(45deg)" : "none", transition: "transform 0.2s" }}>+</span>
+            </button>
+            {detailsOpen && guide && (
+              <ul style={{ margin: "10px 0 0", paddingLeft: "18px", fontSize: "12px", lineHeight: 1.7, color: "rgba(255,255,255,0.6)" }}>
+                {guide.details.map((d) => <li key={d}>{d}</li>)}
+                <li>Machine wash cold, do not tumble dry, do not iron the print, line dry in shade</li>
+              </ul>
+            )}
+          </div>
         </div>
       </div>
 
