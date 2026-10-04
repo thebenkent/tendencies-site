@@ -274,7 +274,8 @@ export default function HeinekenPortal({ layout = 'Sidebar', allowance = 800 }: 
                     <h1 className={s.display} style={{ margin: 0, fontWeight: 800, fontSize: 32, lineHeight: 1.08, letterSpacing: '-.02em', textWrap: 'balance' }}>{p.name}</h1>
                     <div className={s.mono} style={{ fontSize: 20, fontWeight: 500 }}>{money(p.price)}</div>
                   </div>
-                  <div style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--ink-2)' }}>Branding: {p.deco}.</div>
+                  {p.desc && <p style={{ margin: 0, fontSize: 15, lineHeight: 1.6, color: 'var(--ink-2)', textWrap: 'pretty' }}>{p.desc}</p>}
+                  <div style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--ink-3)' }}>Branding: {p.deco}.</div>
                   {colours(p).length > 0 && (
                     <OptionGroup label="Colour" options={colours(p)} value={sel.colour} onPick={c => setSel({ ...sel, colour: c })} />
                   )}
@@ -287,6 +288,7 @@ export default function HeinekenPortal({ layout = 'Sidebar', allowance = 800 }: 
                     </div>
                     <button onClick={addToCart} className={s.darkBtn} style={{ ...darkBtn, height: 44, padding: '0 22px', fontSize: 15 }}>Add to cart</button>
                   </div>
+                  <BulkEnquiry key={p.r} item={p} variant={[sel.colour, sel.size].filter(Boolean).join(' · ')} />
                   <div style={{ borderTop: '1px solid var(--line)', paddingTop: 16, ...col(6), fontSize: 13, lineHeight: 1.5, color: 'var(--ink-3)' }}>
                     <div>Made to order after approval. Allow 10 working days.</div>
                     <div>Size chart and fit notes from the garment supplier.</div>
@@ -581,6 +583,71 @@ function Thumb({ src, box }: { src: string; box: CSSProperties }) {
       <img src={src} alt="" loading="lazy"
         style={{ position: 'absolute', inset: padding, width: `calc(100% - ${typeof padding === 'number' ? padding * 2 : 0}px)`, height: `calc(100% - ${typeof padding === 'number' ? padding * 2 : 0}px)`, objectFit: 'contain', mixBlendMode: 'multiply' }} />
     </div>
+  )
+}
+
+// Bulk orders are quoted, not bought through the store — this posts to the
+// site's existing /api/enquiry (Resend email to Tendencies + Sheets log).
+function BulkEnquiry({ item, variant }: { item: Item; variant: string }) {
+  const [open, setOpen] = useState(false)
+  const [f, setF] = useState({ name: '', email: '', company: 'adm Indicia', quantity: '', notes: '' })
+  const [state, setState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+  const set = (k: keyof typeof f) => (e: { target: { value: string } }) => setF({ ...f, [k]: e.target.value })
+
+  if (!open) {
+    return (
+      <button onClick={() => setOpen(true)} className={s.outlineBtn}
+        style={{ alignSelf: 'flex-start', height: 40, border: '1px solid var(--ink)', background: '#fff', borderRadius: 8, padding: '0 16px', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+        Enquire about bulk quantities
+      </button>
+    )
+  }
+  if (state === 'sent') {
+    return <div role="status" style={{ ...panel, padding: '14px 16px', fontSize: 14, lineHeight: 1.5 }}>Thanks — your bulk enquiry for {item.name} has been sent. Tendencies will be in touch with pricing.</div>
+  }
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setState('sending')
+    try {
+      const res = await fetch('/api/enquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: f.name, email: f.email, company: f.company, quantity: f.quantity,
+          need: 'Bulk quantity — Heineken Brands Uniform Store',
+          product: `${item.name} (${item.brand}${variant ? ` · ${variant}` : ''})`,
+          details: f.notes.trim() || `Bulk quantity enquiry for ${item.name}.`,
+        }),
+      })
+      setState(res.ok ? 'sent' : 'error')
+    } catch {
+      setState('error')
+    }
+  }
+
+  const input: CSSProperties = { height: 40, boxSizing: 'border-box', border: '1px solid var(--line-3)', borderRadius: 8, padding: '0 10px', fontSize: 14, background: '#fff', width: '100%' }
+  return (
+    <form onSubmit={submit} style={{ ...panel, padding: 16, ...col(12) }}>
+      <div style={{ fontWeight: 600, fontSize: 15 }}>Bulk quantity enquiry</div>
+      <div style={{ fontSize: 13, color: 'var(--ink-3)', lineHeight: 1.5 }}>Need more than a few? Tell us how many and we&rsquo;ll quote bulk pricing for {item.name}.</div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(180px, 100%), 1fr))', gap: 10 }}>
+        <label style={fieldLabel}>Name<input required value={f.name} onChange={set('name')} style={input} autoComplete="name" /></label>
+        <label style={fieldLabel}>Email<input required type="email" value={f.email} onChange={set('email')} style={input} autoComplete="email" /></label>
+        <label style={fieldLabel}>Company<input value={f.company} onChange={set('company')} style={input} autoComplete="organization" /></label>
+        <label style={fieldLabel}>Quantity<input required inputMode="numeric" value={f.quantity} onChange={set('quantity')} placeholder="e.g. 150" style={input} /></label>
+      </div>
+      <label style={fieldLabel}>Notes <span style={{ fontWeight: 400, color: 'var(--ink-4)' }}>Sizes, colours, deadline</span>
+        <textarea value={f.notes} onChange={set('notes')} rows={3} style={{ ...input, height: 'auto', padding: 10, resize: 'vertical', fontFamily: 'inherit' }} />
+      </label>
+      {state === 'error' && <div role="alert" style={{ fontSize: 13, color: '#c5363b' }}>Sorry, that didn&rsquo;t send. Please try again, or email Tendencies directly.</div>}
+      <div style={{ display: 'flex', gap: 8 }}>
+        <button type="submit" disabled={state === 'sending'} className={s.darkBtn} style={{ ...darkBtn, height: 40, padding: '0 18px', fontSize: 14, opacity: state === 'sending' ? 0.6 : 1 }}>
+          {state === 'sending' ? 'Sending…' : 'Send enquiry'}
+        </button>
+        <button type="button" onClick={() => setOpen(false)} style={{ height: 40, border: 0, background: 'transparent', fontSize: 14, color: 'var(--ink-3)', cursor: 'pointer' }}>Cancel</button>
+      </div>
+    </form>
   )
 }
 
