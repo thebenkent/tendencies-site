@@ -1,5 +1,5 @@
 // Catalogue for the Heineken Brands uniform store, from the
-// "Heineken Brands Uniforms QUOTE.xlsx" sheet (ADM Indicia). `r` is the sheet
+// "Heineken Brands Uniforms QUOTE.xlsx" sheet (adm Indicia). `r` is the sheet
 // row and keys the product image. Prices are sample retail prices (NZD).
 // Decoration costs and supplier routing from the quote are deliberately
 // omitted — this module ships to the browser.
@@ -15,7 +15,7 @@ export type Item = {
   img: string
 }
 
-// Item descriptions, from ADM's "Heineken Brands Uniforms QUOTE.xlsx" (typos fixed), keyed by sheet row.
+// Item descriptions, from adm Indicia's "Heineken Brands Uniforms QUOTE.xlsx" (typos fixed), keyed by sheet row.
 const DESC: Record<number, string> = {
   4: "Ribbed knit cuffed hem and longer body for warmth. One size fits all. Printed Branding.",
   5: "Ribbed knit cuffed hem and longer body for warmth. One size fits all. Stitch Panel Branded.",
