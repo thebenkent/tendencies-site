@@ -220,6 +220,7 @@ export default function HeinekenPortal({ layout = 'Sidebar', allowance = 800 }: 
                   <input placeholder="Search items" aria-label="Search items" value={q} onChange={e => setQ(e.target.value)}
                     style={{ height: 36, width: 220, maxWidth: '100%', boxSizing: 'border-box', border: '1px solid var(--line-3)', borderRadius: 8, padding: '0 12px', fontSize: 14, background: '#fff' }} />
                   <span style={{ fontSize: 11, fontWeight: 600, color: '#b45309', background: '#fffbeb', padding: '4px 8px', borderRadius: 6, whiteSpace: 'nowrap' }}>Sample prices</span>
+                  <CatalogueDownload items={products} scope={[brand === 'All' ? '' : brand, cat === 'All' ? '' : cat].filter(Boolean).join(' · ') || 'Full catalogue'} />
                 </div>
               </div>
               {!sidebar && (
@@ -582,6 +583,32 @@ function Thumb({ src, box }: { src: string; box: CSSProperties }) {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={src} alt="" loading="lazy"
         style={{ position: 'absolute', inset: padding, width: `calc(100% - ${typeof padding === 'number' ? padding * 2 : 0}px)`, height: `calc(100% - ${typeof padding === 'number' ? padding * 2 : 0}px)`, objectFit: 'contain', mixBlendMode: 'multiply' }} />
+    </div>
+  )
+}
+
+// Downloads the items currently shown (brand/category/search filters applied).
+function CatalogueDownload({ items, scope }: { items: Item[]; scope: string }) {
+  const [busy, setBusy] = useState<'' | 'xlsx' | 'pdf'>('')
+  const [failed, setFailed] = useState(false)
+  const run = async (kind: 'xlsx' | 'pdf') => {
+    setBusy(kind); setFailed(false)
+    try {
+      const m = await import('./exportCatalogue')
+      await (kind === 'xlsx' ? m.downloadCatalogueXlsx(items, scope) : m.downloadCataloguePdf(items, scope))
+    } catch {
+      setFailed(true)
+    } finally {
+      setBusy('')
+    }
+  }
+  const btn: CSSProperties = { height: 36, border: '1px solid var(--line-3)', background: '#fff', borderRadius: 8, padding: '0 12px', fontSize: 13, fontWeight: 500, cursor: 'pointer', whiteSpace: 'nowrap' }
+  return (
+    <div role="group" aria-label="Download catalogue" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+      <span style={{ fontSize: 13, color: 'var(--ink-3)' }}>Download</span>
+      <button onClick={() => run('xlsx')} disabled={!!busy || items.length === 0} className={s.pillIdle} style={btn}>{busy === 'xlsx' ? 'Preparing…' : 'Excel'}</button>
+      <button onClick={() => run('pdf')} disabled={!!busy || items.length === 0} className={s.pillIdle} style={btn}>{busy === 'pdf' ? 'Preparing…' : 'PDF'}</button>
+      {failed && <span role="alert" style={{ fontSize: 12, color: '#c5363b' }}>Download failed — try again</span>}
     </div>
   )
 }
