@@ -12,7 +12,7 @@ type Role = 'staff' | 'adm'
 export type Layout = 'Sidebar' | 'Storefront'
 
 const STAFF = { name: 'Sam Reid', org: 'Heineken NZ · Marketing', initials: 'SR' }
-const ADM = { name: 'Issy Hellen', org: 'ADM Indicia', initials: 'IH' }
+const ADM = { name: 'Issy Hellen', org: 'adm Indicia', initials: 'IH' }
 const WORDMARK = '/heineken/tendencies-wordmark-ink.svg'
 const TODAY = '4 Oct'
 
@@ -109,14 +109,14 @@ export default function HeinekenPortal({ layout = 'Sidebar', allowance = 800 }: 
   const submit = () => {
     const id = `HK-${1054 + orders.length - SEED_ORDERS.length}`
     const n: Order = {
-      id, who: user.name, site: staff ? 'Heineken House, Auckland' : 'ADM Indicia', date: TODAY,
+      id, who: user.name, site: staff ? 'Heineken House, Auckland' : 'adm Indicia', date: TODAY,
       cc: co.cc, po: co.po, status: staff ? 0 : 1, addr: co.addr, lines: cart,
     }
     setOrders(os => [...os, n])
     setCart([])
     setOrderId(id)
     setView('order')
-    flash(staff ? `${id} sent to ADM for approval.` : `${id} approved and sent to Tendencies.`)
+    flash(staff ? `${id} sent to adm Indicia for approval.` : `${id} approved and sent to Tendencies.`)
   }
 
   const reorder = (o: Order) => {
@@ -346,7 +346,7 @@ export default function HeinekenPortal({ layout = 'Sidebar', allowance = 800 }: 
                     </label>
                     {staff && (cartTotal > left ? (
                       <div style={{ fontSize: 13, lineHeight: 1.5, color: '#c5363b', background: '#fef2f2', borderRadius: 8, padding: '10px 12px' }}>
-                        This order is {money(cartTotal - left)} over your remaining allowance. ADM can still approve it.
+                        This order is {money(cartTotal - left)} over your remaining allowance. adm Indicia can still approve it.
                       </div>
                     ) : (
                       <div style={{ fontSize: 13, lineHeight: 1.5, color: '#3a6c0c', background: '#f3fce1', borderRadius: 8, padding: '10px 12px' }}>
@@ -358,8 +358,8 @@ export default function HeinekenPortal({ layout = 'Sidebar', allowance = 800 }: 
                     </button>
                     <div style={{ fontSize: 12, lineHeight: 1.5, color: 'var(--ink-4)' }}>
                       {staff
-                        ? 'ADM Indicia reviews every order. You’ll get an email when it’s approved and when it ships.'
-                        : 'Orders placed by ADM skip approval and go straight to production.'}
+                        ? 'adm Indicia reviews every order. You’ll get an email when it’s approved and when it ships.'
+                        : 'Orders placed by adm Indicia skip approval and go straight to production.'}
                     </div>
                   </div>
                 </div>
@@ -453,7 +453,7 @@ export default function HeinekenPortal({ layout = 'Sidebar', allowance = 800 }: 
                     const st = ord.status < 0 ? 0 : ord.status
                     const done = k < st || (k === st && st >= 5)
                     const current = k === st && st < 5
-                    const sub = ({ 0: ord.date, 1: 'ADM Indicia', 2: 'From supplier', 3: 'Routed per item', 4: 'Tendencies', 5: 'NZ Couriers' } as Record<number, string>)[k] ?? ''
+                    const sub = ({ 0: ord.date, 1: 'adm Indicia', 2: 'From supplier', 3: 'Routed per item', 4: 'Tendencies', 5: 'NZ Couriers' } as Record<number, string>)[k] ?? ''
                     return (
                       <div key={label} style={col(10)}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -539,7 +539,7 @@ function Avatar({ initials }: { initials: string }) {
 }
 
 function RoleSwitch({ role, onPick, stretch }: { role: Role; onPick: (r: Role) => void; stretch?: boolean }) {
-  const roles: [Role, string][] = [['staff', 'Heineken staff'], ['adm', 'ADM']]
+  const roles: [Role, string][] = [['staff', 'Heineken staff'], ['adm', 'adm Indicia']]
   return (
     <div role="group" aria-label="View as" style={{ display: 'flex', background: 'var(--line-2)', borderRadius: 8, padding: 3, gap: 2 }}>
       {roles.map(([k, label]) => {
