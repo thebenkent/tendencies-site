@@ -99,7 +99,7 @@ export const ITEMS: Item[] = [
   R(33, 'Heineken Silver Heavy Tee - White & Black', 'Heineken Silver', 'Tees', 'Front middle', 40),
   R(34, 'Monteiths Button Tee', 'Monteith’s', 'Tees', 'Left arm + back', 40),
   R(35, 'Monteiths Canvas Apron', 'Monteith’s', 'Aprons', 'Leather patch, bib (from image)', 55),
-  R(36, 'Monteiths Highlander Marino', 'Monteith’s', 'Knitwear', 'Stitched chest patch', 115),
+  R(36, 'Monteiths Highlander Merino', 'Monteith’s', 'Knitwear', 'Stitched chest patch', 115),
   R(37, 'Monteiths Invert Puffa Jacket', 'Monteith’s', 'Outerwear', 'Stitched chest patch', 120),
   R(38, 'Monteiths Ladies Norfolk Shirt', 'Monteith’s', 'Shirts', 'Chest embroidered', 65),
   R(39, 'Monteiths Mens Norfolk Shirt', 'Monteith’s', 'Shirts', 'Chest embroidered', 65),
