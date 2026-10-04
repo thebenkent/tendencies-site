@@ -18,14 +18,16 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.38.0",
+    "jspdf": "^4.2.1",
     "lucide-react": "^1.21.0",
     "next": "16.2.4",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "resend": "^6.12.2",
     "stripe": "^22.1.0",
-    "zod": "^4.4.0",
-    "tailwind-merge": "^3.6.0"
+    "tailwind-merge": "^3.6.0",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
+    "zod": "^4.4.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -36,7 +38,6 @@
     "eslint-config-next": "16.2.4",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
-    "typescript": "^5",
-    "xlsx": "^0.18.5"
+    "typescript": "^5"
   }
 }
