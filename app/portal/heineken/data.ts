@@ -10,12 +10,60 @@ export type Item = {
   brand: string
   cat: string
   deco: string
+  desc: string
   price: number
   img: string
 }
 
+// Item descriptions, from ADM's "Heineken Brands Uniforms QUOTE.xlsx" (typos fixed), keyed by sheet row.
+const DESC: Record<number, string> = {
+  4: "Ribbed knit cuffed hem and longer body for warmth. One size fits all. Printed Branding.",
+  5: "Ribbed knit cuffed hem and longer body for warmth. One size fits all. Stitch Panel Branded.",
+  6: "Regular fit. Heavy weight 235 GSM 100% cotton flannel. Check design with double chest pockets, long sleeve button up, adjustable cuffs. Right Chest Embroidered.",
+  7: "Regular fit. Heavy weight 300 GSM 100% cotton corduroy. Long sleeve button up, double chest pockets, tonal corozo nut buttons, adjustable cuffs. Left chest embroidered.",
+  8: "Fully lined with taffeta. Quilted stitch detailing with poly-fill padding. Water repellent rating 10,000mm. Padded collar with removable 3 piece padded hood. Full front blind zippered placket with internal storm flap. Zippered internal chest pocket with internal audio port. Two blind zippered side pockets. Elastic cuffs. Rubber zip pullers. Adjustable draw cord on tailored hem. Left chest embroidered.",
+  9: "Five panel with a flat peak. Quick-dry fabric. Adjustable plastic fastener. Embroidered Logo. One size. Circumference 61cm.",
+  10: "Modern casual fit. 100% cotton. Fashion collar, buttoned cuffs, chest pocket, contoured hemline. Left Chest Branded.",
+  11: "Modern Tapered fit. 100% cotton. Button down collar, fold up cuffs, chest pocket.",
+  12: "Modern casual fit. 100% cotton. Fashion collar, buttoned cuffs, chest pocket, contoured hemline.",
+  13: "Relaxed fit with heavy weight 203 GSM 100% cotton. Left chest branded.",
+  14: "Relaxed fit with heavy weight 203 GSM 100% cotton. Left chest branded.",
+  15: "Modern Tapered fit. 100% cotton. Button down collar, fold up cuffs, chest pocket.",
+  16: "Regular fit with heavy weight 240 GSM 100% cotton.",
+  17: "Regular fit with heavy weight 240 GSM 100% cotton.",
+  18: "Regular fit. Heavy weight 258 GSM. Front middle branded.",
+  19: "Relaxed fit with mid weight 180 GSM 100% cotton. Front middle branded.",
+  20: "Relaxed fit with mid weight 180 GSM 100% cotton.",
+  21: "The Canvas Half Apron is made from heavy-weight 365 GSM 100% cotton duck canvas. It features self-fabric waist ties, a front patch pocket, and top stitch detailing, all preshrunk to minimise shrinkage.",
+  22: "Classic fit. Long sleeve button up shirt, button down collar, one red button.",
+  23: "Classic fit. Long sleeve button up shirt, button down collar, one red button.",
+  24: "5 panel Cap with flat peak, adjustable metal clasp fastener. One size fits all.",
+  25: "Relaxed oversized fit with heavy weight 400 GSM 80% cotton 20% recycled polyester CVC fleece.",
+  26: "A boxy oversized fit with heavy weight 280 GSM 100% carded cotton.",
+  27: "A boxy oversized fit with heavy weight 280 GSM 100% carded cotton.",
+  28: "Loose oversized fit with heavy weight 400 GSM. Left arm printed.",
+  29: "Regular fit Mid weight 145 GSM 100% woven cotton. Long sleeve button up shirt, button down collar, chest pocket, one red button.",
+  30: "Regular fit Mid weight 145 GSM 100% woven cotton. Long sleeve button up shirt, button down collar, chest pocket, one red button.",
+  31: "A boxy oversized fit with heavy weight 280 GSM 100% carded cotton. Front branded, right side, stitched label bottom left.",
+  32: "A boxy oversized fit with heavy weight 280 GSM 100% carded cotton. Printed front middle.",
+  33: "A boxy oversized fit with heavy weight 280 GSM 100% carded cotton. Printed front middle. White or Black.",
+  34: "Relaxed fit, light weight 156 GSM. Left arm branded and back branded.",
+  35: "A durable and functional essential for professionals and enthusiasts alike. Crafted from high-quality canvas material, this apron offers reliability and comfort in a compact design. The upper centre pocket provides convenient storage for tools and utensils, keeping you organized and focused. Built for durability, it withstands everyday use with sturdy construction, making it ideal for various tasks.",
+  36: "Classic fit, 100% ZQ certified traceable NZ merino wool. High 1/4 jet zip. Stitched Chest Branding.",
+  37: "Fully lined with taffeta. Quilted stitch detailing with poly-fill padding. Water repellent rating 10,000mm. Padded collar with removable 3 piece padded hood. Full front blind zippered placket with internal storm flap. Zippered internal chest pocket with internal audio port. Two blind zippered side pockets. Elastic cuffs. Rubber zip pullers. Adjustable draw cord on tailored hem. Stitched chest branding.",
+  38: "Tapered fit, 100% cotton. V neck style open check with fashion collar, contoured hemline. Embroidered chest.",
+  39: "Tapered fit, 100% cotton. Button down fashion collar, single breast pocket, adjustable cuff and cuff link facility. Embroidered chest.",
+  40: "Relaxed fit, light weight 175 GSM 100% cotton. Left Sleeve & Back Branding.",
+  41: "Relaxed fit with heavy weight 220 GSM 100% combed cotton. Front chest & Back middle branding. Blue Option, White Option.",
+  42: "Relaxed fit with heavy weight 220 GSM 100% combed cotton. Front Chest & Side Branding.",
+  43: "Regular fit mid weight. Front Chest Branding & Low Back Branding.",
+  44: "Five panel with a flat peak. Quick-dry fabric. Plastic snapback fastener. Branding Printed Right Side Front Cap. One size. Circumference 60.5cm.",
+  45: "Regular Fit. 180 GSM 100% combed cotton. Front Middle Branding & Back Top Centre Branding.",
+  46: "Mid profile snapback design with a curved peak. 100% cotton on front and back peak with breathable 100% polyester mesh on the back. Plastic snapback closure and tonal under peak lining for all day comfort. One Size - Front Embroidered Cap.",
+}
+
 const R = (r: number, name: string, brand: string, cat: string, deco: string, price: number): Item => ({
-  r, name, brand, cat, deco, price, img: `/heineken/p/r${r}.png`,
+  r, name, brand, cat, deco, desc: DESC[r] ?? '', price, img: `/heineken/p/r${r}.png`,
 })
 
 export const ITEMS: Item[] = [
