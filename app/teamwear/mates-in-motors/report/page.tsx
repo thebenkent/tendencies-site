@@ -16,7 +16,7 @@ const BORDER_MID = "rgba(255,255,255,0.12)";
 const MUTED = "rgba(255,255,255,0.4)";
 const FONT = "Helvetica, Arial, sans-serif";
 
-const ALL_PRODUCTS = ["Staple Tee", "Maple Tee", "Staple Tank", "Maple Tank"];
+const ALL_PRODUCTS = ["Staple Tee", "Maple Tee", "Staple Tank", "Maple Tank", "Pique Polo"];
 const ALL_SIZES = ["XSM", "SML", "MED", "LRG", "XLG", "2XL", "3XL", "4XL", "5XL"];
 const TEE_PRODUCTS = new Set(["Staple Tee", "Maple Tee"]);
 

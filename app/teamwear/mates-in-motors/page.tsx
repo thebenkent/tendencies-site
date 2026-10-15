@@ -16,8 +16,9 @@ const COLLECTION_DATE = "Wednesday 28 October 2026";
 
 const TANK_PRICE = 39.0;
 const TEE_PRICE = 49.0;
+const POLO_PRICE = 55.0;
 
-type ProductKey = "staple-tee" | "maple-tee" | "staple-tank" | "maple-tank";
+type ProductKey = "staple-tee" | "maple-tee" | "staple-tank" | "maple-tank" | "pique-polo";
 
 const PRODUCTS: Record<ProductKey, { label: string; price: number; front: string; back: string }> = {
   "staple-tee": {
@@ -43,6 +44,12 @@ const PRODUCTS: Record<ProductKey, { label: string; price: number; front: string
     price: TANK_PRICE,
     front: "/teamwear/mim-tank-front-maple.png",
     back: "/teamwear/mim-tank-back-maple.png",
+  },
+  "pique-polo": {
+    label: "Male - Navy Pique Polo",
+    price: POLO_PRICE,
+    front: "/teamwear/mim-polo-front-navy.png",
+    back: "/teamwear/mim-polo-back-navy.png",
   },
 };
 

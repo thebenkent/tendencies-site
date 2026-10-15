@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const ALL_PRODUCTS = ["Staple Tee", "Maple Tee", "Staple Tank", "Maple Tank"];
+const ALL_PRODUCTS = ["Staple Tee", "Maple Tee", "Staple Tank", "Maple Tank", "Pique Polo"];
 const ALL_SIZES = ["XSM", "SML", "MED", "LRG", "XLG", "2XL", "3XL", "4XL", "5XL"];
 
 const productOrder = Object.fromEntries(ALL_PRODUCTS.map((p, i) => [p, i]));
