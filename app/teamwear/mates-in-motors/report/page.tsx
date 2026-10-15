@@ -18,7 +18,8 @@ const FONT = "Helvetica, Arial, sans-serif";
 
 const ALL_PRODUCTS = ["Staple Tee", "Maple Tee", "Staple Tank", "Maple Tank", "Pique Polo"];
 const ALL_SIZES = ["XSM", "SML", "MED", "LRG", "XLG", "2XL", "3XL", "4XL", "5XL"];
-const TEE_PRODUCTS = new Set(["Staple Tee", "Maple Tee"]);
+// Garments that get the sleeve badge and MATES sleeve patch
+const SLEEVED_PRODUCTS = new Set(["Staple Tee", "Maple Tee", "Pique Polo"]);
 
 type ParsedItem = {
   product: string;
@@ -142,7 +143,7 @@ export default async function ReportPage({
   }
 
   // Print requirements
-  const teeCount = data.items.filter((i) => TEE_PRODUCTS.has(i.product)).length;
+  const sleevedCount = data.items.filter((i) => SLEEVED_PRODUCTS.has(i.product)).length;
   const gangSheets = data.totalGarments > 0 ? Math.ceil(data.totalGarments / 15) : 0;
   const spareSlots = gangSheets * 15 - data.totalGarments;
 
@@ -381,8 +382,8 @@ export default async function ReportPage({
                 [
                   ["Back graphic", data.totalGarments, "all garments"],
                   ["Chest logo", data.totalGarments, "all garments"],
-                  ["Sleeve badge", teeCount, "tees only"],
-                  ["MATES sleeve patch", teeCount, "tees only"],
+                  ["Sleeve badge", sleevedCount, "tees + polos"],
+                  ["MATES sleeve patch", sleevedCount, "tees + polos"],
                   ["Printed names", data.totalGarments, "all garments"],
                 ] as [string, number, string][]
               ).map(([label, count, note]) => (
