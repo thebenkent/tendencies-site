@@ -64,6 +64,19 @@ export const SIZE_GUIDES: Record<string, SizeGuide> = {
       'Side seamed, shoulder to shoulder tape, double needle hems',
     ],
   },
+  'pique-polo': {
+    title: 'Pique Polo (5411)',
+    sizes: ['SML', 'MED', 'LRG', 'XLG', '2XL', '3XL', '4XL', '5XL'], // no XSM
+    bodyWidth:  [49.5, 53,  56.5, 60,  63.5, 67,  70.5, 74],
+    bodyLength: [73,   75,  77,   79,  81,   83,  84,   85],
+    details: [
+      'AS Colour Pique Polo (5411) — Navy',
+      'Mens regular fit',
+      'Heavy weight 240 GSM, 100% cotton pique',
+      'Two-button placket with tonal buttons, side splits',
+      'Side seamed, double needle hems, preshrunk to minimise shrinkage',
+    ],
+  },
 };
 
 export const SIZE_GUIDE_NOTE = 'Measurements can vary within 2.5cm.';

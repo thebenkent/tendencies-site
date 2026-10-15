@@ -6,13 +6,14 @@ import { sizesFor } from "@/lib/merch/mim-size-guides";
 const ORDER_CUTOFF = new Date("2026-10-18T21:00:00+13:00");
 
 // Prices are authoritative here — never trust values from the browser
-type ProductKey = "staple-tee" | "maple-tee" | "staple-tank" | "maple-tank";
+type ProductKey = "staple-tee" | "maple-tee" | "staple-tank" | "maple-tank" | "pique-polo";
 
 const PRICES_CENTS: Record<ProductKey, number> = {
   "staple-tee":  4900,
   "maple-tee":   4900,
   "staple-tank": 3900,
   "maple-tank":  3900,
+  "pique-polo":  5500,
 };
 
 const PRODUCT_LABELS: Record<ProductKey, string> = {
@@ -20,9 +21,10 @@ const PRODUCT_LABELS: Record<ProductKey, string> = {
   "maple-tee":   "Maple Tee",
   "staple-tank": "Staple Tank",
   "maple-tank":  "Maple Tank",
+  "pique-polo":  "Pique Polo",
 };
 
-const VALID_PRODUCTS = new Set<ProductKey>(["staple-tee", "maple-tee", "staple-tank", "maple-tank"]);
+const VALID_PRODUCTS = new Set<ProductKey>(["staple-tee", "maple-tee", "staple-tank", "maple-tank", "pique-polo"]);
 
 type OrderItem = { product: ProductKey; size: string; name: string };
 type Customer = { fullName: string; email: string; phone: string; notes: string };
